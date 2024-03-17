@@ -1,0 +1,37 @@
+name: Flutter App Testing CI
+
+on: push
+
+jobs:
+  flutter-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install Flutter dependencies
+        run: |
+          flutter config --no-analytics --no-cli-animations
+          flutter --version
+          flutter pub get
+
+      - name: Check code formatting
+        run: |
+          dart format --output=none --set-exit-if-changed .
+
+      - name: Check for code errors
+        run: |
+          flutter analyze
+
+      - name: Flutter testing
+        run: |
+          dart pub global activate dlcov
+          dlcov gen-refs
+          flutter test --coverage -r github test
+          dlcov -c 80
