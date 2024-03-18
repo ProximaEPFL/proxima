@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Setup
+rm -rf ./coverage
+dart pub global activate dlcov
+dlcov gen-refs
+
+# Flutter tests
+flutter test --coverage -r github test
+
+# Show coverage info
+genhtml -q coverage/lcov.info -o coverage/html
+dlcov -c 80
