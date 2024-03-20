@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -49,21 +52,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAMWxLdgdyEBxjLHbxUrR6CypWnnsj3V_4',
-    appId: '1:558973563700:web:4238a174d7a7c866962b61',
-    messagingSenderId: '558973563700',
-    projectId: 'proxima-social',
-    authDomain: 'proxima-social.firebaseapp.com',
-    storageBucket: 'proxima-social.appspot.com',
-    measurementId: 'G-0XZ7NGY9LH',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA4NpjKaDrgqmL6PYVZoJK3xzChRgJlcVM',
-    appId: '1:558973563700:android:79911bd252d78651962b61',
-    messagingSenderId: '558973563700',
-    projectId: 'proxima-social',
-    storageBucket: 'proxima-social.appspot.com',
+    apiKey: 'AIzaSyBEmXiTb9SsLATpkhEaTf3CKy_dYaH20LI',
+    appId: '1:275270662451:android:71266c0562e86a5999e646',
+    messagingSenderId: '275270662451',
+    projectId: 'proxima-0',
+    storageBucket: 'proxima-0.appspot.com',
   );
 }
