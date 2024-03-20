@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -51,6 +48,16 @@ class DefaultFirebaseOptions {
         );
     }
   }
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAMWxLdgdyEBxjLHbxUrR6CypWnnsj3V_4',
+    appId: '1:558973563700:web:4238a174d7a7c866962b61',
+    messagingSenderId: '558973563700',
+    projectId: 'proxima-social',
+    authDomain: 'proxima-social.firebaseapp.com',
+    storageBucket: 'proxima-social.appspot.com',
+    measurementId: 'G-0XZ7NGY9LH',
+  );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyA4NpjKaDrgqmL6PYVZoJK3xzChRgJlcVM',

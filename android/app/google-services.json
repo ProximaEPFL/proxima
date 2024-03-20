@@ -12,7 +12,12 @@
           "package_name": "com.example.proxima"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "558973563700-lkp962hmf8ngmieh46rdpkqoncdcbncb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA4NpjKaDrgqmL6PYVZoJK3xzChRgJlcVM"
@@ -20,7 +25,63 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "558973563700-lkp962hmf8ngmieh46rdpkqoncdcbncb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "558973563700-c4dsuh670re18lbln1057tqehgi7em5u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "proxima-social"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558973563700:android:8bd336497e8163aa962b61",
+        "android_client_info": {
+          "package_name": "com.proxima_social"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "558973563700-vrnvivttbcehdj5r8arcgidhmq9k2ssd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.proxima_social",
+            "certificate_hash": "8fe4fc598cf1c2765a4bc74a8191ad15f019ad1b"
+          }
+        },
+        {
+          "client_id": "558973563700-lkp962hmf8ngmieh46rdpkqoncdcbncb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4NpjKaDrgqmL6PYVZoJK3xzChRgJlcVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "558973563700-lkp962hmf8ngmieh46rdpkqoncdcbncb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "558973563700-c4dsuh670re18lbln1057tqehgi7em5u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "proxima-social"
+              }
+            }
+          ]
         }
       }
     }
