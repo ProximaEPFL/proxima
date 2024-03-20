@@ -1,5 +1,8 @@
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  exclude: [lib/**firebase_options.dart, lib/**.g.dart]
+
 linter:
   rules:
     prefer_double_quotes: true

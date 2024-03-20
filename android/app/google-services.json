@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "558973563700",
+    "project_id": "proxima-social",
+    "storage_bucket": "proxima-social.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558973563700:android:79911bd252d78651962b61",
+        "android_client_info": {
+          "package_name": "com.example.proxima"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4NpjKaDrgqmL6PYVZoJK3xzChRgJlcVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
