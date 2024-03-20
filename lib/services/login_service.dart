@@ -28,7 +28,7 @@ class LoginService {
     );
 
     // Once signed in, return the UserCredential
-    final user = await _firebaseAuth.signInWithCredential(credential);
+    await _firebaseAuth.signInWithCredential(credential);
   }
 
   Future<void> signOut() async {

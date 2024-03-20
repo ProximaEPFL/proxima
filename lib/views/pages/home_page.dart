@@ -6,6 +6,8 @@ import "package:proxima/viewmodels/profile_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 class HomePage extends HookConsumerWidget {
+  static const logoutButtonKey = Key("logout");
+
   const HomePage({super.key});
 
   @override
@@ -23,6 +25,7 @@ class HomePage extends HookConsumerWidget {
               height: 20,
             ),
             ElevatedButton(
+              key: logoutButtonKey,
               onPressed: () {
                 ref.read(loginServiceProvider).signOut();
 

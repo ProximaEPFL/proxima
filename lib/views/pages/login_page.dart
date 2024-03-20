@@ -4,7 +4,7 @@ import "package:proxima/viewmodels/login_viewmodel.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 class LoginPage extends HookConsumerWidget {
-  static const loginKey = Key("login");
+  static const loginButtonKey = Key("login");
 
   const LoginPage({super.key});
 
@@ -22,7 +22,7 @@ class LoginPage extends HookConsumerWidget {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          key: loginKey,
+          key: loginButtonKey,
           onPressed: () async {
             await ref.read(loginServiceProvider).signIn();
           },
