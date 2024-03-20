@@ -10,20 +10,22 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(
+      child: ProximaApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ProximaApp extends StatelessWidget {
+  const ProximaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
-      child: MaterialApp(
-        title: "Proxima",
-        onGenerateRoute: generateRoute,
-        initialRoute: Routes.login.name,
-      ),
+    return MaterialApp(
+      title: "Proxima",
+      onGenerateRoute: generateRoute,
+      initialRoute: Routes.login.name,
     );
   }
 }

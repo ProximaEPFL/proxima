@@ -18,6 +18,8 @@ dependencies:
   google_sign_in: ^6.2.1
   firebase_auth: ^4.17.9
   collection: ^1.18.0
+  firebase_auth_mocks: ^0.13.0
+  google_sign_in_mocks: ^0.3.0
 
 dev_dependencies:
   flutter_test:
