@@ -32,6 +32,6 @@ jobs:
       - name: Flutter testing
         run: |
           dart pub global activate dlcov
-          dlcov gen-refs --exclude-files "*.g.dart,*firebase_options.dart"
+          dlcov gen-refs
           flutter test --coverage -r github test
-          dlcov -c 80
+          dlcov -c 80 --exclude-files "*.g.dart,*firebase_options.dart"

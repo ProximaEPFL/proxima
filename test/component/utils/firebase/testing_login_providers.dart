@@ -7,6 +7,11 @@ import "package:proxima/services/login_service.dart";
 
 import "../mock_data/firebase_user_mock.dart";
 
+final firebaseMocksOverrides = [
+  firebaseAuthProvider.overrideWith(mockFirebaseAuth),
+  googleSignInProvider.overrideWith(mockGoogleSignIn),
+];
+
 GoogleSignIn mockGoogleSignIn(ProviderRef<GoogleSignIn> ref) {
   return MockGoogleSignIn();
 }
@@ -14,8 +19,3 @@ GoogleSignIn mockGoogleSignIn(ProviderRef<GoogleSignIn> ref) {
 FirebaseAuth mockFirebaseAuth(ProviderRef<FirebaseAuth> ref) {
   return MockFirebaseAuth(mockUser: testingLoginUser);
 }
-
-final firebaseMocksOverrides = [
-  firebaseAuthProvider.overrideWith(mockFirebaseAuth),
-  googleSignInProvider.overrideWith(mockGoogleSignIn),
-];

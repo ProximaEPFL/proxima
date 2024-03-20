@@ -1,6 +1,6 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/profile_data.dart";
-import "package:proxima/viewmodels/login_viewmodel.dart";
+import "package:proxima/viewmodels/login_view_model.dart";
 
 /// User profile view model
 class ProfileViewModel extends AsyncNotifier<ProfileData> {
