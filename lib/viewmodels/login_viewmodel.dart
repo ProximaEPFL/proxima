@@ -2,37 +2,44 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 import "package:proxima/models/login_user.dart";
+import "package:proxima/models/ui/profile_data.dart";
 import "package:proxima/services/implementations/login_service_firebase.dart";
 import "package:proxima/services/login_service.dart";
 
-class LoginViewModel extends Notifier<LoginUser?> {
-  final LoginService loginService;
+/// Firebase authentication change provider
+final userProvider = StreamProvider<LoginUser?>((ref) {
+  return FirebaseAuth.instance.authStateChanges().map((user) {
+    if (user == null) {
+      return null;
+    }
 
-  LoginViewModel(this.loginService);
+    return LoginUser(id: user.uid, email: user.email);
+  });
+});
+
+/// User profile view model
+class ProfileViewModel extends AsyncNotifier<ProfileData> {
+  ProfileViewModel();
 
   @override
-  LoginUser? build() {
-    return ref.watch(authProvider).value;
-  }
+  Future<ProfileData> build() async {
+    final user = ref.watch(userProvider).valueOrNull;
+    if (user == null) {
+      return Future.error(
+        "User must be logged in before displaying the home page.",
+      );
+    }
 
-  void signInRequest() {
-    loginService.signIn();
-  }
-
-  void signOut() {
-    loginService.signOut();
+    return ProfileData(user: user);
   }
 }
 
-// Firebase authentication change provider
-final authProvider = StreamProvider<LoginUser?>((ref) {
-  return FirebaseAuth.instance
-      .authStateChanges()
-      .where((user) => user != null)
-      .map((user) => LoginUser(id: user!.uid, email: user.email));
+/// Login Service provider, dependency injection
+final loginServiceProvider = Provider<LoginService>((_) {
+  return LoginServiceFirebase();
 });
 
-// User viwemodel provider
-final userProvider = NotifierProvider<LoginViewModel, LoginUser?>(() {
-  return LoginViewModel(LoginServiceFirebase());
-});
+/// Profile view model of the currently logged in user
+final profileProvider = AsyncNotifierProvider<ProfileViewModel, ProfileData>(
+  () => ProfileViewModel(),
+);

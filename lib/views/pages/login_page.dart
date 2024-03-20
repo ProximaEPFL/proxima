@@ -9,8 +9,9 @@ class LoginPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Listen for authentication changes
-    ref.listen(authProvider, (_, auth) {
-      if (auth.valueOrNull != null) {
+    ref.listen(userProvider, (_, next) {
+      final user = next.valueOrNull;
+      if (user != null) {
         // Go to home page when the user is logged in
         Navigator.pushReplacementNamed(context, Routes.home.name);
       }
@@ -19,7 +20,7 @@ class LoginPage extends HookConsumerWidget {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          onPressed: ref.read(userProvider.notifier).signInRequest,
+          onPressed: ref.read(loginServiceProvider).signIn,
           child: const Text("Login"),
         ),
       ),
