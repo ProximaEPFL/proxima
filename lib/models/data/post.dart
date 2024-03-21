@@ -9,7 +9,8 @@ final class Post {
   final Location location;
   final DateTime publicationTime;
   final int voteScore;
-  final List<Comment> comments;
+  final int totalNumberOfComments;
+  final List<Comment> loadedComments;
   final User owner;
 
   Post({
@@ -19,7 +20,8 @@ final class Post {
     required this.location,
     required this.publicationTime,
     required this.voteScore,
-    required this.comments,
+    required this.totalNumberOfComments,
+    required this.loadedComments,
     required this.owner,
   });
 }

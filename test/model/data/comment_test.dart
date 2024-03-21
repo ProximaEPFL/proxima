@@ -15,7 +15,8 @@ void main() {
         joinTime: DateTime.utc(2021 + i, 1, 1),
       ),
       voteScore: i,
-      answers: [],
+      numberOfDirectAnswers: 0,
+      loadedAnswers: [],
       publicationTime: DateTime.utc(2021 + i, 1, 1),
     ),
   );
@@ -30,7 +31,8 @@ void main() {
       expect(comment.owner.displayName, "user_displayName_0");
       expect(comment.owner.username, "user_username_0");
       expect(comment.voteScore, 0);
-      expect(comment.answers, []);
+      expect(comment.numberOfDirectAnswers, 0);
+      expect(comment.loadedAnswers, []);
       expect(comment.publicationTime, DateTime.utc(2021, 1, 1));
     });
   });

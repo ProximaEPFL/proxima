@@ -6,7 +6,8 @@ final class Comment {
   final User owner;
   final int voteScore;
   final DateTime publicationTime;
-  final List<Comment> answers;
+  final int numberOfDirectAnswers;
+  final List<Comment> loadedAnswers;
 
   Comment({
     required this.id,
@@ -14,6 +15,7 @@ final class Comment {
     required this.owner,
     required this.voteScore,
     required this.publicationTime,
-    required this.answers,
+    required this.numberOfDirectAnswers,
+    required this.loadedAnswers,
   });
 }
