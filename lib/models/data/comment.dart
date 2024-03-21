@@ -1,9 +1,9 @@
-import "package:proxima/models/data/user.dart";
+import "package:proxima/models/data/user_data.dart";
 
 final class Comment {
   final String id;
   final String content;
-  final User owner;
+  final ForeignUserData owner;
   final int voteScore;
   final DateTime publicationTime;
   final int numberOfDirectAnswers;

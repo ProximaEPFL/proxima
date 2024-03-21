@@ -1,6 +1,6 @@
 import "package:proxima/models/data/comment.dart";
 import "package:proxima/models/data/location.dart";
-import "package:proxima/models/data/user.dart";
+import "package:proxima/models/data/user_data.dart";
 
 final class Post {
   final String id;
@@ -11,7 +11,7 @@ final class Post {
   final int voteScore;
   final int totalNumberOfComments;
   final List<Comment> loadedComments;
-  final User owner;
+  final ForeignUserData owner;
 
   Post({
     required this.id,

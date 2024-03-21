@@ -1,7 +1,7 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/data/location.dart";
 import "package:proxima/models/data/post.dart";
-import "package:proxima/models/data/user.dart";
+import "package:proxima/models/data/user_data.dart";
 
 void main() {
   group("Post representation testing", () {
@@ -15,11 +15,10 @@ void main() {
         voteScore: 0,
         totalNumberOfComments: 12,
         loadedComments: [],
-        owner: CurrentUser(
+        owner: ForeignUserData(
           id: "user_id",
           displayName: "user_displayName",
           username: "user_username",
-          joinTime: DateTime.utc(2021, 1, 1),
         ),
       );
 

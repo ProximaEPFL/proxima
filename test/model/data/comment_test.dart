@@ -1,6 +1,6 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/data/comment.dart";
-import "package:proxima/models/data/user.dart";
+import "package:proxima/models/data/user_data.dart";
 
 void main() {
   final commentList = List.generate(
@@ -8,11 +8,10 @@ void main() {
     (i) => Comment(
       id: "comment_id_$i",
       content: "comment_content_$i",
-      owner: CurrentUser(
+      owner: ForeignUserData(
         id: "user_id_$i",
         displayName: "user_displayName_$i",
         username: "user_username_$i",
-        joinTime: DateTime.utc(2021 + i, 1, 1),
       ),
       voteScore: i,
       numberOfDirectAnswers: 0,
