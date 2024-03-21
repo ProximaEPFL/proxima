@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
-/// Utilitiy widget used to display a [CircularProgressIndicator] while waiting for an [AsyncValue] to complete; and another widget once the data resolves.
+/// Utilitiy widget used to display a [CircularProgressIndicator] while waiting
+/// for an [AsyncValue] to complete; and another widget once the data resolves.
 class CircularValue<T> extends StatelessWidget {
   final AsyncValue<T> value;
   final Widget Function(BuildContext context, T data) builder;
