@@ -22,20 +22,26 @@ class LoginService {
         await googleUser?.authentication;
 
     //Check that the auth details are valid
-    if (googleAuth?.accessToken != null || googleAuth?.idToken != null) {
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-
-      // Once signed in, return the UserCredential
-      await _firebaseAuth.signInWithCredential(credential);
+    if (googleAuth?.accessToken == null || googleAuth?.idToken == null) {
+      if (googleUser != null) {
+        await _googleSignIn.signOut();
+      }
+      return;
     }
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    await _firebaseAuth.signInWithCredential(credential);
   }
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+    await _googleSignIn.signOut();
   }
 }
 

@@ -11,9 +11,8 @@ class LoginPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Listen for authentication changes
-    ref.listen(userProvider, (_, next) {
-      final user = next.valueOrNull;
-      if (user != null) {
+    ref.listen(isUserLoggedInProvider, (_, loggedIn) {
+      if (loggedIn) {
         // Go to home page when the user is logged in
         Navigator.pushReplacementNamed(context, Routes.home.name);
       }

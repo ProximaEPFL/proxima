@@ -12,6 +12,18 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Listen for authentication changes
+    ref.listen(isUserLoggedInProvider, (_, isLoggedIn) {
+      if (!isLoggedIn) {
+        // Go to login page when the user is logged out
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          Routes.login.name,
+          (route) => false,
+        );
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home page :)"),
@@ -28,13 +40,6 @@ class HomePage extends HookConsumerWidget {
               key: logoutButtonKey,
               onPressed: () {
                 ref.read(loginServiceProvider).signOut();
-
-                // Go to login page when the user is logged out
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  Routes.login.name,
-                  (route) => false,
-                );
               },
               child: const Text("Logout"),
             ),

@@ -4,13 +4,18 @@ import "package:proxima/services/login_service.dart";
 
 /// Firebase authentication change provider
 final userProvider = StreamProvider<LoginUser?>((ref) {
-  return ref.read(firebaseAuthProvider).authStateChanges().map((user) {
+  return ref.watch(firebaseAuthProvider).authStateChanges().map((user) {
     if (user == null) {
       return null;
     }
 
     return LoginUser(id: user.uid, email: user.email);
   });
+});
+
+/// Firebase authentication change provider to boolean
+final isUserLoggedInProvider = Provider<bool>((ref) {
+  return ref.watch(userProvider).valueOrNull != null;
 });
 
 /// Login Service provider; dependency injection used for testing purposes
