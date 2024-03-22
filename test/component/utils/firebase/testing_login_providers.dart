@@ -12,8 +12,15 @@ final firebaseMocksOverrides = [
   googleSignInProvider.overrideWith(mockGoogleSignIn),
 ];
 
+class MockGoogleSignInAddition extends MockGoogleSignIn {
+  @override
+  Future<GoogleSignInAccount?> signOut() async {
+    return Future.value(null);
+  }
+}
+
 GoogleSignIn mockGoogleSignIn(ProviderRef<GoogleSignIn> ref) {
-  return MockGoogleSignIn();
+  return MockGoogleSignInAddition();
 }
 
 FirebaseAuth mockFirebaseAuth(ProviderRef<FirebaseAuth> ref) {
