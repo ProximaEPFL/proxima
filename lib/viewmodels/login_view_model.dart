@@ -4,7 +4,7 @@ import "package:proxima/services/login_service.dart";
 
 /// Firebase authentication change provider
 final userProvider = StreamProvider<LoginUser?>((ref) {
-  return ref.read(firebaseAuthProvider).authStateChanges().map((user) {
+  return ref.watch(firebaseAuthProvider).authStateChanges().map((user) {
     if (user == null) {
       return null;
     }
