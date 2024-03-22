@@ -13,6 +13,11 @@ final userProvider = StreamProvider<LoginUser?>((ref) {
   });
 });
 
+/// Firebase authentication change provider to boolean
+final isUserLoggedInProvider = Provider<bool>((ref) {
+  return ref.watch(userProvider).valueOrNull != null;
+});
+
 /// Login Service provider; dependency injection used for testing purposes
 final loginServiceProvider = Provider<LoginService>((ref) {
   return LoginService(
