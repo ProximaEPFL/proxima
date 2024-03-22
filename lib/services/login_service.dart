@@ -31,11 +31,15 @@ class LoginService {
 
       // Once signed in, return the UserCredential
       await _firebaseAuth.signInWithCredential(credential);
+    } else if (googleUser != null) {
+      // Failed to sign in with Firebase
+      await _googleSignIn.signOut();
     }
   }
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+    await _googleSignIn.signOut();
   }
 }
 
