@@ -1,4 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:firebase_auth/firebase_auth.dart";
 
 class PostFirestore {
   /// The id is not stored in a field because it already
@@ -104,5 +105,42 @@ class PostFirestoreData {
       publicationTimeField: publicationTime,
       voteScoreField: voteScore,
     };
+  }
+}
+
+class PostRepository {
+  final FirebaseAuth _firebaseAuth;
+
+  static const collectionName = "posts";
+  final CollectionReference _collectionRef;
+
+  PostRepository({
+    required FirebaseAuth firebaseAuth,
+    required FirebaseFirestore firestore,
+  })  : _collectionRef = firestore.collection(collectionName),
+        _firebaseAuth = firebaseAuth;
+
+  Future<List<PostFirestore>> getNearPosts() {
+    return Future.error("Not implemented");
+  }
+
+  Future<PostFirestore> getPost(String postId) {
+    return Future.error("Not implemented");
+  }
+
+  Future<void> addPost(PostFirestoreData postData) {
+    return Future.error("Not implemented");
+  }
+
+  Future<void> deletePost(String postId) {
+    return Future.error("Not implemented");
+  }
+
+  Future<void> upVotePost(String postId) {
+    return Future.error("Not implemented");
+  }
+
+  Future<void> downVotePost(String postId) {
+    return Future.error("Not implemented");
   }
 }
