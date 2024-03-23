@@ -23,16 +23,21 @@ class UserFirestore {
       throw Exception("User document does not exist");
     }
 
-    final data = docSnap.data() as Map<String, dynamic>?;
-    if (data == null) {
-      throw Exception("User document data is null");
-    }
+    try {
+      final data = docSnap.data() as Map<String, dynamic>;
 
-    return UserFirestore(
-      uid: docSnap.id,
-      username: data[usernameField],
-      joinTime: data[joinTimeField],
-    );
+      return UserFirestore(
+        uid: docSnap.id,
+        username: data[usernameField],
+        joinTime: data[joinTimeField],
+      );
+    } catch (e) {
+      if (e is TypeError) {
+        throw Exception("Cannot parse user document : ${e.toString()}");
+      } else {
+        rethrow;
+      }
+    }
   }
 
   Map<String, dynamic> toDb() {
