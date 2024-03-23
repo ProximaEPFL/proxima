@@ -17,10 +17,14 @@ class UserFirestore {
     required this.joinTime,
   });
 
-  factory UserFirestore.fromDb(DocumentSnapshot<Map<String, dynamic>> docSnap) {
-    final data = docSnap.data();
+  factory UserFirestore.fromDb(DocumentSnapshot docSnap) {
+    if (!docSnap.exists) {
+      throw StateError("User document does not exist");
+    }
+
+    final data = docSnap.data() as Map<String, dynamic>?;
     if (data == null) {
-      throw StateError("User document data cannot be null");
+      throw StateError("User document data is null");
     }
 
     return UserFirestore(
