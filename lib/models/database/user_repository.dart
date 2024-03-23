@@ -20,12 +20,12 @@ class UserFirestore {
 
   factory UserFirestore.fromDb(DocumentSnapshot docSnap) {
     if (!docSnap.exists) {
-      throw StateError("User document does not exist");
+      throw Exception("User document does not exist");
     }
 
     final data = docSnap.data() as Map<String, dynamic>?;
     if (data == null) {
-      throw StateError("User document data is null");
+      throw Exception("User document data is null");
     }
 
     return UserFirestore(
@@ -58,7 +58,7 @@ class UserRepository {
   Future<UserFirestore> getCurrentUser() async {
     final uid = _firebaseAuth.currentUser?.uid;
     if (uid == null) {
-      return Future.error("User not logged in");
+      throw Exception("User not logged in");
     }
 
     return getUser(uid);
