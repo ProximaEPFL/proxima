@@ -5,6 +5,44 @@ class PostFirestore {
   /// corresponds to the document id on firestore
   final String id;
 
+  /// The geoHash is not stored in the [PostFirestoreData] because it
+  /// is exclusively managed by the repository (in particular, it is the
+  /// responsability of the repository to create it when adding a post)
+  final String geoHash;
+  static const String geoHashField = "geoHash";
+
+  final PostFirestoreData data;
+
+  PostFirestore({
+    required this.id,
+    required this.geoHash,
+    required this.data,
+  });
+
+  factory PostFirestore.fromDb(DocumentSnapshot docSnap) {
+    if (!docSnap.exists) {
+      throw Exception("Post document does not exist");
+    }
+
+    try {
+      final data = docSnap.data() as Map<String, dynamic>;
+
+      return PostFirestore(
+        id: docSnap.id,
+        geoHash: data[geoHashField],
+        data: PostFirestoreData.fromDbData(data),
+      );
+    } catch (e) {
+      if (e is TypeError) {
+        throw Exception("Cannot parse post document: ${e.toString()}");
+      } else {
+        rethrow;
+      }
+    }
+  }
+}
+
+class PostFirestoreData {
   final String ownerId;
   static const String ownerIdField = "ownerId";
 
@@ -20,43 +58,30 @@ class PostFirestore {
   final double latitude;
   static const String latitudeField = "latitude";
 
-  final String geoHash;
-  static const String geoHashField = "geoHash";
-
   final Timestamp publicationTime;
   static const String publicationTimeField = "publicationTime";
 
   final int voteScore;
   static const String voteScoreField = "voteScore";
 
-  PostFirestore({
-    required this.id,
+  PostFirestoreData({
     required this.ownerId,
     required this.title,
     required this.description,
     required this.longitude,
     required this.latitude,
-    required this.geoHash,
     required this.publicationTime,
     required this.voteScore,
   });
 
-  factory PostFirestore.fromDb(DocumentSnapshot docSnap) {
-    if (!docSnap.exists) {
-      throw Exception("Post document does not exist");
-    }
-
+  factory PostFirestoreData.fromDbData(Map<String, dynamic> data) {
     try {
-      final data = docSnap.data() as Map<String, dynamic>;
-
-      return PostFirestore(
-        id: docSnap.id,
+      return PostFirestoreData(
         ownerId: data[ownerIdField],
         title: data[titleField],
         description: data[descriptionField],
         longitude: data[longitudeField],
         latitude: data[latitudeField],
-        geoHash: data[geoHashField],
         publicationTime: data[publicationTimeField],
         voteScore: data[voteScoreField],
       );
@@ -69,14 +94,13 @@ class PostFirestore {
     }
   }
 
-  Map<String, dynamic> toDb() {
+  Map<String, dynamic> toDbData() {
     return {
       ownerIdField: ownerId,
       titleField: title,
       descriptionField: description,
       longitudeField: longitude,
       latitudeField: latitude,
-      geoHashField: geoHash,
       publicationTimeField: publicationTime,
       voteScoreField: voteScore,
     };
