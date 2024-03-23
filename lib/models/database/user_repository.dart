@@ -1,4 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:firebase_auth/firebase_auth.dart";
 
 class UserFirestore {
   /// The uid is not stored in a field because it already
@@ -39,5 +40,37 @@ class UserFirestore {
       usernameField: username,
       joinTimeField: joinTime,
     };
+  }
+}
+
+class UserRepository {
+  final FirebaseAuth _firebaseAuth;
+
+  static const collectionName = "users";
+  final CollectionReference _collectionRef;
+
+  UserRepository({
+    required FirebaseFirestore firestore,
+    required FirebaseAuth firebaseAuth,
+  })  : _firebaseAuth = firebaseAuth,
+        _collectionRef = firestore.collection(collectionName);
+
+  Future<UserFirestore> getCurrentUser() async {
+    final uid = _firebaseAuth.currentUser?.uid;
+    if (uid == null) {
+      return Future.error("User not logged in");
+    }
+
+    return getUser(uid);
+  }
+
+  Future<UserFirestore> getUser(String uid) async {
+    final docSnap = await _collectionRef.doc(uid).get();
+
+    return UserFirestore.fromDb(docSnap);
+  }
+
+  Future<void> setUser(UserFirestore user) async {
+    await _collectionRef.doc(user.uid).set(user.toDb());
   }
 }
