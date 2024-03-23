@@ -22,7 +22,7 @@ class LoginService {
         await googleUser?.authentication;
 
     //Check that the auth details are valid
-    if (googleAuth?.accessToken == null || googleAuth?.idToken == null) {
+    if (googleAuth?.accessToken == null && googleAuth?.idToken == null) {
       if (googleUser != null) {
         await _googleSignIn.signOut();
       }
