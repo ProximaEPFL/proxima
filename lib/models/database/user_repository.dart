@@ -71,6 +71,10 @@ class UserRepository {
   }
 
   Future<void> setUser(UserFirestore user) async {
+    if (user.uid.isEmpty) {
+      throw const FormatException("Cannot set a user with empty uid");
+    }
+
     await _collectionRef.doc(user.uid).set(user.toDb());
   }
 }
