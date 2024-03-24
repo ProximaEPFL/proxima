@@ -1,0 +1,31 @@
+//create a enum with all the routes for the bottom bar with icons and names
+
+import "package:flutter/material.dart";
+
+enum NavigationbarRoutes {
+  //TODO set the routes for the pages
+  timeline("Feed", Icon(Icons.home)),
+  challenges("Challenges", Icon(Icons.emoji_events)),
+  addPost(
+    "Add post",
+    CircleAvatar(
+      child: Icon(Icons.add),
+    ),
+  ),
+  groups("Groups", Icon(Icons.group)),
+  map("Map", Icon(Icons.place));
+
+  final String name;
+  final Widget icon;
+
+  const NavigationbarRoutes(this.name, this.icon);
+}
+
+List<Widget> createNavigationItems() {
+  return NavigationbarRoutes.values.map((destination) {
+    return NavigationDestination(
+      icon: destination.icon,
+      label: destination.name,
+    );
+  }).toList();
+}

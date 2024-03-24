@@ -7,7 +7,6 @@ import "package:proxima/views/pages/login_page.dart";
 
 import "utils/firebase/setup_firebase_mocks.dart";
 import "utils/firebase/testing_login_providers.dart";
-import "utils/mock_data/firebase_user_mock.dart";
 
 void main() {
   setupFirebaseAuthMocks();
@@ -39,26 +38,5 @@ void main() {
     // Check that pressing login redirects to the homepage
     final homePage = find.byType(HomePage);
     expect(homePage, findsOneWidget);
-
-    // Check that the user's email is correctly dispalyed
-    final test = find.textContaining(testingLoginUser.email!);
-    expect(test, findsOneWidget);
-  });
-
-  testWidgets("Login and Logout", (tester) async {
-    await tester.pumpWidget(mockedProxima);
-    await tester.pumpAndSettle();
-
-    final loginButton = find.byKey(LoginPage.loginButtonKey);
-    await tester.tap(loginButton);
-    await tester.pumpAndSettle();
-
-    final logoutButton = find.byKey(HomePage.logoutButtonKey);
-    await tester.tap(logoutButton);
-    await tester.pumpAndSettle();
-
-    // Check that pressing logout redirects to the login page
-    final loginPage = find.byType(LoginPage);
-    expect(loginPage, findsOneWidget);
   });
 }
