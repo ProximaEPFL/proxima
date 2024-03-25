@@ -27,14 +27,16 @@ void main() {
   });
 
   group("User repository testing", () {
-    test("Set a valid user correctly with empty db", () async {
+    test("Set a valid current user correctly with empty db", () async {
       final expectedUser = UserFirestore(
-        uid: "user_id_1354",
-        username: "username_8456",
-        joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
+        uid: testLoggedUser.uid,
+        data: UserFirestoreData(
+          username: "username_8456",
+          joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
+        ),
       );
 
-      await userRepo.setUser(expectedUser);
+      await userRepo.setCurrentUser(expectedUser.data);
 
       final actualUserCollection = await userCollection.get();
       final actualDocs = actualUserCollection.docs;
@@ -44,25 +46,12 @@ void main() {
       final actualUser = actualDocs[0];
       expect(actualUser.id, expectedUser.uid);
       expect(
-        actualUser.data()[UserFirestore.usernameField],
-        expectedUser.username,
+        actualUser.data()[UserFirestoreData.usernameField],
+        expectedUser.data.username,
       );
       expect(
-        actualUser.data()[UserFirestore.joinTimeField],
-        expectedUser.joinTime,
-      );
-    });
-
-    test("Set a user with empty uid fails", () async {
-      final userToAdd = UserFirestore(
-        uid: "",
-        username: "username",
-        joinTime: Timestamp.fromMillisecondsSinceEpoch(10000),
-      );
-
-      expect(
-        userRepo.setUser(userToAdd),
-        throwsA(isA<Exception>()),
+        actualUser.data()[UserFirestoreData.joinTimeField],
+        expectedUser.data.joinTime,
       );
     });
 
@@ -76,17 +65,21 @@ void main() {
     test("Get current user correctly", () async {
       final expectedUser = UserFirestore(
         uid: testLoggedUser.uid,
-        username: "username_8456",
-        joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
+        data: UserFirestoreData(
+          username: "username_8456",
+          joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
+        ),
       );
 
-      await userCollection.doc(expectedUser.uid).set(expectedUser.toDb());
+      await userCollection
+          .doc(expectedUser.uid)
+          .set(expectedUser.data.toDbData());
 
       final actualUser = await userRepo.getCurrentUser();
 
       expect(actualUser.uid, expectedUser.uid);
-      expect(actualUser.username, expectedUser.username);
-      expect(actualUser.joinTime, expectedUser.joinTime);
+      expect(actualUser.data.joinTime, expectedUser.data.joinTime);
+      expect(actualUser.data.username, expectedUser.data.username);
     });
 
     test("Get current user fails when not logged in", () async {
@@ -105,29 +98,35 @@ void main() {
     test("Get user correctly", () async {
       final expectedUser = UserFirestore(
         uid: "user_id_1354",
-        username: "username_8456",
-        joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
+        data: UserFirestoreData(
+          username: "username_8456",
+          joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
+        ),
       );
 
-      await userCollection.doc(expectedUser.uid).set(expectedUser.toDb());
+      await userCollection
+          .doc(expectedUser.uid)
+          .set(expectedUser.data.toDbData());
 
       final actualUser = await userRepo.getUser(expectedUser.uid);
 
       expect(actualUser.uid, expectedUser.uid);
-      expect(actualUser.username, expectedUser.username);
-      expect(actualUser.joinTime, expectedUser.joinTime);
+      expect(actualUser.data.joinTime, expectedUser.data.joinTime);
+      expect(actualUser.data.username, expectedUser.data.username);
     });
 
     test("Get user fails when firestore data format doesn't have all fields",
         () async {
       final expectedUser = UserFirestore(
         uid: "user_id_1354",
-        username: "username_8456",
-        joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
+        data: UserFirestoreData(
+          username: "username_8456",
+          joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
+        ),
       );
 
       await userCollection.doc(expectedUser.uid).set({
-        UserFirestore.usernameField: expectedUser.username,
+        UserFirestoreData.usernameField: expectedUser.data.username,
         // The joinTime field is missing on purpose
       });
 
