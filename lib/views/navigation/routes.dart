@@ -1,10 +1,12 @@
 import "package:flutter/material.dart";
 import "package:proxima/views/pages/home_page.dart";
 import "package:proxima/views/pages/login_page.dart";
+import "package:proxima/views/pages/new_post_page.dart";
 
 enum Routes {
   home("home"),
-  login("login");
+  login("login"),
+  newPost("new post");
 
   final String name;
 
@@ -20,6 +22,8 @@ enum Routes {
         return const HomePage();
       case login:
         return const LoginPage();
+      case newPost:
+        return const NewPostPage();
     }
   }
 }
