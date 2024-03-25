@@ -1,7 +1,9 @@
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:flutter/foundation.dart";
 import "package:geoflutterfire2/geoflutterfire2.dart";
 import "package:proxima/services/geolocation_service.dart";
 
+@immutable
 class PostLocationFirestore {
   final GeoPoint geoPoint;
   final String geohash;
@@ -14,7 +16,7 @@ class PostLocationFirestore {
   static const String geoPointField = "geopoint"; // Do not change
   static const String geohashField = "geohash"; // Do not change
 
-  PostLocationFirestore({
+  const PostLocationFirestore({
     required this.geoPoint,
     required this.geohash,
   });
@@ -36,6 +38,7 @@ class PostLocationFirestore {
   }
 }
 
+@immutable
 class PostFirestore {
   /// The id is not stored in a field because it already
   /// corresponds to the document id on firestore
@@ -49,7 +52,7 @@ class PostFirestore {
 
   final PostFirestoreData data;
 
-  PostFirestore({
+  const PostFirestore({
     required this.id,
     required this.location,
     required this.data,
@@ -79,6 +82,7 @@ class PostFirestore {
   }
 }
 
+@immutable
 class PostFirestoreData {
   final String ownerId;
   static const String ownerIdField = "ownerId";
@@ -95,7 +99,7 @@ class PostFirestoreData {
   final int voteScore;
   static const String voteScoreField = "voteScore";
 
-  PostFirestoreData({
+  const PostFirestoreData({
     required this.ownerId,
     required this.title,
     required this.description,
