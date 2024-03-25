@@ -20,12 +20,33 @@ class LoginPage extends HookConsumerWidget {
 
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-          key: loginButtonKey,
-          onPressed: () async {
-            await ref.read(loginServiceProvider).signIn();
-          },
-          child: const Text("Login"),
+        // padded centered column containing logo, text and login button
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child:
+                  Image.asset("assets/images/proxima_logo.jpeg"),
+              ),
+              // logo
+              const SizedBox(height: 16),
+              // text
+              const Text("Discover the world, one post at a time"),
+              const SizedBox(height: 16),
+              // login button
+              ElevatedButton(
+                key: loginButtonKey,
+                onPressed: () async {
+                  await ref.read(loginServiceProvider).signIn();
+                },
+
+                child: const Text("Sign in with Google"),
+              ),
+            ],
+          ),
         ),
       ),
     );
