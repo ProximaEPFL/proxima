@@ -1,8 +1,7 @@
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
-import "../../viewmodels/new_post_view_model.dart";
+import "package:proxima/viewmodels/new_post_view_model.dart";
 
 class NewPostPage extends HookConsumerWidget {
   const NewPostPage({super.key});
