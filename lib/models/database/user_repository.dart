@@ -130,6 +130,12 @@ class UserRepository {
     await _collectionRef.doc(uid).set(userData.toDbData());
   }
 
+  Future<bool> doesUserExists(UserFirestoreId uid) async {
+    final docSnap = await _collectionRef.doc(uid).get();
+
+    return docSnap.exists;
+  }
+
   String _getUid() {
     final uid = _firebaseAuth.currentUser?.uid;
     if (uid == null) {

@@ -135,5 +135,30 @@ void main() {
         throwsA(isA<Exception>()),
       );
     });
+
+    test("doesUserExists returns true when user exists", () async {
+      final expectedUser = UserFirestore(
+        uid: "user_id_1354",
+        data: UserFirestoreData(
+          username: "username_8456",
+          displayName: "display_name_8456",
+          joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
+        ),
+      );
+
+      await userCollection
+          .doc(expectedUser.uid)
+          .set(expectedUser.data.toDbData());
+
+      final actualUser = await userRepo.doesUserExists(expectedUser.uid);
+
+      expect(actualUser, true);
+    });
+
+    test("doesUserExists returns false when user does not exist", () async {
+      final actualUser = await userRepo.doesUserExists("non_existent_user_id");
+
+      expect(actualUser, false);
+    });
   });
 }
