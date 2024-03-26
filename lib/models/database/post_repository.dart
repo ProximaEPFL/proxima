@@ -229,18 +229,6 @@ class PostRepository {
     await _collectionRef.doc(postId).delete();
   }
 
-  Future<void> upVotePost(String postId) {
-    // Advice for implementation: use firestore transactions to ensure
-    // atomicity of the operation
-    return Future.error("Not implemented");
-  }
-
-  Future<void> downVotePost(String postId) {
-    // Advice for implementation: use firestore transactions to ensure
-    // atomicity of the operation
-    return Future.error("Not implemented");
-  }
-
   Future<void> _addPostAtLocation(
     GeoFirePoint point,
     PostFirestoreData postData,
@@ -269,7 +257,15 @@ class PostRepository {
         )
         .first;
 
-    return posts.map((docSnap) => PostFirestore.fromDb(docSnap)).toList();
+    return posts.map((docSnap) => PostFirestore.fromDb(docSnap)).where((post) {
+      // We need to filter the posts because the query is not exact
+      final postPoint = post.location.geoPoint;
+      return point.distance(
+            lat: postPoint.latitude,
+            lng: postPoint.longitude,
+          ) <=
+          kmPostRadius;
+    }).toList();
   }
 
   Future<GeoFirePoint> _getCurrentGeoFirePoint() async {
