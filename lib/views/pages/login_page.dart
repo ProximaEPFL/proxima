@@ -11,6 +11,8 @@ class LoginPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var theme = Theme.of(context);
+
     // Listen for authentication changes
     ref.listen(isUserLoggedInProvider, (_, loggedIn) {
       if (loggedIn) {
@@ -24,26 +26,52 @@ class LoginPage extends HookConsumerWidget {
       body: Center(
         // padded centered column containing logo, text and login button
         child: Container(
-          padding: const EdgeInsets.all(16),
-          color: Colors.indigo[100],
+          padding: const EdgeInsets.all(32.0),
+          color: theme.colorScheme.background,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
+              Flexible(
+                flex:
+                    2, // Adjust the flex factor to control how much space the logo takes
                 child: Container(
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24.0),
                   child: ClipRRect(
                     key: logoKey,
-                    // rounded logo image
-                    borderRadius: BorderRadius.circular(28),
-                    child: Image.asset("assets/images/proxima_logo.jpeg"),
+                    borderRadius: BorderRadius.circular(28.0),
+                    child: Image.asset(
+                      "assets/images/proxima_logo.jpeg",
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
-              const Text("Discover the world, one post at a time"),
-              const SizedBox(height: 28),
-              const LoginButton(),
+              const Flexible(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: 8.0,
+                    left: 24.0,
+                    right: 24.0,
+                  ),
+                  child: Text(
+                    "Discover the world,\n one post at a time",
+                    textAlign: TextAlign
+                        .center, // Ensure the text itself is centered if it spans multiple lines
+                    // TODO: verify that the text style is correct after the theme is finalized
+                  ),
+                ),
+              ),
+              const Flexible(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: 16.0,
+                    bottom: 8.0,
+                    left: 24.0,
+                    right: 24.0,
+                  ),
+                  child: LoginButton(),
+                ),
+              ),
             ],
           ),
         ),
