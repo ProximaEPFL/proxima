@@ -18,13 +18,3 @@ enum TimeLineFilters {
 
   const TimeLineFilters(this.name, this.icon);
 }
-
-List<DropdownMenuEntry> createFilterItems(BuildContext context) {
-  return TimeLineFilters.values.map((filter) {
-    return DropdownMenuEntry(
-      value: filter,
-      label: filter.name,
-      leadingIcon: filter.icon,
-    );
-  }).toList();
-}

@@ -11,8 +11,8 @@ class HomePage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return const SafeArea(
       child: Scaffold(
-        bottomNavigationBar: NavigationBottomBar(),
         appBar: HomeTopBar(),
+        bottomNavigationBar: NavigationBottomBar(),
         body: Padding(
           padding: EdgeInsets.all(8.0),
           child: HomeFeed(),

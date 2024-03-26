@@ -24,12 +24,3 @@ enum NavigationbarRoutes {
 
   const NavigationbarRoutes(this.name, this.icon);
 }
-
-List<Widget> createNavigationItems() {
-  return NavigationbarRoutes.values.map((destination) {
-    return NavigationDestination(
-      icon: destination.icon,
-      label: destination.name,
-    );
-  }).toList();
-}

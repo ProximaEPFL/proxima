@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:proxima/models/ui/post_data.dart";
 import "package:proxima/views/home/posts/post_card/comment_widget.dart";
 import "package:proxima/views/home/posts/post_card/user_bar_widget.dart";
 import "package:proxima/views/home/posts/post_card/votes_widget.dart";
@@ -9,24 +10,24 @@ import "package:proxima/views/home/posts/post_card/votes_widget.dart";
   and the user (profile picture and username).
 */
 class PostCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final int votes;
-  final int commentNumber;
-  final String posterUsername;
+  static const postCardKey = Key("postCard");
+  static const postCardTitleKey = Key("postCardTitle");
+  static const postCardDescriptionKey = Key("postCardDescription");
+  static const postCardVotesKey = Key("postCardVotes");
+  static const postCardCommentsKey = Key("postCardComments");
+  static const postCardUserKey = Key("postCardUser");
+
+  final Post post;
 
   const PostCard({
     super.key,
-    required this.title,
-    required this.description,
-    required this.votes,
-    required this.commentNumber,
-    required this.posterUsername,
+    required this.post,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      key: postCardKey,
       clipBehavior: Clip.hardEdge,
       child: InkWell(
         //TODO: Implement the logic to navigate to the post
@@ -36,16 +37,21 @@ class PostCard extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(left: 16.0, right: 0.8, top: 8.0),
-              child: UserBarWidget(posterUsername: posterUsername),
+              child: UserBarWidget(
+                key: postCardUserKey,
+                posterUsername: post.posterUsername,
+              ),
             ),
             ListTile(
               title: Text(
-                title,
+                key: postCardTitleKey,
+                post.title,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
               subtitle: Text(
-                description,
+                key: postCardDescriptionKey,
+                post.description,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 7,
               ),
@@ -55,7 +61,7 @@ class PostCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  VotesWidget(votes: votes),
+                  VotesWidget(key: postCardVotesKey, votes: post.votes),
                   InkWell(
                     customBorder: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
@@ -63,7 +69,8 @@ class PostCard extends StatelessWidget {
                     //TODO: Implement the logic to navigate to the post
                     onTap: () => {},
                     child: CommentWidget(
-                      commentNumber: commentNumber,
+                      key: postCardCommentsKey,
+                      commentNumber: post.commentNumber,
                     ),
                   ),
                 ],

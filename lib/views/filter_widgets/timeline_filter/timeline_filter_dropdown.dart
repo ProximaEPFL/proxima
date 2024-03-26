@@ -25,4 +25,14 @@ class TimeLineFiltersDropDown extends StatelessWidget {
       },
     );
   }
+
+  List<DropdownMenuEntry> createFilterItems(BuildContext context) {
+    return TimeLineFilters.values.map((filter) {
+      return DropdownMenuEntry(
+        value: filter,
+        label: filter.name,
+        leadingIcon: filter.icon,
+      );
+    }).toList();
+  }
 }

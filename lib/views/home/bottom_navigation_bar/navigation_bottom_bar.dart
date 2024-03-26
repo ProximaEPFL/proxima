@@ -7,11 +7,14 @@ import "package:proxima/views/home/bottom_navigation_bar/navigation_bar_routes.d
   It contains the navigation routes to the different pages.
 */
 class NavigationBottomBar extends HookConsumerWidget {
+  static const navigationBottomBarKey = Key("navigationBottomBar");
+
   const NavigationBottomBar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return NavigationBar(
+      key: navigationBottomBarKey,
       height: 90,
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       selectedIndex:
@@ -21,5 +24,14 @@ class NavigationBottomBar extends HookConsumerWidget {
       },
       destinations: createNavigationItems(),
     );
+  }
+
+  List<Widget> createNavigationItems() {
+    return NavigationbarRoutes.values.map((destination) {
+      return NavigationDestination(
+        icon: destination.icon,
+        label: destination.name,
+      );
+    }).toList();
   }
 }

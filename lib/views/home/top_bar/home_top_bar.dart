@@ -7,18 +7,26 @@ import "package:proxima/views/filter_widgets/timeline_filter/timeline_filter_dro
   It contains the timeline filters and the user profile picture
 */
 class HomeTopBar extends HookConsumerWidget implements PreferredSizeWidget {
+  static const homeTopBarKey = Key("homeTopBar");
+  static const timelineFiltersDropDownKey = Key("timelineFiltersDropDown");
+  static const profilePictureKey = Key("profilePicture");
+
   const HomeTopBar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Padding(
+      key: homeTopBarKey,
       padding: EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          TimeLineFiltersDropDown(),
+          TimeLineFiltersDropDown(
+            key: timelineFiltersDropDownKey,
+          ),
           CircleAvatar(
+            key: profilePictureKey,
             child: Text("PR"),
           ),
         ],
