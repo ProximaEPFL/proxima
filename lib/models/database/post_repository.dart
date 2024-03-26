@@ -49,6 +49,21 @@ class PostFirestore {
       }
     }
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is PostFirestore &&
+        other.id == id &&
+        other.location == location &&
+        other.data == data;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(id, location, data);
+  }
 }
 
 @immutable
@@ -104,6 +119,23 @@ class PostFirestoreData {
       voteScoreField: voteScore,
     };
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is PostFirestoreData &&
+        other.ownerId == ownerId &&
+        other.title == title &&
+        other.description == description &&
+        other.publicationTime == publicationTime &&
+        other.voteScore == voteScore;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(ownerId, title, description, publicationTime, voteScore);
+  }
 }
 
 @immutable
@@ -139,6 +171,18 @@ class PostLocationFirestore {
       }
     }
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is PostLocationFirestore &&
+        other.geoPoint == geoPoint &&
+        other.geohash == geohash;
+  }
+
+  @override
+  int get hashCode => Object.hash(geoPoint, geohash);
 }
 
 class PostRepository {

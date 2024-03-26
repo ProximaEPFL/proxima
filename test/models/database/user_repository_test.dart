@@ -79,9 +79,7 @@ void main() {
 
       final actualUser = await userRepo.getCurrentUser();
 
-      expect(actualUser.uid, expectedUser.uid);
-      expect(actualUser.data.joinTime, expectedUser.data.joinTime);
-      expect(actualUser.data.username, expectedUser.data.username);
+      expect(actualUser, expectedUser);
     });
 
     test("Get current user fails when not logged in", () async {
@@ -113,9 +111,7 @@ void main() {
 
       final actualUser = await userRepo.getUser(expectedUser.uid);
 
-      expect(actualUser.uid, expectedUser.uid);
-      expect(actualUser.data.joinTime, expectedUser.data.joinTime);
-      expect(actualUser.data.username, expectedUser.data.username);
+      expect(actualUser, expectedUser);
     });
 
     test("Get user fails when firestore data format doesn't have all fields",

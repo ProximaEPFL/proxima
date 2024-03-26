@@ -35,6 +35,14 @@ class UserFirestore {
       }
     }
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserFirestore && other.uid == uid && other.data == data;
+  }
+
+  @override
+  int get hashCode => Object.hash(uid, data);
 }
 
 @immutable
@@ -77,6 +85,17 @@ class UserFirestoreData {
       joinTimeField: joinTime,
     };
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserFirestoreData &&
+        other.username == username &&
+        other.displayName == displayName &&
+        other.joinTime == joinTime;
+  }
+
+  @override
+  int get hashCode => Object.hash(username, displayName, joinTime);
 }
 
 class UserRepository {
