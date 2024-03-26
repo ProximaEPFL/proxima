@@ -9,7 +9,7 @@ Position getSimplePosition(double latitude, double longitude) {
   return Position(
     latitude: latitude,
     longitude: longitude,
-    timestamp: DateTime.now(),
+    timestamp: DateTime.fromMillisecondsSinceEpoch(123123123),
     accuracy: 0,
     altitude: 0,
     heading: 0,
