@@ -29,7 +29,7 @@ void main() {
 
     // Check that the login button is displayed and contains the "Login" text
     expect(
-      find.descendant(of: loginButton, matching: find.text("Login")),
+      find.descendant(of: loginButton, matching: find.text("Sign in with Google")),
       findsOneWidget,
     );
 
