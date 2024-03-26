@@ -16,12 +16,12 @@ class NewPostPage extends HookConsumerWidget {
           icon: const Icon(Icons.arrow_back),
         ),
       ),
-      body: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
               child: TextField(
                 decoration: InputDecoration(
@@ -30,14 +30,15 @@ class NewPostPage extends HookConsumerWidget {
                 ),
               ),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
               child: TextField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: "Body",
                 ),
-                maxLines: null,
+                minLines: 5,
+                maxLines: 10, // TODO make this depend on the screen size
                 textAlignVertical: TextAlignVertical.top,
               ),
             ),
