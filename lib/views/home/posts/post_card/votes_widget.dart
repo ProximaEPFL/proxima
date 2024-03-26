@@ -59,6 +59,7 @@ class VotesWidget extends StatelessWidget {
     if (votes >= 0) {
       return "+ $votes";
     } else {
+      votes = -votes;
       return "- $votes";
     }
   }
