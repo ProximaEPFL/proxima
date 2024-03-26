@@ -5,28 +5,28 @@ import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/user_repository.dart";
 
 void main() {
-  final testLoggedUser = MockUser(
-    isAnonymous: false,
-    uid: "testing_user_id",
-    email: "testing.user@gmail.com",
-    displayName: "Testing User",
-  );
-
-  var fakeFireStore = FakeFirebaseFirestore();
-  final userCollection =
-      fakeFireStore.collection(UserRepository.collectionName);
-
-  final mockFirebaseAuth =
-      MockFirebaseAuth(signedIn: true, mockUser: testLoggedUser);
-
-  final userRepo =
-      UserRepository(firebaseAuth: mockFirebaseAuth, firestore: fakeFireStore);
-
-  setUp(() async {
-    await fakeFireStore.clearPersistence();
-  });
-
   group("User repository testing", () {
+    final testLoggedUser = MockUser(
+      isAnonymous: false,
+      uid: "testing_user_id",
+      email: "testing.user@gmail.com",
+      displayName: "Testing User",
+    );
+
+    late FakeFirebaseFirestore fakeFireStore;
+    late CollectionReference<Map<String, dynamic>> userCollection;
+    late MockFirebaseAuth mockFirebaseAuth;
+    late UserRepository userRepo;
+
+    setUp(() async {
+      fakeFireStore = FakeFirebaseFirestore();
+      userCollection = fakeFireStore.collection(UserRepository.collectionName);
+      mockFirebaseAuth =
+          MockFirebaseAuth(signedIn: true, mockUser: testLoggedUser);
+      userRepo = UserRepository(
+          firebaseAuth: mockFirebaseAuth, firestore: fakeFireStore);
+    });
+
     test("Set a valid current user correctly with empty db", () async {
       final expectedUser = UserFirestore(
         uid: testLoggedUser.uid,
@@ -83,14 +83,10 @@ void main() {
     });
 
     test("Get current user fails when not logged in", () async {
-      final signedOutMockFirebaseAuth = MockFirebaseAuth(signedIn: false);
-      final signedOutserRepo = UserRepository(
-        firebaseAuth: signedOutMockFirebaseAuth,
-        firestore: fakeFireStore,
-      );
+      await mockFirebaseAuth.signOut();
 
       expect(
-        signedOutserRepo.getCurrentUser(),
+        userRepo.getCurrentUser(),
         throwsA(isA<Exception>()),
       );
     });
