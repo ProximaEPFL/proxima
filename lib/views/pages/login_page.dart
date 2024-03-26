@@ -28,12 +28,14 @@ class LoginPage extends HookConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.all(24),
-                child: ClipRRect(
-                  // rounded logo image
-                  borderRadius: BorderRadius.circular(28),
-                  child: Image.asset("assets/images/proxima_logo.jpeg"),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  child: ClipRRect(
+                    // rounded logo image
+                    borderRadius: BorderRadius.circular(28),
+                    child: Image.asset("assets/images/proxima_logo.jpeg"),
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
