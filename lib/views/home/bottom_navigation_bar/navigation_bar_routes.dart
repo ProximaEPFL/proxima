@@ -2,6 +2,10 @@
 
 import "package:flutter/material.dart";
 
+/*
+  This enum is used to create the navigation bar routes.
+  It contains the name and icon of the routes.
+*/
 enum NavigationbarRoutes {
   //TODO set the routes for the pages
   timeline("Feed", Icon(Icons.home)),

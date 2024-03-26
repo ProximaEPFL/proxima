@@ -2,6 +2,10 @@
 
 import "package:flutter/material.dart";
 
+/*
+  This enum is used to create the timeline filters.
+  It contains the name and icon of the filters.
+*/
 enum TimeLineFilters {
   f1("Filter 1", Icon(Icons.abc)),
   f2("Filter 2", Icon(Icons.filter_none)),

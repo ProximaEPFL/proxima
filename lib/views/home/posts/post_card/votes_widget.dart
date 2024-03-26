@@ -1,5 +1,9 @@
 import "package:flutter/material.dart";
 
+/*
+  This widget is used to display the votes of a post.
+  It contains two buttons to upvote and downvote the post and the number of votes.
+*/
 class VotesWidget extends StatelessWidget {
   final int votes;
   const VotesWidget({

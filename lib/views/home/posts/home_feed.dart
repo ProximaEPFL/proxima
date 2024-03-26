@@ -2,6 +2,10 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/home/posts/post_card/post_card.dart";
 
+/*
+  This widget is the feed of the home page
+  It contains the posts
+*/
 class HomeFeed extends HookConsumerWidget {
   const HomeFeed({super.key});
 
