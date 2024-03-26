@@ -14,7 +14,7 @@ class HomePage extends HookConsumerWidget {
         appBar: HomeTopBar(),
         bottomNavigationBar: NavigationBottomBar(),
         body: Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: EdgeInsets.only(left: 8.0, right: 8.0),
           child: HomeFeed(),
         ),
       ),

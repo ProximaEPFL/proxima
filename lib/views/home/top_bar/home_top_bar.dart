@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
-import "package:proxima/views/filter_widgets/timeline_filter/timeline_filter_dropdown.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 /*
@@ -12,7 +11,6 @@ class HomeTopBar extends HookConsumerWidget implements PreferredSizeWidget {
   static const logoutButtonKey = Key("logout");
 
   static const homeTopBarKey = Key("homeTopBar");
-  static const timelineFiltersDropDownKey = Key("timelineFiltersDropDown");
   static const profilePictureKey = Key("profilePicture");
 
   const HomeTopBar({super.key});
@@ -33,14 +31,12 @@ class HomeTopBar extends HookConsumerWidget implements PreferredSizeWidget {
 
     return Padding(
       key: homeTopBarKey,
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const TimeLineFiltersDropDown(
-            key: timelineFiltersDropDownKey,
-          ),
+          Text("Proxima", style: Theme.of(context).textTheme.headlineMedium),
 
           //Temporary logout button
           InkWell(

@@ -11,27 +11,19 @@ class TimeLineFiltersDropDown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownMenu(
-      inputDecorationTheme: const InputDecorationTheme(
-        isDense: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-      ),
-      dropdownMenuEntries: createFilterItems(context),
-      initialSelection: TimeLineFilters.f1,
-      onSelected: (value) {
-        //TODO: Implement the logic to change the filter
-      },
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 4.0,
+      children: createFilterItems(context),
     );
   }
 
-  List<DropdownMenuEntry> createFilterItems(BuildContext context) {
+  List<ChoiceChip> createFilterItems(BuildContext context) {
     return TimeLineFilters.values.map((filter) {
-      return DropdownMenuEntry(
-        value: filter,
-        label: filter.name,
-        leadingIcon: filter.icon,
+      return ChoiceChip(
+        //TODO: Handle the filter selection
+        selected: filter.name == "Nearest",
+        label: Text(filter.name),
       );
     }).toList();
   }

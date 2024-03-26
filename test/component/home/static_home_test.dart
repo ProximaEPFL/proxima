@@ -32,7 +32,7 @@ void main() {
     expect(topBar, findsOneWidget);
 
     //Check filter dropdown is displayed
-    final filterDropDown = find.byKey(HomeTopBar.timelineFiltersDropDownKey);
+    final filterDropDown = find.byKey(HomeFeed.timelineFiltersDropDownKey);
     expect(filterDropDown, findsOneWidget);
 
     //Check profile picture is displayed
