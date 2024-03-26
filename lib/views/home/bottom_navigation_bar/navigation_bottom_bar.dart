@@ -14,7 +14,6 @@ class NavigationBottomBar extends HookConsumerWidget {
           0, // TODO set the index of the selected page depending on the page
       onDestinationSelected: (int index) {
         //TODO add the navigation to the pages
-        print("Clicked on $index");
       },
       destinations: createNavigationItems(),
     );

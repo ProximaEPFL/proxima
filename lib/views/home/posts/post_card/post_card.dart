@@ -25,7 +25,7 @@ class PostCard extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       child: InkWell(
         //TODO: Implement the logic to navigate to the post
-        onTap: () => print("Clicked on post"),
+        onTap: () => {},
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -56,7 +56,7 @@ class PostCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     //TODO: Implement the logic to navigate to the post
-                    onTap: () => print("Clicked on post (with comments)"),
+                    onTap: () => {},
                     child: CommentWidget(
                       commentNumber: commentNumber,
                     ),

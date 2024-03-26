@@ -27,7 +27,7 @@ class VotesWidget extends StatelessWidget {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               onPressed: () {
-                print("Clicked on upvote");
+                //TODO: Implement the logic to upvote the post
               },
             ),
             IconButton(
@@ -38,7 +38,7 @@ class VotesWidget extends StatelessWidget {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               onPressed: () {
-                print("Clicked on downvote");
+                //TODO: Implement the logic to downvote the post
               },
             ),
             Padding(

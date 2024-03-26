@@ -19,7 +19,6 @@ class TimeLineFiltersDropDown extends StatelessWidget {
       initialSelection: TimeLineFilters.f1,
       onSelected: (value) {
         //TODO: Implement the logic to change the filter
-        print("Changed to ${value.name}");
       },
     );
   }
