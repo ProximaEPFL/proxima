@@ -24,7 +24,9 @@ void main() {
       mockFirebaseAuth =
           MockFirebaseAuth(signedIn: true, mockUser: testLoggedUser);
       userRepo = UserRepository(
-          firebaseAuth: mockFirebaseAuth, firestore: fakeFireStore);
+        firebaseAuth: mockFirebaseAuth,
+        firestore: fakeFireStore,
+      );
     });
 
     test("Set a valid current user correctly with empty db", () async {
