@@ -42,27 +42,25 @@ class NewPostPage extends HookConsumerWidget {
                 textAlignVertical: TextAlignVertical.top,
               ),
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                child: const Text("Post"),
-                onPressed: () {
-                  Navigator.pop(context);
-                  // TODO commit the post to the repository
-                },
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                // TODO open tag and notification settings overlay
-              },
-              icon: const Icon(Icons.settings),
+            const Spacer(),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    child: const Text("Post"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      // TODO commit the post to the repository
+                    },
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    // TODO open tag and notification settings overlay
+                  },
+                  icon: const Icon(Icons.settings),
+                ),
+              ],
             ),
           ],
         ),
