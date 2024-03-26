@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
-import "package:proxima/views/filter_widgets/timeline_filter/timeline_filter_dropdown.dart";
 import "package:proxima/views/home/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/home/posts/home_feed.dart";
 import "package:proxima/views/home/posts/post_card/post_card.dart";
