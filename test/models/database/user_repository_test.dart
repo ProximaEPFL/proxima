@@ -32,6 +32,7 @@ void main() {
         uid: testLoggedUser.uid,
         data: UserFirestoreData(
           username: "username_8456",
+          displayName: "display_name_8456",
           joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
         ),
       );
@@ -67,6 +68,7 @@ void main() {
         uid: testLoggedUser.uid,
         data: UserFirestoreData(
           username: "username_8456",
+          displayName: "display_name_8456",
           joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
         ),
       );
@@ -100,6 +102,7 @@ void main() {
         uid: "user_id_1354",
         data: UserFirestoreData(
           username: "username_8456",
+          displayName: "display_name_8456",
           joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
         ),
       );
@@ -121,6 +124,7 @@ void main() {
         uid: "user_id_1354",
         data: UserFirestoreData(
           username: "username_8456",
+          displayName: "display_name_8456",
           joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
         ),
       );

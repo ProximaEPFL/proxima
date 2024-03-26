@@ -39,11 +39,15 @@ class UserFirestoreData {
   final String username;
   static const String usernameField = "username";
 
+  final String displayName;
+  static const String displayNameField = "displayName";
+
   final Timestamp joinTime;
   static const joinTimeField = "joinTime";
 
   const UserFirestoreData({
     required this.username,
+    required this.displayName,
     required this.joinTime,
   });
 
@@ -51,6 +55,7 @@ class UserFirestoreData {
     try {
       return UserFirestoreData(
         username: data[usernameField],
+        displayName: data[displayNameField],
         joinTime: data[joinTimeField],
       );
     } catch (e) {
@@ -65,6 +70,7 @@ class UserFirestoreData {
   Map<String, dynamic> toDbData() {
     return {
       usernameField: username,
+      displayNameField: displayName,
       joinTimeField: joinTime,
     };
   }
