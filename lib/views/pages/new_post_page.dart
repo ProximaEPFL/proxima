@@ -1,16 +1,11 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
-import "package:proxima/viewmodels/new_post_view_model.dart";
-
 class NewPostPage extends HookConsumerWidget {
   const NewPostPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final title = ref.watch(titleProvider);
-    final body = ref.watch(bodyProvider);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Create a new post"),
@@ -58,11 +53,16 @@ class NewPostPage extends HookConsumerWidget {
                 child: const Text("Post"),
                 onPressed: () {
                   Navigator.pop(context);
-                  /* TODO */
+                  // TODO commit the post to the repository
                 },
               ),
             ),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.settings)),
+            IconButton(
+              onPressed: () {
+                // TODO open tag and notification settings overlay
+              },
+              icon: const Icon(Icons.settings),
+            ),
           ],
         ),
       ),
