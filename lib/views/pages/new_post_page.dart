@@ -12,12 +12,57 @@ class NewPostPage extends HookConsumerWidget {
     final body = ref.watch(bodyProvider);
 
     return Scaffold(
-      body: Center(
+      appBar: AppBar(
+        title: const Text("Create a new post"),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
+      ),
+      body: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(title),
-            Text(body),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+              child: TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "Title",
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+              child: TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "Body",
+                ),
+                maxLines: null,
+                textAlignVertical: TextAlignVertical.top,
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                child: const Text("Post"),
+                onPressed: () {
+                  Navigator.pop(context);
+                  /* TODO */
+                },
+              ),
+            ),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.settings)),
           ],
         ),
       ),
