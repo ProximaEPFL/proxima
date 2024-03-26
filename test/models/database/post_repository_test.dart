@@ -303,8 +303,11 @@ void main() {
       final postsData = mockFirestorePost.generatePostData(nbPosts);
 
       final allPosts = List.generate(nbPosts, (i) {
-        return mockFirestorePost.createPostAt(postsData[i], pointList[i],
-            id: "post_$i");
+        return mockFirestorePost.createPostAt(
+          postsData[i],
+          pointList[i],
+          id: "post_$i",
+        );
       });
 
       await setPostsFirestore(allPosts);

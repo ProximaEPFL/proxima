@@ -152,7 +152,9 @@ void main() {
         ),
       ).thenAnswer(
         (_) async => getSimplePosition(
-            expectedGeoPoint.latitude, expectedGeoPoint.longitude),
+          expectedGeoPoint.latitude,
+          expectedGeoPoint.longitude,
+        ),
       );
 
       final actualGeoPoint = await geoLocationService.getCurrentPosition();

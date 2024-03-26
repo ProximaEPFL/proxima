@@ -211,7 +211,7 @@ class PostRepository {
   }
 
   /// Get a post by its id
-  Future<PostFirestore> getPost(String postId) async {
+  Future<PostFirestore> getPost(PostFirestoreId postId) async {
     final docSnap = await _collectionRef.doc(postId).get();
 
     return PostFirestore.fromDb(docSnap);
@@ -225,7 +225,7 @@ class PostRepository {
   }
 
   /// Deletes a post by its id
-  Future<void> deletePost(String postId) async {
+  Future<void> deletePost(PostFirestoreId postId) async {
     await _collectionRef.doc(postId).delete();
   }
 
