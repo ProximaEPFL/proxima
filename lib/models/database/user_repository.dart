@@ -2,11 +2,14 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/foundation.dart";
 
+/// The id are strong typed to avoid misuse
+typedef UserFirestoreId = String;
+
 @immutable
 class UserFirestore {
   /// The uid is not stored in a field because it already
   /// corresponds to the document id on firestore
-  final String uid;
+  final UserFirestoreId uid;
 
   final UserFirestoreData data;
 
