@@ -19,34 +19,54 @@ class LoginPage extends HookConsumerWidget {
     });
 
     return Scaffold(
+      key: const Key("login_page"),
       body: Center(
         // padded centered column containing logo, text and login button
-        child: Padding(
+        child: Container(
           padding: const EdgeInsets.all(16),
+          color: Colors.indigo[100],
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
+              Container(
                 padding: const EdgeInsets.all(24),
-                child:
-                  Image.asset("assets/images/proxima_logo.jpeg"),
+                child: ClipRRect(
+                  // rounded logo image
+                  borderRadius: BorderRadius.circular(28),
+                  child: Image.asset("assets/images/proxima_logo.jpeg"),
+                ),
               ),
-              // logo
               const SizedBox(height: 16),
-              // text
               const Text("Discover the world, one post at a time"),
-              const SizedBox(height: 16),
-              // login button
-              ElevatedButton(
-                key: loginButtonKey,
-                onPressed: () async {
-                  await ref.read(loginServiceProvider).signIn();
-                },
-
-                child: const Text("Sign in with Google"),
-              ),
+              const SizedBox(height: 28),
+              const LoginButton(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class LoginButton extends HookConsumerWidget {
+  const LoginButton({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      child: ElevatedButton(
+        key: LoginPage.loginButtonKey,
+        onPressed: () async {
+          await ref.read(loginServiceProvider).signIn();
+        },
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.login),
+            SizedBox(width: 8),
+            Text("Sign in with Google"),
+          ],
         ),
       ),
     );
