@@ -25,11 +25,21 @@ void main() {
     await tester.pumpWidget(mockedProxima);
     await tester.pumpAndSettle();
 
-    final loginButton = find.byKey(LoginPage.loginButtonKey);
+    // Check for the logo on the Login Page
+    final logoFinder = find.byKey(LoginPage.logoKey);
+    expect(logoFinder, findsOneWidget);
 
+    // Check for the slogan on the Login Page
+    final sloganFinder = find.text("Discover the world, one post at a time");
+    expect(sloganFinder, findsOneWidget);
+
+    final loginButton = find.byKey(LoginPage.loginButtonKey);
     // Check that the login button is displayed and contains the "Login" text
     expect(
-      find.descendant(of: loginButton, matching: find.text("Sign in with Google")),
+      find.descendant(
+        of: loginButton,
+        matching: find.text("Sign in with Google"),
+      ),
       findsOneWidget,
     );
 

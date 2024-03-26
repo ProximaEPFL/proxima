@@ -5,6 +5,7 @@ import "package:proxima/views/navigation/routes.dart";
 
 class LoginPage extends HookConsumerWidget {
   static const loginButtonKey = Key("login");
+  static const logoKey = Key("logo");
 
   const LoginPage({super.key});
 
@@ -32,6 +33,7 @@ class LoginPage extends HookConsumerWidget {
                 child: Container(
                   padding: const EdgeInsets.all(24),
                   child: ClipRRect(
+                    key: logoKey,
                     // rounded logo image
                     borderRadius: BorderRadius.circular(28),
                     child: Image.asset("assets/images/proxima_logo.jpeg"),
