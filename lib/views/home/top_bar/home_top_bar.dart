@@ -7,7 +7,7 @@ import "package:proxima/views/navigation/routes.dart";
   This widget is the top bar of the home page
   It contains the timeline filters and the user profile picture
 */
-class HomeTopBar extends HookConsumerWidget implements PreferredSizeWidget {
+class HomeTopBar extends HookConsumerWidget {
   static const logoutButtonKey = Key("logout");
 
   static const homeTopBarKey = Key("homeTopBar");
@@ -29,31 +29,24 @@ class HomeTopBar extends HookConsumerWidget implements PreferredSizeWidget {
       }
     });
 
-    return Padding(
-      key: homeTopBarKey,
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text("Proxima", style: Theme.of(context).textTheme.headlineMedium),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text("Proxima", style: Theme.of(context).textTheme.headlineMedium),
 
-          //Temporary logout button
-          InkWell(
-            key: logoutButtonKey,
-            onTap: () => {ref.read(loginServiceProvider).signOut()},
-            child: const Icon(Icons.logout),
-          ),
+        //Temporary logout button
+        InkWell(
+          key: logoutButtonKey,
+          onTap: () => {ref.read(loginServiceProvider).signOut()},
+          child: const Icon(Icons.logout),
+        ),
 
-          const CircleAvatar(
-            key: profilePictureKey,
-            child: Text("PR"),
-          ),
-        ],
-      ),
+        const CircleAvatar(
+          key: profilePictureKey,
+          child: Text("PR"),
+        ),
+      ],
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(100);
 }
