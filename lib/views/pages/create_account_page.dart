@@ -2,8 +2,12 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
+import "package:proxima/views/pages/home_page.dart";
 
 class CreateAccountPage extends HookConsumerWidget {
+  static const logoutButtonKey = Key("logout");
+  static const confirmButtonKey = Key("confirm");
+
   const CreateAccountPage({super.key});
 
   @override
@@ -24,6 +28,7 @@ class CreateAccountPage extends HookConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
+              key: logoutButtonKey,
               onPressed: () {
                 ref.read(loginServiceProvider).signOut();
               },
@@ -63,6 +68,7 @@ class _CreateAccountPageContent extends HookConsumerWidget {
         ),
         Flexible(flex: 50, child: Container()),
         ElevatedButton(
+          key: CreateAccountPage.confirmButtonKey,
           onPressed: () {
             // TODO: Also store this to the database
             Navigator.pushReplacementNamed(context, Routes.home.name);
