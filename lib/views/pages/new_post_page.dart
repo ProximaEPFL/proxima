@@ -77,35 +77,38 @@ class NewPostForm extends HookConsumerWidget {
                 return null;
               },
               minLines: 5,
-              maxLines: 10,
-              // TODO make this depend on the screen size
+              maxLines: 9,
+              // TODO make this flexible based on the screen size
               textAlignVertical: TextAlignVertical.top,
             ),
           ),
           const Spacer(),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  child: const Text(postButtonText),
-                  onPressed: () {
-                    if (!_formKey.currentState!.validate()) {
-                      return;
-                    }
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    child: const Text(postButtonText),
+                    onPressed: () {
+                      if (!_formKey.currentState!.validate()) {
+                        return;
+                      }
 
-                    // TODO commit the post to the repository
+                      // TODO commit the post to the repository
 
-                    Navigator.pop(context);
-                  },
+                      Navigator.pop(context);
+                    },
+                  ),
                 ),
-              ),
-              IconButton(
-                onPressed: () {
-                  // TODO open tag and notification settings overlay
-                },
-                icon: const Icon(Icons.settings),
-              ),
-            ],
+                IconButton(
+                  onPressed: () {
+                    // TODO open tag and notification settings overlay
+                  },
+                  icon: const Icon(Icons.settings),
+                ),
+              ],
+            ),
           ),
         ],
       ),
