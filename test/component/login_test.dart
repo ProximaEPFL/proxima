@@ -31,7 +31,7 @@ void main() {
     expect(logoFinder, findsOneWidget);
 
     // Check for the slogan on the Login Page
-    final sloganFinder = find.text("Discover the world,\n one post at a time");
+    final sloganFinder = find.text(LoginPage.tagLineText);
     expect(sloganFinder, findsOneWidget);
 
     final loginButton = find.byKey(LoginButton.loginButtonKey);
