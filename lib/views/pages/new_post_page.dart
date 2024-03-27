@@ -1,4 +1,6 @@
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 class NewPostPage extends HookConsumerWidget {
@@ -62,7 +64,9 @@ class NewPostForm extends HookConsumerWidget {
               },
             ),
           ),
-          Expanded(
+          Flexible(
+            fit: FlexFit.loose,
+            flex: 1,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
               child: TextFormField(
@@ -77,9 +81,8 @@ class NewPostForm extends HookConsumerWidget {
                   }
                   return null;
                 },
-                minLines: 5,
                 maxLines: null,
-                // TODO make whitespace not reactive to touch
+                expands: true,
                 textAlignVertical: TextAlignVertical.top,
               ),
             ),
