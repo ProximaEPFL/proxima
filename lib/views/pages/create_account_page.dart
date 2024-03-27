@@ -13,22 +13,20 @@ class CreateAccountPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     navigateToLoginPageOnLogout(context, ref);
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            key: logoutButtonKey,
-            onPressed: () {
-              ref.read(loginServiceProvider).signOut();
-            },
-            icon: const Icon(Icons.arrow_back),
-          ),
-          title: const Text("Create your account"),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          key: logoutButtonKey,
+          onPressed: () {
+            ref.read(loginServiceProvider).signOut();
+          },
+          icon: const Icon(Icons.arrow_back),
         ),
-        body: const Padding(
-          padding: EdgeInsets.only(left: 50, right: 50, top: 50, bottom: 50),
-          child: Center(child: _CreateAccountPageContent()),
-        ),
+        title: const Text("Create your account"),
+      ),
+      body: const Padding(
+        padding: EdgeInsets.only(left: 50, right: 50, top: 50, bottom: 50),
+        child: Center(child: _CreateAccountPageContent()),
       ),
     );
   }
