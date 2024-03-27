@@ -6,10 +6,6 @@ class NewPostPage extends HookConsumerWidget {
 
   static const backButtonKey = Key("back");
 
-  static const titleHint = "Title";
-  static const bodyHint = "Body";
-  static const postButtonText = "Post";
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -25,52 +21,93 @@ class NewPostPage extends HookConsumerWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-              child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: titleHint,
-                ),
+        child: NewPostForm(),
+      ),
+    );
+  }
+}
+
+class NewPostForm extends HookConsumerWidget {
+  NewPostForm({super.key});
+
+  static const titleFieldKey = Key("title");
+  static const bodyFieldKey = Key("body");
+
+  static const titleHint = "Title";
+  static const bodyHint = "Body";
+  static const postButtonText = "Post";
+
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+            child: TextFormField(
+              key: titleFieldKey,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: titleHint,
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please enter a title";
+                }
+                return null;
+              },
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-              child: TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: bodyHint,
-                ),
-                minLines: 5,
-                maxLines: 10, // TODO make this depend on the screen size
-                textAlignVertical: TextAlignVertical.top,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+            child: TextFormField(
+              key: bodyFieldKey,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: bodyHint,
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please enter a body";
+                }
+                return null;
+              },
+              minLines: 5,
+              maxLines: 10,
+              // TODO make this depend on the screen size
+              textAlignVertical: TextAlignVertical.top,
             ),
-            const Spacer(),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    child: const Text(postButtonText),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      // TODO commit the post to the repository
-                    },
-                  ),
-                ),
-                IconButton(
+          ),
+          const Spacer(),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  child: const Text(postButtonText),
                   onPressed: () {
-                    // TODO open tag and notification settings overlay
+                    if (!_formKey.currentState!.validate()) {
+                      return;
+                    }
+
+                    // TODO commit the post to the repository
+
+                    Navigator.pop(context);
                   },
-                  icon: const Icon(Icons.settings),
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+              IconButton(
+                onPressed: () {
+                  // TODO open tag and notification settings overlay
+                },
+                icon: const Icon(Icons.settings),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
