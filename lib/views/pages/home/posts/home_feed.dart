@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/filter_widgets/timeline_filter/timeline_filter_dropdown.dart";
-import "package:proxima/views/home/posts/post_card/post_card.dart";
+import "package:proxima/views/pages/home/posts/post_card/post_card.dart";
 
 /*
   This widget is the feed of the home page

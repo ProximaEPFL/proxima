@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/views/home/bottom_navigation_bar/navigation_bar_routes.dart";
+import "package:proxima/views/bottom_navigation_bar/navigation_bar_routes.dart";
 
 /*
   This widget is the bottom navigation bar of the home page.

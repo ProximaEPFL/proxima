@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/views/pages/home_page.dart";
+import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/login_page.dart";
 
 enum Routes {
