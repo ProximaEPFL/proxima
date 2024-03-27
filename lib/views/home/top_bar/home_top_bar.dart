@@ -30,6 +30,7 @@ class HomeTopBar extends HookConsumerWidget {
     });
 
     return Row(
+      key: homeTopBarKey,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
