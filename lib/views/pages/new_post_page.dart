@@ -62,27 +62,28 @@ class NewPostForm extends HookConsumerWidget {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-            child: TextFormField(
-              key: bodyFieldKey,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: bodyHint,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+              child: TextFormField(
+                key: bodyFieldKey,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: bodyHint,
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter a body";
+                  }
+                  return null;
+                },
+                minLines: 5,
+                maxLines: null,
+                // TODO make whitespace not reactive to touch
+                textAlignVertical: TextAlignVertical.top,
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please enter a body";
-                }
-                return null;
-              },
-              minLines: 5,
-              maxLines: 9,
-              // TODO make this flexible based on the screen size
-              textAlignVertical: TextAlignVertical.top,
             ),
           ),
-          const Spacer(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Row(
