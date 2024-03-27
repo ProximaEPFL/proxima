@@ -4,7 +4,8 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home_page.dart";
-import "package:proxima/views/pages/login_page.dart";
+import "package:proxima/views/pages/login/login_button.dart";
+import "package:proxima/views/pages/login/login_page.dart";
 
 import "utils/firebase/setup_firebase_mocks.dart";
 import "utils/firebase/testing_login_providers.dart";
@@ -26,11 +27,21 @@ void main() {
     await tester.pumpWidget(mockedProxima);
     await tester.pumpAndSettle();
 
-    final loginButton = find.byKey(LoginPage.loginButtonKey);
+    // Check for the logo on the Login Page
+    final logoFinder = find.byKey(LoginPage.logoKey);
+    expect(logoFinder, findsOneWidget);
 
+    // Check for the slogan on the Login Page
+    final sloganFinder = find.text(LoginPage.tagLineText);
+    expect(sloganFinder, findsOneWidget);
+
+    final loginButton = find.byKey(LoginButton.loginButtonKey);
     // Check that the login button is displayed and contains the "Login" text
     expect(
-      find.descendant(of: loginButton, matching: find.text("Login")),
+      find.descendant(
+        of: loginButton,
+        matching: find.text("Sign in with Google"),
+      ),
       findsOneWidget,
     );
 
@@ -59,7 +70,7 @@ void main() {
     await tester.pumpWidget(mockedProxima);
     await tester.pumpAndSettle();
 
-    final loginButton = find.byKey(LoginPage.loginButtonKey);
+    final loginButton = find.byKey(LoginButton.loginButtonKey);
     await tester.tap(loginButton);
     await tester.pumpAndSettle();
 
