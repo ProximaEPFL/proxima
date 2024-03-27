@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
-import "package:proxima/views/pages/home_page.dart";
 
 class CreateAccountPage extends HookConsumerWidget {
   static const logoutButtonKey = Key("logout");
@@ -12,27 +11,18 @@ class CreateAccountPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: This is copied from home_page. I am pretty sure there is a way to improve this.
-    ref.listen(isUserLoggedInProvider, (_, isLoggedIn) {
-      if (!isLoggedIn) {
-        // Go to login page when the user is logged out
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          Routes.login.name,
-          (route) => false,
-        );
-      }
-    });
+    navigateToLoginPageOnLogout(context, ref);
 
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              key: logoutButtonKey,
-              onPressed: () {
-                ref.read(loginServiceProvider).signOut();
-              },
-              icon: const Icon(Icons.arrow_back)),
+            key: logoutButtonKey,
+            onPressed: () {
+              ref.read(loginServiceProvider).signOut();
+            },
+            icon: const Icon(Icons.arrow_back),
+          ),
           title: const Text("Create your account"),
         ),
         body: const Padding(
