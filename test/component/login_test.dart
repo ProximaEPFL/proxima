@@ -2,10 +2,9 @@ import "package:firebase_core/firebase_core.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
-import "package:proxima/views/pages/home/top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/home/home_page.dart";
+import "package:proxima/views/pages/home/top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/login_page.dart";
-
 import "utils/firebase/setup_firebase_mocks.dart";
 import "utils/firebase/testing_login_providers.dart";
 
