@@ -7,6 +7,7 @@ import "package:proxima/views/navigation/routes.dart";
 
 class HomePage extends HookConsumerWidget {
   static const logoutButtonKey = Key("logout");
+  static const newPostKey = Key("New Post");
 
   const HomePage({super.key});
 
@@ -44,6 +45,20 @@ class HomePage extends HookConsumerWidget {
               child: const Text("Logout"),
             ),
           ],
+        ),
+      ),
+
+      // TODO(new post) remove on merge with home page, make sure to merge the test keys
+      bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: IconButton(
+            key: newPostKey,
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.newPost.name);
+            },
+            icon: const Icon(Icons.add),
+          ),
         ),
       ),
     );
