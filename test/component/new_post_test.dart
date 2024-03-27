@@ -40,9 +40,9 @@ void main() {
 
     await loginAndNavigateToNewPost(tester);
 
-    final titleFinder = find.text(NewPostPage.titleHint);
-    final bodyFinder = find.text(NewPostPage.bodyHint);
-    final postButtonFinder = find.text(NewPostPage.postButtonText);
+    final titleFinder = find.text(NewPostForm.titleHint);
+    final bodyFinder = find.text(NewPostForm.bodyHint);
+    final postButtonFinder = find.text(NewPostForm.postButtonText);
 
     expect(titleFinder, findsOneWidget);
     expect(bodyFinder, findsOneWidget);
@@ -60,22 +60,44 @@ void main() {
     await widgetTester.pumpAndSettle();
 
     // check that we are no longer on the new post page
-    final titleFinder = find.text(NewPostPage.titleHint);
+    final titleFinder = find.text(NewPostForm.titleHint);
     expect(titleFinder, findsNothing);
   });
 
-  testWidgets("Post button works", (widgetTester) async {
+  testWidgets("Accepts non empty post", (widgetTester) async {
     await widgetTester.pumpWidget(mockedProxima);
     await widgetTester.pumpAndSettle();
 
     await loginAndNavigateToNewPost(widgetTester);
 
-    final postButtonFinder = find.text(NewPostPage.postButtonText);
+    final titleFinder = find.byKey(NewPostForm.titleFieldKey);
+    await widgetTester.enterText(titleFinder, "I like turtles");
+    await widgetTester.pumpAndSettle();
+
+    final bodyFinder = find.byKey(NewPostForm.bodyFieldKey);
+    await widgetTester.enterText(bodyFinder, "Look at them go!");
+    await widgetTester.pumpAndSettle();
+
+    final postButtonFinder = find.text(NewPostForm.postButtonText);
     await widgetTester.tap(postButtonFinder);
     await widgetTester.pumpAndSettle();
 
     // check that we are no longer on the new post page
-    final titleFinder = find.text(NewPostPage.titleHint);
     expect(titleFinder, findsNothing);
+  });
+
+  testWidgets("Refuses empty post", (widgetTester) async {
+    await widgetTester.pumpWidget(mockedProxima);
+    await widgetTester.pumpAndSettle();
+
+    await loginAndNavigateToNewPost(widgetTester);
+
+    final postButtonFinder = find.text(NewPostForm.postButtonText);
+    await widgetTester.tap(postButtonFinder);
+    await widgetTester.pumpAndSettle();
+
+    // check that we are still on the new post page
+    final titleFinder = find.text(NewPostForm.titleHint);
+    expect(titleFinder, findsOne);
   });
 }
