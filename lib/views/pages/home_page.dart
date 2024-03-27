@@ -9,14 +9,12 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const SafeArea(
-      child: Scaffold(
-        appBar: HomeTopBar(),
-        bottomNavigationBar: NavigationBottomBar(),
-        body: Padding(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
-          child: HomeFeed(),
-        ),
+    return const Scaffold(
+      appBar: HomeTopBar(),
+      bottomNavigationBar: NavigationBottomBar(),
+      body: Padding(
+        padding: EdgeInsets.only(left: 8.0, right: 8.0),
+        child: HomeFeed(),
       ),
     );
   }
