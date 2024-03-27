@@ -33,7 +33,7 @@ class ProximaApp extends StatelessWidget {
       ),
       onGenerateRoute: generateRoute,
       //TODO CHANGE BACK TO LOGIN
-      initialRoute: Routes.profile.name,
+      initialRoute: Routes.login.name,
     );
   }
 }

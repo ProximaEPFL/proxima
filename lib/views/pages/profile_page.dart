@@ -11,6 +11,16 @@ class ProfilePage extends HookConsumerWidget {
 
     final theme = Theme.of(context);
 
+    var itemList = <InfoCard>[];
+
+    for (var i = 0; i < 5; i++) {
+      itemList.add(
+        InfoCard(
+          theme: theme,
+        ),
+      );
+    }
+
     return switch (asyncUserData) {
       AsyncData(:final value) => Scaffold(
           appBar: AppBar(
@@ -31,12 +41,31 @@ class ProfilePage extends HookConsumerWidget {
           body: Container(
             color: theme.colorScheme.tertiaryContainer,
             child: Center(
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  CentauriPoints(theme: theme),
-                  const SizedBox(height: 20),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 15),
+                    CentauriPoints(theme: theme),
+                    const SizedBox(height: 15),
+                    LazyCardRow(
+                      theme: theme,
+                      itemList: itemList,
+                      title: "Your badges",
+                    ),
+                    const SizedBox(height: 15),
+                    LazyCardColumn(
+                      theme: theme,
+                      itemList: itemList,
+                      title: "Your posts:",
+                    ),
+                    const SizedBox(height: 15),
+                    LazyCardColumn(
+                      theme: theme,
+                      itemList: itemList,
+                      title: "Your comments:",
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -47,7 +76,140 @@ class ProfilePage extends HookConsumerWidget {
   }
 }
 
-class CentauriPoints extends HookConsumerWidget {
+class InfoCard extends StatelessWidget {
+  const InfoCard({
+    super.key,
+    required this.theme,
+  });
+
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 92,
+      height: 92,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+          width: 2,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        color: theme.colorScheme.primaryContainer,
+      ),
+    );
+  }
+}
+
+class LazyCardColumn extends StatelessWidget {
+  const LazyCardColumn({
+    super.key,
+    required this.theme,
+    required this.itemList,
+    required this.title,
+  });
+
+  final ThemeData theme;
+  final List<Widget> itemList;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 275,
+      width: 380,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+          width: 2,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        color: theme.colorScheme.secondaryContainer,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 5, top: 1),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: theme.textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 5),
+            Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.all(8),
+                scrollDirection: Axis.vertical,
+                itemCount: itemList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return itemList[index];
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const SizedBox(height: 10),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class LazyCardRow extends StatelessWidget {
+  const LazyCardRow({
+    super.key,
+    required this.theme,
+    required this.itemList,
+    required this.title,
+  });
+
+  final ThemeData theme;
+  final List<Widget> itemList;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 150,
+      width: 380,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+          width: 2,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        color: theme.colorScheme.secondaryContainer,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 5, top: 1),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: theme.textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 5),
+            Expanded(
+              child: ListView.separated(
+                padding: const EdgeInsets.all(8),
+                scrollDirection: Axis.horizontal,
+                itemCount: itemList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return itemList[index];
+                },
+                separatorBuilder: (BuildContext context, int index) =>
+                    const SizedBox(width: 10),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CentauriPoints extends StatelessWidget {
   const CentauriPoints({
     super.key,
     required this.theme,
@@ -56,7 +218,7 @@ class CentauriPoints extends HookConsumerWidget {
   final ThemeData theme;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Container(
       height: 40,
       width: 380,
@@ -68,12 +230,13 @@ class CentauriPoints extends HookConsumerWidget {
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         color: theme.colorScheme.secondaryContainer,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+      child: ListView(
+        padding: const EdgeInsets.only(top: 3),
+        scrollDirection: Axis.horizontal,
         children: [
           const SizedBox(width: 5),
           //TODO: get the centauri points from the viewmodel
-          Text("Centauri Points:", style: theme.textTheme.headlineSmall),
+          Text("Centauri points:", style: theme.textTheme.headlineSmall),
         ],
       ),
     );
@@ -97,15 +260,17 @@ class UserInfos extends StatelessWidget {
         const CircleAvatar(
           radius: 25,
           //TODO: get the image from the viewmodel
-          backgroundImage: NetworkImage("https://via.placeholder.com/150"),
+          //backgroundImage: AssetImage("assets/images/user.png" ),
         ),
         const SizedBox(width: 10),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //TODO: get the profile info from the viewmodel
-            Text(userEmail ?? "default@mail.com",
-                style: theme.textTheme.titleMedium),
+            Text(
+              userEmail ?? "default@mail.com",
+              style: theme.textTheme.titleMedium,
+            ),
             Text("User Profile", style: theme.textTheme.titleSmall),
           ],
         ),
