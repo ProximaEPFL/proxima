@@ -3,14 +3,14 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
 import "package:proxima/views/pages/home_page.dart";
-import "package:proxima/views/pages/login_page.dart";
+import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/new_post_page.dart";
 
 import "utils/firebase/setup_firebase_mocks.dart";
 import "utils/firebase/testing_login_providers.dart";
 
 Future<void> loginAndNavigateToNewPost(WidgetTester tester) async {
-  final loginButton = find.byKey(LoginPage.loginButtonKey);
+  final loginButton = find.byKey(LoginButton.loginButtonKey);
   await tester.tap(loginButton);
   await tester.pumpAndSettle();
 
