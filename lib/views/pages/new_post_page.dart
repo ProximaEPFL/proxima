@@ -4,12 +4,19 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 class NewPostPage extends HookConsumerWidget {
   const NewPostPage({super.key});
 
+  static const backButtonKey = Key("back");
+
+  static const titleHint = "Title";
+  static const bodyHint = "Body";
+  static const postButtonText = "Post";
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Create a new post"),
         leading: IconButton(
+          key: backButtonKey,
           onPressed: () {
             Navigator.pop(context);
           },
@@ -26,7 +33,7 @@ class NewPostPage extends HookConsumerWidget {
               child: TextField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: "Title",
+                  hintText: titleHint,
                 ),
               ),
             ),
@@ -35,7 +42,7 @@ class NewPostPage extends HookConsumerWidget {
               child: TextField(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: "Body",
+                  hintText: bodyHint,
                 ),
                 minLines: 5,
                 maxLines: 10, // TODO make this depend on the screen size
@@ -47,7 +54,7 @@ class NewPostPage extends HookConsumerWidget {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    child: const Text("Post"),
+                    child: const Text(postButtonText),
                     onPressed: () {
                       Navigator.pop(context);
                       // TODO commit the post to the repository
