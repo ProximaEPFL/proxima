@@ -5,6 +5,38 @@ import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/user_repository.dart";
 
 void main() {
+  group("User Data Firestore testing", () {
+    test("hash overrides correctly", () {
+      final data = UserDataFirestore(
+        username: "username_8456",
+        displayName: "display_name_8456",
+        joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
+      );
+
+      final expectedHash = Object.hash(
+        data.username,
+        data.displayName,
+        data.joinTime,
+      );
+
+      final actualHash = data.hashCode;
+
+      expect(actualHash, expectedHash);
+    });
+
+    test("fromDbData throw error when missing fields", () {
+      final data = <String, dynamic>{
+        UserDataFirestore.usernameField: "username_8456",
+        UserDataFirestore.displayNameField: "display_name_8456",
+      };
+
+      expect(
+        () => UserDataFirestore.fromDbData(data),
+        throwsA(isA<FormatException>()),
+      );
+    });
+  });
+
   group("User repository testing", () {
     final testLoggedUser = MockUser(
       isAnonymous: false,
