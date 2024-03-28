@@ -15,35 +15,8 @@ class HomeFeed extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final posts = ref.watch(postList);
-    List<Widget> widgetChildren = [];
 
-    widgetChildren.add(
-      const TimeLineFiltersDropDown(
-        key: timelineFiltersDropDownKey,
-      ),
-    );
-    widgetChildren.add(const Divider());
-
-    if (posts.isEmpty) {
-      widgetChildren.add(Flexible(flex: 1, child: Container()));
-      widgetChildren.add(
-        _buildeEmptyFeed(),
-      );
-      widgetChildren.add(Flexible(flex: 1, child: Container()));
-      return Column(
-        children: widgetChildren,
-      );
-    } else {
-      widgetChildren.addAll(_buildFeed(ref));
-      return ListView(
-        key: homeFeedKey,
-        children: widgetChildren,
-      );
-    }
-  }
-
-  Widget _buildeEmptyFeed() {
-    return Center(
+    final emptyHelper = Center(
       key: emptyHomeFeedKey,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -63,10 +36,20 @@ class HomeFeed extends HookConsumerWidget {
         ],
       ),
     );
-  }
 
-  List<Widget> _buildFeed(WidgetRef ref) {
-    final posts = ref.watch(postList);
-    return posts.map((post) => PostCard(post: post)).toList();
+    final postsCards = ListView(
+      key: homeFeedKey,
+      children: posts.map((post) => PostCard(post: post)).toList(),
+    );
+
+    return Column(
+      children: [
+        const TimeLineFiltersDropDown(
+          key: timelineFiltersDropDownKey,
+        ),
+        const Divider(),
+        Expanded(child: posts.isEmpty ? emptyHelper : postsCards),
+      ],
+    );
   }
 }

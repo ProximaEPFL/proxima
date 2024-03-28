@@ -17,12 +17,12 @@ class CommentWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(3.0),
+        padding: const EdgeInsets.all(3),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
+          children: [
             const Padding(
-              padding: EdgeInsets.all(4.0),
+              padding: EdgeInsets.all(4),
               child: Icon(Icons.comment, size: 20),
             ),
             Padding(

@@ -19,7 +19,7 @@ class TimeLineFiltersDropDown extends StatelessWidget {
 
     return Wrap(
       alignment: WrapAlignment.center,
-      spacing: 4.0,
+      spacing: 4,
       children: filters,
     );
   }

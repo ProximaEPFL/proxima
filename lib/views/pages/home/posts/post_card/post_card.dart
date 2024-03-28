@@ -24,6 +24,42 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final postBottomBar = Padding(
+      padding: const EdgeInsets.all(8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          VotesWidget(key: postCardVotesKey, votes: post.votes),
+          InkWell(
+            customBorder: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            //TODO: Implement the logic to navigate to the post
+            onTap: () => {},
+            child: CommentWidget(
+              key: postCardCommentsKey,
+              commentNumber: post.commentNumber,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    final postBody = ListTile(
+      title: Text(
+        key: postCardTitleKey,
+        post.title,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      ),
+      subtitle: Text(
+        key: postCardDescriptionKey,
+        post.description,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 7,
+      ),
+    );
+
     return Card(
       key: postCardKey,
       clipBehavior: Clip.hardEdge,
@@ -32,48 +68,16 @@ class PostCard extends StatelessWidget {
         onTap: () => {},
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
+          children: [
             Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 0.8, top: 8.0),
+              padding: const EdgeInsets.only(left: 16, right: 0.8, top: 8),
               child: UserBarWidget(
                 key: postCardUserKey,
                 posterUsername: post.posterUsername,
               ),
             ),
-            ListTile(
-              title: Text(
-                key: postCardTitleKey,
-                post.title,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-              subtitle: Text(
-                key: postCardDescriptionKey,
-                post.description,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 7,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  VotesWidget(key: postCardVotesKey, votes: post.votes),
-                  InkWell(
-                    customBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    //TODO: Implement the logic to navigate to the post
-                    onTap: () => {},
-                    child: CommentWidget(
-                      key: postCardCommentsKey,
-                      commentNumber: post.commentNumber,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            postBody,
+            postBottomBar,
           ],
         ),
       ),

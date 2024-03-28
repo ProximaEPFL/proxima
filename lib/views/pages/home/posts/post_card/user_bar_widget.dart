@@ -16,11 +16,11 @@ class UserBarWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         CircleAvatar(
-          radius: 12.0,
+          radius: 12,
           child: Text(posterUsername.substring(0, 1)),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 8.0),
+          padding: const EdgeInsets.only(left: 8),
           child: Text(posterUsername),
         ),
       ],

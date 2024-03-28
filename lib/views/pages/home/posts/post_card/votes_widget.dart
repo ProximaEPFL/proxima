@@ -4,6 +4,7 @@ import "package:flutter/material.dart";
 /// It contains two buttons to upvote and downvote the post and the number of votes.
 class VotesWidget extends StatelessWidget {
   final int votes;
+
   const VotesWidget({
     super.key,
     required this.votes,
@@ -11,49 +12,55 @@ class VotesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final upvote = IconButton(
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(),
+      icon: const Icon(Icons.expand_less, size: 30),
+      style: const ButtonStyle(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      onPressed: () {
+        //TODO: Implement the logic to upvote the post
+      },
+    );
+
+    final downvote = IconButton(
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(),
+      icon: const Icon(Icons.expand_more, size: 30),
+      style: const ButtonStyle(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      onPressed: () {
+        //TODO: Implement the logic to downvote the post
+      },
+    );
+
+    final voteCount = Padding(
+      padding: const EdgeInsets.only(left: 8, right: 8),
+      child: Text(_votesString(votes)),
+    );
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(3.0),
+        padding: const EdgeInsets.all(3),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            IconButton(
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              icon: const Icon(Icons.expand_less, size: 30),
-              style: const ButtonStyle(
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              onPressed: () {
-                //TODO: Implement the logic to upvote the post
-              },
-            ),
-            IconButton(
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              icon: const Icon(Icons.expand_more, size: 30),
-              style: const ButtonStyle(
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              onPressed: () {
-                //TODO: Implement the logic to downvote the post
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-              child: Text(getVotesString(votes)),
-            ),
+          children: [
+            upvote,
+            downvote,
+            voteCount,
           ],
         ),
       ),
     );
   }
 
-  String getVotesString(int votes) {
+  String _votesString(int votes) {
     if (votes >= 0) {
       return "+ $votes";
     } else {
