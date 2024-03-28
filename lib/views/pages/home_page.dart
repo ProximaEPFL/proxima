@@ -3,6 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
+import "package:proxima/views/navigation/routes.dart";
 
 class HomePage extends HookConsumerWidget {
   static const logoutButtonKey = Key("logout");

@@ -2,6 +2,7 @@ import "package:firebase_core/firebase_core.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
+import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home_page.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/new_post_page.dart";
@@ -12,6 +13,11 @@ import "utils/firebase/testing_login_providers.dart";
 Future<void> loginAndNavigateToNewPost(WidgetTester tester) async {
   final loginButton = find.byKey(LoginButton.loginButtonKey);
   await tester.tap(loginButton);
+  await tester.pumpAndSettle();
+
+  // And that pushing the confirm button redirects to the home page
+  final confirmButton = find.byKey(CreateAccountPage.confirmButtonKey);
+  await tester.tap(confirmButton);
   await tester.pumpAndSettle();
 
   final newPostButton = find.byKey(HomePage.newPostKey);

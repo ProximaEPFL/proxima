@@ -9,7 +9,7 @@ enum Routes {
   login("login"),
   newPost("new post"),
   createAccount("createAccount");
-  
+
   final String name;
 
   const Routes(this.name);
