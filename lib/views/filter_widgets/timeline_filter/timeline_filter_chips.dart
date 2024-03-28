@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 import "package:proxima/views/filter_widgets/timeline_filter/timeline_filters.dart";
 
 /// This widget is the dropdown menu for the timeline filters.
-class TimeLineFiltersDropDown extends StatelessWidget {
-  const TimeLineFiltersDropDown({
+class TimeLineFiltersChips extends StatelessWidget {
+  const TimeLineFiltersChips({
     super.key,
   });
 
