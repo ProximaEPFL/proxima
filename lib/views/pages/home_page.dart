@@ -3,7 +3,6 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
-import "package:proxima/views/navigation/routes.dart";
 
 class HomePage extends HookConsumerWidget {
   static const logoutButtonKey = Key("logout");
@@ -13,17 +12,7 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Listen for authentication changes
-    ref.listen(isUserLoggedInProvider, (_, isLoggedIn) {
-      if (!isLoggedIn) {
-        // Go to login page when the user is logged out
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          Routes.login.name,
-          (route) => false,
-        );
-      }
-    });
+    navigateToLoginPageOnLogout(context, ref);
 
     return Scaffold(
       appBar: AppBar(
