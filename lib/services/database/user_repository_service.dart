@@ -1,9 +1,11 @@
 import "dart:async";
 
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_data.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
+import "package:proxima/services/database/firestore_service.dart";
 
 class UserRepositoryService {
   final CollectionReference _collectionRef;
@@ -28,3 +30,9 @@ class UserRepositoryService {
     return docSnap.exists;
   }
 }
+
+final userRepositoryProvider = Provider<UserRepositoryService>(
+  (ref) => UserRepositoryService(
+    firestore: ref.watch(firestoreProvider),
+  ),
+);
