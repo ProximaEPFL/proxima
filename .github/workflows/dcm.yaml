@@ -1,0 +1,27 @@
+name: Dart Code Metrics Report Generation
+
+on: push
+
+jobs:
+  dart_code_metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install Flutter dependencies
+        run: |
+          flutter config --no-analytics --no-cli-animations
+          flutter --version
+          flutter pub get
+
+      - name: Dart Code Metrics
+        run: |
+          dart pub global activate -s git https://github.com/gruvw/dart_code_metrics.git
+          ((metrics analyze lib --reporter=console || true) | tail -n +3 | sed "s/\/individuals//g" | sed "s/WARNING/:warning:/g" | sed "s/ERROR/:rotating_light:/g" | sed "s/STYLE/:art:/g" | sed "s/PERFORMANCE/:dart:/g" | sed "/^lib\//s/^/#### /" | sed "s/at.*\/lib/in file lib/g" | sed "s/        /- /g") >> $GITHUB_STEP_SUMMARY
