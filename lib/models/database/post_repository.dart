@@ -6,14 +6,14 @@ import "package:proxima/services/geolocation_service.dart";
 
 /// The id are strong typed to avoid misuse
 @immutable
-class PostFirestoreId {
+class PostIdFirestore {
   final String value;
 
-  const PostFirestoreId({required this.value});
+  const PostIdFirestore({required this.value});
 
   @override
   bool operator ==(Object other) {
-    return other is PostFirestoreId && other.value == value;
+    return other is PostIdFirestore && other.value == value;
   }
 
   @override
@@ -24,15 +24,15 @@ class PostFirestoreId {
 class PostFirestore {
   /// The id is not stored in a field because it already
   /// corresponds to the document id on firestore
-  final PostFirestoreId id;
+  final PostIdFirestore id;
 
-  /// The post location is not stored in the [PostFirestoreData] because it
+  /// The post location is not stored in the [PostDataFirestore] because it
   /// is exclusively managed by the repository (in particular, it is the
   /// responsability of the repository to create it when adding a post)
   final PostLocationFirestore location;
   static const String locationField = "location";
 
-  final PostFirestoreData data;
+  final PostDataFirestore data;
 
   const PostFirestore({
     required this.id,
@@ -50,9 +50,9 @@ class PostFirestore {
       final data = docSnap.data() as Map<String, dynamic>;
 
       return PostFirestore(
-        id: PostFirestoreId(value: docSnap.id),
+        id: PostIdFirestore(value: docSnap.id),
         location: PostLocationFirestore.fromDbData(data[locationField]),
-        data: PostFirestoreData.fromDbData(data),
+        data: PostDataFirestore.fromDbData(data),
       );
     } catch (e) {
       if (e is TypeError) {
@@ -80,8 +80,8 @@ class PostFirestore {
 }
 
 @immutable
-class PostFirestoreData {
-  final UserFirestoreId ownerId;
+class PostDataFirestore {
+  final UserIdFirestore ownerId;
   static const String ownerIdField = "ownerId";
 
   final String title;
@@ -96,7 +96,7 @@ class PostFirestoreData {
   final int voteScore;
   static const String voteScoreField = "voteScore";
 
-  const PostFirestoreData({
+  const PostDataFirestore({
     required this.ownerId,
     required this.title,
     required this.description,
@@ -105,10 +105,10 @@ class PostFirestoreData {
   });
 
   /// Parses the data from a firestore document
-  factory PostFirestoreData.fromDbData(Map<String, dynamic> data) {
+  factory PostDataFirestore.fromDbData(Map<String, dynamic> data) {
     try {
-      return PostFirestoreData(
-        ownerId: UserFirestoreId(value: data[ownerIdField]),
+      return PostDataFirestore(
+        ownerId: UserIdFirestore(value: data[ownerIdField]),
         title: data[titleField],
         description: data[descriptionField],
         publicationTime: data[publicationTimeField],
@@ -137,7 +137,7 @@ class PostFirestoreData {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is PostFirestoreData &&
+    return other is PostDataFirestore &&
         other.ownerId == ownerId &&
         other.title == title &&
         other.description == description &&
@@ -226,27 +226,27 @@ class PostRepository {
   }
 
   /// Get a post by its id
-  Future<PostFirestore> getPost(PostFirestoreId postId) async {
+  Future<PostFirestore> getPost(PostIdFirestore postId) async {
     final docSnap = await _collectionRef.doc(postId.value).get();
 
     return PostFirestore.fromDb(docSnap);
   }
 
   /// Adds a post at the current location of the user
-  Future<void> addPost(PostFirestoreData postData) async {
+  Future<void> addPost(PostDataFirestore postData) async {
     final point = await _getCurrentGeoFirePoint();
 
     return _addPostAtLocation(point, postData);
   }
 
   /// Deletes a post by its id
-  Future<void> deletePost(PostFirestoreId postId) async {
+  Future<void> deletePost(PostIdFirestore postId) async {
     await _collectionRef.doc(postId.value).delete();
   }
 
   Future<void> _addPostAtLocation(
     GeoFirePoint point,
-    PostFirestoreData postData,
+    PostDataFirestore postData,
   ) async {
     // The `point.data` returns a Map<String, dynamic> consistent with the
     // class [PostLocationFirestore]. This is because the field name values

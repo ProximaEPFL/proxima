@@ -51,8 +51,8 @@ void main() {
 
   group("Post Firestore Data testing", () {
     test("hash overrides correctly", () {
-      final data = PostFirestoreData(
-        ownerId: const UserFirestoreId(value: "owner_id"),
+      final data = PostDataFirestore(
+        ownerId: const UserIdFirestore(value: "owner_id"),
         title: "post_tiltle",
         description: "description",
         publicationTime: Timestamp.fromMillisecondsSinceEpoch(4564654),
@@ -74,15 +74,15 @@ void main() {
 
     test("fromDbData throw error when missing fields", () {
       final data = <String, dynamic>{
-        PostFirestoreData.ownerIdField: "owner_id",
-        PostFirestoreData.titleField: "post_tiltle",
-        PostFirestoreData.descriptionField: "description",
-        PostFirestoreData.publicationTimeField:
+        PostDataFirestore.ownerIdField: "owner_id",
+        PostDataFirestore.titleField: "post_tiltle",
+        PostDataFirestore.descriptionField: "description",
+        PostDataFirestore.publicationTimeField:
             Timestamp.fromMillisecondsSinceEpoch(4564654),
       };
 
       expect(
-        () => PostFirestoreData.fromDbData(data),
+        () => PostDataFirestore.fromDbData(data),
         throwsA(isA<FormatException>()),
       );
     });
@@ -98,8 +98,8 @@ void main() {
         geohash: geoHash,
       );
 
-      final data = PostFirestoreData(
-        ownerId: const UserFirestoreId(value: "owner_id"),
+      final data = PostDataFirestore(
+        ownerId: const UserIdFirestore(value: "owner_id"),
         title: "post_tiltle",
         description: "description",
         publicationTime: Timestamp.fromMillisecondsSinceEpoch(4564654),
@@ -107,7 +107,7 @@ void main() {
       );
 
       final post = PostFirestore(
-        id: const PostFirestoreId(value: "post_id"),
+        id: const PostIdFirestore(value: "post_id"),
         location: location,
         data: data,
       );
@@ -162,13 +162,13 @@ void main() {
     });
 
     final post = PostFirestore(
-      id: const PostFirestoreId(value: "post_id"),
+      id: const PostIdFirestore(value: "post_id"),
       location: const PostLocationFirestore(
         geoPoint: GeoPoint(40, 20),
         geohash: "afed",
       ),
-      data: PostFirestoreData(
-        ownerId: const UserFirestoreId(value: "owner_id"),
+      data: PostDataFirestore(
+        ownerId: const UserIdFirestore(value: "owner_id"),
         title: "post_tiltle",
         description: "description",
         publicationTime: Timestamp.fromMillisecondsSinceEpoch(4564654),
@@ -281,7 +281,7 @@ void main() {
       expect(actualPosts.docs.length, 1);
 
       final expectedPost = PostFirestore(
-        id: PostFirestoreId(value: actualPosts.docs.first.id),
+        id: PostIdFirestore(value: actualPosts.docs.first.id),
         location: PostLocationFirestore(
           geoPoint: userPosition,
           geohash: userGeoFirePoint.hash,

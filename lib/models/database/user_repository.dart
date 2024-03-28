@@ -6,14 +6,14 @@ import "package:flutter/foundation.dart";
 
 /// The id are strong typed to avoid misuse
 @immutable
-class UserFirestoreId {
+class UserIdFirestore {
   final String value;
 
-  const UserFirestoreId({required this.value});
+  const UserIdFirestore({required this.value});
 
   @override
   bool operator ==(Object other) {
-    return other is UserFirestoreId && other.value == value;
+    return other is UserIdFirestore && other.value == value;
   }
 
   @override
@@ -24,9 +24,9 @@ class UserFirestoreId {
 class UserFirestore {
   /// The uid is not stored in a field because it already
   /// corresponds to the document id on firestore
-  final UserFirestoreId uid;
+  final UserIdFirestore uid;
 
-  final UserFirestoreData data;
+  final UserDataFirestore data;
 
   const UserFirestore({required this.uid, required this.data});
 
@@ -39,8 +39,8 @@ class UserFirestore {
       final data = docSnap.data() as Map<String, dynamic>;
 
       return UserFirestore(
-        uid: UserFirestoreId(value: docSnap.id),
-        data: UserFirestoreData.fromDbData(data),
+        uid: UserIdFirestore(value: docSnap.id),
+        data: UserDataFirestore.fromDbData(data),
       );
     } catch (e) {
       if (e is TypeError) {
@@ -61,7 +61,7 @@ class UserFirestore {
 }
 
 @immutable
-class UserFirestoreData {
+class UserDataFirestore {
   final String username;
   static const String usernameField = "username";
 
@@ -71,15 +71,15 @@ class UserFirestoreData {
   final Timestamp joinTime;
   static const joinTimeField = "joinTime";
 
-  const UserFirestoreData({
+  const UserDataFirestore({
     required this.username,
     required this.displayName,
     required this.joinTime,
   });
 
-  factory UserFirestoreData.fromDbData(Map<String, dynamic> data) {
+  factory UserDataFirestore.fromDbData(Map<String, dynamic> data) {
     try {
-      return UserFirestoreData(
+      return UserDataFirestore(
         username: data[usernameField],
         displayName: data[displayNameField],
         joinTime: data[joinTimeField],
@@ -105,7 +105,7 @@ class UserFirestoreData {
 
   @override
   bool operator ==(Object other) {
-    return other is UserFirestoreData &&
+    return other is UserDataFirestore &&
         other.username == username &&
         other.displayName == displayName &&
         other.joinTime == joinTime;
@@ -130,22 +130,22 @@ class UserRepository {
   Future<UserFirestore> getCurrentUser() async {
     final uid = _getUid();
 
-    return getUser(UserFirestoreId(value: uid));
+    return getUser(UserIdFirestore(value: uid));
   }
 
-  Future<UserFirestore> getUser(UserFirestoreId uid) async {
+  Future<UserFirestore> getUser(UserIdFirestore uid) async {
     final docSnap = await _collectionRef.doc(uid.value).get();
 
     return UserFirestore.fromDb(docSnap);
   }
 
-  Future<void> setCurrentUser(UserFirestoreData userData) async {
+  Future<void> setCurrentUser(UserDataFirestore userData) async {
     final uid = _getUid();
 
     await _collectionRef.doc(uid).set(userData.toDbData());
   }
 
-  Future<bool> doesUserExists(UserFirestoreId uid) async {
+  Future<bool> doesUserExists(UserIdFirestore uid) async {
     final docSnap = await _collectionRef.doc(uid.value).get();
 
     return docSnap.exists;

@@ -31,8 +31,8 @@ void main() {
 
     test("Set a valid current user correctly with empty db", () async {
       final expectedUser = UserFirestore(
-        uid: UserFirestoreId(value: testLoggedUser.uid),
-        data: UserFirestoreData(
+        uid: UserIdFirestore(value: testLoggedUser.uid),
+        data: UserDataFirestore(
           username: "username_8456",
           displayName: "display_name_8456",
           joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
@@ -49,26 +49,26 @@ void main() {
       final actualUser = actualDocs[0];
       expect(actualUser.id, expectedUser.uid.value);
       expect(
-        actualUser.data()[UserFirestoreData.usernameField],
+        actualUser.data()[UserDataFirestore.usernameField],
         expectedUser.data.username,
       );
       expect(
-        actualUser.data()[UserFirestoreData.joinTimeField],
+        actualUser.data()[UserDataFirestore.joinTimeField],
         expectedUser.data.joinTime,
       );
     });
 
     test("Get a user that does not exist fails", () async {
       expect(
-        userRepo.getUser(const UserFirestoreId(value: "non_existent_user_id")),
+        userRepo.getUser(const UserIdFirestore(value: "non_existent_user_id")),
         throwsA(isA<Exception>()),
       );
     });
 
     test("Get current user correctly", () async {
       final expectedUser = UserFirestore(
-        uid: UserFirestoreId(value: testLoggedUser.uid),
-        data: UserFirestoreData(
+        uid: UserIdFirestore(value: testLoggedUser.uid),
+        data: UserDataFirestore(
           username: "username_8456",
           displayName: "display_name_8456",
           joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
@@ -95,8 +95,8 @@ void main() {
 
     test("Get user correctly", () async {
       final expectedUser = UserFirestore(
-        uid: const UserFirestoreId(value: "user_id_1354"),
-        data: UserFirestoreData(
+        uid: const UserIdFirestore(value: "user_id_1354"),
+        data: UserDataFirestore(
           username: "username_8456",
           displayName: "display_name_8456",
           joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
@@ -115,8 +115,8 @@ void main() {
     test("Get user fails when firestore data format doesn't have all fields",
         () async {
       final expectedUser = UserFirestore(
-        uid: const UserFirestoreId(value: "user_id_1354"),
-        data: UserFirestoreData(
+        uid: const UserIdFirestore(value: "user_id_1354"),
+        data: UserDataFirestore(
           username: "username_8456",
           displayName: "display_name_8456",
           joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
@@ -124,7 +124,7 @@ void main() {
       );
 
       await userCollection.doc(expectedUser.uid.value).set({
-        UserFirestoreData.usernameField: expectedUser.data.username,
+        UserDataFirestore.usernameField: expectedUser.data.username,
         // The joinTime field is missing on purpose
       });
 
@@ -136,8 +136,8 @@ void main() {
 
     test("doesUserExists returns true when user exists", () async {
       final expectedUser = UserFirestore(
-        uid: const UserFirestoreId(value: "user_id_1354"),
-        data: UserFirestoreData(
+        uid: const UserIdFirestore(value: "user_id_1354"),
+        data: UserDataFirestore(
           username: "username_8456",
           displayName: "display_name_8456",
           joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
@@ -155,7 +155,7 @@ void main() {
 
     test("doesUserExists returns false when user does not exist", () async {
       final actualUser = await userRepo
-          .doesUserExists(const UserFirestoreId(value: "non_existent_user_id"));
+          .doesUserExists(const UserIdFirestore(value: "non_existent_user_id"));
 
       expect(actualUser, false);
     });

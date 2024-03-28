@@ -5,14 +5,14 @@ import "package:proxima/models/database/user_repository.dart";
 
 class MockFirestorePost {
   PostFirestore createPostAt(
-    PostFirestoreData data,
+    PostDataFirestore data,
     GeoPoint location, {
     id = "post_id",
   }) {
     final point = GeoFirePoint(location.latitude, location.longitude);
 
     return PostFirestore(
-      id: PostFirestoreId(value: id),
+      id: PostIdFirestore(value: id),
       location: PostLocationFirestore(
         geoPoint: location,
         geohash: point.hash,
@@ -21,12 +21,12 @@ class MockFirestorePost {
     );
   }
 
-  List<PostFirestoreData> generatePostData(int count) {
+  List<PostDataFirestore> generatePostData(int count) {
     return List.generate(count, (i) {
-      return PostFirestoreData(
+      return PostDataFirestore(
         description: "description_$i",
         title: "title_$i",
-        ownerId: UserFirestoreId(value: "owner_id_$i"),
+        ownerId: UserIdFirestore(value: "owner_id_$i"),
         publicationTime: Timestamp.fromMillisecondsSinceEpoch(1000 * i),
         voteScore: i,
       );
