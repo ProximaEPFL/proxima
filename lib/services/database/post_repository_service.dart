@@ -16,13 +16,15 @@ class PostRepositoryService {
         _geoFire = GeoFlutterFire();
 
   /// Adds a post at the current location of the user
-  Future<void> addPost(PostData postData, GeoFirePoint position) async {
+  Future<void> addPost(PostData postData, GeoPoint position) async {
     // The `point.data` returns a Map<String, dynamic> consistent with the
     // class [PostLocationFirestore]. This is because the field name values
     // are hardcoded in the [GeoFlutterFire] library
 
+    final geoFirePoint = _getGeoFirePoint(position);
+
     await _collectionRef.add({
-      PostFirestore.locationField: position.data,
+      PostFirestore.locationField: geoFirePoint.data,
       ...postData.toDbData(),
     });
   }
@@ -40,15 +42,16 @@ class PostRepositoryService {
   }
 
   /// Get the posts near a given point
-  /// The radius is defined by [kmPostRadius]
   Future<List<PostFirestore>> getNearPosts(
-    GeoFirePoint point,
+    GeoPoint point,
     double radius,
   ) async {
+    final geoFirePoint = _getGeoFirePoint(point);
+
     final posts = await _geoFire
         .collection(collectionRef: _collectionRef)
         .withinAsSingleStreamSubscription(
-          center: point,
+          center: geoFirePoint,
           radius: radius,
           field: PostFirestore.locationField,
           strictMode: false,
@@ -58,12 +61,19 @@ class PostRepositoryService {
     return posts.map((docSnap) => PostFirestore.fromDb(docSnap)).where((post) {
       // We need to filter the posts because the query is not exact
       final postPoint = post.location.geoPoint;
-      return point.distance(
+      return geoFirePoint.distance(
             lat: postPoint.latitude,
             lng: postPoint.longitude,
           ) <=
           radius;
     }).toList();
+  }
+
+  GeoFirePoint _getGeoFirePoint(GeoPoint point) {
+    return _geoFire.point(
+      latitude: point.latitude,
+      longitude: point.longitude,
+    );
   }
 }
 
