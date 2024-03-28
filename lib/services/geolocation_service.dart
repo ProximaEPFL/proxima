@@ -4,7 +4,15 @@ import "package:geolocator/geolocator.dart";
 class GeoLocationService {
   final GeolocatorPlatform _geoLocator;
 
-  // Settings to get the most accurate location
+  /// Here we use the LocationAccuracy.best setting to get the most accurate location possible. (~0m on IOS, 0-100m on Android)
+  /// We do not use the LocationAccuracy.high setting because the accuracy is lower
+  /// and given that we are dealing with small distances (< 100m), it is more beneficial to use the best accuracy possible.
+  ///
+  /// We also do not use the LocationAccuracy.bestForNavigation as the user is most
+  /// likely not moving at high speeds considering the goal of the app.
+  /// Also, the bestForNavigation setting is the same as best on Android.
+  ///
+  /// Source : https://pub.dev/documentation/geolocator_android/latest/geolocator_android/LocationAccuracy.html
   final LocationSettings locationSettings = AndroidSettings(
     accuracy: LocationAccuracy.best,
   );
@@ -13,6 +21,8 @@ class GeoLocationService {
     required GeolocatorPlatform geoLocator,
   }) : _geoLocator = geoLocator;
 
+  // This code is adapted from the geolocator package documentation
+  // Source : https://pub.dev/packages/geolocator
   Future<GeoPoint> getCurrentPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
