@@ -6,7 +6,7 @@ class GeoLocationService {
 
   // Settings to get the most accurate location
   final LocationSettings locationSettings = AndroidSettings(
-    accuracy: LocationAccuracy.high,
+    accuracy: LocationAccuracy.best,
   );
 
   GeoLocationService({
