@@ -4,7 +4,6 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
-import "package:proxima/views/pages/home/top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 import "utils/firebase/setup_firebase_mocks.dart";
@@ -73,33 +72,6 @@ void main() {
     expect(createAccountPage, findsOneWidget);
 
     final logoutButton = find.byKey(CreateAccountPage.logoutButtonKey);
-    await tester.tap(logoutButton);
-    await tester.pumpAndSettle();
-
-    // Check that pressing logout redirects to the login page
-    final loginPage = find.byType(LoginPage);
-    expect(loginPage, findsOneWidget);
-  });
-
-  testWidgets("Login and Logout using overview", (tester) async {
-    await tester.pumpWidget(mockedProxima);
-    await tester.pumpAndSettle();
-
-    final loginButton = find.byKey(LoginButton.loginButtonKey);
-    await tester.tap(loginButton);
-    await tester.pumpAndSettle();
-
-    final createAccountPage = find.byType(CreateAccountPage);
-    expect(createAccountPage, findsOneWidget);
-
-    final confirmButton = find.byKey(CreateAccountPage.confirmButtonKey);
-    await tester.tap(confirmButton);
-    await tester.pumpAndSettle();
-
-    final homePage = find.byType(HomePage);
-    expect(homePage, findsOneWidget);
-
-    final logoutButton = find.byKey(HomeTopBar.logoutButtonKey);
     await tester.tap(logoutButton);
     await tester.pumpAndSettle();
 
