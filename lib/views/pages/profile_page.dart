@@ -39,6 +39,7 @@ class ProfilePage extends HookConsumerWidget {
             ],
           ),
           body: Container(
+            padding: const EdgeInsets.only(left: 8, right: 8),
             color: theme.colorScheme.tertiaryContainer,
             child: Center(
               child: SingleChildScrollView(
@@ -50,7 +51,7 @@ class ProfilePage extends HookConsumerWidget {
                     LazyCardRow(
                       theme: theme,
                       itemList: itemList,
-                      title: "Your badges",
+                      title: "Your badges:",
                     ),
                     const SizedBox(height: 15),
                     LazyCardColumn(
@@ -64,6 +65,7 @@ class ProfilePage extends HookConsumerWidget {
                       itemList: itemList,
                       title: "Your comments:",
                     ),
+                    const SizedBox(height: 15),
                   ],
                 ),
               ),
@@ -127,7 +129,7 @@ class LazyCardColumn extends StatelessWidget {
         color: theme.colorScheme.secondaryContainer,
       ),
       child: Padding(
-        padding: const EdgeInsets.only(left: 5, top: 1),
+        padding: const EdgeInsets.only(left: 5, right: 5, top: 1),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -263,16 +265,22 @@ class UserInfos extends StatelessWidget {
           //backgroundImage: AssetImage("assets/images/user.png" ),
         ),
         const SizedBox(width: 10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //TODO: get the profile info from the viewmodel
-            Text(
-              userEmail ?? "default@mail.com",
-              style: theme.textTheme.titleMedium,
-            ),
-            Text("User Profile", style: theme.textTheme.titleSmall),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //TODO: get the profile info from the viewmodel
+              Text(
+                userEmail ?? "averylongemailjusttocheckthatitfades",
+                style: theme.textTheme.titleSmall,
+                overflow: TextOverflow.fade,
+              ),
+              Text(
+                "User Profile",
+                style: theme.textTheme.titleSmall,
+              ),
+            ],
+          ),
         ),
       ],
     );

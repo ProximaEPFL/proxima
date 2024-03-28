@@ -31,13 +31,6 @@ class ProximaApp extends StatelessWidget {
 
     return MaterialApp(
       title: "Proxima",
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.lightBlueAccent,
-          brightness: Brightness.light,
-        ),
-      ),
       onGenerateRoute: generateRoute,
       initialRoute: Routes.login.name,
       theme: ThemeData(
