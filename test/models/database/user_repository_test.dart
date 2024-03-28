@@ -1,11 +1,12 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
-import "package:firebase_auth_mocks/firebase_auth_mocks.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/user/user_data.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/user_repository_service.dart";
+
+import "../../services/test_data/firestore_user_mock.dart";
 
 void main() {
   group("User Data Firestore testing", () {
@@ -41,40 +42,23 @@ void main() {
   });
 
   group("User repository testing", () {
-    final testLoggedUser = MockUser(
-      isAnonymous: false,
-      uid: "testing_user_id",
-      email: "testing.user@gmail.com",
-      displayName: "Testing User",
-    );
-
     late FakeFirebaseFirestore fakeFireStore;
     late CollectionReference<Map<String, dynamic>> userCollection;
-    late MockFirebaseAuth mockFirebaseAuth;
-    late UserRepository userRepo;
+    // late MockFirebaseAuth mockFirebaseAuth;
+    late UserRepositoryService userRepo;
 
     setUp(() async {
       fakeFireStore = FakeFirebaseFirestore();
-      userCollection = fakeFireStore.collection(UserRepository.collectionName);
-      mockFirebaseAuth =
-          MockFirebaseAuth(signedIn: true, mockUser: testLoggedUser);
-      userRepo = UserRepository(
-        firebaseAuth: mockFirebaseAuth,
+      userCollection = fakeFireStore.collection(UserFirestore.collectionName);
+      userRepo = UserRepositoryService(
         firestore: fakeFireStore,
       );
     });
 
     test("Set a valid current user correctly with empty db", () async {
-      final expectedUser = UserFirestore(
-        uid: UserIdFirestore(value: testLoggedUser.uid),
-        data: UserDataFirestore(
-          username: "username_8456",
-          displayName: "display_name_8456",
-          joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
-        ),
-      );
+      final expectedUser = testingUserFirestore;
 
-      await userRepo.setCurrentUser(expectedUser.data);
+      await userRepo.setUser(testingUserFirestoreId, expectedUser.data);
 
       final actualUserCollection = await userCollection.get();
       final actualDocs = actualUserCollection.docs;
@@ -100,33 +84,26 @@ void main() {
       );
     });
 
-    test("Get current user correctly", () async {
-      final expectedUser = UserFirestore(
-        uid: UserIdFirestore(value: testLoggedUser.uid),
-        data: UserDataFirestore(
-          username: "username_8456",
-          displayName: "display_name_8456",
-          joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
-        ),
-      );
+    // test("Get current user correctly", () async {
+    //   final expectedUser = testingUserFirestore;
 
-      await userCollection
-          .doc(expectedUser.uid.value)
-          .set(expectedUser.data.toDbData());
+    //   await userCollection
+    //       .doc(expectedUser.uid.value)
+    //       .set(expectedUser.data.toDbData());
 
-      final actualUser = await userRepo.getCurrentUser();
+    //   final actualUser = await userRepo.getCurrentUser();
 
-      expect(actualUser, expectedUser);
-    });
+    //   expect(actualUser, expectedUser);
+    // });
 
-    test("Get current user fails when not logged in", () async {
-      await mockFirebaseAuth.signOut();
+    // test("Get current user fails when not logged in", () async {
+    //   await mockFirebaseAuth.signOut();
 
-      expect(
-        userRepo.getCurrentUser(),
-        throwsA(isA<Exception>()),
-      );
-    });
+    //   expect(
+    //     userRepo.getCurrentUser(),
+    //     throwsA(isA<Exception>()),
+    //   );
+    // });
 
     test("Get user correctly", () async {
       final expectedUser = UserFirestore(

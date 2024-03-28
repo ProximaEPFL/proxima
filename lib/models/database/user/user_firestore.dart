@@ -5,6 +5,8 @@ import "package:proxima/models/database/user/user_id_firestore.dart";
 
 @immutable
 class UserFirestore {
+  static const collectionName = "users";
+
   /// The uid is not stored in a field because it already
   /// corresponds to the document id on firestore
   final UserIdFirestore uid;

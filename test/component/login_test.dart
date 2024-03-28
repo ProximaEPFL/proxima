@@ -8,7 +8,7 @@ import "package:proxima/views/pages/login/login_page.dart";
 
 import "../services/firebase/setup_firebase_mocks.dart";
 import "../services/firebase/testing_auth_providers.dart";
-import "../services/mock_data/firebase_auth_user_mock.dart";
+import "../services/test_data/firebase_auth_user_mock.dart";
 
 void main() {
   setupFirebaseAuthMocks();
