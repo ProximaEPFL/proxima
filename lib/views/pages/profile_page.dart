@@ -173,7 +173,6 @@ class LazyCardRow extends StatelessWidget {
       height: 150,
       width: 380,
       decoration: BoxDecoration(
-
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         color: theme.colorScheme.secondaryContainer,
       ),
@@ -251,7 +250,7 @@ class UserInfos extends StatelessWidget {
     return Row(
       children: [
         const CircleAvatar(
-          radius: 25,
+          radius: 20,
           //TODO: get the image from the viewmodel
           //backgroundImage: AssetImage("assets/images/user.png" ),
         ),
