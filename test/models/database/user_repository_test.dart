@@ -11,7 +11,7 @@ import "../../services/test_data/firestore_user_mock.dart";
 void main() {
   group("User Data Firestore testing", () {
     test("hash overrides correctly", () {
-      final data = UserDataFirestore(
+      final data = UserData(
         username: "username_8456",
         displayName: "display_name_8456",
         joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
@@ -30,12 +30,12 @@ void main() {
 
     test("fromDbData throw error when missing fields", () {
       final data = <String, dynamic>{
-        UserDataFirestore.usernameField: "username_8456",
-        UserDataFirestore.displayNameField: "display_name_8456",
+        UserData.usernameField: "username_8456",
+        UserData.displayNameField: "display_name_8456",
       };
 
       expect(
-        () => UserDataFirestore.fromDbData(data),
+        () => UserData.fromDbData(data),
         throwsA(isA<FormatException>()),
       );
     });
@@ -44,7 +44,6 @@ void main() {
   group("User repository testing", () {
     late FakeFirebaseFirestore fakeFireStore;
     late CollectionReference<Map<String, dynamic>> userCollection;
-    // late MockFirebaseAuth mockFirebaseAuth;
     late UserRepositoryService userRepo;
 
     setUp(() async {
@@ -68,11 +67,11 @@ void main() {
       final actualUser = actualDocs[0];
       expect(actualUser.id, expectedUser.uid.value);
       expect(
-        actualUser.data()[UserDataFirestore.usernameField],
+        actualUser.data()[UserData.usernameField],
         expectedUser.data.username,
       );
       expect(
-        actualUser.data()[UserDataFirestore.joinTimeField],
+        actualUser.data()[UserData.joinTimeField],
         expectedUser.data.joinTime,
       );
     });
@@ -84,31 +83,10 @@ void main() {
       );
     });
 
-    // test("Get current user correctly", () async {
-    //   final expectedUser = testingUserFirestore;
-
-    //   await userCollection
-    //       .doc(expectedUser.uid.value)
-    //       .set(expectedUser.data.toDbData());
-
-    //   final actualUser = await userRepo.getCurrentUser();
-
-    //   expect(actualUser, expectedUser);
-    // });
-
-    // test("Get current user fails when not logged in", () async {
-    //   await mockFirebaseAuth.signOut();
-
-    //   expect(
-    //     userRepo.getCurrentUser(),
-    //     throwsA(isA<Exception>()),
-    //   );
-    // });
-
     test("Get user correctly", () async {
       final expectedUser = UserFirestore(
         uid: const UserIdFirestore(value: "user_id_1354"),
-        data: UserDataFirestore(
+        data: UserData(
           username: "username_8456",
           displayName: "display_name_8456",
           joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
@@ -128,7 +106,7 @@ void main() {
         () async {
       final expectedUser = UserFirestore(
         uid: const UserIdFirestore(value: "user_id_1354"),
-        data: UserDataFirestore(
+        data: UserData(
           username: "username_8456",
           displayName: "display_name_8456",
           joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
@@ -136,7 +114,7 @@ void main() {
       );
 
       await userCollection.doc(expectedUser.uid.value).set({
-        UserDataFirestore.usernameField: expectedUser.data.username,
+        UserData.usernameField: expectedUser.data.username,
         // The joinTime field is missing on purpose
       });
 
@@ -149,7 +127,7 @@ void main() {
     test("doesUserExists returns true when user exists", () async {
       final expectedUser = UserFirestore(
         uid: const UserIdFirestore(value: "user_id_1354"),
-        data: UserDataFirestore(
+        data: UserData(
           username: "username_8456",
           displayName: "display_name_8456",
           joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),

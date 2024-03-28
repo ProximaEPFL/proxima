@@ -1,6 +1,9 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:geoflutterfire2/geoflutterfire2.dart";
-import "package:proxima/models/database/post_repository.dart";
+import "package:proxima/models/database/post/post_data.dart";
+import "package:proxima/models/database/post/post_firestore.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 
 class MockFirestorePost {

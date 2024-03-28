@@ -2,12 +2,13 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:geoflutterfire2/geoflutterfire2.dart";
-import "package:mockito/mockito.dart";
-import "package:proxima/models/database/post_repository.dart";
+import "package:proxima/models/database/post/post_data.dart";
+import "package:proxima/models/database/post/post_firestore.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/services/database/post_repository_service.dart";
 
-import "../../services/mock_geo_location_service.dart";
 import "mock_post_data.dart";
 
 void main() {
@@ -42,7 +43,7 @@ void main() {
 
   group("Post Firestore Data testing", () {
     test("hash overrides correctly", () {
-      final data = PostDataFirestore(
+      final data = PostData(
         ownerId: const UserIdFirestore(value: "owner_id"),
         title: "post_tiltle",
         description: "description",
@@ -65,15 +66,15 @@ void main() {
 
     test("fromDbData throw error when missing fields", () {
       final data = <String, dynamic>{
-        PostDataFirestore.ownerIdField: "owner_id",
-        PostDataFirestore.titleField: "post_tiltle",
-        PostDataFirestore.descriptionField: "description",
-        PostDataFirestore.publicationTimeField:
+        PostData.ownerIdField: "owner_id",
+        PostData.titleField: "post_tiltle",
+        PostData.descriptionField: "description",
+        PostData.publicationTimeField:
             Timestamp.fromMillisecondsSinceEpoch(4564654),
       };
 
       expect(
-        () => PostDataFirestore.fromDbData(data),
+        () => PostData.fromDbData(data),
         throwsA(isA<FormatException>()),
       );
     });
@@ -89,7 +90,7 @@ void main() {
         geohash: geoHash,
       );
 
-      final data = PostDataFirestore(
+      final data = PostData(
         ownerId: const UserIdFirestore(value: "owner_id"),
         title: "post_tiltle",
         description: "description",
@@ -113,10 +114,10 @@ void main() {
 
   group("Post Repository testing", () {
     late FakeFirebaseFirestore firestore;
-    late GeoFlutterFire geoFire;
-    late GeoLocationService geoLocationService;
-    late PostRepository postRepository;
+    late PostRepositoryService postRepository;
     late MockFirestorePost mockFirestorePost;
+
+    const kmRadius = 0.1;
 
     /// Helper function to set a post in the firestore db
     Future<void> setPostFirestore(PostFirestore post) async {
@@ -126,7 +127,7 @@ void main() {
       };
 
       await firestore
-          .collection(PostRepository.collectionName)
+          .collection(PostFirestore.collectionName)
           .doc(post.id.value)
           .set({
         PostFirestore.locationField: locationData,
@@ -142,12 +143,8 @@ void main() {
 
     setUp(() {
       firestore = FakeFirebaseFirestore();
-      geoFire = GeoFlutterFire();
-      geoLocationService = MockGeoLocationService();
-      postRepository = PostRepository(
+      postRepository = PostRepositoryService(
         firestore: firestore,
-        geoFire: geoFire,
-        geoLocationService: geoLocationService,
       );
       mockFirestorePost = MockFirestorePost();
     });
@@ -158,7 +155,7 @@ void main() {
         geoPoint: GeoPoint(40, 20),
         geohash: "afed",
       ),
-      data: PostDataFirestore(
+      data: PostData(
         ownerId: const UserIdFirestore(value: "owner_id"),
         title: "post_tiltle",
         description: "description",
@@ -172,14 +169,14 @@ void main() {
 
       // Check that the post is in the db
       final dbPost = await firestore
-          .collection(PostRepository.collectionName)
+          .collection(PostFirestore.collectionName)
           .doc(post.id.value)
           .get();
       expect(dbPost.exists, true);
 
       await postRepository.deletePost(post.id);
       final actualPost = await firestore
-          .collection(PostRepository.collectionName)
+          .collection(PostFirestore.collectionName)
           .doc(post.id.value)
           .get();
       expect(actualPost.exists, false);
@@ -201,15 +198,14 @@ void main() {
 
       await setPostFirestore(expectedPost);
 
-      when(geoLocationService.getCurrentPosition())
-          .thenAnswer((_) => Future.value(userPosition));
-
-      final actualPosts = await postRepository.getNearPosts();
+      final actualPosts =
+          await postRepository.getNearPosts(userPosition, kmRadius);
       expect(actualPosts, [expectedPost]);
     });
 
     test("post is not queried when far away", () async {
       const userPosition = GeoPoint(40, 20);
+
       const postPoint = GeoPoint(40.001, 20.001); // about 140m away
 
       final postData = mockFirestorePost.generatePostData(1).first;
@@ -217,10 +213,8 @@ void main() {
 
       await setPostFirestore(expectedPost);
 
-      when(geoLocationService.getCurrentPosition())
-          .thenAnswer((_) => Future.value(userPosition));
-
-      final actualPosts = await postRepository.getNearPosts();
+      final actualPosts =
+          await postRepository.getNearPosts(userPosition, kmRadius);
       expect(actualPosts, isEmpty);
     });
 
@@ -236,10 +230,8 @@ void main() {
 
       await setPostFirestore(expectedPost);
 
-      when(geoLocationService.getCurrentPosition())
-          .thenAnswer((_) => Future.value(userPosition));
-
-      final actualPosts = await postRepository.getNearPosts();
+      final actualPosts =
+          await postRepository.getNearPosts(userPosition, kmRadius);
       expect(actualPosts, [expectedPost]);
     });
 
@@ -255,27 +247,22 @@ void main() {
 
       await setPostFirestore(expectedPost);
 
-      when(geoLocationService.getCurrentPosition())
-          .thenAnswer((_) => Future.value(userPosition));
-
-      final actualPosts = await postRepository.getNearPosts();
+      final actualPosts =
+          await postRepository.getNearPosts(userPosition, kmRadius);
       expect(actualPosts, isEmpty);
     });
 
-    test("add post at current location correctly", () async {
+    test("add post at location correctly", () async {
       const userPosition = GeoPoint(40, 20);
       final userGeoFirePoint =
           GeoFirePoint(userPosition.latitude, userPosition.longitude);
 
       final postData = mockFirestorePost.generatePostData(1).first;
 
-      when(geoLocationService.getCurrentPosition())
-          .thenAnswer((_) => Future.value(userPosition));
-
-      await postRepository.addPost(postData);
+      await postRepository.addPost(postData, userPosition);
 
       final actualPosts =
-          await firestore.collection(PostRepository.collectionName).get();
+          await firestore.collection(PostFirestore.collectionName).get();
       expect(actualPosts.docs.length, 1);
 
       final expectedPost = PostFirestore(
@@ -311,10 +298,8 @@ void main() {
 
       await setPostsFirestore(allPosts);
 
-      when(geoLocationService.getCurrentPosition())
-          .thenAnswer((_) => Future.value(userPosition));
-
-      final actualPosts = await postRepository.getNearPosts();
+      final actualPosts =
+          await postRepository.getNearPosts(userPosition, kmRadius);
 
       final expectedPosts = allPosts.where((element) {
         final geoFirePoint = GeoFirePoint(
@@ -325,7 +310,7 @@ void main() {
           lat: userPosition.latitude,
           lng: userPosition.longitude,
         );
-        return distance <= PostRepository.kmPostRadius;
+        return distance <= kmRadius;
       }).toList();
 
       expect(actualPosts, expectedPosts);

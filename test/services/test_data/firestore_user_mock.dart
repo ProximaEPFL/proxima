@@ -5,7 +5,7 @@ import "package:proxima/models/database/user/user_id_firestore.dart";
 
 import "firebase_auth_user_mock.dart";
 
-final testingUserData = UserDataFirestore(
+final testingUserData = UserData(
   username: "username_8456",
   displayName: "display_name_8456",
   joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
