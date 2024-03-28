@@ -2,7 +2,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/foundation.dart";
 
 @immutable
-class UserDataFirestore {
+class UserData {
   final String username;
   static const String usernameField = "username";
 
@@ -12,15 +12,15 @@ class UserDataFirestore {
   final Timestamp joinTime;
   static const joinTimeField = "joinTime";
 
-  const UserDataFirestore({
+  const UserData({
     required this.username,
     required this.displayName,
     required this.joinTime,
   });
 
-  factory UserDataFirestore.fromDbData(Map<String, dynamic> data) {
+  factory UserData.fromDbData(Map<String, dynamic> data) {
     try {
-      return UserDataFirestore(
+      return UserData(
         username: data[usernameField],
         displayName: data[displayNameField],
         joinTime: data[joinTimeField],
@@ -46,7 +46,7 @@ class UserDataFirestore {
 
   @override
   bool operator ==(Object other) {
-    return other is UserDataFirestore &&
+    return other is UserData &&
         other.username == username &&
         other.displayName == displayName &&
         other.joinTime == joinTime;

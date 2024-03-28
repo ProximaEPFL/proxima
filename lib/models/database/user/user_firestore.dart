@@ -11,7 +11,7 @@ class UserFirestore {
   /// corresponds to the document id on firestore
   final UserIdFirestore uid;
 
-  final UserDataFirestore data;
+  final UserData data;
 
   const UserFirestore({required this.uid, required this.data});
 
@@ -25,7 +25,7 @@ class UserFirestore {
 
       return UserFirestore(
         uid: UserIdFirestore(value: docSnap.id),
-        data: UserDataFirestore.fromDbData(data),
+        data: UserData.fromDbData(data),
       );
     } catch (e) {
       if (e is TypeError) {

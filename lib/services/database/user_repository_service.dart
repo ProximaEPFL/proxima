@@ -20,7 +20,7 @@ class UserRepositoryService {
     return UserFirestore.fromDb(docSnap);
   }
 
-  Future<void> setUser(UserIdFirestore uid, UserDataFirestore userData) async {
+  Future<void> setUser(UserIdFirestore uid, UserData userData) async {
     await _collectionRef.doc(uid.value).set(userData.toDbData());
   }
 
