@@ -1,5 +1,8 @@
 import "package:flutter/widgets.dart";
 
+/// Widget that will be scrollable if its content is too high. This wraps
+/// [[SingleChildScrollView]], as presented in its documentation:
+/// https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html
 class ScrollableIfTooHigh extends StatelessWidget {
   final Widget child;
 
