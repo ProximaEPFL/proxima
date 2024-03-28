@@ -72,8 +72,12 @@ class ProfilePage extends HookConsumerWidget {
             ),
           ),
         ),
-      AsyncError(:final error) => Text("Error: $error"),
-      _ => const Center(child: CircularProgressIndicator()),
+      AsyncError(:final error) => Text(
+          "Error: $error",
+        ),
+      _ => const Center(
+          child: CircularProgressIndicator(),
+        ),
     };
   }
 }
