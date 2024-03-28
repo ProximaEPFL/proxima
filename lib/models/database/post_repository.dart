@@ -43,7 +43,7 @@ class PostFirestore {
       );
     } catch (e) {
       if (e is TypeError) {
-        throw Exception("Cannot parse post document: ${e.toString()}");
+        throw FormatException("Cannot parse post document: ${e.toString()}");
       } else {
         rethrow;
       }
@@ -103,7 +103,7 @@ class PostFirestoreData {
       );
     } catch (e) {
       if (e is TypeError) {
-        throw Exception("Cannot parse post document: ${e.toString()}");
+        throw FormatException("Cannot parse post document: ${e.toString()}");
       } else {
         rethrow;
       }
@@ -165,7 +165,9 @@ class PostLocationFirestore {
       );
     } catch (e) {
       if (e is TypeError) {
-        throw Exception("Cannot parse post location document: ${e.toString()}");
+        throw FormatException(
+          "Cannot parse post location document: ${e.toString()}",
+        );
       } else {
         rethrow;
       }

@@ -31,7 +31,7 @@ class UserFirestore {
       );
     } catch (e) {
       if (e is TypeError) {
-        throw Exception("Cannot parse user document : ${e.toString()}");
+        throw FormatException("Cannot parse user document : ${e.toString()}");
       } else {
         rethrow;
       }
@@ -73,7 +73,9 @@ class UserFirestoreData {
       );
     } catch (e) {
       if (e is TypeError) {
-        throw Exception("Cannot parse user data document: ${e.toString()}");
+        throw FormatException(
+          "Cannot parse user data document: ${e.toString()}",
+        );
       } else {
         rethrow;
       }

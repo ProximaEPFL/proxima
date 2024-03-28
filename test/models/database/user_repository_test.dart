@@ -130,7 +130,7 @@ void main() {
 
       expect(
         userRepo.getUser(expectedUser.uid),
-        throwsA(isA<Exception>()),
+        throwsA(isA<FormatException>()),
       );
     });
 

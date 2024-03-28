@@ -43,7 +43,7 @@ void main() {
 
       expect(
         () => PostLocationFirestore.fromDbData(data),
-        throwsA(isA<Exception>()),
+        throwsA(isA<FormatException>()),
       );
     });
   });
@@ -82,7 +82,7 @@ void main() {
 
       expect(
         () => PostFirestoreData.fromDbData(data),
-        throwsA(isA<Exception>()),
+        throwsA(isA<FormatException>()),
       );
     });
   });
