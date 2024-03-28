@@ -4,11 +4,9 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
 import "package:proxima/views/pages/home_page.dart";
 import "package:proxima/views/pages/login_page.dart";
-//import "package:proxima/views/pages/profile_page.dart";
 
 import "utils/firebase/setup_firebase_mocks.dart";
 import "utils/firebase/testing_login_providers.dart";
-//import "utils/mock_data/firebase_user_mock.dart";
 
 void main() {
   setupFirebaseAuthMocks();
