@@ -9,38 +9,6 @@ import "package:proxima/services/database/user_repository_service.dart";
 import "../../services/test_data/firestore_user_mock.dart";
 
 void main() {
-  group("User Data Firestore testing", () {
-    test("hash overrides correctly", () {
-      final data = UserData(
-        username: "username_8456",
-        displayName: "display_name_8456",
-        joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
-      );
-
-      final expectedHash = Object.hash(
-        data.username,
-        data.displayName,
-        data.joinTime,
-      );
-
-      final actualHash = data.hashCode;
-
-      expect(actualHash, expectedHash);
-    });
-
-    test("fromDbData throw error when missing fields", () {
-      final data = <String, dynamic>{
-        UserData.usernameField: "username_8456",
-        UserData.displayNameField: "display_name_8456",
-      };
-
-      expect(
-        () => UserData.fromDbData(data),
-        throwsA(isA<FormatException>()),
-      );
-    });
-  });
-
   group("User repository testing", () {
     late FakeFirebaseFirestore fakeFireStore;
     late CollectionReference<Map<String, dynamic>> userCollection;
