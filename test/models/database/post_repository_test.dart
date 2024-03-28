@@ -7,17 +7,8 @@ import "package:proxima/models/database/post_repository.dart";
 import "package:proxima/models/database/user_repository.dart";
 import "package:proxima/services/geolocation_service.dart";
 
+import "../../services/mock_geo_location_service.dart";
 import "mock_post_data.dart";
-
-class MockGeoLocationService extends Mock implements GeoLocationService {
-  @override
-  Future<GeoPoint> getCurrentPosition() {
-    return super.noSuchMethod(
-      Invocation.method(#getCurrentPosition, []),
-      returnValue: Future.value(const GeoPoint(0, 0)),
-    );
-  }
-}
 
 void main() {
   group("Post Location Firestore testing", () {
