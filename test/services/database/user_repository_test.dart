@@ -6,7 +6,7 @@ import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 
-import "../../services/test_data/firestore_user_mock.dart";
+import "../test_data/firestore_user_mock.dart";
 
 void main() {
   group("User repository testing", () {
@@ -22,7 +22,7 @@ void main() {
       );
     });
 
-    test("Set a valid current user correctly with empty db", () async {
+    test("Set a valid user correctly with empty db", () async {
       final expectedUser = testingUserFirestore;
 
       await userRepo.setUser(testingUserFirestoreId, expectedUser.data);
