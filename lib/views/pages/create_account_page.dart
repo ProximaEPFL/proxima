@@ -29,7 +29,7 @@ class CreateAccountPage extends HookConsumerWidget {
         title: const Text("Create your account"),
       ),
       body: const Padding(
-        padding: EdgeInsets.only(left: 50, right: 50, top: 50, bottom: 50),
+        padding: EdgeInsets.only(left: 50, right: 50),
         child: Center(child: _CreateAccountPageContent()),
       ),
     );
@@ -46,6 +46,7 @@ class _CreateAccountPageContent extends HookConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Flexible(flex: 20, child: Container()),
+          const SizedBox(height: 20),
           const TextField(
             key: CreateAccountPage.uniqueUsernameFieldKey,
             decoration: InputDecoration(
@@ -62,6 +63,7 @@ class _CreateAccountPageContent extends HookConsumerWidget {
             ),
           ),
           Flexible(flex: 50, child: Container()),
+          const SizedBox(height: 50),
           ElevatedButton(
             key: CreateAccountPage.confirmButtonKey,
             onPressed: () {
@@ -70,6 +72,8 @@ class _CreateAccountPageContent extends HookConsumerWidget {
             },
             child: const Text("Confirm"),
           ),
+          Flexible(flex: 20, child: Container()),
+          const SizedBox(height: 20),
         ],
       ),
     );
