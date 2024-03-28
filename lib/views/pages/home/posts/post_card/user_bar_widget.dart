@@ -1,9 +1,7 @@
 import "package:flutter/material.dart";
 
-/*
-  This widget is used to display the user bar in the post card.
-  It contains the user's profile picture and username.
-*/
+/// This widget is used to display the user bar in the post card.
+/// It contains the user's profile picture and username.
 class UserBarWidget extends StatelessWidget {
   const UserBarWidget({
     super.key,

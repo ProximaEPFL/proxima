@@ -4,10 +4,8 @@ import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/filter_widgets/timeline_filter/timeline_filter_dropdown.dart";
 import "package:proxima/views/pages/home/posts/post_card/post_card.dart";
 
-/*
-  This widget is the feed of the home page
-  It contains the posts
-*/
+/// This widget is the feed of the home page
+/// It contains the posts
 class HomeFeed extends HookConsumerWidget {
   static const timelineFiltersDropDownKey = Key("timelineFiltersDropDown");
   static const homeFeedKey = Key("homeFeed");

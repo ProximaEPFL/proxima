@@ -1,9 +1,7 @@
 import "package:flutter/material.dart";
 
-/*
-  This widget is used to display the comment number in the post card.
-  It contains the comment icon and the number of comments.
-*/
+/// This widget is used to display the comment number in the post card.
+/// It contains the comment icon and the number of comments.
 class CommentWidget extends StatelessWidget {
   final int commentNumber;
   const CommentWidget({
