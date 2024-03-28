@@ -7,6 +7,9 @@ class CreateAccountPage extends HookConsumerWidget {
   static const logoutButtonKey = Key("logout");
   static const confirmButtonKey = Key("confirm");
 
+  static const uniqueUsernameFieldKey = Key("uniqueUsername");
+  static const pseudoFieldKey = Key("pseudo");
+
   const CreateAccountPage({super.key});
 
   @override
@@ -42,6 +45,7 @@ class _CreateAccountPageContent extends HookConsumerWidget {
       children: [
         Flexible(flex: 20, child: Container()),
         const TextField(
+          key: CreateAccountPage.uniqueUsernameFieldKey,
           decoration: InputDecoration(
             labelText: "Unique username",
             border: OutlineInputBorder(),
@@ -49,6 +53,7 @@ class _CreateAccountPageContent extends HookConsumerWidget {
         ),
         const SizedBox(height: 20),
         const TextField(
+          key: CreateAccountPage.pseudoFieldKey,
           decoration: InputDecoration(
             labelText: "Pseudo",
             border: OutlineInputBorder(),
