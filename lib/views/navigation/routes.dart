@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home_page.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/profile_page.dart";
@@ -6,7 +7,8 @@ import "package:proxima/views/pages/profile_page.dart";
 enum Routes {
   home("home"),
   login("login"),
-  profile("profile");
+  profile("profile"),
+  createAccount("createAccount");
 
   final String name;
 
@@ -24,6 +26,8 @@ enum Routes {
         return const LoginPage();
       case profile:
         return const ProfilePage();
+      case createAccount:
+        return const CreateAccountPage();
     }
   }
 }

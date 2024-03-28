@@ -1,6 +1,8 @@
+import "package:flutter/widgets.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/login_user.dart";
 import "package:proxima/services/login_service.dart";
+import "package:proxima/views/navigation/routes.dart";
 
 /// Firebase authentication change provider
 final userProvider = StreamProvider<LoginUser?>((ref) {
@@ -25,3 +27,19 @@ final loginServiceProvider = Provider<LoginService>((ref) {
     googleSignIn: ref.watch(googleSignInProvider),
   );
 });
+
+/// Registers the widget to navigate to the login page on logout.
+/// This only needs to be called once in the navigation stack,
+/// typically in the home page.
+void navigateToLoginPageOnLogout(BuildContext context, WidgetRef ref) {
+  ref.listen(isUserLoggedInProvider, (_, isLoggedIn) {
+    if (!isLoggedIn) {
+      // Go to login page when the user is logged out
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        Routes.login.name,
+        (route) => false,
+      );
+    }
+  });
+}
