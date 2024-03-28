@@ -3,6 +3,7 @@ import "package:proxima/views/pages/home_page.dart";
 import "package:proxima/views/pages/login_page.dart";
 import "package:proxima/views/pages/profile_page.dart";
 
+
 enum Routes {
   home("home"),
   login("login"),
