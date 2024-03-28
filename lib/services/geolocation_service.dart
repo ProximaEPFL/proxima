@@ -34,7 +34,8 @@ class GeoLocationService {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
+      // Permissions are denied forever
+      // TODO : Handle this case to notify the user that the location permissions are denied forever
       throw Exception(
         "Location permissions are permanently denied, we cannot request permissions.",
       );
