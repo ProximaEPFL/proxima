@@ -145,7 +145,7 @@ class UserRepository {
     await _collectionRef.doc(uid).set(userData.toDbData());
   }
 
-  Future<bool> doesUserExists(UserIdFirestore uid) async {
+  Future<bool> doesUserExist(UserIdFirestore uid) async {
     final docSnap = await _collectionRef.doc(uid.value).get();
 
     return docSnap.exists;

@@ -148,14 +148,14 @@ void main() {
           .doc(expectedUser.uid.value)
           .set(expectedUser.data.toDbData());
 
-      final actualUser = await userRepo.doesUserExists(expectedUser.uid);
+      final actualUser = await userRepo.doesUserExist(expectedUser.uid);
 
       expect(actualUser, true);
     });
 
     test("doesUserExists returns false when user does not exist", () async {
       final actualUser = await userRepo
-          .doesUserExists(const UserIdFirestore(value: "non_existent_user_id"));
+          .doesUserExist(const UserIdFirestore(value: "non_existent_user_id"));
 
       expect(actualUser, false);
     });
