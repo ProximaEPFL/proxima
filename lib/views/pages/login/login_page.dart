@@ -19,8 +19,9 @@ class LoginPage extends HookConsumerWidget {
     // Listen for authentication changes
     ref.listen(isUserLoggedInProvider, (_, loggedIn) {
       if (loggedIn) {
-        // Go to home page when the user is logged in
-        Navigator.pushReplacementNamed(context, Routes.home.name);
+        // TODO: This should be Navigator.push instead, but we would have to make sure the user is logged out when coming  back here.
+        // TODO: The route should be different according to whether the user exists or not.
+        Navigator.pushReplacementNamed(context, Routes.createAccount.name);
       }
     });
 
