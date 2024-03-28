@@ -170,6 +170,13 @@ void main() {
     test("delete post correctly", () async {
       await setPostFirestore(post);
 
+      // Check that the post is in the db
+      final dbPost = await firestore
+          .collection(PostRepository.collectionName)
+          .doc(post.id.value)
+          .get();
+      expect(dbPost.exists, true);
+
       await postRepository.deletePost(post.id);
       final actualPost = await firestore
           .collection(PostRepository.collectionName)
