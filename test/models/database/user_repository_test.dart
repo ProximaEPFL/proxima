@@ -31,7 +31,7 @@ void main() {
 
     test("Set a valid current user correctly with empty db", () async {
       final expectedUser = UserFirestore(
-        uid: testLoggedUser.uid,
+        uid: UserFirestoreId(value: testLoggedUser.uid),
         data: UserFirestoreData(
           username: "username_8456",
           displayName: "display_name_8456",
@@ -47,7 +47,7 @@ void main() {
       expect(actualDocs.length, 1);
 
       final actualUser = actualDocs[0];
-      expect(actualUser.id, expectedUser.uid);
+      expect(actualUser.id, expectedUser.uid.value);
       expect(
         actualUser.data()[UserFirestoreData.usernameField],
         expectedUser.data.username,
@@ -60,14 +60,14 @@ void main() {
 
     test("Get a user that does not exist fails", () async {
       expect(
-        userRepo.getUser("non_existent_user_id"),
+        userRepo.getUser(const UserFirestoreId(value: "non_existent_user_id")),
         throwsA(isA<Exception>()),
       );
     });
 
     test("Get current user correctly", () async {
       final expectedUser = UserFirestore(
-        uid: testLoggedUser.uid,
+        uid: UserFirestoreId(value: testLoggedUser.uid),
         data: UserFirestoreData(
           username: "username_8456",
           displayName: "display_name_8456",
@@ -76,7 +76,7 @@ void main() {
       );
 
       await userCollection
-          .doc(expectedUser.uid)
+          .doc(expectedUser.uid.value)
           .set(expectedUser.data.toDbData());
 
       final actualUser = await userRepo.getCurrentUser();
@@ -95,7 +95,7 @@ void main() {
 
     test("Get user correctly", () async {
       final expectedUser = UserFirestore(
-        uid: "user_id_1354",
+        uid: const UserFirestoreId(value: "user_id_1354"),
         data: UserFirestoreData(
           username: "username_8456",
           displayName: "display_name_8456",
@@ -104,7 +104,7 @@ void main() {
       );
 
       await userCollection
-          .doc(expectedUser.uid)
+          .doc(expectedUser.uid.value)
           .set(expectedUser.data.toDbData());
 
       final actualUser = await userRepo.getUser(expectedUser.uid);
@@ -115,7 +115,7 @@ void main() {
     test("Get user fails when firestore data format doesn't have all fields",
         () async {
       final expectedUser = UserFirestore(
-        uid: "user_id_1354",
+        uid: const UserFirestoreId(value: "user_id_1354"),
         data: UserFirestoreData(
           username: "username_8456",
           displayName: "display_name_8456",
@@ -123,7 +123,7 @@ void main() {
         ),
       );
 
-      await userCollection.doc(expectedUser.uid).set({
+      await userCollection.doc(expectedUser.uid.value).set({
         UserFirestoreData.usernameField: expectedUser.data.username,
         // The joinTime field is missing on purpose
       });
@@ -136,7 +136,7 @@ void main() {
 
     test("doesUserExists returns true when user exists", () async {
       final expectedUser = UserFirestore(
-        uid: "user_id_1354",
+        uid: const UserFirestoreId(value: "user_id_1354"),
         data: UserFirestoreData(
           username: "username_8456",
           displayName: "display_name_8456",
@@ -145,7 +145,7 @@ void main() {
       );
 
       await userCollection
-          .doc(expectedUser.uid)
+          .doc(expectedUser.uid.value)
           .set(expectedUser.data.toDbData());
 
       final actualUser = await userRepo.doesUserExists(expectedUser.uid);
@@ -154,7 +154,8 @@ void main() {
     });
 
     test("doesUserExists returns false when user does not exist", () async {
-      final actualUser = await userRepo.doesUserExists("non_existent_user_id");
+      final actualUser = await userRepo
+          .doesUserExists(const UserFirestoreId(value: "non_existent_user_id"));
 
       expect(actualUser, false);
     });

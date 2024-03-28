@@ -5,7 +5,20 @@ import "package:proxima/models/database/user_repository.dart";
 import "package:proxima/services/geolocation_service.dart";
 
 /// The id are strong typed to avoid misuse
-typedef PostFirestoreId = String;
+@immutable
+class PostFirestoreId {
+  final String value;
+
+  const PostFirestoreId({required this.value});
+
+  @override
+  bool operator ==(Object other) {
+    return other is PostFirestoreId && other.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+}
 
 @immutable
 class PostFirestore {
@@ -37,7 +50,7 @@ class PostFirestore {
       final data = docSnap.data() as Map<String, dynamic>;
 
       return PostFirestore(
-        id: docSnap.id,
+        id: PostFirestoreId(value: docSnap.id),
         location: PostLocationFirestore.fromDbData(data[locationField]),
         data: PostFirestoreData.fromDbData(data),
       );
@@ -95,7 +108,7 @@ class PostFirestoreData {
   factory PostFirestoreData.fromDbData(Map<String, dynamic> data) {
     try {
       return PostFirestoreData(
-        ownerId: data[ownerIdField],
+        ownerId: UserFirestoreId(value: data[ownerIdField]),
         title: data[titleField],
         description: data[descriptionField],
         publicationTime: data[publicationTimeField],
@@ -112,7 +125,7 @@ class PostFirestoreData {
 
   Map<String, dynamic> toDbData() {
     return {
-      ownerIdField: ownerId,
+      ownerIdField: ownerId.value,
       titleField: title,
       descriptionField: description,
       publicationTimeField: publicationTime,
@@ -214,7 +227,7 @@ class PostRepository {
 
   /// Get a post by its id
   Future<PostFirestore> getPost(PostFirestoreId postId) async {
-    final docSnap = await _collectionRef.doc(postId).get();
+    final docSnap = await _collectionRef.doc(postId.value).get();
 
     return PostFirestore.fromDb(docSnap);
   }
@@ -228,7 +241,7 @@ class PostRepository {
 
   /// Deletes a post by its id
   Future<void> deletePost(PostFirestoreId postId) async {
-    await _collectionRef.doc(postId).delete();
+    await _collectionRef.doc(postId.value).delete();
   }
 
   Future<void> _addPostAtLocation(

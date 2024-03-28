@@ -1,6 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:geoflutterfire2/geoflutterfire2.dart";
 import "package:proxima/models/database/post_repository.dart";
+import "package:proxima/models/database/user_repository.dart";
 
 class MockFirestorePost {
   PostFirestore createPostAt(
@@ -11,7 +12,7 @@ class MockFirestorePost {
     final point = GeoFirePoint(location.latitude, location.longitude);
 
     return PostFirestore(
-      id: id,
+      id: PostFirestoreId(value: id),
       location: PostLocationFirestore(
         geoPoint: location,
         geohash: point.hash,
@@ -25,7 +26,7 @@ class MockFirestorePost {
       return PostFirestoreData(
         description: "description_$i",
         title: "title_$i",
-        ownerId: "owner_id_$i",
+        ownerId: UserFirestoreId(value: "owner_id_$i"),
         publicationTime: Timestamp.fromMillisecondsSinceEpoch(1000 * i),
         voteScore: i,
       );

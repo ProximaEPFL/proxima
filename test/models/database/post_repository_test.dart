@@ -4,6 +4,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:geoflutterfire2/geoflutterfire2.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post_repository.dart";
+import "package:proxima/models/database/user_repository.dart";
 import "package:proxima/services/geolocation_service.dart";
 
 import "mock_post_data.dart";
@@ -51,7 +52,7 @@ void main() {
   group("Post Firestore Data testing", () {
     test("hash overrides correctly", () {
       final data = PostFirestoreData(
-        ownerId: "owner_id",
+        ownerId: const UserFirestoreId(value: "owner_id"),
         title: "post_tiltle",
         description: "description",
         publicationTime: Timestamp.fromMillisecondsSinceEpoch(4564654),
@@ -98,7 +99,7 @@ void main() {
       );
 
       final data = PostFirestoreData(
-        ownerId: "owner_id",
+        ownerId: const UserFirestoreId(value: "owner_id"),
         title: "post_tiltle",
         description: "description",
         publicationTime: Timestamp.fromMillisecondsSinceEpoch(4564654),
@@ -106,7 +107,7 @@ void main() {
       );
 
       final post = PostFirestore(
-        id: "post_id",
+        id: const PostFirestoreId(value: "post_id"),
         location: location,
         data: data,
       );
@@ -135,7 +136,7 @@ void main() {
 
       await firestore
           .collection(PostRepository.collectionName)
-          .doc(post.id)
+          .doc(post.id.value)
           .set({
         PostFirestore.locationField: locationData,
         ...post.data.toDbData(),
@@ -161,13 +162,13 @@ void main() {
     });
 
     final post = PostFirestore(
-      id: "post_id",
+      id: const PostFirestoreId(value: "post_id"),
       location: const PostLocationFirestore(
         geoPoint: GeoPoint(40, 20),
         geohash: "afed",
       ),
       data: PostFirestoreData(
-        ownerId: "owner_id",
+        ownerId: const UserFirestoreId(value: "owner_id"),
         title: "post_tiltle",
         description: "description",
         publicationTime: Timestamp.fromMillisecondsSinceEpoch(4564654),
@@ -181,7 +182,7 @@ void main() {
       await postRepository.deletePost(post.id);
       final actualPost = await firestore
           .collection(PostRepository.collectionName)
-          .doc(post.id)
+          .doc(post.id.value)
           .get();
       expect(actualPost.exists, false);
     });
@@ -280,7 +281,7 @@ void main() {
       expect(actualPosts.docs.length, 1);
 
       final expectedPost = PostFirestore(
-        id: actualPosts.docs.first.id,
+        id: PostFirestoreId(value: actualPosts.docs.first.id),
         location: PostLocationFirestore(
           geoPoint: userPosition,
           geohash: userGeoFirePoint.hash,

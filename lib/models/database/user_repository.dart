@@ -5,7 +5,20 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/foundation.dart";
 
 /// The id are strong typed to avoid misuse
-typedef UserFirestoreId = String;
+@immutable
+class UserFirestoreId {
+  final String value;
+
+  const UserFirestoreId({required this.value});
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserFirestoreId && other.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+}
 
 @immutable
 class UserFirestore {
@@ -26,7 +39,7 @@ class UserFirestore {
       final data = docSnap.data() as Map<String, dynamic>;
 
       return UserFirestore(
-        uid: docSnap.id,
+        uid: UserFirestoreId(value: docSnap.id),
         data: UserFirestoreData.fromDbData(data),
       );
     } catch (e) {
@@ -117,11 +130,11 @@ class UserRepository {
   Future<UserFirestore> getCurrentUser() async {
     final uid = _getUid();
 
-    return getUser(uid);
+    return getUser(UserFirestoreId(value: uid));
   }
 
   Future<UserFirestore> getUser(UserFirestoreId uid) async {
-    final docSnap = await _collectionRef.doc(uid).get();
+    final docSnap = await _collectionRef.doc(uid.value).get();
 
     return UserFirestore.fromDb(docSnap);
   }
@@ -133,7 +146,7 @@ class UserRepository {
   }
 
   Future<bool> doesUserExists(UserFirestoreId uid) async {
-    final docSnap = await _collectionRef.doc(uid).get();
+    final docSnap = await _collectionRef.doc(uid.value).get();
 
     return docSnap.exists;
   }
