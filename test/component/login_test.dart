@@ -6,15 +6,15 @@ import "package:proxima/views/pages/home_page.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 
-import "utils/firebase/setup_firebase_mocks.dart";
-import "utils/firebase/testing_login_providers.dart";
-import "utils/mock_data/firebase_user_mock.dart";
+import "../services/firebase/setup_firebase_mocks.dart";
+import "../services/firebase/testing_auth_providers.dart";
+import "../services/mock_data/firebase_auth_user_mock.dart";
 
 void main() {
   setupFirebaseAuthMocks();
 
   final mockedProxima = ProviderScope(
-    overrides: firebaseMocksOverrides,
+    overrides: firebaseAuthMocksOverrides,
     child: const ProximaApp(),
   );
 

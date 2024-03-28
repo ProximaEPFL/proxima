@@ -4,7 +4,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:geoflutterfire2/geoflutterfire2.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post_repository.dart";
-import "package:proxima/models/database/user_repository.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/geolocation_service.dart";
 
 import "../../services/mock_geo_location_service.dart";

@@ -1,7 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/foundation.dart";
 import "package:geoflutterfire2/geoflutterfire2.dart";
-import "package:proxima/models/database/user_repository.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/geolocation_service.dart";
 
 /// The id are strong typed to avoid misuse

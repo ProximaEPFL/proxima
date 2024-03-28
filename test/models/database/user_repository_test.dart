@@ -2,7 +2,10 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:firebase_auth_mocks/firebase_auth_mocks.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:proxima/models/database/user_repository.dart";
+import "package:proxima/models/database/user/user_data.dart";
+import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
+import "package:proxima/services/database/user_repository_service.dart";
 
 void main() {
   group("User Data Firestore testing", () {
