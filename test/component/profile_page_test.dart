@@ -6,7 +6,7 @@ import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home_page.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
-import "package:proxima/views/pages/profile_page.dart";
+import "package:proxima/views/pages/profile/profile_page.dart";
 
 import "utils/firebase/setup_firebase_mocks.dart";
 import "utils/firebase/testing_login_providers.dart";
