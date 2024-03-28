@@ -23,7 +23,7 @@ class GeoLocationService {
       throw Exception("Location services are disabled.");
     }
 
-    // Chech location permissions
+    // Check location permissions
     permission = await _geoLocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await _geoLocator.requestPermission();
