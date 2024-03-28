@@ -3,16 +3,9 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 
-import "utils/firebase/setup_firebase_mocks.dart";
-
 void main() {
-  setupFirebaseAuthMocks();
-  const mockedPage = ProviderScope(
-    child: MaterialApp(
-      title: "Proxima",
-      home: CreateAccountPage(),
-    ),
-  );
+  const mockedPage =
+      ProviderScope(child: MaterialApp(home: CreateAccountPage()));
 
   testWidgets("Text fields are visible", (tester) async {
     await tester.pumpWidget(mockedPage);
