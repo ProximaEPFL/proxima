@@ -264,11 +264,11 @@ class PostRepository {
   ) async {
     final posts = await _geoFire
         .collection(collectionRef: _collectionRef)
-        .within(
+        .withinAsSingleStreamSubscription(
           center: point,
           radius: radius,
           field: PostFirestore.locationField,
-          strictMode: true,
+          strictMode: false,
         )
         .first;
 
