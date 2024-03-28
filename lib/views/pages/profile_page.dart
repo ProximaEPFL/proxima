@@ -40,7 +40,6 @@ class ProfilePage extends HookConsumerWidget {
           ),
           body: Container(
             padding: const EdgeInsets.only(left: 8, right: 8),
-            color: theme.colorScheme.tertiaryContainer,
             child: Center(
               child: SingleChildScrollView(
                 child: Column(
@@ -101,7 +100,6 @@ class InfoCard extends StatelessWidget {
           width: 2,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(10)),
-        color: theme.colorScheme.primaryContainer,
       ),
     );
   }
@@ -125,10 +123,6 @@ class LazyCardColumn extends StatelessWidget {
       height: 275,
       width: 380,
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black,
-          width: 2,
-        ),
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         color: theme.colorScheme.secondaryContainer,
       ),
@@ -179,10 +173,7 @@ class LazyCardRow extends StatelessWidget {
       height: 150,
       width: 380,
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black,
-          width: 2,
-        ),
+
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         color: theme.colorScheme.secondaryContainer,
       ),
@@ -229,10 +220,6 @@ class CentauriPoints extends StatelessWidget {
       height: 40,
       width: 380,
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black,
-          width: 2,
-        ),
         borderRadius: const BorderRadius.all(Radius.circular(10)),
         color: theme.colorScheme.secondaryContainer,
       ),
