@@ -3,9 +3,11 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
+import "package:proxima/views/navigation/routes.dart";
 
 class HomePage extends HookConsumerWidget {
   static const logoutButtonKey = Key("logout");
+  static const profilePageButtonKey = Key("profile");
 
   const HomePage({super.key});
 
@@ -16,6 +18,15 @@ class HomePage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home page :)"),
+        actions: [
+          IconButton(
+            key: profilePageButtonKey,
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.profile.name);
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(
