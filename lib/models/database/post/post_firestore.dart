@@ -6,6 +6,7 @@ import "package:proxima/models/database/post/post_location_firestore.dart";
 
 @immutable
 class PostFirestore {
+  /// This is the collection in which the posts are stored
   static const collectionName = "posts";
 
   /// The id is not stored in a field because it already
@@ -26,7 +27,8 @@ class PostFirestore {
     required this.data,
   });
 
-  /// Parses the data from a firestore document
+  /// This method will create an instance of [PostFirestore] from the
+  /// document snapshot [docSnap] that comes from firestore
   factory PostFirestore.fromDb(DocumentSnapshot docSnap) {
     if (!docSnap.exists) {
       throw Exception("Post document does not exist");

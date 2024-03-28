@@ -19,7 +19,8 @@ class PostLocationFirestore {
     required this.geohash,
   });
 
-  /// Parses the data from a firestore document
+  /// This method will create an instance of [PostLocationFirestore] from the
+  /// data map [data] that comes from firestore
   factory PostLocationFirestore.fromDbData(Map<String, dynamic> data) {
     try {
       return PostLocationFirestore(

@@ -5,6 +5,7 @@ import "package:proxima/models/database/user/user_id_firestore.dart";
 
 @immutable
 class UserFirestore {
+  // This is the collection where the users are stored
   static const collectionName = "users";
 
   /// The uid is not stored in a field because it already
@@ -15,6 +16,8 @@ class UserFirestore {
 
   const UserFirestore({required this.uid, required this.data});
 
+  /// This method will create an instance of [UserFirestore] from the
+  /// document snapshot [docSnap] that comes from firestore
   factory UserFirestore.fromDb(DocumentSnapshot docSnap) {
     if (!docSnap.exists) {
       throw Exception("User document does not exist");

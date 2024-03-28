@@ -6,6 +6,7 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
 
+/// This repository service is responsible for managing the posts in the database
 class PostRepositoryService {
   final GeoFlutterFire _geoFire;
   final CollectionReference _collectionRef;
@@ -15,9 +16,10 @@ class PostRepositoryService {
   })  : _collectionRef = firestore.collection(PostFirestore.collectionName),
         _geoFire = GeoFlutterFire();
 
-  /// Adds a post at the current location of the user
+  /// This method creates a new post that has for data [postData]
+  /// and that is located at [position] and adds it to the database
   Future<void> addPost(PostData postData, GeoPoint position) async {
-    // The `point.data` returns a Map<String, dynamic> consistent with the
+    // The `geoFirePoint.data` returns a Map<String, dynamic> consistent with the
     // class [PostLocationFirestore]. This is because the field name values
     // are hardcoded in the [GeoFlutterFire] library
 
@@ -29,19 +31,21 @@ class PostRepositoryService {
     });
   }
 
-  /// Deletes a post by its id
+  /// This method deletes the post with id [postId] from the database
   Future<void> deletePost(PostIdFirestore postId) async {
     await _collectionRef.doc(postId.value).delete();
   }
 
-  /// Get a post by its id
+  /// This method returns the post with id [postId] from the database
   Future<PostFirestore> getPost(PostIdFirestore postId) async {
     final docSnap = await _collectionRef.doc(postId.value).get();
 
     return PostFirestore.fromDb(docSnap);
   }
 
-  /// Get the posts near a given point
+  /// This method will retrieve all the posts that are within a radius of [radius]
+  /// from the geo point [point] in the database
+  /// And then those posts are returned
   Future<List<PostFirestore>> getNearPosts(
     GeoPoint point,
     double radius,

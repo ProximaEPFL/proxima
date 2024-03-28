@@ -27,7 +27,8 @@ class PostData {
     required this.voteScore,
   });
 
-  /// Parses the data from a firestore document
+  /// This method will create an instance of [PostData] from the
+  /// data map [data] that comes from firestore
   factory PostData.fromDbData(Map<String, dynamic> data) {
     try {
       return PostData(
@@ -46,6 +47,8 @@ class PostData {
     }
   }
 
+  /// This method will create a map from the current instance of [PostData]
+  /// to be stored in firestore
   Map<String, dynamic> toDbData() {
     return {
       ownerIdField: ownerId.value,

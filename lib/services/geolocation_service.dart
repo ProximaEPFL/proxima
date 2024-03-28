@@ -23,6 +23,8 @@ class GeoLocationService {
 
   // This code is adapted from the geolocator package documentation
   // Source : https://pub.dev/packages/geolocator
+
+  /// This method will retrieve the current position of the user.
   Future<GeoPoint> getCurrentPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
