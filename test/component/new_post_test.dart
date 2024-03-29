@@ -1,13 +1,9 @@
 import "package:firebase_core/firebase_core.dart";
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/main.dart";
-import "package:proxima/views/pages/create_account_page.dart";
-import "package:proxima/views/pages/home_page.dart";
-import "package:proxima/views/pages/login/login_button.dart";
-import "package:proxima/views/pages/new_post_page.dart";
+import "package:proxima/views/pages/new_post/new_post_form.dart";
+import "package:proxima/views/pages/new_post/new_post_page.dart";
 
 import "utils/firebase/setup_firebase_mocks.dart";
 import "utils/firebase/testing_login_providers.dart";
