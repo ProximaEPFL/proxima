@@ -26,27 +26,14 @@ void main() {
     await Firebase.initializeApp();
   });
 
-  testWidgets("Test only new post page", (widgetTester) async {
-    await widgetTester.pumpWidget(mockedPage);
-    await widgetTester.pumpAndSettle();
-
-    final titleFinder = find.text(NewPostForm.titleHint);
-    final bodyFinder = find.text(NewPostForm.bodyHint);
-    final postButtonFinder = find.text(NewPostForm.postButtonText);
-
-    expect(titleFinder, findsOneWidget);
-    expect(bodyFinder, findsOneWidget);
-    expect(postButtonFinder, findsOneWidget);
-  });
-
   testWidgets("Create post contains title, body and post button",
       (tester) async {
     await tester.pumpWidget(mockedPage);
     await tester.pumpAndSettle();
 
-    final titleFinder = find.text(NewPostForm.titleHint);
-    final bodyFinder = find.text(NewPostForm.bodyHint);
-    final postButtonFinder = find.text(NewPostForm.postButtonText);
+    final titleFinder = find.byKey(NewPostForm.titleFieldKey);
+    final bodyFinder = find.byKey(NewPostForm.bodyFieldKey);
+    final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
 
     expect(titleFinder, findsOneWidget);
     expect(bodyFinder, findsOneWidget);
@@ -62,7 +49,7 @@ void main() {
     await widgetTester.pumpAndSettle();
 
     // check that we are no longer on the new post page
-    final titleFinder = find.text(NewPostForm.titleHint);
+    final titleFinder = find.byKey(NewPostForm.titleFieldKey);
     expect(titleFinder, findsNothing);
   });
 
@@ -78,7 +65,7 @@ void main() {
     await widgetTester.enterText(bodyFinder, "Look at them go!");
     await widgetTester.pumpAndSettle();
 
-    final postButtonFinder = find.text(NewPostForm.postButtonText);
+    final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
     await widgetTester.tap(postButtonFinder);
     await widgetTester.pumpAndSettle();
 
@@ -90,12 +77,12 @@ void main() {
     await widgetTester.pumpWidget(mockedPage);
     await widgetTester.pumpAndSettle();
 
-    final postButtonFinder = find.text(NewPostForm.postButtonText);
+    final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
     await widgetTester.tap(postButtonFinder);
     await widgetTester.pumpAndSettle();
 
     // check that we are still on the new post page
-    final titleFinder = find.text(NewPostForm.titleHint);
+    final titleFinder = find.byKey(NewPostForm.titleFieldKey);
     expect(titleFinder, findsOne);
   });
 }
