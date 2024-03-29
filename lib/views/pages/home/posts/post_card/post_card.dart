@@ -61,6 +61,7 @@ class PostCard extends StatelessWidget {
     );
 
     return Card(
+      //Note: This card has two onTap actions, one for the card and one for the comment widget.
       key: postCardKey,
       clipBehavior: Clip.hardEdge,
       child: InkWell(
