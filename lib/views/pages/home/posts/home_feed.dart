@@ -1,13 +1,13 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
-import "package:proxima/views/filter_widgets/timeline_filter/timeline_filter_chips.dart";
 import "package:proxima/views/pages/home/posts/post_card/post_card.dart";
+import "package:proxima/views/sort_option_widgets/timeline_sort_option/timeline_sort_option_chips.dart";
 
 /// This widget is the feed of the home page
 /// It contains the posts
 class HomeFeed extends HookConsumerWidget {
-  static const timelineFiltersDropDownKey = Key("timelineFiltersDropDown");
+  static const timelineSortOptionKey = Key("timelineSortOption");
   static const homeFeedKey = Key("homeFeed");
   static const emptyHomeFeedKey = Key("emptyHomeFeed");
   const HomeFeed({super.key});
@@ -44,8 +44,8 @@ class HomeFeed extends HookConsumerWidget {
 
     return Column(
       children: [
-        const TimeLineFiltersChips(
-          key: timelineFiltersDropDownKey,
+        const TimeLineSortOptionChips(
+          key: timelineSortOptionKey,
         ),
         const Divider(),
         Expanded(child: posts.isEmpty ? emptyHelper : postsCards),

@@ -30,9 +30,9 @@ void main() {
     final topBar = find.byKey(HomeTopBar.homeTopBarKey);
     expect(topBar, findsOneWidget);
 
-    //Check filter dropdown is displayed
-    final filterDropDown = find.byKey(HomeFeed.timelineFiltersDropDownKey);
-    expect(filterDropDown, findsOneWidget);
+    //Check sort option list is displayed
+    final timelineSortOptionList = find.byKey(HomeFeed.timelineSortOptionKey);
+    expect(timelineSortOptionList, findsOneWidget);
 
     //Check profile picture is displayed
     final profilePicture = find.byKey(HomeTopBar.profilePictureKey);
