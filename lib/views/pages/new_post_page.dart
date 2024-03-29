@@ -44,6 +44,13 @@ class NewPostForm extends HookConsumerWidget {
 
   final _formKey = GlobalKey<FormState>();
 
+  Padding verticallyPadded(Widget child) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+      child: child,
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final titleField = TextFormField(
@@ -100,20 +107,13 @@ class NewPostForm extends HookConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-            child: titleField,
-          ),
+          verticallyPadded(titleField),
           Flexible(
             fit: FlexFit.loose,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-              child: bodyField,
-            ),
+            child: verticallyPadded(bodyField),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
+          verticallyPadded(
+            Row(
               children: [
                 Expanded(child: postButton),
                 settingsButton,
