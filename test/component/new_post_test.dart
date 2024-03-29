@@ -1,4 +1,6 @@
 import "package:firebase_core/firebase_core.dart";
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
@@ -10,41 +12,37 @@ import "package:proxima/views/pages/new_post_page.dart";
 import "utils/firebase/setup_firebase_mocks.dart";
 import "utils/firebase/testing_login_providers.dart";
 
-Future<void> loginAndNavigateToNewPost(WidgetTester tester) async {
-  final loginButton = find.byKey(LoginButton.loginButtonKey);
-  await tester.tap(loginButton);
-  await tester.pumpAndSettle();
-
-  // And that pushing the confirm button redirects to the home page
-  final confirmButton = find.byKey(CreateAccountPage.confirmButtonKey);
-  await tester.tap(confirmButton);
-  await tester.pumpAndSettle();
-
-  final newPostButton = find.byKey(HomePage.newPostKey);
-  await tester.tap(newPostButton);
-  await tester.pumpAndSettle();
-}
-
 void main() {
   setupFirebaseAuthMocks();
 
-  final mockedProxima = ProviderScope(
+  final mockedPage = ProviderScope(
     overrides: firebaseMocksOverrides,
-    child: const ProximaApp(),
+    child: const MaterialApp(
+      home: NewPostPage(),
+    ),
   );
 
   setUpAll(() async {
     await Firebase.initializeApp();
   });
 
-  // TODO find a way to test only the new post page without changing main.dart
+  testWidgets("Test only new post page", (widgetTester) async {
+    await widgetTester.pumpWidget(mockedPage);
+    await widgetTester.pumpAndSettle();
+
+    final titleFinder = find.text(NewPostForm.titleHint);
+    final bodyFinder = find.text(NewPostForm.bodyHint);
+    final postButtonFinder = find.text(NewPostForm.postButtonText);
+
+    expect(titleFinder, findsOneWidget);
+    expect(bodyFinder, findsOneWidget);
+    expect(postButtonFinder, findsOneWidget);
+  });
 
   testWidgets("Create post contains title, body and post button",
       (tester) async {
-    await tester.pumpWidget(mockedProxima);
+    await tester.pumpWidget(mockedPage);
     await tester.pumpAndSettle();
-
-    await loginAndNavigateToNewPost(tester);
 
     final titleFinder = find.text(NewPostForm.titleHint);
     final bodyFinder = find.text(NewPostForm.bodyHint);
@@ -56,10 +54,8 @@ void main() {
   });
 
   testWidgets("Back button works", (widgetTester) async {
-    await widgetTester.pumpWidget(mockedProxima);
+    await widgetTester.pumpWidget(mockedPage);
     await widgetTester.pumpAndSettle();
-
-    await loginAndNavigateToNewPost(widgetTester);
 
     final backButton = find.byKey(NewPostPage.backButtonKey);
     await widgetTester.tap(backButton);
@@ -71,10 +67,8 @@ void main() {
   });
 
   testWidgets("Accepts non empty post", (widgetTester) async {
-    await widgetTester.pumpWidget(mockedProxima);
+    await widgetTester.pumpWidget(mockedPage);
     await widgetTester.pumpAndSettle();
-
-    await loginAndNavigateToNewPost(widgetTester);
 
     final titleFinder = find.byKey(NewPostForm.titleFieldKey);
     await widgetTester.enterText(titleFinder, "I like turtles");
@@ -93,10 +87,8 @@ void main() {
   });
 
   testWidgets("Refuses empty post", (widgetTester) async {
-    await widgetTester.pumpWidget(mockedProxima);
+    await widgetTester.pumpWidget(mockedPage);
     await widgetTester.pumpAndSettle();
-
-    await loginAndNavigateToNewPost(widgetTester);
 
     final postButtonFinder = find.text(NewPostForm.postButtonText);
     await widgetTester.tap(postButtonFinder);
