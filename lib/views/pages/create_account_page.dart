@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/utils/ui/scrollable_if_too_high.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
 
@@ -28,7 +29,7 @@ class CreateAccountPage extends HookConsumerWidget {
         title: const Text("Create your account"),
       ),
       body: const Padding(
-        padding: EdgeInsets.only(left: 50, right: 50, top: 50, bottom: 50),
+        padding: EdgeInsets.only(left: 50, right: 50),
         child: Center(child: _CreateAccountPageContent()),
       ),
     );
@@ -40,35 +41,41 @@ class _CreateAccountPageContent extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Flexible(flex: 20, child: Container()),
-        const TextField(
-          key: CreateAccountPage.uniqueUsernameFieldKey,
-          decoration: InputDecoration(
-            labelText: "Unique username",
-            border: OutlineInputBorder(),
+    return ScrollableIfTooHigh(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Flexible(flex: 20, child: Container()),
+          const SizedBox(height: 20),
+          const TextField(
+            key: CreateAccountPage.uniqueUsernameFieldKey,
+            decoration: InputDecoration(
+              labelText: "Unique username",
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        const SizedBox(height: 20),
-        const TextField(
-          key: CreateAccountPage.pseudoFieldKey,
-          decoration: InputDecoration(
-            labelText: "Pseudo",
-            border: OutlineInputBorder(),
+          const SizedBox(height: 20),
+          const TextField(
+            key: CreateAccountPage.pseudoFieldKey,
+            decoration: InputDecoration(
+              labelText: "Pseudo",
+              border: OutlineInputBorder(),
+            ),
           ),
-        ),
-        Flexible(flex: 50, child: Container()),
-        ElevatedButton(
-          key: CreateAccountPage.confirmButtonKey,
-          onPressed: () {
-            // TODO: Also store this to the database
-            Navigator.pushReplacementNamed(context, Routes.home.name);
-          },
-          child: const Text("Confirm"),
-        ),
-      ],
+          Flexible(flex: 50, child: Container()),
+          const SizedBox(height: 50),
+          ElevatedButton(
+            key: CreateAccountPage.confirmButtonKey,
+            onPressed: () {
+              // TODO: Also store this to the database
+              Navigator.pushReplacementNamed(context, Routes.home.name);
+            },
+            child: const Text("Confirm"),
+          ),
+          Flexible(flex: 20, child: Container()),
+          const SizedBox(height: 20),
+        ],
+      ),
     );
   }
 }
