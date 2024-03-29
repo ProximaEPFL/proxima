@@ -5,14 +5,14 @@ import "package:flutter/material.dart";
 enum NavigationbarRoutes {
   //TODO set the routes for the pages
   feed("Feed", Icon(Icons.home)),
-  challenges("Challenges", Icon(Icons.emoji_events)),
+  challenge("Challenge", Icon(Icons.emoji_events)),
   addPost(
-    "Add post",
+    "New post",
     CircleAvatar(
       child: Icon(Icons.add),
     ),
   ),
-  groups("Groups", Icon(Icons.group)),
+  group("Group", Icon(Icons.group)),
   map("Map", Icon(Icons.place));
 
   final String name;
