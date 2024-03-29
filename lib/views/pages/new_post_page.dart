@@ -102,6 +102,13 @@ class NewPostForm extends HookConsumerWidget {
       icon: const Icon(Icons.settings),
     );
 
+    final buttonRow = Row(
+      children: [
+        Expanded(child: postButton),
+        settingsButton,
+      ],
+    );
+
     return Form(
       key: _formKey,
       child: Column(
@@ -112,14 +119,7 @@ class NewPostForm extends HookConsumerWidget {
             fit: FlexFit.loose,
             child: verticallyPadded(bodyField),
           ),
-          verticallyPadded(
-            Row(
-              children: [
-                Expanded(child: postButton),
-                settingsButton,
-              ],
-            ),
-          ),
+          verticallyPadded(buttonRow),
         ],
       ),
     );
