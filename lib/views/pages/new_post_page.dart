@@ -81,13 +81,10 @@ class NewPostForm extends HookConsumerWidget {
       key: postButtonKey,
       child: const Text(_postButtonText),
       onPressed: () {
-        if (!_formKey.currentState!.validate()) {
-          return;
+        if (_formKey.currentState?.validate() ?? false) {
+          // TODO commit the post to the repository
+          Navigator.pop(context);
         }
-
-        // TODO commit the post to the repository
-
-        Navigator.pop(context);
       },
     );
 
