@@ -13,6 +13,8 @@ class VotesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final upvote = IconButton(
+      //Used to reduce the padding and InkWell created by the IconButton widget
+      //https://stackoverflow.com/questions/50381157/how-do-i-remove-flutter-iconbutton-big-padding
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints(),
       icon: const Icon(Icons.expand_less, size: 30),
@@ -25,6 +27,8 @@ class VotesWidget extends StatelessWidget {
     );
 
     final downvote = IconButton(
+      //Used to reduce the padding and InkWell created by the IconButton widget
+      //https://stackoverflow.com/questions/50381157/how-do-i-remove-flutter-iconbutton-big-padding
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints(),
       icon: const Icon(Icons.expand_more, size: 30),
