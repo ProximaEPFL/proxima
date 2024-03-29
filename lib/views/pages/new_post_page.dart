@@ -5,12 +5,13 @@ class NewPostPage extends HookConsumerWidget {
   const NewPostPage({super.key});
 
   static const backButtonKey = Key("back");
+  static const _pageTitle = "Create a new post";
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Create a new post"),
+        title: const Text(_pageTitle),
         leading: IconButton(
           key: backButtonKey,
           onPressed: () {
@@ -32,15 +33,71 @@ class NewPostForm extends HookConsumerWidget {
 
   static const titleFieldKey = Key("title");
   static const bodyFieldKey = Key("body");
+  static const postButtonKey = Key("post");
 
-  static const titleHint = "Title";
-  static const bodyHint = "Body";
-  static const postButtonText = "Post";
+  static const _titleHint = "Title";
+  static const _bodyHint = "Body";
+  static const _postButtonText = "Post";
+
+  static const _titleError = "Please enter a title";
+  static const _bodyError = "Please enter a body";
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final titleField = TextFormField(
+      key: titleFieldKey,
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(),
+        hintText: _titleHint,
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return _titleError;
+        }
+        return null;
+      },
+    );
+
+    final bodyField = TextFormField(
+      key: bodyFieldKey,
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(),
+        hintText: _bodyHint,
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return _bodyError;
+        }
+        return null;
+      },
+      maxLines: null,
+      expands: true,
+      textAlignVertical: TextAlignVertical.top,
+    );
+
+    final postButton = ElevatedButton(
+      key: postButtonKey,
+      child: const Text(_postButtonText),
+      onPressed: () {
+        if (!_formKey.currentState!.validate()) {
+          return;
+        }
+
+        // TODO commit the post to the repository
+
+        Navigator.pop(context);
+      },
+    );
+
+    final settingsButton = IconButton(
+      onPressed: () {
+        // TODO open tag and notification settings overlay
+      },
+      icon: const Icon(Icons.settings),
+    );
+
     return Form(
       key: _formKey,
       child: Column(
@@ -48,67 +105,21 @@ class NewPostForm extends HookConsumerWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-            child: TextFormField(
-              key: titleFieldKey,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: titleHint,
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please enter a title";
-                }
-                return null;
-              },
-            ),
+            child: titleField,
           ),
           Flexible(
             fit: FlexFit.loose,
-            flex: 1,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-              child: TextFormField(
-                key: bodyFieldKey,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: bodyHint,
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter a body";
-                  }
-                  return null;
-                },
-                maxLines: null,
-                expands: true,
-                textAlignVertical: TextAlignVertical.top,
-              ),
+              child: bodyField,
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Row(
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    child: const Text(postButtonText),
-                    onPressed: () {
-                      if (!_formKey.currentState!.validate()) {
-                        return;
-                      }
-
-                      // TODO commit the post to the repository
-
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    // TODO open tag and notification settings overlay
-                  },
-                  icon: const Icon(Icons.settings),
-                ),
+                Expanded(child: postButton),
+                settingsButton,
               ],
             ),
           ),
