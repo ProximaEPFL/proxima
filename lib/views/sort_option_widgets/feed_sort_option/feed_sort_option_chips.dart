@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
-import "package:proxima/views/sort_option_widgets/timeline_sort_option/timeline_sort_option.dart";
+import "package:proxima/views/sort_option_widgets/feed_sort_option/feed_sort_option.dart";
 
 /// This widget is the list of sort options for the timeline.
-class TimeLineSortOptionChips extends StatelessWidget {
-  const TimeLineSortOptionChips({
+class FeedSortOptionChips extends StatelessWidget {
+  const FeedSortOptionChips({
     super.key,
   });
 

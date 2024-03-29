@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 /// This widget is the top bar of the home page
-/// It contains the timeline filters and the user profile picture
+/// It contains the feed sort option and the user profile picture
 class HomeTopBar extends HookConsumerWidget {
   static const homeTopBarKey = Key("homeTopBar");
   static const profilePictureKey = Key("profilePicture");

@@ -31,8 +31,8 @@ void main() {
     expect(topBar, findsOneWidget);
 
     //Check sort option list is displayed
-    final timelineSortOptionList = find.byKey(HomeFeed.timelineSortOptionKey);
-    expect(timelineSortOptionList, findsOneWidget);
+    final feedSortOptionList = find.byKey(HomeFeed.feedSortOptionKey);
+    expect(feedSortOptionList, findsOneWidget);
 
     //Check profile picture is displayed
     final profilePicture = find.byKey(HomeTopBar.profilePictureKey);

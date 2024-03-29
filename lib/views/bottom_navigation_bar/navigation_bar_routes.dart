@@ -4,7 +4,7 @@ import "package:flutter/material.dart";
 /// It contains the name and icon of the routes.
 enum NavigationbarRoutes {
   //TODO set the routes for the pages
-  timeline("Feed", Icon(Icons.home)),
+  feed("Feed", Icon(Icons.home)),
   challenges("Challenges", Icon(Icons.emoji_events)),
   addPost(
     "Add post",
