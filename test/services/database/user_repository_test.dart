@@ -52,14 +52,7 @@ void main() {
     });
 
     test("Get user correctly", () async {
-      final expectedUser = UserFirestore(
-        uid: const UserIdFirestore(value: "user_id_1354"),
-        data: UserData(
-          username: "username_8456",
-          displayName: "display_name_8456",
-          joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
-        ),
-      );
+      final expectedUser = testingUserFirestore;
 
       await userCollection
           .doc(expectedUser.uid.value)
@@ -72,14 +65,7 @@ void main() {
 
     test("Get user fails when firestore data format doesn't have all fields",
         () async {
-      final expectedUser = UserFirestore(
-        uid: const UserIdFirestore(value: "user_id_1354"),
-        data: UserData(
-          username: "username_8456",
-          displayName: "display_name_8456",
-          joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
-        ),
-      );
+      final expectedUser = testingUserFirestore;
 
       await userCollection.doc(expectedUser.uid.value).set({
         UserData.usernameField: expectedUser.data.username,
@@ -93,14 +79,7 @@ void main() {
     });
 
     test("doesUserExists returns true when user exists", () async {
-      final expectedUser = UserFirestore(
-        uid: const UserIdFirestore(value: "user_id_1354"),
-        data: UserData(
-          username: "username_8456",
-          displayName: "display_name_8456",
-          joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
-        ),
-      );
+      final expectedUser = testingUserFirestore;
 
       await userCollection
           .doc(expectedUser.uid.value)

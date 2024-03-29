@@ -1,15 +1,12 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/user/user_data.dart";
+
+import "../../../services/test_data/firestore_user_mock.dart";
 
 void main() {
   group("User Data testing", () {
     test("hash overrides correctly", () {
-      final data = UserData(
-        username: "username_8456",
-        displayName: "display_name_8456",
-        joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
-      );
+      final data = testingUserData;
 
       final expectedHash = Object.hash(
         data.username,
