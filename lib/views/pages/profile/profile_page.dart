@@ -7,6 +7,8 @@ import "package:proxima/views/pages/profile/posts_info/info_row.dart";
 import "package:proxima/views/pages/profile/user_info/centauri_points.dart";
 import "package:proxima/views/pages/profile/user_info/user_account.dart";
 
+/// This widget is used to display the profile page
+/// It contains the user info, centauri points, badges, posts and comments
 class ProfilePage extends HookConsumerWidget {
   const ProfilePage({super.key});
 

@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 
+/// This widget is used to display the centauri points in the profile page
 class CentauriPoints extends StatelessWidget {
   const CentauriPoints({
     super.key,

@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 
+/// This widget defines the style of the rows in the profile page,
+/// such as the badges row
 class InfoRow extends StatelessWidget {
   const InfoRow({
     super.key,

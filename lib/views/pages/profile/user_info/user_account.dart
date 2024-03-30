@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 
+/// This widget display the user info in the profile page
 class UserAccount extends StatelessWidget {
   const UserAccount({
     super.key,
