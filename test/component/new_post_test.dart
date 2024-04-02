@@ -5,8 +5,8 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/new_post/new_post_page.dart";
 
-import "utils/firebase/setup_firebase_mocks.dart";
-import "utils/firebase/testing_login_providers.dart";
+import "../services/firebase/setup_firebase_mocks.dart";
+import "../services/firestore/testing_firestore_provider.dart";
 
 void main() {
   setupFirebaseAuthMocks();
