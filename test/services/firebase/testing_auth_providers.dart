@@ -5,9 +5,9 @@ import "package:google_sign_in_mocks/google_sign_in_mocks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/services/login_service.dart";
 
-import "../mock_data/firebase_user_mock.dart";
+import "../test_data/firebase_auth_user_mock.dart";
 
-final firebaseMocksOverrides = [
+final firebaseAuthMocksOverrides = [
   googleSignInProvider.overrideWith(mockGoogleSignIn),
   firebaseAuthProvider.overrideWith(mockFirebaseAuth),
 ];
