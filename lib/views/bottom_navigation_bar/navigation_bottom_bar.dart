@@ -6,6 +6,7 @@ import "package:proxima/views/bottom_navigation_bar/navigation_bar_routes.dart";
 /// It contains the navigation routes to the different pages.
 class NavigationBottomBar extends HookConsumerWidget {
   static const navigationBottomBarKey = Key("navigationBottomBar");
+  static const selectedIndex = 0;
 
   const NavigationBottomBar({super.key});
 
@@ -22,10 +23,16 @@ class NavigationBottomBar extends HookConsumerWidget {
       key: navigationBottomBarKey,
       height: 90,
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-      // TODO set the index of the selected page depending on the page
-      selectedIndex: 0,
+      selectedIndex: selectedIndex,
       onDestinationSelected: (int index) {
-        //TODO add the navigation to the pages
+        NavigationbarRoutes selectedRoute = NavigationbarRoutes.values[index];
+        if (index != selectedIndex && selectedRoute.routesDestination != null) {
+          if (selectedRoute.needPushNavigation) {
+            Navigator.pushNamed(context, selectedRoute.routesDestination!.name);
+          } else {
+            Navigator.pushReplacementNamed(context, selectedRoute.name);
+          }
+        }
       },
       destinations: destinations,
     );

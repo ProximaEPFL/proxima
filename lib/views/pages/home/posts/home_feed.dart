@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
+import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/posts/post_card/post_card.dart";
 import "package:proxima/views/sort_option_widgets/feed_sort_option/feed_sort_option_chips.dart";
 
@@ -10,6 +11,7 @@ class HomeFeed extends HookConsumerWidget {
   static const feedSortOptionKey = Key("feedSortOption");
   static const homeFeedKey = Key("homeFeed");
   static const emptyHomeFeedKey = Key("emptyHomeFeed");
+  static const newPostButtonTextKey = Key("newPostButtonTextKey");
   const HomeFeed({super.key});
 
   @override
@@ -24,9 +26,10 @@ class HomeFeed extends HookConsumerWidget {
           const Text("No post to display, "),
           InkWell(
             onTap: () => {
-              //TODO: Add navigation to create post page
+              Navigator.pushNamed(context, Routes.newPost.name),
             },
             child: const Text(
+              key: newPostButtonTextKey,
               "create one",
               style: TextStyle(
                 color: Colors.blue,
