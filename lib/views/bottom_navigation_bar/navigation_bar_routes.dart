@@ -26,5 +26,9 @@ enum NavigationbarRoutes {
   final bool needPushNavigation;
 
   const NavigationbarRoutes(
-      this.name, this.icon, this.routesDestination, this.needPushNavigation);
+    this.name,
+    this.icon,
+    this.routesDestination,
+    this.needPushNavigation,
+  );
 }
