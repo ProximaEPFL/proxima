@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
+import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/login/login_button.dart";
@@ -16,11 +18,21 @@ class LoginPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Listen for authentication changes
-    ref.listen(isUserLoggedInProvider, (_, loggedIn) {
-      if (loggedIn) {
-        // TODO: The route should be different according to whether the user exists or not.
-        Navigator.pushReplacementNamed(context, Routes.createAccount.name);
+    final userRepository = ref.watch(userRepositoryProvider);
+    ref.listen(userProvider, (_, newUser) async {
+      final user = newUser.valueOrNull;
+      if (user != null) {
+        final exists =
+            await userRepository.doesUserExist(UserIdFirestore(value: user.id));
+
+        //Ensure that the page is still mounted before navigating
+        if (!context.mounted) return;
+
+        if (exists) {
+          Navigator.pushReplacementNamed(context, Routes.home.name);
+        } else {
+          Navigator.pushReplacementNamed(context, Routes.createAccount.name);
+        }
       }
     });
 
