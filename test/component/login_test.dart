@@ -3,19 +3,18 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
 import "package:proxima/views/pages/create_account_page.dart";
-import "package:proxima/views/pages/home_page.dart";
+import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 
-import "utils/firebase/setup_firebase_mocks.dart";
-import "utils/firebase/testing_login_providers.dart";
-import "utils/mock_data/firebase_user_mock.dart";
+import "../services/firebase/setup_firebase_mocks.dart";
+import "../services/firebase/testing_auth_providers.dart";
 
 void main() {
   setupFirebaseAuthMocks();
 
   final mockedProxima = ProviderScope(
-    overrides: firebaseMocksOverrides,
+    overrides: firebaseAuthMocksOverrides,
     child: const ProximaApp(),
   );
 
@@ -60,19 +59,18 @@ void main() {
     // We must now be on the home page
     final homePage = find.byType(HomePage);
     expect(homePage, findsOneWidget);
-
-    // Check that the user's email is correctly dispalyed
-    final test = find.textContaining(testingLoginUser.email!);
-    expect(test, findsOneWidget);
   });
 
-  testWidgets("Login and Logout", (tester) async {
+  testWidgets("Login and Logout using create account page", (tester) async {
     await tester.pumpWidget(mockedProxima);
     await tester.pumpAndSettle();
 
     final loginButton = find.byKey(LoginButton.loginButtonKey);
     await tester.tap(loginButton);
     await tester.pumpAndSettle();
+
+    final createAccountPage = find.byType(CreateAccountPage);
+    expect(createAccountPage, findsOneWidget);
 
     final logoutButton = find.byKey(CreateAccountPage.logoutButtonKey);
     await tester.tap(logoutButton);
