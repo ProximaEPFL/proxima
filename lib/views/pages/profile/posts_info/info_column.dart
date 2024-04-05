@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 /// This widget defines the style of the columns in the profile page,
 /// such as the posts and comments columns
 class InfoColumn extends StatelessWidget {
+  static const infoColumnKey = Key("info column");
   const InfoColumn({
     super.key,
     required this.theme,
@@ -17,6 +18,7 @@ class InfoColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: infoColumnKey,
       height: 275,
       width: 380,
       decoration: BoxDecoration(

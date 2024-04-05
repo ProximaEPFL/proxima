@@ -2,6 +2,8 @@ import "package:flutter/material.dart";
 
 /// This widget display the user info in the profile page
 class UserAccount extends StatelessWidget {
+  static const userInfoKey = Key("user Info");
+
   const UserAccount({
     super.key,
     required this.theme,
@@ -14,6 +16,7 @@ class UserAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      key: userInfoKey,
       children: [
         const CircleAvatar(
           radius: 20,

@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 /// This widget defines the style of the rows in the profile page,
 /// such as the badges row
 class InfoRow extends StatelessWidget {
+  static const infoRowKey = Key("info row");
   const InfoRow({
     super.key,
     required this.theme,
@@ -17,6 +18,7 @@ class InfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: infoRowKey,
       height: 150,
       width: 380,
       decoration: BoxDecoration(

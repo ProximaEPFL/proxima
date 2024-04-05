@@ -3,6 +3,8 @@ import "package:flutter/material.dart";
 /// This widget defines the style of the cards in the profile page,
 /// such as badges, posts and comments
 class InfoCard extends StatelessWidget {
+  static const cardKey = Key("card");
+
   const InfoCard({
     super.key,
     required this.theme,
@@ -13,6 +15,7 @@ class InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: cardKey,
       width: 92,
       height: 92,
       decoration: BoxDecoration(
