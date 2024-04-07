@@ -19,13 +19,21 @@ class HomeTopBar extends HookConsumerWidget {
       style: Theme.of(context).textTheme.headlineMedium,
     );
 
-    Widget userAvatar = InkWell(
-      key: profilePictureKey,
-      onTap: () {
-        Navigator.pushNamed(context, Routes.profile.name);
-      },
-      child: const CircleAvatar(
-        child: Text("PR"),
+    Widget userAvatar = CircleAvatar(
+      child: Stack(
+        children: [
+          const Center(child: Text("PR")),
+          Material(
+            shape: const CircleBorder(),
+            clipBehavior: Clip.hardEdge,
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => {
+                Navigator.pushNamed(context, Routes.profile.name),
+              },
+            ),
+          ),
+        ],
       ),
     );
 
