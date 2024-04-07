@@ -91,4 +91,34 @@ void main() {
     final emptyPostMessage = find.byKey(HomeFeed.emptyHomeFeedKey);
     expect(emptyPostMessage, findsOneWidget);
   });
+
+  testWidgets(
+    "static home display circular value on loading",
+    (tester) async {
+      final homePageWidget = ProviderScope(
+        overrides: [
+          postOverviewProvider.overrideWith(
+            // Future.any([]) will never complete and simulate a loading state
+            (ref) => Future.any([]),
+          ),
+        ],
+        child: const MaterialApp(
+          title: "Proxima",
+          home: HomePage(),
+        ),
+      );
+
+      await tester.pumpWidget(homePageWidget);
+
+      // Check that the home page is displayed
+      final homePage = find.byType(HomePage);
+      expect(homePage, findsOneWidget);
+
+      // Check that the circular progress indicator is displayed
+      final progressIndicator = find.byType(
+        CircularProgressIndicator,
+      );
+      expect(progressIndicator, findsOneWidget);
+    },
+  );
 }
