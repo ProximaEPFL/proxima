@@ -1,5 +1,6 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:geolocator/geolocator.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 
 class GeoLocationService {
   final GeolocatorPlatform _geoLocator;
@@ -60,3 +61,9 @@ class GeoLocationService {
     return GeoPoint(position.latitude, position.longitude);
   }
 }
+
+final geoLocationServiceProvider = Provider<GeoLocationService>(
+  (ref) => GeoLocationService(
+    geoLocator: GeolocatorPlatform.instance,
+  ),
+);
