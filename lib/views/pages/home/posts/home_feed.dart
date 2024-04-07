@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/pages/home/posts/post_card/post_card.dart";
@@ -9,7 +10,6 @@ import "package:proxima/views/sort_option_widgets/feed_sort_option/feed_sort_opt
 /// It contains the posts
 class HomeFeed extends HookConsumerWidget {
   static const feedSortOptionKey = Key("feedSortOption");
-  static const homeFeedKey = Key("homeFeed");
   static const emptyHomeFeedKey = Key("emptyHomeFeed");
   const HomeFeed({super.key});
 
@@ -47,14 +47,35 @@ class HomeFeed extends HookConsumerWidget {
         CircularValue(
           value: asyncPosts,
           builder: (context, posts) {
-            final postsCards = ListView(
-              key: homeFeedKey,
-              children: posts.map((post) => PostCard(post: post)).toList(),
+            return PostList(
+              emptyHelper: emptyHelper,
+              posts: posts,
             );
-            return Expanded(child: posts.isEmpty ? emptyHelper : postsCards);
           },
         ),
       ],
     );
+  }
+}
+
+class PostList extends StatelessWidget {
+  const PostList({
+    super.key,
+    required this.emptyHelper,
+    required this.posts,
+  });
+  static const homeFeedKey = Key("homeFeed");
+
+  final Center emptyHelper;
+  final List<PostOverview> posts;
+
+  @override
+  Widget build(BuildContext context) {
+    final postsCards = ListView(
+      key: homeFeedKey,
+      children: posts.map((post) => PostCard(post: post)).toList(),
+    );
+
+    return Expanded(child: posts.isEmpty ? emptyHelper : postsCards);
   }
 }
