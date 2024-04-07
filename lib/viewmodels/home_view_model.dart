@@ -6,11 +6,6 @@ import "package:proxima/services/geolocation_service.dart";
 
 const kmPostRadius = 0.1;
 
-// This provider is used to store the list of posts that are displayed in the home feed.
-final postList = Provider<List<PostOverview>>((ref) {
-  return List.empty();
-});
-
 /// This provider is used to fetch the list of posts that are displayed in the home feed.
 /// It fetches the posts from the database and returns a list of [PostOverview] objects to be displayed.
 final postOverviewProvider = FutureProvider<List<PostOverview>>((ref) async {
