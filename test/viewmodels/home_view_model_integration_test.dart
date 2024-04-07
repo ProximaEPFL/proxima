@@ -11,8 +11,8 @@ import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:test/test.dart";
 
+import "../models/database/post/mock_post_data.dart";
 import "../models/database/user/mock_user_data.dart";
-import "../services/database/mock_post_data.dart";
 import "../services/mock_geo_location_service.dart";
 
 void main() {
@@ -23,7 +23,7 @@ void main() {
     late MockGeoLocationService geoLocationService;
     late FakeFirebaseFirestore fakeFireStore;
 
-    late MockFirestorePost mockFirestorePost;
+    late MockPostFirestore mockPostFirestore;
     late MockUserFirestore mockUserFirestore;
     late UserRepositoryService userRepo;
     late PostRepositoryService postRepo;
@@ -52,7 +52,7 @@ void main() {
         ],
       );
 
-      mockFirestorePost = MockFirestorePost();
+      mockPostFirestore = MockPostFirestore();
       mockUserFirestore = MockUserFirestore();
 
       when(geoLocationService.getCurrentPosition()).thenAnswer(
@@ -67,7 +67,7 @@ void main() {
     });
 
     test("No posts are returned when they are far way from the user", () async {
-      final postData = mockFirestorePost.generatePostData(1)[0];
+      final postData = mockPostFirestore.generatePostData(1)[0];
 
       await postRepo.addPost(
         postData,
@@ -85,7 +85,7 @@ void main() {
       await userRepo.setUser(owner.uid, owner.data);
 
       // Add the post to the database
-      final postData = mockFirestorePost.generatePostData(1).map((postData) {
+      final postData = mockPostFirestore.generatePostData(1).map((postData) {
         return PostData(
           ownerId: owner.uid, // Map to the owner
           title: postData.title,
@@ -121,7 +121,7 @@ void main() {
 
     test("Throws an exception when the owner of a post is not found", () async {
       // Add the post to the database
-      final postData = mockFirestorePost.generatePostData(1).first;
+      final postData = mockPostFirestore.generatePostData(1).first;
 
       await postRepo.addPost(
         postData,
@@ -146,7 +146,7 @@ void main() {
       }
 
       // Add the posts to the database
-      final postDatas = mockFirestorePost
+      final postDatas = mockPostFirestore
           .generatePostData(nbPosts)
           .mapIndexed(
             (index, element) => PostData(
