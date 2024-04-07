@@ -6,7 +6,7 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 
-class MockFirestorePost {
+class MockPostFirestore {
   PostFirestore createPostAt(
     PostData data,
     GeoPoint location, {
