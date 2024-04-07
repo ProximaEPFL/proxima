@@ -9,7 +9,7 @@ import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
-import "mock_post_data.dart";
+import "../../models/database/post/mock_post_data.dart";
 
 void main() {
   group("Post Repository testing", () {
