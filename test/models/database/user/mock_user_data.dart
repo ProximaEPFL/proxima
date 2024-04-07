@@ -4,6 +4,7 @@ import "package:proxima/models/database/user/user_data.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 
+/// Helper class to generate mock user data to be used in tests
 class MockUserFirestore {
   List<UserData> generateUserData(int count) {
     return List.generate(count, (i) {
