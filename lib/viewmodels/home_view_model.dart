@@ -27,6 +27,8 @@ final postOverviewProvider = FutureProvider<List<PostOverview>>((ref) async {
   final posts = postsFirestore.map((post) {
     final owner = postOwners.firstWhere(
       (user) => user.uid == post.data.ownerId,
+      // This should never be executed in practice as if the owner is not found,
+      // the user repository would have already thrown an exception.
       orElse: () => throw Exception("Owner not found"),
     );
 
