@@ -17,7 +17,7 @@ import "../services/database/mock_user_repository_service.dart";
 import "../services/mock_geo_location_service.dart";
 
 void main() {
-  group("postOverviewProvider", () {
+  group("Post Overview Provider unit testing", () {
     late MockGeoLocationService geoLocationService;
     late PostRepositoryService postRepository;
     late UserRepositoryService userRepository;
