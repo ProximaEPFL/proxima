@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/models/ui/post_data.dart";
+import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/views/pages/home/posts/post_card/comment_widget.dart";
 import "package:proxima/views/pages/home/posts/post_card/user_bar_widget.dart";
 import "package:proxima/views/pages/home/posts/post_card/votes_widget.dart";
@@ -15,7 +15,7 @@ class PostCard extends StatelessWidget {
   static const postCardCommentsKey = Key("postCardComments");
   static const postCardUserKey = Key("postCardUser");
 
-  final Post post;
+  final PostOverview post;
 
   const PostCard({
     super.key,

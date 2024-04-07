@@ -1,5 +1,5 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/ui/post_data.dart";
+import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
@@ -7,11 +7,11 @@ import "package:proxima/services/geolocation_service.dart";
 const kmPostRadius = 0.1;
 
 // This provider is used to store the list of posts that are displayed in the home feed.
-final postList = Provider<List<Post>>((ref) {
+final postList = Provider<List<PostOverview>>((ref) {
   return List.empty();
 });
 
-final postProvider = FutureProvider<List<Post>>((ref) async {
+final postProvider = FutureProvider<List<PostOverview>>((ref) async {
   final geoLocationService = ref.watch(geoLocationServiceProvider);
   final postRepository = ref.watch(postRepositoryProvider);
   final userRepository = ref.watch(userRepositoryProvider);
@@ -33,7 +33,7 @@ final postProvider = FutureProvider<List<Post>>((ref) async {
       orElse: () => throw Exception("Owner not found"),
     );
 
-    return Post(
+    return PostOverview(
       title: post.data.title,
       description: post.data.description,
       votes: post.data.voteScore,
