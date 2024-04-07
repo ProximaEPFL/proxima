@@ -50,6 +50,9 @@ class HomeFeed extends HookConsumerWidget {
             return PostList(
               emptyHelper: emptyHelper,
               posts: posts,
+              onRefresh: () async {
+                return ref.refresh(postOverviewProvider);
+              },
             );
           },
         ),
@@ -63,17 +66,22 @@ class PostList extends StatelessWidget {
     super.key,
     required this.emptyHelper,
     required this.posts,
+    required this.onRefresh,
   });
   static const homeFeedKey = Key("homeFeed");
 
   final Center emptyHelper;
   final List<PostOverview> posts;
+  final Future<void> Function() onRefresh;
 
   @override
   Widget build(BuildContext context) {
-    final postsCards = ListView(
-      key: homeFeedKey,
-      children: posts.map((post) => PostCard(post: post)).toList(),
+    final postsCards = RefreshIndicator(
+      onRefresh: onRefresh,
+      child: ListView(
+        key: homeFeedKey,
+        children: posts.map((post) => PostCard(post: post)).toList(),
+      ),
     );
 
     return Expanded(child: posts.isEmpty ? emptyHelper : postsCards);
