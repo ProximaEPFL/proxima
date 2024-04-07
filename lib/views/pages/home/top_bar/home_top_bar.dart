@@ -28,6 +28,7 @@ class HomeTopBar extends HookConsumerWidget {
             clipBehavior: Clip.hardEdge,
             color: Colors.transparent,
             child: InkWell(
+              key: profilePictureKey,
               onTap: () => {
                 Navigator.pushNamed(context, Routes.profile.name),
               },
