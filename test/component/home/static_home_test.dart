@@ -12,7 +12,9 @@ import "../utils/mock_data/home/mock_posts.dart";
 void main() {
   testWidgets("static home display top and bottom bar", (tester) async {
     final homePageWidget = ProviderScope(
-      overrides: [postList.overrideWithValue(testPosts)],
+      overrides: [
+        postOverviewProvider.overrideWith((ref) => Future.value(testPosts)),
+      ],
       child: const MaterialApp(
         title: "Proxima",
         home: HomePage(),
@@ -69,7 +71,9 @@ void main() {
 
   testWidgets("static home display no post text", (tester) async {
     final homePageWidget = ProviderScope(
-      overrides: [postList.overrideWithValue(List.empty())],
+      overrides: [
+        postOverviewProvider.overrideWith((ref) => Future.value(List.empty())),
+      ],
       child: const MaterialApp(
         title: "Proxima",
         home: HomePage(),
