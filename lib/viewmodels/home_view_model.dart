@@ -11,6 +11,8 @@ final postList = Provider<List<PostOverview>>((ref) {
   return List.empty();
 });
 
+/// This provider is used to fetch the list of posts that are displayed in the home feed.
+/// It fetches the posts from the database and returns a list of [PostOverview] objects to be displayed.
 final postProvider = FutureProvider<List<PostOverview>>((ref) async {
   final geoLocationService = ref.watch(geoLocationServiceProvider);
   final postRepository = ref.watch(postRepositoryProvider);
