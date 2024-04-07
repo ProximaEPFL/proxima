@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/pages/home/posts/post_card/post_card.dart";
 import "package:proxima/views/sort_option_widgets/feed_sort_option/feed_sort_option_chips.dart";
@@ -14,7 +15,7 @@ class HomeFeed extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final posts = ref.watch(postList);
+    final asyncPosts = ref.watch(postOverviewProvider);
 
     final emptyHelper = Center(
       key: emptyHomeFeedKey,
@@ -37,18 +38,22 @@ class HomeFeed extends HookConsumerWidget {
       ),
     );
 
-    final postsCards = ListView(
-      key: homeFeedKey,
-      children: posts.map((post) => PostCard(post: post)).toList(),
-    );
-
     return Column(
       children: [
         const FeedSortOptionChips(
           key: feedSortOptionKey,
         ),
         const Divider(),
-        Expanded(child: posts.isEmpty ? emptyHelper : postsCards),
+        CircularValue(
+          value: asyncPosts,
+          builder: (context, posts) {
+            final postsCards = ListView(
+              key: homeFeedKey,
+              children: posts.map((post) => PostCard(post: post)).toList(),
+            );
+            return Expanded(child: posts.isEmpty ? emptyHelper : postsCards);
+          },
+        ),
       ],
     );
   }
