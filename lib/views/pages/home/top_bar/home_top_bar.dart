@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/views/navigation/routes.dart";
 
 /// This widget is the top bar of the home page
 /// It contains the feed sort option and the user profile picture
@@ -18,9 +19,14 @@ class HomeTopBar extends HookConsumerWidget {
       style: Theme.of(context).textTheme.headlineMedium,
     );
 
-    const userAvatar = CircleAvatar(
+    Widget userAvatar = InkWell(
       key: profilePictureKey,
-      child: Text("PR"),
+      onTap: () {
+        Navigator.pushNamed(context, Routes.profile.name);
+      },
+      child: const CircleAvatar(
+        child: Text("PR"),
+      ),
     );
 
     return Row(
