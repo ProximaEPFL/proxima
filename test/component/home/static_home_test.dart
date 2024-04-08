@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
-import "package:proxima/views/content/feed/home_feed.dart";
 import "package:proxima/views/content/feed/post_card/post_card.dart";
+import "package:proxima/views/content/feed/post_feed.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/pages/home/home_page.dart";
@@ -33,7 +33,7 @@ void main() {
     expect(topBar, findsOneWidget);
 
     //Check sort option list is displayed
-    final feedSortOptionList = find.byKey(HomeFeed.feedSortOptionKey);
+    final feedSortOptionList = find.byKey(PostFeed.feedSortOptionKey);
     expect(feedSortOptionList, findsOneWidget);
 
     //Check profile picture is displayed
@@ -86,11 +86,11 @@ void main() {
     expect(homePage, findsOneWidget);
 
     //Check empty post message is displayed
-    final emptyPostMessage = find.byKey(HomeFeed.emptyHomeFeedKey);
+    final emptyPostMessage = find.byKey(PostFeed.emptyfeedKey);
     expect(emptyPostMessage, findsOneWidget);
 
     //Check the new post button text is displayed
-    final newPostButtonText = find.byKey(HomeFeed.newPostButtonTextKey);
+    final newPostButtonText = find.byKey(PostFeed.newPostButtonTextKey);
     expect(newPostButtonText, findsOneWidget);
   });
 

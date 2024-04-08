@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
-import "package:proxima/views/content/feed/home_feed.dart";
+import "package:proxima/views/content/feed/post_feed.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
@@ -102,7 +102,7 @@ void main() {
     expect(homePage, findsOneWidget);
 
     //Click on the new post button on the home page
-    final newPostButtonText = find.byKey(HomeFeed.newPostButtonTextKey);
+    final newPostButtonText = find.byKey(PostFeed.newPostButtonTextKey);
     await tester.tap(newPostButtonText);
     await tester.pumpAndSettle();
 

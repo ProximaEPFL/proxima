@@ -7,19 +7,19 @@ import "package:proxima/views/sort_option_widgets/feed_sort_option/feed_sort_opt
 
 /// This widget is the feed of the home page
 /// It contains the posts
-class HomeFeed extends HookConsumerWidget {
+class PostFeed extends HookConsumerWidget {
   static const feedSortOptionKey = Key("feedSortOption");
-  static const homeFeedKey = Key("homeFeed");
-  static const emptyHomeFeedKey = Key("emptyHomeFeed");
+  static const feedKey = Key("feed");
+  static const emptyfeedKey = Key("emptyFeed");
   static const newPostButtonTextKey = Key("newPostButtonTextKey");
-  const HomeFeed({super.key});
+  const PostFeed({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final posts = ref.watch(postList);
 
     final emptyHelper = Center(
-      key: emptyHomeFeedKey,
+      key: emptyfeedKey,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -41,7 +41,7 @@ class HomeFeed extends HookConsumerWidget {
     );
 
     final postsCards = ListView(
-      key: homeFeedKey,
+      key: feedKey,
       children: posts.map((post) => PostCard(post: post)).toList(),
     );
 
