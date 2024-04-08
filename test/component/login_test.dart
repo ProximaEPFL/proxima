@@ -6,7 +6,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/services/database/user_repository_service.dart";
-import "package:proxima/views/leading_back_button/leading_back_button.dart";
+import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/login/login_button.dart";

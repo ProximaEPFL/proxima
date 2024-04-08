@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
-import "package:proxima/views/bottom_navigation_bar/navigation_bar_routes.dart";
-import "package:proxima/views/bottom_navigation_bar/navigation_bottom_bar.dart";
+import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
+import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/top_bar/home_top_bar.dart";
 
