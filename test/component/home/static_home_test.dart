@@ -7,7 +7,7 @@ import "package:proxima/views/content/feed/post_card/post_card.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/pages/home/home_page.dart";
-import "package:proxima/views/pages/home/top_bar/home_top_bar.dart";
+import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 
 import "../utils/mock_data/home/mock_posts.dart";
 
@@ -29,7 +29,7 @@ void main() {
     expect(homePage, findsOneWidget);
 
     // Check that the top bar is displayed
-    final topBar = find.byKey(HomeTopBar.homeTopBarKey);
+    final topBar = find.byKey(AppTopBar.homeTopBarKey);
     expect(topBar, findsOneWidget);
 
     //Check sort option list is displayed
@@ -37,7 +37,7 @@ void main() {
     expect(feedSortOptionList, findsOneWidget);
 
     //Check profile picture is displayed
-    final profilePicture = find.byKey(HomeTopBar.profilePictureKey);
+    final profilePicture = find.byKey(AppTopBar.profilePictureKey);
     expect(profilePicture, findsOneWidget);
 
     // Check that the bottom bar is displayed

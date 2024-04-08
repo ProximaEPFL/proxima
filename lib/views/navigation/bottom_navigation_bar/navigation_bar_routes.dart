@@ -19,6 +19,8 @@ enum NavigationbarRoutes {
   group("Group", Icon(Icons.group), null),
   map("Map", Icon(Icons.place), null);
 
+  static const defaultLabelText = "Proxima";
+
   final String name;
   final Widget icon;
 
@@ -42,6 +44,15 @@ enum NavigationbarRoutes {
         return const HomeFeed();
       case _:
         return const NotImplemented();
+    }
+  }
+
+  String pageLabel() {
+    switch (this) {
+      case challenge:
+        return "Your challenges";
+      case _:
+        return defaultLabelText;
     }
   }
 }

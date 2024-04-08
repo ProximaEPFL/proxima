@@ -4,18 +4,18 @@ import "package:proxima/views/navigation/routes.dart";
 
 /// This widget is the top bar of the home page
 /// It contains the feed sort option and the user profile picture
-class HomeTopBar extends HookConsumerWidget {
+class AppTopBar extends HookConsumerWidget {
   static const homeTopBarKey = Key("homeTopBar");
   static const profilePictureKey = Key("profilePicture");
 
-  static const titleText = "Proxima";
+  final String labelText;
 
-  const HomeTopBar({super.key});
+  const AppTopBar({super.key, required this.labelText});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final title = Text(
-      titleText,
+      labelText,
       style: Theme.of(context).textTheme.headlineMedium,
     );
 
