@@ -4,43 +4,54 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 
-const kmPostRadius = 0.1;
-
-/// This provider is used to fetch the list of posts that are displayed in the home feed.
+/// This viewmodel is used to fetch the list of posts that are displayed in the home feed.
 /// It fetches the posts from the database and returns a list of [PostOverview] objects to be displayed.
-final postOverviewProvider = FutureProvider<List<PostOverview>>((ref) async {
-  final geoLocationService = ref.watch(geoLocationServiceProvider);
-  final postRepository = ref.watch(postRepositoryProvider);
-  final userRepository = ref.watch(userRepositoryProvider);
+class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
+  HomeViewModel();
 
-  final position = await geoLocationService.getCurrentPosition();
+  static const kmPostRadius = 0.1;
 
-  final postsFirestore =
-      await postRepository.getNearPosts(position, kmPostRadius);
+  @override
+  Future<List<PostOverview>> build() async {
+    final geoLocationService = ref.watch(geoLocationServiceProvider);
+    final postRepository = ref.watch(postRepositoryProvider);
+    final userRepository = ref.watch(userRepositoryProvider);
 
-  final postOwnersId = postsFirestore.map((post) => post.data.ownerId).toSet();
+    final position = await geoLocationService.getCurrentPosition();
 
-  final postOwners = await Future.wait(
-    postOwnersId.map((userId) => userRepository.getUser(userId)),
-  );
+    final postsFirestore =
+        await postRepository.getNearPosts(position, kmPostRadius);
 
-  final posts = postsFirestore.map((post) {
-    final owner = postOwners.firstWhere(
-      (user) => user.uid == post.data.ownerId,
-      // This should never be executed in practice as if the owner is not found,
-      // the user repository would have already thrown an exception.
-      orElse: () => throw Exception("Owner not found"),
+    final postOwnersId =
+        postsFirestore.map((post) => post.data.ownerId).toSet();
+
+    final postOwners = await Future.wait(
+      postOwnersId.map((userId) => userRepository.getUser(userId)),
     );
 
-    return PostOverview(
-      title: post.data.title,
-      description: post.data.description,
-      votes: post.data.voteScore,
-      posterUsername: owner.data.username,
-      commentNumber:
-          0, // TODO: Update appropriately when comments are implemented
-    );
-  }).toList();
+    final posts = postsFirestore.map((post) {
+      final owner = postOwners.firstWhere(
+        (user) => user.uid == post.data.ownerId,
+        // This should never be executed in practice as if the owner is not found,
+        // the user repository would have already thrown an exception.
+        orElse: () => throw Exception("Owner not found"),
+      );
 
-  return posts;
-});
+      return PostOverview(
+        title: post.data.title,
+        description: post.data.description,
+        votes: post.data.voteScore,
+        posterUsername: owner.data.username,
+        commentNumber:
+            0, // TODO: Update appropriately when comments are implemented
+      );
+    }).toList();
+
+    return posts;
+  }
+}
+
+final postOverviewProvider =
+    AsyncNotifierProvider<HomeViewModel, List<PostOverview>>(
+  () => HomeViewModel(),
+);
