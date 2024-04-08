@@ -23,8 +23,6 @@ void main() {
     late UserRepositoryService userRepository;
 
     late ProviderContainer container;
-    late MockPostFirestore mockPostFirestore;
-    late MockUserFirestore mockUserFirestore;
 
     const point = GeoPoint(0, 0);
 
@@ -46,9 +44,6 @@ void main() {
           ),
         ],
       );
-
-      mockPostFirestore = MockPostFirestore();
-      mockUserFirestore = MockUserFirestore();
     });
 
     test("No posts are returned when no posts returned by the repository",
@@ -69,9 +64,8 @@ void main() {
     test(
         "Post is returned correctly when single post is returned by the repository",
         () async {
-      final owner = mockUserFirestore.generateUserFirestore(1)[0];
-      final postData = mockPostFirestore
-          .generatePostData(1)
+      final owner = MockUserFirestore.generateUserFirestore(1)[0];
+      final postData = MockPostFirestore.generatePostData(1)
           .map(
             (postData) => PostData(
               ownerId: owner.uid,
@@ -82,7 +76,7 @@ void main() {
             ),
           )
           .toList()[0];
-      final post = mockPostFirestore.createPostAt(postData, point);
+      final post = MockPostFirestore.createPostAt(postData, point);
 
       when(userRepository.getUser(post.data.ownerId)).thenAnswer(
         (_) async => owner,
@@ -118,9 +112,8 @@ void main() {
       "Posts are returned correctly when multiple posts are returned by the repository with all posts corresponding to the same owner",
       () async {
         // Generate the data for the test
-        final owner = mockUserFirestore.generateUserFirestore(1)[0];
-        final postsData = mockPostFirestore
-            .generatePostData(10)
+        final owner = MockUserFirestore.generateUserFirestore(1)[0];
+        final postsData = MockPostFirestore.generatePostData(10)
             .map(
               (postData) => PostData(
                 ownerId: owner.uid,
@@ -133,7 +126,7 @@ void main() {
             .toList();
 
         final posts = postsData.map((data) {
-          return mockPostFirestore.createPostAt(data, point);
+          return MockPostFirestore.createPostAt(data, point);
         }).toList();
 
         final expectedPosts = postsData.map((data) {
@@ -172,20 +165,20 @@ void main() {
         const numberOfPosts = 10;
 
         // Generate the data for the test
-        final owners = mockUserFirestore.generateUserFirestore(numberOfPosts);
+        final owners = MockUserFirestore.generateUserFirestore(numberOfPosts);
         final postsData =
-            mockPostFirestore.generatePostData(numberOfPosts).mapIndexed(
-                  (index, element) => PostData(
-                    ownerId: owners[index].uid,
-                    title: element.title,
-                    description: element.description,
-                    publicationTime: element.publicationTime,
-                    voteScore: element.voteScore,
-                  ),
-                );
+            MockPostFirestore.generatePostData(numberOfPosts).mapIndexed(
+          (index, element) => PostData(
+            ownerId: owners[index].uid,
+            title: element.title,
+            description: element.description,
+            publicationTime: element.publicationTime,
+            voteScore: element.voteScore,
+          ),
+        );
 
         final posts = postsData.map((data) {
-          return mockPostFirestore.createPostAt(data, point);
+          return MockPostFirestore.createPostAt(data, point);
         }).toList();
 
         final expectedPosts = postsData.mapIndexed(

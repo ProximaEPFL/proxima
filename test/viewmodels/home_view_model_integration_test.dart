@@ -23,8 +23,6 @@ void main() {
     late MockGeoLocationService geoLocationService;
     late FakeFirebaseFirestore fakeFireStore;
 
-    late MockPostFirestore mockPostFirestore;
-    late MockUserFirestore mockUserFirestore;
     late UserRepositoryService userRepo;
     late PostRepositoryService postRepo;
 
@@ -52,9 +50,6 @@ void main() {
         ],
       );
 
-      mockPostFirestore = MockPostFirestore();
-      mockUserFirestore = MockUserFirestore();
-
       when(geoLocationService.getCurrentPosition()).thenAnswer(
         (_) async => userPosition,
       );
@@ -67,7 +62,7 @@ void main() {
     });
 
     test("No posts are returned when they are far way from the user", () async {
-      final postData = mockPostFirestore.generatePostData(1)[0];
+      final postData = MockPostFirestore.generatePostData(1)[0];
 
       await postRepo.addPost(
         postData,
@@ -81,11 +76,11 @@ void main() {
 
     test("Single near post returned correctly", () async {
       // Add the post owner to the database
-      final owner = mockUserFirestore.generateUserFirestore(1)[0];
+      final owner = MockUserFirestore.generateUserFirestore(1)[0];
       await userRepo.setUser(owner.uid, owner.data);
 
       // Add the post to the database
-      final postData = mockPostFirestore.generatePostData(1).map((postData) {
+      final postData = MockPostFirestore.generatePostData(1).map((postData) {
         return PostData(
           ownerId: owner.uid, // Map to the owner
           title: postData.title,
@@ -121,7 +116,7 @@ void main() {
 
     test("Throws an exception when the owner of a post is not found", () async {
       // Add the post to the database
-      final postData = mockPostFirestore.generatePostData(1).first;
+      final postData = MockPostFirestore.generatePostData(1).first;
 
       await postRepo.addPost(
         postData,
@@ -140,14 +135,13 @@ void main() {
       const nbPosts = 10;
 
       // Add the post owners to the database
-      final owners = mockUserFirestore.generateUserFirestore(nbOwners);
+      final owners = MockUserFirestore.generateUserFirestore(nbOwners);
       for (final owner in owners) {
         await userRepo.setUser(owner.uid, owner.data);
       }
 
       // Add the posts to the database
-      final postDatas = mockPostFirestore
-          .generatePostData(nbPosts)
+      final postDatas = MockPostFirestore.generatePostData(nbPosts)
           .mapIndexed(
             (index, element) => PostData(
               ownerId: owners[index % nbOwners].uid, // Map to an owner
