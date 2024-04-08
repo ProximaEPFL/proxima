@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/viewmodels/new_post_view_model.dart";
 
 class NewPostForm extends HookConsumerWidget {
