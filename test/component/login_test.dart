@@ -9,6 +9,7 @@ import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
+import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 
@@ -96,6 +97,44 @@ void main() {
 
       final loginButtonStillHere = find.byType(CreateAccountPage);
       expect(loginButtonStillHere, findsOneWidget);
+
+      final backButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
+      await tester.tap(backButton);
+      await tester.pumpAndSettle();
+
+      //Check that we are in the login page
+      final loginPage = find.byType(LoginPage);
+      expect(loginPage, findsOneWidget);
+    });
+
+    testWidgets("Login and Logout using home page", (tester) async {
+      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpAndSettle();
+
+      final loginButton = find.byKey(LoginButton.loginButtonKey);
+      await tester.tap(loginButton);
+      //Needs a delay to allow the existance check to complete
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
+
+      final loginButtonStillHere = find.byType(CreateAccountPage);
+      expect(loginButtonStillHere, findsOneWidget);
+
+      final confirmAccountCreating =
+          find.byKey(CreateAccountPage.confirmButtonKey);
+      await tester.tap(confirmAccountCreating);
+      await tester.pumpAndSettle();
+
+      final homePage = find.byType(HomePage);
+      expect(homePage, findsOneWidget);
+
+      //Logout and check that we are back to the login page
+      final logoutButton = find.byKey(AppTopBar.logoutButtonKey);
+      await tester.tap(logoutButton);
+      await tester.pumpAndSettle();
+
+      //Check that we are in the login page
+      final loginPage = find.byType(LoginPage);
+      expect(loginPage, findsOneWidget);
     });
 
     testWidgets("Login and get to create account page flow", (tester) async {
