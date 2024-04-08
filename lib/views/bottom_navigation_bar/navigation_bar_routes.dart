@@ -1,34 +1,46 @@
 import "package:flutter/material.dart";
 import "package:proxima/views/navigation/routes.dart";
+import "package:proxima/views/pages/home/posts/home_feed.dart";
 
 /// This enum is used to create the navigation bar routes.
 /// It contains the name and icon of the routes.
 enum NavigationbarRoutes {
   //TODO set the routes for the pages
-  feed("Feed", Icon(Icons.home), Routes.home, false),
-  challenge("Challenge", Icon(Icons.emoji_events), null, false),
+  feed("Feed", Icon(Icons.home), null),
+  challenge("Challenge", Icon(Icons.emoji_events), null),
   addPost(
     "New post",
     CircleAvatar(
       child: Icon(Icons.add),
     ),
     Routes.newPost,
-    true,
   ),
-  group("Group", Icon(Icons.group), null, false),
-  map("Map", Icon(Icons.place), null, false);
+  group("Group", Icon(Icons.group), null),
+  map("Map", Icon(Icons.place), null);
 
   final String name;
   final Widget icon;
 
-  //Temporary nullable for missing pages
-  final Routes? routesDestination;
-  final bool needPushNavigation;
+  // Non-null if it requires a push
+  final Routes? routeDestination;
 
   const NavigationbarRoutes(
     this.name,
     this.icon,
-    this.routesDestination,
-    this.needPushNavigation,
+    this.routeDestination,
   );
+
+  Widget page() {
+    if (routeDestination != null) {
+      throw Exception("Route must be pushed.");
+    }
+
+    // TODO implement other routes
+    switch (this) {
+      case feed:
+        return const HomeFeed();
+      case _:
+        throw UnimplementedError("Navigation Bar Route not yet implemented!");
+    }
+  }
 }
