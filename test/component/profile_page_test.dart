@@ -2,7 +2,6 @@ import "package:firebase_auth_mocks/firebase_auth_mocks.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/services/login_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
@@ -22,11 +21,7 @@ void main() {
     final homePageWidget = ProviderScope(
       overrides: [
         postOverviewProvider.overrideWith(
-          () => MockHomeViewModel(
-            build: () async {
-              return List<PostOverview>.empty();
-            },
-          ),
+          () => MockHomeViewModel(),
         ),
       ],
       child: const MaterialApp(

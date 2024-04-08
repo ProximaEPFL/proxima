@@ -2,7 +2,6 @@ import "package:firebase_core/firebase_core.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
-import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
@@ -19,11 +18,7 @@ void main() {
   final mockedProxima = ProviderScope(
     overrides: [
       postOverviewProvider.overrideWith(
-        () => MockHomeViewModel(
-          build: () async {
-            return List<PostOverview>.empty();
-          },
-        ),
+        () => MockHomeViewModel(),
       ),
       ...firebaseAuthMocksOverrides,
     ],

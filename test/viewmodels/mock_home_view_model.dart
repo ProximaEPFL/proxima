@@ -2,15 +2,24 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 
+/// A mock implementation of the [HomeViewModel] class.
+/// This class is particulary usefull for the ui tests where we want to expose
+/// particular data to the views.
+/// By default it exposes an empty list of [PostOverview] and does nothing on refresh.
 class MockHomeViewModel extends AsyncNotifier<List<PostOverview>>
     implements HomeViewModel {
-  // build function
   final Future<List<PostOverview>> Function() _build;
+  final Future<void> Function() _onRefresh;
 
-  MockHomeViewModel({required build}) : _build = build;
+  MockHomeViewModel({
+    Future<List<PostOverview>> Function()? build,
+    Future<void> Function()? onRefresh,
+  })  : _build = build ?? (() async => List<PostOverview>.empty()),
+        _onRefresh = onRefresh ?? (() async {});
 
   @override
-  Future<List<PostOverview>> build() {
-    return _build();
-  }
+  Future<List<PostOverview>> build() => _build();
+
+  @override
+  Future<void> refresh() => _onRefresh();
 }
