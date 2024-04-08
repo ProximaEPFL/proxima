@@ -214,5 +214,82 @@ void main() {
         expect(actualPosts, expectedPosts);
       },
     );
+
+    test("New posts are exposed correctly on refresh", () async {
+      when(geoLocationService.getCurrentPosition()).thenAnswer(
+        (_) async => point,
+      );
+      when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
+          .thenAnswer(
+        (_) async => [],
+      );
+
+      // Query the posts a first time
+      final postBeforeRefresh =
+          await container.read(postOverviewProvider.future);
+      expect(postBeforeRefresh, []);
+
+      // Simulate a new post being added
+      final owner = MockUserFirestore.generateUserFirestore(1)[0];
+      final postData = MockPostFirestore.generatePostData(1)
+          .map(
+            (postData) => PostData(
+              ownerId: owner.uid,
+              title: postData.title,
+              description: postData.description,
+              publicationTime: postData.publicationTime,
+              voteScore: postData.voteScore,
+            ),
+          )
+          .toList()[0];
+      final post = MockPostFirestore.createPostAt(postData, point);
+
+      when(userRepository.getUser(post.data.ownerId)).thenAnswer(
+        (_) async => owner,
+      );
+
+      final expectedPosts = [
+        PostOverview(
+          title: post.data.title,
+          description: post.data.description,
+          votes: post.data.voteScore,
+          commentNumber: 0,
+          posterUsername: owner.data.username,
+        ),
+      ];
+
+      when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
+          .thenAnswer(
+        (_) async => [post],
+      );
+      when(userRepository.getUser(post.data.ownerId)).thenAnswer(
+        (_) async => owner,
+      );
+
+      // Refresh the posts
+      await container.read(postOverviewProvider.notifier).refresh();
+
+      // Check the actual posts
+      final postAfterRefresh =
+          await container.read(postOverviewProvider.future);
+
+      expect(postAfterRefresh, expectedPosts);
+    });
+
+    test("Error is exposed correctly on refresh", () async {
+      when(geoLocationService.getCurrentPosition()).thenAnswer(
+        (_) async => point,
+      );
+      when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
+          .thenThrow(Exception("Error"));
+
+      // Refresh the posts
+      await container.read(postOverviewProvider.notifier).refresh();
+
+      // Check the actual posts
+      final asyncPosts = container.read(postOverviewProvider);
+
+      expect(asyncPosts, isA<AsyncError>());
+    });
   });
 }
