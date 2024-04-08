@@ -40,6 +40,7 @@ class HomeFeed extends HookConsumerWidget {
               ),
             ],
           ),
+          const SizedBox(height: 10),
           ElevatedButton(
             key: refreshButtonKey,
             onPressed: () async {
