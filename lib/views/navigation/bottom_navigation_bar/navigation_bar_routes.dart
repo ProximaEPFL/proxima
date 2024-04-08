@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:proxima/utils/ui/not_implemented.dart";
 import "package:proxima/views/content/feed/home_feed.dart";
 import "package:proxima/views/navigation/routes.dart";
 
@@ -40,7 +41,7 @@ enum NavigationbarRoutes {
       case feed:
         return const HomeFeed();
       case _:
-        throw UnimplementedError("Navigation Bar Route not yet implemented!");
+        return const NotImplemented();
     }
   }
 }
