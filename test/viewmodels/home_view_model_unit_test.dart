@@ -56,7 +56,8 @@ void main() {
       when(geoLocationService.getCurrentPosition()).thenAnswer(
         (_) async => point,
       );
-      when(postRepository.getNearPosts(point, kmPostRadius)).thenAnswer(
+      when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
+          .thenAnswer(
         (_) async => [],
       );
 
@@ -100,7 +101,8 @@ void main() {
       when(geoLocationService.getCurrentPosition()).thenAnswer(
         (_) async => point,
       );
-      when(postRepository.getNearPosts(point, kmPostRadius)).thenAnswer(
+      when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
+          .thenAnswer(
         (_) async => [post],
       );
       when(userRepository.getUser(post.data.ownerId)).thenAnswer(
@@ -152,7 +154,8 @@ void main() {
         when(geoLocationService.getCurrentPosition()).thenAnswer(
           (_) async => point,
         );
-        when(postRepository.getNearPosts(point, kmPostRadius)).thenAnswer(
+        when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
+            .thenAnswer(
           (_) async => posts,
         );
 
@@ -207,7 +210,8 @@ void main() {
         when(geoLocationService.getCurrentPosition()).thenAnswer(
           (_) async => point,
         );
-        when(postRepository.getNearPosts(point, kmPostRadius)).thenAnswer(
+        when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
+            .thenAnswer(
           (_) async => posts,
         );
 

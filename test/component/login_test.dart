@@ -2,6 +2,7 @@ import "package:firebase_core/firebase_core.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
+import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
@@ -10,13 +11,20 @@ import "package:proxima/views/pages/login/login_page.dart";
 
 import "../services/firebase/setup_firebase_mocks.dart";
 import "../services/firebase/testing_auth_providers.dart";
+import "../viewmodels/mock_home_view_model.dart";
 
 void main() {
   setupFirebaseAuthMocks();
 
   final mockedProxima = ProviderScope(
     overrides: [
-      postOverviewProvider.overrideWith((ref) => Future.value(List.empty())),
+      postOverviewProvider.overrideWith(
+        () => MockHomeViewModel(
+          build: () async {
+            return List<PostOverview>.empty();
+          },
+        ),
+      ),
       ...firebaseAuthMocksOverrides,
     ],
     child: const ProximaApp(),

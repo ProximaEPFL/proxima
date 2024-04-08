@@ -1,19 +1,27 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/posts/home_feed.dart";
 import "package:proxima/views/pages/home/posts/post_card/post_card.dart";
 import "package:proxima/views/pages/home/top_bar/home_top_bar.dart";
+import "../../viewmodels/mock_home_view_model.dart";
 import "../utils/mock_data/home/mock_posts.dart";
 
 void main() {
   testWidgets("static home display top and bottom bar", (tester) async {
     final homePageWidget = ProviderScope(
       overrides: [
-        postOverviewProvider.overrideWith((ref) => Future.value(testPosts)),
+        postOverviewProvider.overrideWith(
+          () => MockHomeViewModel(
+            build: () async {
+              return testPosts;
+            },
+          ),
+        ),
       ],
       child: const MaterialApp(
         title: "Proxima",
@@ -72,7 +80,11 @@ void main() {
   testWidgets("static home display no post text", (tester) async {
     final homePageWidget = ProviderScope(
       overrides: [
-        postOverviewProvider.overrideWith((ref) => Future.value(List.empty())),
+        postOverviewProvider.overrideWith(
+          () => MockHomeViewModel(
+            build: () => Future.value(List<PostOverview>.empty()),
+          ),
+        ),
       ],
       child: const MaterialApp(
         title: "Proxima",
@@ -98,8 +110,12 @@ void main() {
       final homePageWidget = ProviderScope(
         overrides: [
           postOverviewProvider.overrideWith(
-            // Future.any([]) will never complete and simulate a loading state
-            (ref) => Future.any([]),
+            () => MockHomeViewModel(
+              build: () {
+                // Future.any([]) will never complete and simulate a loading state
+                return Future.any([]);
+              },
+            ),
           ),
         ],
         child: const MaterialApp(
