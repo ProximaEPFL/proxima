@@ -1,5 +1,8 @@
 import "package:flutter/material.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/post/post_data.dart";
+import "package:proxima/viewmodels/new_post_view_model.dart";
 
 class NewPostForm extends HookConsumerWidget {
   NewPostForm({super.key});
@@ -26,6 +29,9 @@ class NewPostForm extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final titleController = useTextEditingController();
+    final bodyController = useTextEditingController();
+
     final titleField = TextFormField(
       key: titleFieldKey,
       decoration: const InputDecoration(
@@ -38,6 +44,7 @@ class NewPostForm extends HookConsumerWidget {
         }
         return null;
       },
+      controller: titleController,
     );
 
     final bodyField = TextFormField(
@@ -55,6 +62,7 @@ class NewPostForm extends HookConsumerWidget {
       maxLines: null,
       expands: true,
       textAlignVertical: TextAlignVertical.top,
+      controller: bodyController,
     );
 
     final postButton = ElevatedButton(
@@ -62,7 +70,7 @@ class NewPostForm extends HookConsumerWidget {
       child: const Text(_postButtonText),
       onPressed: () {
         if (_formKey.currentState?.validate() ?? false) {
-          // TODO commit the post to the repository
+          addPost(titleController.text, bodyController.text, ref);
           Navigator.pop(context);
         }
       },
