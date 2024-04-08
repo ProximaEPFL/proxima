@@ -11,6 +11,7 @@ import "package:proxima/views/sort_option_widgets/feed_sort_option/feed_sort_opt
 class HomeFeed extends HookConsumerWidget {
   static const feedSortOptionKey = Key("feedSortOption");
   static const emptyHomeFeedKey = Key("emptyHomeFeed");
+  static const refreshButtonKey = Key("refreshButton");
   const HomeFeed({super.key});
 
   @override
@@ -19,20 +20,32 @@ class HomeFeed extends HookConsumerWidget {
 
     final emptyHelper = Center(
       key: emptyHomeFeedKey,
-      child: Row(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text("No post to display, "),
-          InkWell(
-            onTap: () => {
-              //TODO: Add navigation to create post page
-            },
-            child: const Text(
-              "create one",
-              style: TextStyle(
-                color: Colors.blue,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("No post to display, "),
+              InkWell(
+                onTap: () => {
+                  //TODO: Add navigation to create post page
+                },
+                child: const Text(
+                  "create one",
+                  style: TextStyle(
+                    color: Colors.blue,
+                  ),
+                ),
               ),
-            ),
+            ],
+          ),
+          ElevatedButton(
+            key: refreshButtonKey,
+            onPressed: () async {
+              return ref.refresh(postOverviewProvider);
+            },
+            child: const Text("Refresh"),
           ),
         ],
       ),
