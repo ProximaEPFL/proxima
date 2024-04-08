@@ -44,7 +44,7 @@ class HomeFeed extends HookConsumerWidget {
           ElevatedButton(
             key: refreshButtonKey,
             onPressed: () async {
-              return ref.refresh(postOverviewProvider);
+              ref.read(postOverviewProvider.notifier).refresh();
             },
             child: const Text("Refresh"),
           ),
@@ -65,7 +65,7 @@ class HomeFeed extends HookConsumerWidget {
               emptyHelper: emptyHelper,
               posts: posts,
               onRefresh: () async {
-                return ref.refresh(postOverviewProvider);
+                return ref.read(postOverviewProvider.notifier).refresh();
               },
             );
           },

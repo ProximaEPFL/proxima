@@ -49,6 +49,19 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
 
     return posts;
   }
+
+  /// Refresh the list of posts
+  /// This will put the state of the viewmodel to loading, fetch the posts
+  /// and update the state accordingly
+  Future<void> refresh() async {
+    state = const AsyncValue.loading();
+    try {
+      final posts = await build();
+      state = AsyncValue.data(posts);
+    } catch (e, stackTrace) {
+      state = AsyncValue.error(e, stackTrace);
+    }
+  }
 }
 
 final postOverviewProvider =
