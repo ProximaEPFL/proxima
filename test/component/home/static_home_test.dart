@@ -100,7 +100,7 @@ void main() {
     final emptyPostMessage = find.byKey(HomeFeed.emptyHomeFeedKey);
     expect(emptyPostMessage, findsOneWidget);
 
-    // Check that the refrsh button is displayed
+    // Check that the refresh button is displayed
     final refreshButton = find.byKey(HomeFeed.refreshButtonKey);
     expect(refreshButton, findsOneWidget);
   });
