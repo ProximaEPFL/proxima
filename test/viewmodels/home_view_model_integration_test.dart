@@ -125,7 +125,13 @@ void main() {
 
       expect(
         container.read(postOverviewProvider.future),
-        throwsA(isA<Exception>()),
+        throwsA(
+          isA<Exception>().having(
+            (error) => error.toString(),
+            "message",
+            "Exception: User document does not exist",
+          ),
+        ),
       );
     });
 
