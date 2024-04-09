@@ -1,18 +1,37 @@
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:collection/collection.dart";
+import "package:firebase_auth/firebase_auth.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:geolocator/geolocator.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:mockito/mockito.dart";
+import "package:proxima/models/database/post/post_data.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
+import "package:proxima/services/database/post_repository_service.dart";
+import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/new_post/new_post_page.dart";
 
+import "../services/database/mock_post_repository_service.dart";
 import "../services/firebase/setup_firebase_mocks.dart";
 import "../services/firestore/testing_firestore_provider.dart";
+import "../services/geolocation_service_test.dart";
+import "../services/mock_geo_location_service.dart";
+import "../services/test_data/firebase_auth_user_mock.dart";
+import "../services/test_data/firestore_user_mock.dart";
 
 void main() {
   setupFirebaseAuthMocks();
+  MockPostRepositoryService postRepository = MockPostRepositoryService();
+  MockGeoLocationService geoLocationService = MockGeoLocationService();
 
   final mockedPage = ProviderScope(
-    overrides: firebaseMocksOverrides,
+    overrides: firebaseMocksOverrides + [
+      postRepositoryProvider.overrideWithValue(postRepository),
+      geoLocationServiceProvider.overrideWithValue(geoLocationService),
+    ],
     child: const MaterialApp(
       home: NewPostPage(),
     ),
@@ -53,6 +72,11 @@ void main() {
     await widgetTester.pumpWidget(mockedPage);
     await widgetTester.pumpAndSettle();
 
+    GeoPoint testPoint = const GeoPoint(0, 0);
+    when(geoLocationService.getCurrentPosition()).thenAnswer(
+      (_) => Future.value(testPoint),
+    );
+
     final titleFinder = find.byKey(NewPostForm.titleFieldKey);
     await widgetTester.enterText(titleFinder, "I like turtles");
     await widgetTester.pumpAndSettle();
@@ -67,6 +91,39 @@ void main() {
 
     // check that we are no longer on the new post page
     expect(titleFinder, findsNothing);
+  });
+
+  testWidgets("Writes post to repository", (widgetTester) async {
+    await widgetTester.pumpWidget(mockedPage);
+    await widgetTester.pumpAndSettle();
+
+    GeoPoint testPoint = const GeoPoint(0, 0);
+    when(geoLocationService.getCurrentPosition()).thenAnswer(
+      (_) => Future.value(testPoint),
+    );
+
+    PostData postData = PostData(
+      ownerId: testingUserFirestoreId,
+      title: "I like turtles",
+      description: "Look at them go!",
+      publicationTime: Timestamp.now(),
+      voteScore: 0,
+    );
+
+    final titleFinder = find.byKey(NewPostForm.titleFieldKey);
+    await widgetTester.enterText(titleFinder, postData.title);
+    await widgetTester.pumpAndSettle();
+
+    final bodyFinder = find.byKey(NewPostForm.bodyFieldKey);
+    await widgetTester.enterText(bodyFinder, postData.description);
+    await widgetTester.pumpAndSettle();
+
+    final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
+    await widgetTester.tap(postButtonFinder);
+    await widgetTester.pumpAndSettle();
+
+
+    verify(postRepository.addPost(postData, testPoint)).called(1);
   });
 
   testWidgets("Refuses empty post", (widgetTester) async {
