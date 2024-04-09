@@ -19,7 +19,7 @@ class InfoColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       key: infoColumnKey,
-      height: 412,
+      height: 200,
       width: 380,
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(10)),

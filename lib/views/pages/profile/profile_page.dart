@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card.dart";
@@ -28,42 +29,65 @@ class ProfilePage extends HookConsumerWidget {
     }
 
     return switch (asyncUserData) {
-      AsyncData(:final value) => Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            title: UserAccount(theme: theme, userEmail: value.user.email),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.settings),
-                onPressed: () {},
+      AsyncData(:final value) => DefaultTabController(
+        length: 2,
+        child: Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
-            ],
-          ),
-          body: Container(
-            padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 8),
-                    InfoRow(
-                      theme: theme,
-                      itemList: itemList,
-                      title: "Your badges:",
-                    ),
-                    const SizedBox(height: 8),
-                    InfoColumn(
-                      theme: theme,
-                      itemList: itemList,
-                      title: "Your posts:",
-                    ),
-                  ],
+              title: UserAccount(theme: theme, userEmail: value.user.email),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+            body: Container(
+              padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 8),
+                      InfoRow(
+                        theme: theme,
+                        itemList: itemList,
+                        title: "Your badges:",
+                      ),
+                      
+                      const TabBar(tabs: [
+                        Tab(text: "Posts"),
+                        Tab(text: "Comments"),
+                      ],),
+                      const SizedBox(height: 8),
+                      // InfoColumn(
+                      //   theme: theme,
+                      //   itemList: itemList,
+                      //   title: "Your posts:",
+                      // ),
+                      Expanded(
+                        child: TabBarView(
+                          children:[
+                          InfoColumn(
+                            theme: theme,
+                            itemList: itemList,
+                            title: "Your posts:",
+                          ),
+                          InfoColumn(
+                            theme: theme,
+                            itemList: itemList,
+                            title: "Your comments:",
+                          ),
+                        ],),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
       AsyncError(:final error) => Text(
           "Error: $error",
         ),
