@@ -244,10 +244,6 @@ void main() {
           .toList()[0];
       final post = MockPostFirestore.createPostAt(postData, point);
 
-      when(userRepository.getUser(post.data.ownerId)).thenAnswer(
-        (_) async => owner,
-      );
-
       final expectedPosts = [
         PostOverview(
           title: post.data.title,
