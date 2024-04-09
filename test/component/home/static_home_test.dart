@@ -16,9 +16,7 @@ void main() {
       overrides: [
         postOverviewProvider.overrideWith(
           () => MockHomeViewModel(
-            build: () async {
-              return testPosts;
-            },
+            build: () async => testPosts,
           ),
         ),
       ],
