@@ -3,7 +3,7 @@ import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 
 /// A mock implementation of the [HomeViewModel] class.
-/// This class is particulary usefull for the ui tests where we want to expose
+/// This class is particularly useful for the UI tests where we want to expose
 /// particular data to the views.
 /// By default it exposes an empty list of [PostOverview] and does nothing on refresh.
 class MockHomeViewModel extends AsyncNotifier<List<PostOverview>>
