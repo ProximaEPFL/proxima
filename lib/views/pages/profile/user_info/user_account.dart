@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 /// This widget display the user info in the profile page
 class UserAccount extends StatelessWidget {
   static const userInfoKey = Key("user Info");
+  static const centauriPointsKey = Key("centauri points");
 
   const UserAccount({
     super.key,
@@ -35,8 +36,10 @@ class UserAccount extends StatelessWidget {
                 overflow: TextOverflow.fade,
               ),
               Text(
-                "User Profile",
+                //TODO: get the user points from the viewmodel
+                "User Profile · 1000 Points ",
                 style: theme.textTheme.titleSmall,
+                key: centauriPointsKey,
               ),
             ],
           ),

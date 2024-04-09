@@ -16,8 +16,8 @@ class InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       key: cardKey,
-      width: 92,
-      height: 92,
+      width: 54,
+      height: 80,
       decoration: BoxDecoration(
         border: Border.all(
           color: Colors.black,

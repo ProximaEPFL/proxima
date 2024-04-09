@@ -4,7 +4,6 @@ import "package:proxima/viewmodels/profile_view_model.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card.dart";
 import "package:proxima/views/pages/profile/posts_info/info_column.dart";
 import "package:proxima/views/pages/profile/posts_info/info_row.dart";
-import "package:proxima/views/pages/profile/user_info/centauri_points.dart";
 import "package:proxima/views/pages/profile/user_info/user_account.dart";
 
 /// This widget is used to display the profile page
@@ -20,7 +19,7 @@ class ProfilePage extends HookConsumerWidget {
 
     var itemList = <InfoCard>[];
 
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 10; i++) {
       itemList.add(
         InfoCard(
           theme: theme,
@@ -46,38 +45,25 @@ class ProfilePage extends HookConsumerWidget {
             ],
           ),
           body: Container(
-            padding: const EdgeInsets.only(left: 8, right: 8),
-            child: Center(
-              child: SingleChildScrollView(
+            padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
                 child: Column(
                   children: [
-                    const SizedBox(height: 15),
-                    CentauriPoints(theme: theme),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 8),
                     InfoRow(
                       theme: theme,
                       itemList: itemList,
                       title: "Your badges:",
                     ),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 8),
                     InfoColumn(
                       theme: theme,
                       itemList: itemList,
                       title: "Your posts:",
                     ),
-                    const SizedBox(height: 15),
-                    InfoColumn(
-                      theme: theme,
-                      itemList: itemList,
-                      title: "Your comments:",
-                    ),
-                    const SizedBox(height: 15),
                   ],
                 ),
               ),
             ),
-          ),
-        ),
       AsyncError(:final error) => Text(
           "Error: $error",
         ),

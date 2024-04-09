@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 
 /// This widget is used to display the centauri points in the profile page
 class CentauriPoints extends StatelessWidget {
-  static const centauriPointsKey = Key("centauri points");
   const CentauriPoints({
     super.key,
     required this.theme,
@@ -13,7 +12,6 @@ class CentauriPoints extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: centauriPointsKey,
       height: 40,
       width: 380,
       decoration: BoxDecoration(
