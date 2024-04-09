@@ -20,8 +20,6 @@ class ProfilePage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncUserData = ref.watch(profileProvider);
 
-    final theme = Theme.of(context);
-
     var itemList = <InfoCard>[];
 
     for (var i = 0; i < 10; i++) {
@@ -55,7 +53,6 @@ class ProfilePage extends HookConsumerWidget {
                 children: [
                   const SizedBox(height: 8),
                   InfoRow(
-                    theme: theme,
                     itemList: itemList,
                     title: "Your badges:",
                   ),

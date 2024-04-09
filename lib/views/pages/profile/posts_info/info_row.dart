@@ -6,12 +6,10 @@ class InfoRow extends StatelessWidget {
   static const infoRowKey = Key("info row");
   const InfoRow({
     super.key,
-    required this.theme,
     required this.itemList,
     required this.title,
   });
 
-  final ThemeData theme;
   final List<Widget> itemList;
   final String title;
 
@@ -31,7 +29,7 @@ class InfoRow extends StatelessWidget {
           children: [
             Text(
               title,
-              style: theme.textTheme.titleMedium,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 5),
             Expanded(
