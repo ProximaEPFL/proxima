@@ -276,8 +276,10 @@ void main() {
       when(geoLocationService.getCurrentPosition()).thenAnswer(
         (_) async => point,
       );
+
+      const expectedErrorMessage = "Error while fetching posts";
       when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
-          .thenThrow(Exception("Error"));
+          .thenThrow(Exception(expectedErrorMessage));
 
       // Refresh the posts
       await container.read(postOverviewProvider.notifier).refresh();
@@ -285,7 +287,14 @@ void main() {
       // Check the actual posts
       final asyncPosts = container.read(postOverviewProvider);
 
-      expect(asyncPosts, isA<AsyncError>());
+      expect(
+        asyncPosts,
+        isA<AsyncError>().having(
+          (error) => error.error.toString(),
+          "message",
+          "Exception: $expectedErrorMessage",
+        ),
+      );
     });
   });
 }
