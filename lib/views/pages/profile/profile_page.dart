@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card.dart";
@@ -11,6 +10,11 @@ import "package:proxima/views/pages/profile/user_info/user_account.dart";
 /// It contains the user info, centauri points, badges, posts and comments
 class ProfilePage extends HookConsumerWidget {
   const ProfilePage({super.key});
+  static const postTabKey = Key("post tab");
+  static const commentTabKey = Key("comment tab");
+  static const tabKey = Key("tab");
+  static const postColumnKey = Key("post column");
+  static const commentColumnKey = Key("comment column");
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,16 +26,14 @@ class ProfilePage extends HookConsumerWidget {
 
     for (var i = 0; i < 10; i++) {
       itemList.add(
-        InfoCard(
-          theme: theme,
-        ),
+        const InfoCard(),
       );
     }
 
     return switch (asyncUserData) {
       AsyncData(:final value) => DefaultTabController(
-        length: 2,
-        child: Scaffold(
+          length: 2,
+          child: Scaffold(
             appBar: AppBar(
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
@@ -39,7 +41,7 @@ class ProfilePage extends HookConsumerWidget {
                   Navigator.pop(context);
                 },
               ),
-              title: UserAccount(theme: theme, userEmail: value.user.email),
+              title: UserAccount(userEmail: value.user.email),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.settings),
@@ -49,45 +51,47 @@ class ProfilePage extends HookConsumerWidget {
             ),
             body: Container(
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 8),
-                      InfoRow(
-                        theme: theme,
-                        itemList: itemList,
-                        title: "Your badges:",
+              child: Column(
+                children: [
+                  const SizedBox(height: 8),
+                  InfoRow(
+                    theme: theme,
+                    itemList: itemList,
+                    title: "Your badges:",
+                  ),
+                  const TabBar(
+                    key: tabKey,
+                    tabs: [
+                      Tab(
+                        text: "Posts",
+                        key: postTabKey,
                       ),
-                      
-                      const TabBar(tabs: [
-                        Tab(text: "Posts"),
-                        Tab(text: "Comments"),
-                      ],),
-                      const SizedBox(height: 8),
-                      // InfoColumn(
-                      //   theme: theme,
-                      //   itemList: itemList,
-                      //   title: "Your posts:",
-                      // ),
-                      Expanded(
-                        child: TabBarView(
-                          children:[
-                          InfoColumn(
-                            theme: theme,
-                            itemList: itemList,
-                            title: "Your posts:",
-                          ),
-                          InfoColumn(
-                            theme: theme,
-                            itemList: itemList,
-                            title: "Your comments:",
-                          ),
-                        ],),
+                      Tab(
+                        text: "Comments",
+                        key: commentTabKey,
                       ),
                     ],
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        InfoColumn(
+                          itemList: itemList,
+                          colKey: postColumnKey,
+                        ),
+                        InfoColumn(
+                          itemList: itemList,
+                          colKey: commentColumnKey,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-      ),
+            ),
+          ),
+        ),
       AsyncError(:final error) => Text(
           "Error: $error",
         ),

@@ -7,11 +7,9 @@ class UserAccount extends StatelessWidget {
 
   const UserAccount({
     super.key,
-    required this.theme,
     required this.userEmail,
   });
 
-  final ThemeData theme;
   final String? userEmail;
 
   @override
@@ -32,13 +30,13 @@ class UserAccount extends StatelessWidget {
               //TODO: get the profile info from the viewmodel
               Text(
                 userEmail ?? "averylongemailjusttocheckthatitfades",
-                style: theme.textTheme.titleSmall,
+                style: Theme.of(context).textTheme.titleSmall,
                 overflow: TextOverflow.fade,
               ),
               Text(
                 //TODO: get the user points from the viewmodel
                 "User Profile · 1000 Points ",
-                style: theme.textTheme.titleSmall,
+                style: Theme.of(context).textTheme.titleSmall,
                 key: centauriPointsKey,
               ),
             ],

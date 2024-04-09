@@ -7,10 +7,7 @@ class InfoCard extends StatelessWidget {
 
   const InfoCard({
     super.key,
-    required this.theme,
   });
-
-  final ThemeData theme;
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +16,7 @@ class InfoCard extends StatelessWidget {
       width: 54,
       height: 80,
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black,
-          width: 2,
-        ),
+        color: Theme.of(context).colorScheme.secondaryContainer,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
     );
