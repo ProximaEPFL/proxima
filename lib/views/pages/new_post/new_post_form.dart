@@ -69,8 +69,8 @@ class NewPostForm extends HookConsumerWidget {
       child: const Text(_postButtonText),
       onPressed: () {
         if (_formKey.currentState?.validate() ?? false) {
-          addPost(titleController.text, bodyController.text, ref);
-          Navigator.pop(context);
+          addPost(titleController.text, bodyController.text, ref).whenComplete(() => Navigator.pop(context));
+          //Navigator.pop(context);
         }
       },
     );
