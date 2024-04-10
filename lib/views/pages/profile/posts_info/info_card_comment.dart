@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 
 //info card for the badges
 class InfoCardComment extends StatelessWidget {
@@ -29,7 +28,9 @@ class InfoCardComment extends StatelessWidget {
             padding: const EdgeInsets.only(left: 8.0),
             child: SizedBox(
               width: 250,
-              child: Text(
+              child:
+                  //TODO: replace with real data
+                  Text(
                 "Here is a super comment on a super post that talks about something that is super cool and is located in a super spot",
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,

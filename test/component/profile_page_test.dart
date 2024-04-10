@@ -64,8 +64,14 @@ void main() {
     await tester.pumpAndSettle();
 
     // Check that badges are displayed
-    final infoRow = find.byKey(InfoCardBadge.cardKey);
-    expect(infoRow, findsWidgets);
+    final badgeCard = find.byKey(InfoCardBadge.cardKey);
+    expect(badgeCard, findsWidgets);
+
+    final postCard = find.byKey(InfoCardBadge.cardKey);
+    expect(postCard, findsWidgets);
+
+    final commentCard = find.byKey(InfoCardBadge.cardKey);
+    expect(commentCard, findsWidgets);
 
     // Check that the info column is displayed
     final infoColumn = find.byKey(ProfilePage.postColumnKey);

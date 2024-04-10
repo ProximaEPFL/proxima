@@ -28,6 +28,7 @@ class InfoCardPost extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                //TODO: replace with real data
                 Text(
                   "Post Title",
                   style: Theme.of(context).textTheme.titleSmall,
