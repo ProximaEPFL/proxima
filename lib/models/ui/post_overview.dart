@@ -4,16 +4,16 @@ import "package:flutter/foundation.dart";
 class PostOverview {
   final String title;
   final String description;
-  final int votes;
+  final int voteScore;
   final int commentNumber;
-  final String posterUsername;
+  final String ownerDisplayName;
 
   const PostOverview({
     required this.title,
     required this.description,
-    required this.votes,
+    required this.voteScore,
     required this.commentNumber,
-    required this.posterUsername,
+    required this.ownerDisplayName,
   });
 
   @override
@@ -23,9 +23,9 @@ class PostOverview {
     return other is PostOverview &&
         other.title == title &&
         other.description == description &&
-        other.votes == votes &&
+        other.voteScore == voteScore &&
         other.commentNumber == commentNumber &&
-        other.posterUsername == posterUsername;
+        other.ownerDisplayName == ownerDisplayName;
   }
 
   @override
@@ -33,9 +33,9 @@ class PostOverview {
     return Object.hash(
       title,
       description,
-      votes,
+      voteScore,
       commentNumber,
-      posterUsername,
+      ownerDisplayName,
     );
   }
 }

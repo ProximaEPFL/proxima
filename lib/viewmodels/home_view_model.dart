@@ -40,8 +40,8 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
       return PostOverview(
         title: post.data.title,
         description: post.data.description,
-        votes: post.data.voteScore,
-        posterUsername: owner.data.username,
+        voteScore: post.data.voteScore,
+        ownerDisplayName: owner.data.displayName,
         commentNumber:
             0, // TODO: Update appropriately when comments are implemented
       );

@@ -86,9 +86,9 @@ void main() {
         PostOverview(
           title: post.data.title,
           description: post.data.description,
-          votes: post.data.voteScore,
+          voteScore: post.data.voteScore,
           commentNumber: 0,
-          posterUsername: owner.data.username,
+          ownerDisplayName: owner.data.displayName,
         ),
       ];
 
@@ -133,9 +133,9 @@ void main() {
           return PostOverview(
             title: data.title,
             description: data.description,
-            votes: data.voteScore,
+            voteScore: data.voteScore,
             commentNumber: 0,
-            posterUsername: owner.data.username,
+            ownerDisplayName: owner.data.displayName,
           );
         }).toList();
 
@@ -186,9 +186,9 @@ void main() {
             return PostOverview(
               title: data.title,
               description: data.description,
-              votes: data.voteScore,
+              voteScore: data.voteScore,
               commentNumber: 0,
-              posterUsername: owners[index].data.username,
+              ownerDisplayName: owners[index].data.displayName,
             );
           },
         );
@@ -248,9 +248,9 @@ void main() {
         PostOverview(
           title: post.data.title,
           description: post.data.description,
-          votes: post.data.voteScore,
+          voteScore: post.data.voteScore,
           commentNumber: 0,
-          posterUsername: owner.data.username,
+          ownerDisplayName: owner.data.displayName,
         ),
       ];
 

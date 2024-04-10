@@ -7,17 +7,17 @@ void main() {
       const postOverview = PostOverview(
         title: "title",
         description: "description",
-        votes: 12,
+        voteScore: 12,
         commentNumber: 3,
-        posterUsername: "username",
+        ownerDisplayName: "username",
       );
 
       final expectedHash = Object.hash(
         postOverview.title,
         postOverview.description,
-        postOverview.votes,
+        postOverview.voteScore,
         postOverview.commentNumber,
-        postOverview.posterUsername,
+        postOverview.ownerDisplayName,
       );
 
       final actualHash = postOverview.hashCode;
@@ -29,17 +29,17 @@ void main() {
       const postOverview = PostOverview(
         title: "title",
         description: "description",
-        votes: 12,
+        voteScore: 12,
         commentNumber: 3,
-        posterUsername: "username",
+        ownerDisplayName: "username",
       );
 
       const postOverviewCopy = PostOverview(
         title: "title",
         description: "description",
-        votes: 12,
+        voteScore: 12,
         commentNumber: 3,
-        posterUsername: "username",
+        ownerDisplayName: "username",
       );
 
       expect(postOverview, postOverviewCopy);

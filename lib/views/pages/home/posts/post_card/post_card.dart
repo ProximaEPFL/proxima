@@ -29,7 +29,7 @@ class PostCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          VotesWidget(key: postCardVotesKey, votes: post.votes),
+          VotesWidget(key: postCardVotesKey, votes: post.voteScore),
           InkWell(
             customBorder: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -74,7 +74,7 @@ class PostCard extends StatelessWidget {
               padding: const EdgeInsets.only(left: 16, right: 0.8, top: 8),
               child: UserBarWidget(
                 key: postCardUserKey,
-                posterUsername: post.posterUsername,
+                posterUsername: post.ownerDisplayName,
               ),
             ),
             postBody,

@@ -103,8 +103,8 @@ void main() {
         PostOverview(
           title: postData.title,
           description: postData.description,
-          votes: postData.voteScore,
-          posterUsername: owner.data.username,
+          voteScore: postData.voteScore,
+          ownerDisplayName: owner.data.displayName,
           commentNumber: 0,
         ),
       ];
@@ -192,8 +192,8 @@ void main() {
         return PostOverview(
           title: data.title,
           description: data.description,
-          votes: data.voteScore,
-          posterUsername: owner.data.username,
+          voteScore: data.voteScore,
+          ownerDisplayName: owner.data.displayName,
           commentNumber: 0,
         );
       }).toList();
