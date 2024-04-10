@@ -51,6 +51,18 @@ void main() {
     final createAccountPage = find.byType(CreateAccountPage);
     expect(createAccountPage, findsOneWidget);
 
+    // Enter a valid username and pseudo to make validation work
+    final pseudoField = find.byKey(CreateAccountPage.pseudoFieldKey);
+    expect(pseudoField, findsOneWidget);
+    await tester.enterText(pseudoField, "ANicePseudo");
+    await tester.pumpAndSettle();
+
+    final uniqueUsernameField =
+        find.byKey(CreateAccountPage.uniqueUsernameFieldKey);
+    expect(uniqueUsernameField, findsOneWidget);
+    await tester.enterText(uniqueUsernameField, "ANiceUsername");
+    await tester.pumpAndSettle();
+
     // And that pushing the confirm button redirects to the home page
     final confirmButton = find.byKey(CreateAccountPage.confirmButtonKey);
     await tester.tap(confirmButton);
