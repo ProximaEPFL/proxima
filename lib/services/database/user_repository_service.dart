@@ -34,6 +34,15 @@ class UserRepositoryService {
 
     return docSnap.exists;
   }
+
+  /// This method will check if the unique username [username] is already taken
+  /// by some user
+  Future<bool> isUsernameTaken(String username) async {
+    final query = await _collectionRef
+        .where(UserData.usernameField, isEqualTo: username)
+        .get();
+    return query.docs.isNotEmpty;
+  }
 }
 
 final userRepositoryProvider = Provider<UserRepositoryService>(
