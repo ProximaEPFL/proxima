@@ -67,10 +67,10 @@ void main() {
     final badgeCard = find.byKey(InfoCardBadge.cardKey);
     expect(badgeCard, findsWidgets);
 
-    final postCard = find.byKey(InfoCardBadge.cardKey);
+    final postCard = find.byKey(InfoCardPost.cardKey);
     expect(postCard, findsWidgets);
 
-    final commentCard = find.byKey(InfoCardBadge.cardKey);
+    final commentCard = find.byKey(InfoCardComment.cardKey);
     expect(commentCard, findsWidgets);
 
     // Check that the info column is displayed

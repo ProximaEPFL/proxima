@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 
 /// This widget display the user info in the profile page
 class UserAccount extends StatelessWidget {
-  static const userInfoKey = Key("user Info");
-  static const centauriPointsKey = Key("centauri points");
+  static const userInfoKey = Key("userInfo");
+  static const centauriPointsKey = Key("centauriPoints");
 
   const UserAccount({
     super.key,

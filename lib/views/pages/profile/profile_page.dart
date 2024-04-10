@@ -12,11 +12,11 @@ import "package:proxima/views/pages/profile/user_info/user_account.dart";
 /// It contains the user info, centauri points, badges, posts and comments
 class ProfilePage extends HookConsumerWidget {
   const ProfilePage({super.key});
-  static const postTabKey = Key("post tab");
-  static const commentTabKey = Key("comment tab");
+  static const postTabKey = Key("postTab");
+  static const commentTabKey = Key("commentTab");
   static const tabKey = Key("tab");
-  static const postColumnKey = Key("post column");
-  static const commentColumnKey = Key("comment column");
+  static const postColumnKey = Key("postColumn");
+  static const commentColumnKey = Key("commentColumn");
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
