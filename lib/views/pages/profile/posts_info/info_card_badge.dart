@@ -14,18 +14,17 @@ class InfoCardBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: cardKey,
-      width: 54,
-      height: 80,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondaryContainer,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        boxShadow:[shadow],
-      ),
-      child: const Icon(
-        Icons.star,
-        size: 32,
-      )
-    );
+        key: cardKey,
+        width: 54,
+        height: 80,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          boxShadow: [shadow],
+        ),
+        child: const Icon(
+          Icons.star,
+          size: 32,
+        ));
   }
 }

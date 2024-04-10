@@ -27,11 +27,11 @@ class ProfilePage extends HookConsumerWidget {
     var itemListComments = <InfoCardComment>[];
 
     BoxShadow shadow = BoxShadow(
-            color: Theme.of(context).colorScheme.shadow.withOpacity(0.4),
-            offset: const Offset(0, 1),
-            blurRadius: 0.1,
-            spreadRadius: 0.01,
-          );
+      color: Theme.of(context).colorScheme.shadow.withOpacity(0.4),
+      offset: const Offset(0, 1),
+      blurRadius: 0.1,
+      spreadRadius: 0.01,
+    );
 
     //this is a MOCK list of cards
     for (var i = 0; i < 10; i++) {
