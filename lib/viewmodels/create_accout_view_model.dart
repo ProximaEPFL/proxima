@@ -96,8 +96,11 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountErrors?> {
     if (newState.valueOrNull?.valid == true) {
       final uid = ref.read(uidProvider);
       if (uid == null) {
+        // The user is no longer logged in, so they will anyway be sent to the login page
+        state = const AsyncValue.data(null);
         return;
       }
+
       final userData = UserData(
         username: uniqueUsername,
         displayName: pseudo,
