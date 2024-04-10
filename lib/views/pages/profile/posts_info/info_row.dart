@@ -35,7 +35,7 @@ class InfoRow extends StatelessWidget {
           const SizedBox(height: 5),
           Expanded(
             child: ListView.separated(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.only(top: 8, bottom: 8),
               scrollDirection: Axis.horizontal,
               itemCount: itemList.length,
               itemBuilder: (BuildContext context, int index) {
