@@ -39,6 +39,7 @@ class InfoCardPost extends StatelessWidget {
               Icons.delete,
               size: 32,
             ),
+            // TODO : add the logic for deleting a post
             onPressed: null,
           ),
         ),
