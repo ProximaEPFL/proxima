@@ -1,7 +1,12 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/login_user.dart";
+import "package:proxima/services/database/post_repository_service.dart";
+import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/new_post_view_model.dart";
+
+import "../../../services/geolocation_service.dart";
 
 class NewPostForm extends HookConsumerWidget {
   NewPostForm({super.key});
@@ -69,8 +74,12 @@ class NewPostForm extends HookConsumerWidget {
       child: const Text(_postButtonText),
       onPressed: () {
         if (_formKey.currentState?.validate() ?? false) {
-          addPost(titleController.text, bodyController.text, ref).whenComplete(() => Navigator.pop(context));
-          //Navigator.pop(context);
+          final geoLocationService = ref.read(geoLocationServiceProvider);
+          LoginUser? loggedInUser = ref.read(userProvider).valueOrNull;
+          final postRepositoryService = ref.read(postRepositoryProvider);
+          addPost(titleController.text, bodyController.text, geoLocationService,
+              loggedInUser, postRepositoryService);
+          Navigator.pop(context);
         }
       },
     );

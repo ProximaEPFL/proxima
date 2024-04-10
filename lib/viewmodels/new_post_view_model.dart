@@ -7,14 +7,17 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
-Future<void> addPost(String title, String description, WidgetRef ref) async {
+Future<void> addPost(
+    String title,
+    String description,
+    GeoLocationService geoLocationService,
+    LoginUser? user,
+    PostRepositoryService postRepositoryService) async {
   if (title.isEmpty || description.isEmpty) {
     throw const FormatException("Title and description must not be empty");
   }
 
-  final GeoPoint currPosition =
-      await ref.read(geoLocationServiceProvider).getCurrentPosition();
-  final LoginUser? user = ref.read(userProvider).value;
+  final GeoPoint currPosition = await geoLocationService.getCurrentPosition();
 
   if (user == null) {
     throw Exception("User must be logged in before creating a post");
@@ -28,5 +31,5 @@ Future<void> addPost(String title, String description, WidgetRef ref) async {
     voteScore: 0,
   );
 
-  await ref.read(postRepositoryProvider).addPost(post, currPosition);
+  await postRepositoryService.addPost(post, currPosition);
 }
