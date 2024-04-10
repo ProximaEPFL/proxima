@@ -2,11 +2,13 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
-import "package:proxima/views/bottom_navigation_bar/navigation_bottom_bar.dart";
+import "package:proxima/views/content/feed/post_card/post_card.dart";
+import "package:proxima/views/content/feed/post_feed.dart";
+import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
+import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/pages/home/home_page.dart";
-import "package:proxima/views/pages/home/posts/home_feed.dart";
-import "package:proxima/views/pages/home/posts/post_card/post_card.dart";
-import "package:proxima/views/pages/home/top_bar/home_top_bar.dart";
+import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
+
 import "../utils/mock_data/home/mock_posts.dart";
 
 void main() {
@@ -27,15 +29,15 @@ void main() {
     expect(homePage, findsOneWidget);
 
     // Check that the top bar is displayed
-    final topBar = find.byKey(HomeTopBar.homeTopBarKey);
+    final topBar = find.byKey(AppTopBar.homeTopBarKey);
     expect(topBar, findsOneWidget);
 
     //Check sort option list is displayed
-    final feedSortOptionList = find.byKey(HomeFeed.feedSortOptionKey);
+    final feedSortOptionList = find.byKey(PostFeed.feedSortOptionKey);
     expect(feedSortOptionList, findsOneWidget);
 
     //Check profile picture is displayed
-    final profilePicture = find.byKey(HomeTopBar.profilePictureKey);
+    final profilePicture = find.byKey(AppTopBar.profilePictureKey);
     expect(profilePicture, findsOneWidget);
 
     // Check that the bottom bar is displayed
@@ -84,7 +86,40 @@ void main() {
     expect(homePage, findsOneWidget);
 
     //Check empty post message is displayed
-    final emptyPostMessage = find.byKey(HomeFeed.emptyHomeFeedKey);
+    final emptyPostMessage = find.byKey(PostFeed.emptyfeedKey);
     expect(emptyPostMessage, findsOneWidget);
+
+    //Check the new post button text is displayed
+    final newPostButtonText = find.byKey(PostFeed.newPostButtonTextKey);
+    expect(newPostButtonText, findsOneWidget);
+  });
+
+  testWidgets(
+      "check correct number of navigation bottom bar elements are displayed",
+      (tester) async {
+    final homePageWidget = ProviderScope(
+      overrides: [postList.overrideWithValue(List.empty())],
+      child: const MaterialApp(
+        title: "Proxima",
+        home: HomePage(),
+      ),
+    );
+
+    await tester.pumpWidget(homePageWidget);
+    await tester.pumpAndSettle();
+
+    // Check that the home page is displayed
+    final homePage = find.byType(HomePage);
+    expect(homePage, findsOneWidget);
+
+    //Click on the middle element of the bottombar
+    final bottomBar = find.byKey(NavigationBottomBar.navigationBottomBarKey);
+    expect(
+      find.descendant(
+        of: bottomBar,
+        matching: find.byType(NavigationDestination),
+      ),
+      findsExactly(NavigationbarRoutes.values.length),
+    );
   });
 }

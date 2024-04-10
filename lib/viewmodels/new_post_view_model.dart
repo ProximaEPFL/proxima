@@ -6,6 +6,7 @@ import "package:proxima/models/login_user.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import 'dart:developer';
 
 Future<void> addPost(String title, String description, WidgetRef ref) async {
   if (title.isEmpty || description.isEmpty) {

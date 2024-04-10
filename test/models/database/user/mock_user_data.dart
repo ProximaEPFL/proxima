@@ -6,7 +6,7 @@ import "package:proxima/models/database/user/user_id_firestore.dart";
 
 /// Helper class to generate mock user data to be used in tests
 class MockUserFirestore {
-  List<UserData> generateUserData(int count) {
+  static List<UserData> generateUserData(int count) {
     return List.generate(count, (i) {
       return UserData(
         displayName: "display_name_$i",
@@ -16,7 +16,7 @@ class MockUserFirestore {
     });
   }
 
-  List<UserFirestore> generateUserFirestore(int count) {
+  static List<UserFirestore> generateUserFirestore(int count) {
     return generateUserData(count).mapIndexed((i, data) {
       return UserFirestore(
         uid: UserIdFirestore(value: "user_id_$i"),

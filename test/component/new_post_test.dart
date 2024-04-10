@@ -1,25 +1,20 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:collection/collection.dart";
-import "package:firebase_auth/firebase_auth.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:geolocator/geolocator.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_data.dart";
-import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/new_post/new_post_page.dart";
 
 import "../services/database/mock_post_repository_service.dart";
 import "../services/firebase/setup_firebase_mocks.dart";
 import "../services/firestore/testing_firestore_provider.dart";
-import "../services/geolocation_service_test.dart";
 import "../services/mock_geo_location_service.dart";
-import "../services/test_data/firebase_auth_user_mock.dart";
 import "../services/test_data/firestore_user_mock.dart";
 
 void main() {
@@ -59,7 +54,7 @@ void main() {
     await widgetTester.pumpWidget(mockedPage);
     await widgetTester.pumpAndSettle();
 
-    final backButton = find.byKey(NewPostPage.backButtonKey);
+    final backButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
     await widgetTester.tap(backButton);
     await widgetTester.pumpAndSettle();
 
@@ -72,11 +67,6 @@ void main() {
     await widgetTester.pumpWidget(mockedPage);
     await widgetTester.pumpAndSettle();
 
-    GeoPoint testPoint = const GeoPoint(0, 0);
-    when(geoLocationService.getCurrentPosition()).thenAnswer(
-      (_) => Future.value(testPoint),
-    );
-
     final titleFinder = find.byKey(NewPostForm.titleFieldKey);
     await widgetTester.enterText(titleFinder, "I like turtles");
     await widgetTester.pumpAndSettle();
@@ -84,6 +74,11 @@ void main() {
     final bodyFinder = find.byKey(NewPostForm.bodyFieldKey);
     await widgetTester.enterText(bodyFinder, "Look at them go!");
     await widgetTester.pumpAndSettle();
+
+    GeoPoint testPoint = const GeoPoint(0, 0);
+    when(geoLocationService.getCurrentPosition()).thenAnswer(
+          (_) => Future.value(testPoint),
+    );
 
     final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
     await widgetTester.tap(postButtonFinder);

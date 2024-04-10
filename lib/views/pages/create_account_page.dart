@@ -2,10 +2,10 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/utils/ui/scrollable_if_too_high.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 class CreateAccountPage extends HookConsumerWidget {
-  static const logoutButtonKey = Key("logout");
   static const confirmButtonKey = Key("confirm");
 
   static const uniqueUsernameFieldKey = Key("uniqueUsername");
@@ -17,20 +17,20 @@ class CreateAccountPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     navigateToLoginPageOnLogout(context, ref);
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          key: logoutButtonKey,
-          onPressed: () {
-            ref.read(loginServiceProvider).signOut();
-          },
-          icon: const Icon(Icons.arrow_back),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) {
+        ref.read(loginServiceProvider).signOut();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: const LeadingBackButton(),
+          title: const Text("Create your account"),
         ),
-        title: const Text("Create your account"),
-      ),
-      body: const Padding(
-        padding: EdgeInsets.only(left: 50, right: 50),
-        child: Center(child: _CreateAccountPageContent()),
+        body: const Padding(
+          padding: EdgeInsets.only(left: 50, right: 50),
+          child: Center(child: _CreateAccountPageContent()),
+        ),
       ),
     );
   }

@@ -8,7 +8,7 @@ import "package:proxima/models/database/user/user_id_firestore.dart";
 
 /// Helper class to create mock post data to be used in tests
 class MockPostFirestore {
-  PostFirestore createPostAt(
+  static PostFirestore createPostAt(
     PostData data,
     GeoPoint location, {
     id = "post_id",
@@ -25,7 +25,7 @@ class MockPostFirestore {
     );
   }
 
-  List<PostData> generatePostData(int count) {
+  static List<PostData> generatePostData(int count) {
     return List.generate(count, (i) {
       return PostData(
         description: "description_$i",
