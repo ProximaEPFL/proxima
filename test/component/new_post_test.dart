@@ -1,15 +1,12 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_data.dart";
-import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/login_user.dart";
 import "package:proxima/services/database/post_repository_service.dart";
-import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
@@ -28,19 +25,14 @@ void main() {
   MockPostRepositoryService postRepository = MockPostRepositoryService();
   MockGeoLocationService geoLocationService = MockGeoLocationService();
 
-  Stream<LoginUser?> fakeUserProvider() async* {
-    yield LoginUser(
-      id: testingLoginUser.uid,
-      email: testingLoginUser.email,
-    );
-  }
-
+  final testUser =
+      LoginUser(id: testingLoginUser.uid, email: testingLoginUser.email);
   final mockedPage = ProviderScope(
     overrides: firebaseMocksOverrides +
         [
           postRepositoryProvider.overrideWithValue(postRepository),
           geoLocationServiceProvider.overrideWithValue(geoLocationService),
-          userProvider.overrideWith((ref) => fakeUserProvider()),
+          userProvider.overrideWith((ref) => Stream.value(testUser)),
         ],
     child: const MaterialApp(
       home: NewPostPage(),

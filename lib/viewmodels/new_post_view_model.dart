@@ -1,18 +1,17 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/login_user.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
-import "package:proxima/viewmodels/login_view_model.dart";
 
 Future<void> addPost(
-    String title,
-    String description,
-    GeoLocationService geoLocationService,
-    LoginUser? user,
-    PostRepositoryService postRepositoryService) async {
+  String title,
+  String description,
+  GeoLocationService geoLocationService,
+  LoginUser? user,
+  PostRepositoryService postRepositoryService,
+) async {
   if (title.isEmpty || description.isEmpty) {
     throw const FormatException("Title and description must not be empty");
   }
