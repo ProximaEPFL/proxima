@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 
-//info card for the badges
+//info card for the comments
 class InfoCardComment extends StatelessWidget {
   static const cardKey = Key("card");
 
