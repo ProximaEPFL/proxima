@@ -3,6 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
+import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/posts/post_card/post_card.dart";
 import "package:proxima/views/sort_option_widgets/feed_sort_option/feed_sort_option_chips.dart";
 
@@ -18,6 +19,22 @@ class HomeFeed extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncPosts = ref.watch(postOverviewProvider);
 
+    final newPostButton = InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, Routes.newPost.name);
+      },
+      child: const Text(
+        "create one!",
+        style: TextStyle(color: Colors.blue),
+      ),
+    );
+    final refreshButton = ElevatedButton(
+      key: refreshButtonKey,
+      onPressed: () async {
+        ref.read(postOverviewProvider.notifier).refresh();
+      },
+      child: const Text("Refresh"),
+    );
     final emptyHelper = Center(
       key: emptyHomeFeedKey,
       child: Column(
@@ -26,28 +43,12 @@ class HomeFeed extends HookConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text("No post to display, "),
-              InkWell(
-                onTap: () => {
-                  //TODO: Add navigation to create post page
-                },
-                child: const Text(
-                  "create one",
-                  style: TextStyle(
-                    color: Colors.blue,
-                  ),
-                ),
-              ),
+              const Text("No post in this area, "),
+              newPostButton,
             ],
           ),
           const SizedBox(height: 10),
-          ElevatedButton(
-            key: refreshButtonKey,
-            onPressed: () async {
-              ref.read(postOverviewProvider.notifier).refresh();
-            },
-            child: const Text("Refresh"),
-          ),
+          refreshButton,
         ],
       ),
     );
@@ -61,12 +62,15 @@ class HomeFeed extends HookConsumerWidget {
         CircularValue(
           value: asyncPosts,
           builder: (context, posts) {
-            return PostList(
-              emptyHelper: emptyHelper,
+            final postsList = PostList(
               posts: posts,
               onRefresh: () async {
                 return ref.read(postOverviewProvider.notifier).refresh();
               },
+            );
+
+            return Expanded(
+              child: posts.isEmpty ? emptyHelper : postsList,
             );
           },
         ),
@@ -76,28 +80,25 @@ class HomeFeed extends HookConsumerWidget {
 }
 
 class PostList extends StatelessWidget {
+  static const homeFeedKey = Key("homeFeed");
+
   const PostList({
     super.key,
-    required this.emptyHelper,
     required this.posts,
     required this.onRefresh,
   });
-  static const homeFeedKey = Key("homeFeed");
 
-  final Center emptyHelper;
   final List<PostOverview> posts;
   final Future<void> Function() onRefresh;
 
   @override
   Widget build(BuildContext context) {
-    final postsCards = RefreshIndicator(
+    return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView(
         key: homeFeedKey,
         children: posts.map((post) => PostCard(post: post)).toList(),
       ),
     );
-
-    return Expanded(child: posts.isEmpty ? emptyHelper : postsCards);
   }
 }
