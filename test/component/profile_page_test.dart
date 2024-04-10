@@ -6,7 +6,7 @@ import "package:proxima/services/login_service.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/top_bar/home_top_bar.dart";
-import "package:proxima/views/pages/profile/posts_info/info_card.dart";
+import "package:proxima/views/pages/profile/posts_info/info_card_badge.dart";
 import "package:proxima/views/pages/profile/posts_info/info_row.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 import "package:proxima/views/pages/profile/user_info/user_account.dart";
@@ -64,7 +64,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Check that badges are displayed
-    final infoRow = find.byKey(InfoCard.cardKey);
+    final infoRow = find.byKey(InfoCardBadge.cardKey);
     expect(infoRow, findsWidgets);
 
     // Check that the info column is displayed

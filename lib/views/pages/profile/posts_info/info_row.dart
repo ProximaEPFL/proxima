@@ -22,14 +22,15 @@ class InfoRow extends StatelessWidget {
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 5, top: 1),
-        child: Column(
+      child:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium,
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
             ),
             const SizedBox(height: 5),
             Expanded(
@@ -46,7 +47,6 @@ class InfoRow extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }

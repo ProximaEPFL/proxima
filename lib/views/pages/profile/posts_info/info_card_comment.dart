@@ -1,13 +1,15 @@
 import "package:flutter/material.dart";
 
-/// This widget defines the style of the cards in the profile page,
-/// such as badges, posts and comments
-class InfoCard extends StatelessWidget {
+//info card for the badges
+class InfoCardComment extends StatelessWidget {
   static const cardKey = Key("card");
 
-  const InfoCard({
+  const InfoCardComment({
     super.key,
+    required this.shadow,
   });
+
+  final BoxShadow shadow;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,7 @@ class InfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondaryContainer,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
+        boxShadow:[shadow],
       ),
     );
   }

@@ -1,7 +1,9 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
-import "package:proxima/views/pages/profile/posts_info/info_card.dart";
+import "package:proxima/views/pages/profile/posts_info/info_card_badge.dart";
+import "package:proxima/views/pages/profile/posts_info/info_card_comment.dart";
+import "package:proxima/views/pages/profile/posts_info/info_card_post.dart";
 import "package:proxima/views/pages/profile/posts_info/info_column.dart";
 import "package:proxima/views/pages/profile/posts_info/info_row.dart";
 import "package:proxima/views/pages/profile/user_info/user_account.dart";
@@ -20,11 +22,29 @@ class ProfilePage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncUserData = ref.watch(profileProvider);
 
-    var itemList = <InfoCard>[];
+    var itemListBadge = <InfoCardBadge>[];
+    var itemListPosts = <InfoCardPost>[];
+    var itemListComments = <InfoCardComment>[];
 
+    BoxShadow shadow = BoxShadow(
+            color: Theme.of(context).colorScheme.shadow.withOpacity(0.4),
+            offset: const Offset(0, 1),
+            blurRadius: 0.1,
+            spreadRadius: 0.01,
+          );
+
+    //this is a MOCK list of cards
     for (var i = 0; i < 10; i++) {
-      itemList.add(
-        const InfoCard(),
+      itemListBadge.add(
+        InfoCardBadge(shadow: shadow),
+      );
+
+      itemListPosts.add(
+        InfoCardPost(shadow: shadow),
+      );
+
+      itemListComments.add(
+        InfoCardComment(shadow: shadow),
       );
     }
 
@@ -51,9 +71,8 @@ class ProfilePage extends HookConsumerWidget {
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
               child: Column(
                 children: [
-                  const SizedBox(height: 8),
                   InfoRow(
-                    itemList: itemList,
+                    itemList: itemListBadge,
                     title: "Your badges:",
                   ),
                   const TabBar(
@@ -69,16 +88,15 @@ class ProfilePage extends HookConsumerWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
                   Expanded(
                     child: TabBarView(
                       children: [
                         InfoColumn(
-                          itemList: itemList,
+                          itemList: itemListPosts,
                           colKey: postColumnKey,
                         ),
                         InfoColumn(
-                          itemList: itemList,
+                          itemList: itemListComments,
                           colKey: commentColumnKey,
                         ),
                       ],

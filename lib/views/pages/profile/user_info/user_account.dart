@@ -35,7 +35,7 @@ class UserAccount extends StatelessWidget {
               ),
               Text(
                 //TODO: get the user points from the viewmodel
-                "User Profile · 1000 Points ",
+                "Pseudo · 1000 Centauri ",
                 style: Theme.of(context).textTheme.titleSmall,
                 key: centauriPointsKey,
               ),
