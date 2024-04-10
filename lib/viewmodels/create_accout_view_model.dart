@@ -10,23 +10,57 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountErrors?> {
     return null;
   }
 
+  /// Validate a generic [value], either a pseudo or a username,
+  /// by returning an error message if it is invalid".
+  /// Returns null if it is valid.
+  /// A value is invalid if:
+  /// - It is empty
+  /// - It contains spaces
+  /// - It is less than 3 characters long
+  /// - It is more than 20 characters long
+  /// - It contains special characters
+  String? _validateString(String value) {
+    if (value.isEmpty) {
+      return "Cannot be blank.";
+    }
+
+    if (value.contains(" ")) {
+      return "Cannot contain spaces.";
+    }
+
+    if (value.length < 3) {
+      return "Too short.";
+    }
+
+    if (value.length > 20) {
+      return "Too long.";
+    }
+
+    // This regular expression is intentionally too restrictive (for instance,
+    // the {3,20} is already checked above). Its purpose is too make sure that
+    // the value is whitelisted; not that it is not blacklisted.
+    if (!RegExp(r"^\w{3,20}$").hasMatch(value)) {
+      return "Invalid characters.";
+    }
+
+    return null;
+  }
+
   /// Validate a [pseudo] by returning an error message if it is invalid. Returns null if it is valid.
   /// A pseudo is invalid if:
-  /// - It is empty
+  /// - It is invalid according to [_validateString]
   String? validatePseudo(String pseudo) {
-    if (pseudo.isEmpty) {
-      return "The pseudo cannot be blank.";
-    }
-    return null;
+    return _validateString(pseudo);
   }
 
   /// Validate a [uniqueUsername] by returning an error message if it is invalid. Returns null if it is valid.
   /// A unique username is invalid if:
-  /// - It is empty
+  /// - It is invalid according to [_validateString]
   /// - It is already taken by another user in the database
   Future<String?> validateUniqueUsername(String uniqueUsername) async {
-    if (uniqueUsername.isEmpty) {
-      return "The username cannot be blank.";
+    final error = _validateString(uniqueUsername);
+    if (error != null) {
+      return error;
     }
 
     if (await ref
