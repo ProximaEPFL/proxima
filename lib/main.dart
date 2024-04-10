@@ -1,3 +1,4 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
@@ -11,6 +12,15 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // TODO: Remove this line when the issue is correctly fixed (https://github.com/ProximaEPFL/proxima/issues/78)
+  // This is a workaround that will force the app to fetch the data from the server instead of the cache
+  // hence avoiding the issue of the posts not being updated in the overview
+  // We are basically disabling the cache globally
+  FirebaseFirestore.instance.settings = const Settings(
+    persistenceEnabled: false,
+  );
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
