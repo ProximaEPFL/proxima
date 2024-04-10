@@ -55,12 +55,7 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
   /// and update the state accordingly
   Future<void> refresh() async {
     state = const AsyncValue.loading();
-    try {
-      final posts = await build();
-      state = AsyncValue.data(posts);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
+    state = await AsyncValue.guard(() => build());
   }
 }
 
