@@ -1,11 +1,8 @@
-import "package:cloud_firestore/cloud_firestore.dart";
-import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 import "package:firebase_auth_mocks/firebase_auth_mocks.dart";
 import "package:google_sign_in/google_sign_in.dart";
 import "package:google_sign_in_mocks/google_sign_in_mocks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/login_service.dart";
 
 import "../test_data/firebase_auth_user_mock.dart";
@@ -13,7 +10,6 @@ import "../test_data/firebase_auth_user_mock.dart";
 final firebaseAuthMocksOverrides = [
   googleSignInProvider.overrideWith(mockGoogleSignIn),
   firebaseAuthProvider.overrideWith(mockFirebaseAuth),
-  firestoreProvider.overrideWith(mockFirebaseFirestore),
 ];
 
 class MockGoogleSignInAddition extends MockGoogleSignIn {
@@ -29,8 +25,4 @@ GoogleSignIn mockGoogleSignIn(ProviderRef<GoogleSignIn> ref) {
 
 FirebaseAuth mockFirebaseAuth(ProviderRef<FirebaseAuth> ref) {
   return MockFirebaseAuth(mockUser: testingLoginUser);
-}
-
-FirebaseFirestore mockFirebaseFirestore(ProviderRef<FirebaseFirestore> ref) {
-  return FakeFirebaseFirestore();
 }

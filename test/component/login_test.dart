@@ -9,12 +9,13 @@ import "package:proxima/views/pages/login/login_page.dart";
 
 import "../services/firebase/setup_firebase_mocks.dart";
 import "../services/firebase/testing_auth_providers.dart";
+import "../services/firestore/testing_firestore_provider.dart";
 
 void main() {
   setupFirebaseAuthMocks();
 
   final mockedProxima = ProviderScope(
-    overrides: firebaseAuthMocksOverrides,
+    overrides: firebaseAuthMocksOverrides + firebaseMocksOverrides,
     child: const ProximaApp(),
   );
 
