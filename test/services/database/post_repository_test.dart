@@ -9,13 +9,12 @@ import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
-import "mock_post_data.dart";
+import "../../models/database/post/mock_post_data.dart";
 
 void main() {
   group("Post Repository testing", () {
     late FakeFirebaseFirestore firestore;
     late PostRepositoryService postRepository;
-    late MockFirestorePost mockFirestorePost;
 
     const kmRadius = 0.1;
 
@@ -46,7 +45,6 @@ void main() {
       postRepository = PostRepositoryService(
         firestore: firestore,
       );
-      mockFirestorePost = MockFirestorePost();
     });
 
     final post = PostFirestore(
@@ -93,8 +91,8 @@ void main() {
       const userPosition = GeoPoint(40, 20);
       const postPoint = GeoPoint(40.0001, 20.0001); // 14m away
 
-      final postData = mockFirestorePost.generatePostData(1).first;
-      final expectedPost = mockFirestorePost.createPostAt(postData, postPoint);
+      final postData = MockPostFirestore.generatePostData(1).first;
+      final expectedPost = MockPostFirestore.createPostAt(postData, postPoint);
 
       await setPostFirestore(expectedPost);
 
@@ -108,8 +106,8 @@ void main() {
 
       const postPoint = GeoPoint(40.001, 20.001); // about 140m away
 
-      final postData = mockFirestorePost.generatePostData(1).first;
-      final expectedPost = mockFirestorePost.createPostAt(postData, postPoint);
+      final postData = MockPostFirestore.generatePostData(1).first;
+      final expectedPost = MockPostFirestore.createPostAt(postData, postPoint);
 
       await setPostFirestore(expectedPost);
 
@@ -125,8 +123,8 @@ void main() {
         52.001188563379976 - 1e-5,
       ); // just below 100m away
 
-      final postData = mockFirestorePost.generatePostData(1).first;
-      final expectedPost = mockFirestorePost.createPostAt(postData, postPoint);
+      final postData = MockPostFirestore.generatePostData(1).first;
+      final expectedPost = MockPostFirestore.createPostAt(postData, postPoint);
 
       await setPostFirestore(expectedPost);
 
@@ -142,8 +140,8 @@ void main() {
         52.001188563379976 + 1e-5,
       ); // just above 100m away
 
-      final postData = mockFirestorePost.generatePostData(1).first;
-      final expectedPost = mockFirestorePost.createPostAt(postData, postPoint);
+      final postData = MockPostFirestore.generatePostData(1).first;
+      final expectedPost = MockPostFirestore.createPostAt(postData, postPoint);
 
       await setPostFirestore(expectedPost);
 
@@ -157,7 +155,7 @@ void main() {
       final userGeoFirePoint =
           GeoFirePoint(userPosition.latitude, userPosition.longitude);
 
-      final postData = mockFirestorePost.generatePostData(1).first;
+      final postData = MockPostFirestore.generatePostData(1).first;
 
       await postRepository.addPost(postData, userPosition);
 
@@ -186,10 +184,10 @@ void main() {
         return GeoPoint(40.0001 + i * 0.0001, 20.0001 + i * 0.0001);
       });
 
-      final postsData = mockFirestorePost.generatePostData(nbPosts);
+      final postsData = MockPostFirestore.generatePostData(nbPosts);
 
       final allPosts = List.generate(nbPosts, (i) {
-        return mockFirestorePost.createPostAt(
+        return MockPostFirestore.createPostAt(
           postsData[i],
           pointList[i],
           id: "post_$i",
