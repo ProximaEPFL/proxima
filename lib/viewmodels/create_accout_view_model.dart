@@ -1,8 +1,11 @@
 import "dart:async";
 
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/user/user_data.dart";
 import "package:proxima/models/ui/create_account_errors.dart";
 import "package:proxima/services/database/user_repository_service.dart";
+import "package:proxima/viewmodels/login_view_model.dart";
 
 class CreateAccountViewModel extends AsyncNotifier<CreateAccountErrors?> {
   @override
@@ -71,11 +74,15 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountErrors?> {
     return null;
   }
 
-  /// Validate a [pseudo] and a [uniqueUsername] and update the state with the errors.
+  /// Validate a [pseudo] and a [uniqueUsername] and update the state with the potential errors.
+  /// If it happens that both are valid, the account is created.
   /// See [validatePseudo] and [validateUniqueUsername] for the validation rules.
-  Future<void> validate(String pseudo, String uniqueUsername) async {
+  Future<void> createAccountIfValid(
+    String pseudo,
+    String uniqueUsername,
+  ) async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
+    final newState = await AsyncValue.guard(() async {
       final pseudoError = validatePseudo(pseudo);
       final uniqueUsernameError = await validateUniqueUsername(uniqueUsername);
       return CreateAccountErrors(
@@ -84,6 +91,22 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountErrors?> {
         valid: pseudoError == null && uniqueUsernameError == null,
       );
     });
+
+    // Create the account before applying the new state
+    if (newState.valueOrNull?.valid == true) {
+      final uid = ref.read(uidProvider);
+      if (uid == null) {
+        return;
+      }
+      final userData = UserData(
+        username: uniqueUsername,
+        displayName: pseudo,
+        joinTime: Timestamp.now(),
+      );
+      ref.read(userRepositoryProvider).setUser(uid, userData);
+    }
+
+    state = newState;
   }
 }
 

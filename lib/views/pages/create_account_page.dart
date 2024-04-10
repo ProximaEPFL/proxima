@@ -91,7 +91,9 @@ class _CreateAccountPageContent extends HookConsumerWidget {
               ElevatedButton(
                 key: CreateAccountPage.confirmButtonKey,
                 onPressed: () {
-                  ref.read(createAccountErrorsProvider.notifier).validate(
+                  ref
+                      .read(createAccountErrorsProvider.notifier)
+                      .createAccountIfValid(
                         pseudoController.text,
                         uniqueUsernameController.text,
                       );
