@@ -14,9 +14,9 @@ class CreateAccountModel {
   /// differentiate from the case where the fields have no error because they have
   /// not yet been validated from the case they have no errors because they are valid.
   const CreateAccountModel({
-    required this.uniqueUsernameError,
-    required this.pseudoError,
-    required this.accountCreated,
+    this.uniqueUsernameError,
+    this.pseudoError,
+    this.accountCreated = false,
   });
 
   @override
