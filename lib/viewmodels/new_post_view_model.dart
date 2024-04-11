@@ -1,38 +1,12 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_data.dart";
+import "package:proxima/models/ui/new_post_state.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
-class NewPostState {
-  final String? titleError;
-  final String? descriptionError;
-  final bool posted;
-
-  NewPostState({
-    required this.titleError,
-    required this.descriptionError,
-    required this.posted,
-  });
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is NewPostState &&
-        other.titleError == titleError &&
-        other.descriptionError == descriptionError &&
-        other.posted == posted;
-  }
-
-  @override
-  int get hashCode {
-    return Object.hash(titleError, descriptionError, posted);
-  }
-}
-
-class NewPostViewModel extends AsyncNotifier<NewPostState> {
+class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
   static const _titleError = "Please enter a title";
   static const _bodyError = "Please enter a body";
 
@@ -67,7 +41,7 @@ class NewPostViewModel extends AsyncNotifier<NewPostState> {
       throw Exception("User must be logged in before creating a post");
     }
 
-    if(!validate(title, description)) {
+    if (!validate(title, description)) {
       return;
     }
 
@@ -96,6 +70,6 @@ class NewPostViewModel extends AsyncNotifier<NewPostState> {
 }
 
 final newPostStateProvider =
-    AsyncNotifierProvider<NewPostViewModel, NewPostState>(
+    AsyncNotifierProvider.autoDispose<NewPostViewModel, NewPostState>(
   () => NewPostViewModel(),
 );
