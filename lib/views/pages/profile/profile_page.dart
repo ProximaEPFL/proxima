@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
+import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_badge.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_comment.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_post.dart";
@@ -62,12 +63,7 @@ class ProfilePage extends HookConsumerWidget {
           length: 2,
           child: Scaffold(
             appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
+              leading: const LeadingBackButton(),
               title: UserAccount(
                 userEmail: value.user.email ?? "default@mail.com",
               ),

@@ -5,7 +5,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/services/login_service.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/home_page.dart";
-import "package:proxima/views/pages/home/top_bar/home_top_bar.dart";
+import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_badge.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_comment.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_post.dart";
@@ -28,11 +28,11 @@ void main() {
     await tester.pumpAndSettle();
 
     // Check that the top bar is displayed
-    final topBar = find.byKey(HomeTopBar.homeTopBarKey);
+    final topBar = find.byKey(AppTopBar.homeTopBarKey);
     expect(topBar, findsOneWidget);
 
     //Check profile picture is displayed
-    final profilePicture = find.byKey(HomeTopBar.profilePictureKey);
+    final profilePicture = find.byKey(AppTopBar.profilePictureKey);
     expect(profilePicture, findsOneWidget);
 
     // Tap on the profile picture
