@@ -24,11 +24,6 @@ void main() {
   late CollectionReference<Map<String, dynamic>> userCollection;
   late UserRepositoryService userRepo;
 
-  final mockedProxima = ProviderScope(
-    overrides: firebaseAuthMocksOverrides + firebaseMocksOverrides,
-    child: const ProximaApp(),
-  );
-
   setupFirebaseAuthMocks();
 
   setUpAll(() async {
