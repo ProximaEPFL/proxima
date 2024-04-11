@@ -74,7 +74,7 @@ class NewPostForm extends HookConsumerWidget {
       onPressed: () {
         if (_formKey.currentState?.validate() ?? false) {
           final geoLocationService = ref.read(geoLocationServiceProvider);
-          LoginUser? loggedInUser = ref.read(userProvider).valueOrNull;
+          final loggedInUser = ref.read(uidProvider);
           final postRepositoryService = ref.read(postRepositoryProvider);
           addPost(
             titleController.text,

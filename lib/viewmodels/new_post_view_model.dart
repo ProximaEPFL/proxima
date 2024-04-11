@@ -9,7 +9,7 @@ Future<void> addPost(
   String title,
   String description,
   GeoLocationService geoLocationService,
-  LoginUser? user,
+  UserIdFirestore? uid,
   PostRepositoryService postRepositoryService,
 ) async {
   if (title.isEmpty || description.isEmpty) {
@@ -18,12 +18,12 @@ Future<void> addPost(
 
   final GeoPoint currPosition = await geoLocationService.getCurrentPosition();
 
-  if (user == null) {
+  if (uid == null) {
     throw Exception("User must be logged in before creating a post");
   }
 
   final PostData post = PostData(
-    ownerId: UserIdFirestore(value: user.id),
+    ownerId: uid,
     title: title,
     description: description,
     publicationTime: Timestamp.now(),
