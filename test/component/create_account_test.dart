@@ -13,7 +13,7 @@ void main() {
     overrides: firebaseMocksOverrides + loggedInUserOverrides,
     child: MaterialApp(
       onGenerateRoute: generateRoute,
-      initialRoute: Routes.login.name,
+      initialRoute: Routes.createAccount.name,
     ),
   );
 
