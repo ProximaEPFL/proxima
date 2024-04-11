@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
-import "package:proxima/models/ui/post_data.dart";
+import "package:proxima/models/ui/post_overview.dart";
+
 import "package:proxima/views/home_content/feed/post_card/comment_widget.dart";
 import "package:proxima/views/home_content/feed/post_card/user_bar_widget.dart";
 import "package:proxima/views/home_content/feed/post_card/votes_widget.dart";
@@ -15,7 +16,7 @@ class PostCard extends StatelessWidget {
   static const postCardCommentsKey = Key("postCardComments");
   static const postCardUserKey = Key("postCardUser");
 
-  final Post post;
+  final PostOverview post;
 
   const PostCard({
     super.key,
@@ -29,7 +30,7 @@ class PostCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          VotesWidget(key: postCardVotesKey, votes: post.votes),
+          VotesWidget(key: postCardVotesKey, votes: post.voteScore),
           InkWell(
             customBorder: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -74,7 +75,7 @@ class PostCard extends StatelessWidget {
               padding: const EdgeInsets.only(left: 16, right: 0.8, top: 8),
               child: UserBarWidget(
                 key: postCardUserKey,
-                posterUsername: post.posterUsername,
+                posterUsername: post.ownerDisplayName,
               ),
             ),
             postBody,

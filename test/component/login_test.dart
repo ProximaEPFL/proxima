@@ -6,6 +6,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/services/database/user_repository_service.dart";
+import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
@@ -16,6 +17,7 @@ import "package:proxima/views/pages/login/login_page.dart";
 import "../services/firebase/setup_firebase_mocks.dart";
 import "../services/firebase/testing_auth_providers.dart";
 import "../services/test_data/firestore_user_mock.dart";
+import "../viewmodels/mock_home_view_model.dart";
 
 void main() {
   const delayNeededForAsyncFunctionExecution = Duration(seconds: 1);
@@ -62,6 +64,9 @@ void main() {
         overrides: [
           ...firebaseAuthMocksOverrides,
           userRepositoryProvider.overrideWithValue(userRepo),
+          postOverviewProvider.overrideWith(
+            () => MockHomeViewModel(),
+          ),
         ],
         child: const ProximaApp(),
       );
@@ -96,6 +101,9 @@ void main() {
         overrides: [
           ...firebaseAuthMocksOverrides,
           userRepositoryProvider.overrideWithValue(userRepo),
+          postOverviewProvider.overrideWith(
+            () => MockHomeViewModel(),
+          ),
         ],
         child: const ProximaApp(),
       );
@@ -138,6 +146,7 @@ void main() {
 
       final confirmAccountCreating =
           find.byKey(CreateAccountPage.confirmButtonKey);
+
       await tester.tap(confirmAccountCreating);
       await tester.pumpAndSettle();
 

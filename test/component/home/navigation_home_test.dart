@@ -9,6 +9,7 @@ import "package:proxima/views/navigation/leading_back_button/leading_back_button
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/new_post/new_post_page.dart";
+import "../../viewmodels/mock_home_view_model.dart";
 import "../utils/mock_data/home/mock_posts.dart";
 
 void main() {
@@ -18,11 +19,22 @@ void main() {
   );
 
   final emptyMockedPage = ProviderScope(
+    overrides: [
+      postOverviewProvider.overrideWith(
+        () => MockHomeViewModel(),
+      ),
+    ],
     child: homePageApp,
   );
 
   final nonEmptyMockedPage = ProviderScope(
-    overrides: [postList.overrideWithValue(testPosts)],
+    overrides: [
+      postOverviewProvider.overrideWith(
+        () => MockHomeViewModel(
+          build: () async => testPosts,
+        ),
+      ),
+    ],
     child: homePageApp,
   );
 
