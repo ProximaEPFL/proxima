@@ -63,8 +63,8 @@ void main() {
       //Needs a delay to allow the existance check to complete
       await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
-      final loginButtonStillHere = find.byType(HomePage);
-      expect(loginButtonStillHere, findsOneWidget);
+      final homePage = find.byType(HomePage);
+      expect(homePage, findsOneWidget);
     });
   });
 
@@ -96,8 +96,8 @@ void main() {
       //Needs a delay to allow the existance check to complete
       await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
-      final loginButtonStillHere = find.byType(CreateAccountPage);
-      expect(loginButtonStillHere, findsOneWidget);
+      final createAccountPage = find.byType(CreateAccountPage);
+      expect(createAccountPage, findsOneWidget);
 
       final backButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
       await tester.tap(backButton);
@@ -117,8 +117,8 @@ void main() {
       //Needs a delay to allow the existance check to complete
       await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
-      final loginButtonStillHere = find.byType(CreateAccountPage);
-      expect(loginButtonStillHere, findsOneWidget);
+      final createAccountPage = find.byType(CreateAccountPage);
+      expect(createAccountPage, findsOneWidget);
 
       final confirmAccountCreating =
           find.byKey(CreateAccountPage.confirmButtonKey);
