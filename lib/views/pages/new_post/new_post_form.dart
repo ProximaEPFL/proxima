@@ -1,14 +1,11 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/services/database/post_repository_service.dart";
-import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/utils/ui/circular_value.dart";
-import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/new_post_view_model.dart";
 
 class NewPostForm extends HookConsumerWidget {
-  NewPostForm({super.key});
+  const NewPostForm({super.key});
 
   static const titleFieldKey = Key("title");
   static const bodyFieldKey = Key("body");
