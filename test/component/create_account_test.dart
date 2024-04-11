@@ -7,10 +7,13 @@ import "package:proxima/views/pages/home/home_page.dart";
 
 import "../services/firebase/testing_auth_providers.dart";
 import "../services/firestore/testing_firestore_provider.dart";
+import "../viewmodels/mock_home_view_model.dart";
 
 void main() {
   final mockedPage = ProviderScope(
-    overrides: firebaseMocksOverrides + loggedInUserOverrides,
+    overrides: firebaseMocksOverrides +
+        loggedInUserOverrides +
+        mockEmptyHomeViewModelOverride,
     child: MaterialApp(
       onGenerateRoute: generateRoute,
       initialRoute: Routes.createAccount.name,
