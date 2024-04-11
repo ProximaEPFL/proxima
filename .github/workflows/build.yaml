@@ -1,0 +1,27 @@
+name: Flutter Application Build
+
+on: push
+
+jobs:
+  flutter-app-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install Flutter Dependencies
+        run: |
+          flutter config --no-analytics --no-cli-animations
+          flutter --version
+          flutter pub get
+
+      - name: Flutter Build APK
+        run: ./scripts/build
