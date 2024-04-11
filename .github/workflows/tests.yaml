@@ -33,9 +33,17 @@ jobs:
           dlcov gen-refs
           flutter test --coverage -r github test
           dlcov -c 80 --exclude-files "*.g.dart,*firebase_options.dart" | tee coverage.out
+          echo "COVERAGE=$(tail -n 1 coverage.out | grep -oP '(?<=coverage ).+?(?=%)')" >> $GITHUB_ENV
 
       - name: Update Coverage Badge
         if: github.ref_name == 'main'
-        run: |
-          echo "COVERAGE=$(tail -n 1 coverage.out | grep -oP '(?<=coverage ).+?(?=%)')" >> $GITHUB_ENV
-          echo ${{ env.COVERAGE }}
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.BADGE_GIST }}
+          gistID: 1009ca75162e4a39e4561300eadbc5c4
+          filename: proxima_badge.json
+          label: Coverage
+          message: ${{ env.COVERAGE }}%
+          valColorRange: ${{ env.COVERAGE }}
+          maxColorRange: 100
+          minColorRange: 80
