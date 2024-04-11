@@ -31,9 +31,7 @@ jobs:
         uses: kenji-miyake/setup-git-cliff@v1
 
       - name: Generate Changelog
-        run: |
-          git push --delete origin v${{ env.VERSION }}
-          git cliff --unreleased --tag v${{ env.VERSION }} --topo-order -o
+        run: git cliff --unreleased --tag v${{ env.VERSION }} --topo-order -o
 
       - name: GitHub Release
         uses: softprops/action-gh-release@v2
