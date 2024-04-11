@@ -18,7 +18,7 @@ class NewPostPage extends HookConsumerWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-        child: NewPostForm(),
+        child: Center(child: NewPostForm()),
       ),
     );
   }
