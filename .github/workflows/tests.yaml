@@ -43,7 +43,8 @@ jobs:
           gistID: 1009ca75162e4a39e4561300eadbc5c4
           filename: proxima_badge.json
           label: Coverage
+          style: for-the-badge
           message: ${{ env.COVERAGE }}%
           valColorRange: ${{ env.COVERAGE }}
-          maxColorRange: 100
+          maxColorRange: 90
           minColorRange: 80
