@@ -1,0 +1,26 @@
+name: Flutter App Release
+
+on: workflow_dispatch
+
+jobs:
+  proxima-android-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install Flutter dependencies
+        run: |
+          flutter config --no-analytics --no-cli-animations
+          flutter --version
+          flutter pub get
+
+      - name: Flutter Build APK
+        run: |
+          ./scripts/build
