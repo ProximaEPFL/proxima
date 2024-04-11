@@ -10,7 +10,7 @@ class UserAccount extends StatelessWidget {
     required this.userEmail,
   });
 
-  final String? userEmail;
+  final String userEmail;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class UserAccount extends StatelessWidget {
             children: [
               //TODO: get the profile info from the viewmodel
               Text(
-                userEmail ?? "averylongemailjusttocheckthatitfades",
+                userEmail,
                 style: Theme.of(context).textTheme.titleSmall,
                 overflow: TextOverflow.fade,
               ),
