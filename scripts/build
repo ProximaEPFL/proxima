@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -e
+
+flutter build apk --release
+
+VERSION=$(grep 'version:' pubspec.yaml | awk '{print $2}')
+mv "build/app/outputs/flutter-apk/app-release.apk" "build/Proxima-v$VERSION.apk"
+
+printf "\nProxima app build successful.\n"
+printf "See build APK in 'build/Proxima-v$VERSION.apk'\n"

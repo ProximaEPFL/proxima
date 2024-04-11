@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
-import "package:proxima/views/content/feed/post_feed.dart";
+import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
@@ -26,7 +26,8 @@ void main() {
     child: homePageApp,
   );
 
-  testWidgets("new post flow with posts, using bottom bar and come back",
+  testWidgets(
+      "new post flow with posts, using bottom bar and use back button to come back to home page",
       (tester) async {
     await tester.pumpWidget(nonEmptyMockedPage);
     await tester.pumpAndSettle();
@@ -59,7 +60,8 @@ void main() {
     expect(homePage, findsOneWidget);
   });
 
-  testWidgets("new post flow without post, using bottom bar and come back",
+  testWidgets(
+      "new post flow without post, using bottom bar and use back button to go back to home page",
       (tester) async {
     await tester.pumpWidget(emptyMockedPage);
     await tester.pumpAndSettle();
@@ -70,6 +72,7 @@ void main() {
 
     //Click on the middle element of the bottombar
     final bottomBar = find.byKey(NavigationBottomBar.navigationBottomBarKey);
+    expect(bottomBar, findsOneWidget);
     await tester.tap(
       find.descendant(
         of: bottomBar,
@@ -85,14 +88,18 @@ void main() {
     expect(newPostPage, findsOneWidget);
 
     //Go back to the home page
-    await tester.tap(find.byKey(LeadingBackButton.leadingBackButtonKey));
+    final leadingBackButton =
+        find.byKey(LeadingBackButton.leadingBackButtonKey);
+    expect(leadingBackButton, findsOneWidget);
+    await tester.tap(leadingBackButton);
     await tester.pumpAndSettle();
 
     //Check that the home page is displayed
     expect(homePage, findsOneWidget);
   });
 
-  testWidgets("new post flow without post, using button text and come back",
+  testWidgets(
+      "new post flow without post, using button creation text and come back to home page using back button",
       (tester) async {
     await tester.pumpWidget(emptyMockedPage);
     await tester.pumpAndSettle();
@@ -103,6 +110,7 @@ void main() {
 
     //Click on the new post button on the home page
     final newPostButtonText = find.byKey(PostFeed.newPostButtonTextKey);
+    expect(newPostButtonText, findsOneWidget);
     await tester.tap(newPostButtonText);
     await tester.pumpAndSettle();
 
@@ -111,7 +119,10 @@ void main() {
     expect(newPostPage, findsOneWidget);
 
     //Go back to the home page
-    await tester.tap(find.byKey(LeadingBackButton.leadingBackButtonKey));
+    final leadingBackButton =
+        find.byKey(LeadingBackButton.leadingBackButtonKey);
+    expect(leadingBackButton, findsOneWidget);
+    await tester.tap(leadingBackButton);
     await tester.pumpAndSettle();
 
     //Check that the home page is displayed

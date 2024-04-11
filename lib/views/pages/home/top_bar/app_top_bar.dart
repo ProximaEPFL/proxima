@@ -20,7 +20,6 @@ class AppTopBar extends HookConsumerWidget {
       labelText,
       style: Theme.of(context).textTheme.headlineMedium,
     );
-    navigateToLoginPageOnLogout(context, ref);
 
     Widget userAvatar = CircleAvatar(
       child: Stack(

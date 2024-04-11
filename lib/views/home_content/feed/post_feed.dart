@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
-import "package:proxima/views/content/feed/post_card/post_card.dart";
+import "package:proxima/views/home_content/feed/post_card/post_card.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/sort_option_widgets/feed_sort_option/feed_sort_option_chips.dart";
 

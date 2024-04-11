@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
@@ -19,11 +18,9 @@ class LoginPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userRepository = ref.watch(userRepositoryProvider);
-    ref.listen(userProvider, (_, newUser) async {
-      final user = newUser.valueOrNull;
+    ref.listen(uidProvider, (_, user) async {
       if (user != null) {
-        final exists =
-            await userRepository.doesUserExist(UserIdFirestore(value: user.id));
+        final exists = await userRepository.doesUserExist(user);
 
         //Ensure that the page is still mounted before navigating
         if (!context.mounted) return;
