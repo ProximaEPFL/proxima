@@ -9,24 +9,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Flutter SDK
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
+      # - name: Setup Flutter SDK
+      #   uses: subosito/flutter-action@v2
+      #   with:
+      #     channel: stable
+      #     cache: true
 
-      - name: Install Flutter dependencies
-        run: |
-          flutter config --no-analytics --no-cli-animations
-          flutter --version
-          flutter pub get
+      # - name: Install Flutter dependencies
+      #   run: |
+      #     flutter config --no-analytics --no-cli-animations
+      #     flutter --version
+      #     flutter pub get
 
-      - name: Flutter Build APK
-        run: |
-          ./scripts/build
+      # - name: Flutter Build APK
+      #   run: |
+      #     ./scripts/build
 
       - name: GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v0.1.2
-          files: build/Proxima*.apk
+          # files: build/Proxima*.apk
+          files: README.md
