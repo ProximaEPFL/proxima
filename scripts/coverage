@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 # Setup
 rm -rf ./coverage
 dart pub global activate dlcov
