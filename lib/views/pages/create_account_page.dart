@@ -25,7 +25,7 @@ class CreateAccountPage extends HookConsumerWidget {
         Navigator.pushReplacementNamed(context, Routes.home.name);
       }
     });
-    
+
     return PopScope(
       canPop: false,
       onPopInvoked: (bool didPop) {
