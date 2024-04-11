@@ -29,7 +29,7 @@ jobs:
       - name: Get Version From Project
         run: echo "VERSION=$(grep 'version:' pubspec.yaml | awk '{print $2}')" >> $GITHUB_ENV
 
-      - name: Setup git-cliff
+      - name: Setup git-cliff Changelog
         uses: kenji-miyake/setup-git-cliff@v1
 
       - name: Generate Changelog

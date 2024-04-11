@@ -22,16 +22,16 @@ jobs:
           flutter pub get
 
       - name: Check Code Formatting
-        run: |
-          dart format --output=none --set-exit-if-changed .
+        run: dart format --output=none --set-exit-if-changed .
 
       - name: Check For Code Errors
-        run: |
-          flutter analyze
+        run: flutter analyze
 
       - name: Flutter Run Tests (coverage)
+        run: ./script/coverage | tee coverage.out
+
+      - name: Update Coverage Badge
+        if: github.ref_name == 'main'
         run: |
-          dart pub global activate dlcov
-          dlcov gen-refs
-          flutter test --coverage -r github test
-          dlcov -c 80 --exclude-files "*.g.dart,*firebase_options.dart"
+          echo "COVERAGE=$(tail -n 1 coverage.out | grep -oP '(?<=coverage ).+?(?=%)')" >> $GITHUB_ENV
+          echo ${{ env.COVERAGE }}
