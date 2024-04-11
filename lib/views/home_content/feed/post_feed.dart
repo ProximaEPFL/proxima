@@ -83,14 +83,16 @@ class PostFeed extends HookConsumerWidget {
             );
           },
           error: (error, _) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("An error occurred"),
-                  const SizedBox(height: 10),
-                  refreshButton,
-                ],
+            return Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("An error occurred"),
+                    const SizedBox(height: 10),
+                    refreshButton,
+                  ],
+                ),
               ),
             );
           },
