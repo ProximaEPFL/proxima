@@ -28,10 +28,15 @@ jobs:
         run: flutter analyze
 
       - name: Flutter Run Tests (coverage)
-        run: ./script/coverage | tee coverage.out
+        run: |
+          dart pub global activate dlcov
+          dlcov gen-refs
+          flutter test --coverage -r github test
+          dlcov -c 80 --exclude-files "*.g.dart,*firebase_options.dart"
 
       - name: Update Coverage Badge
         if: github.ref_name == 'main'
         run: |
+          ./scripts/coverage | tee coverage.out
           echo "COVERAGE=$(tail -n 1 coverage.out | grep -oP '(?<=coverage ).+?(?=%)')" >> $GITHUB_ENV
           echo ${{ env.COVERAGE }}
