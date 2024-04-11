@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:proxima/utils/ui/not_implemented.dart";
-import "package:proxima/views/content/feed/post_feed.dart";
+import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 /// This enum is used to create the navigation bar routes.
