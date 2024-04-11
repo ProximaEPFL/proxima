@@ -25,3 +25,9 @@ jobs:
 
       - name: Flutter Build APK
         run: ./scripts/build
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: proxima-app
+          path: build/Proxima*.apk
