@@ -106,7 +106,8 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
         joinTime: Timestamp.now(),
       );
       await ref.read(userRepositoryProvider).setUser(uid, userData);
-
+      // Here the [newState.valueOrNull] cannot be null because [newState.valueOrNull?.noError]
+      // is checked to be true above.
       newState =
           AsyncValue.data(newState.valueOrNull!.withAccountCreated(true));
     }
