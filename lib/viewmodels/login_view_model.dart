@@ -1,5 +1,6 @@
 import "package:flutter/widgets.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/login_user.dart";
 import "package:proxima/services/login_service.dart";
 import "package:proxima/views/navigation/routes.dart";
@@ -18,6 +19,12 @@ final userProvider = StreamProvider<LoginUser?>((ref) {
 /// Firebase authentication change provider to boolean
 final isUserLoggedInProvider = Provider<bool>((ref) {
   return ref.watch(userProvider).valueOrNull != null;
+});
+
+/// Firebase logged in user id provider
+final uidProvider = Provider<UserIdFirestore?>((ref) {
+  final user = ref.watch(userProvider).valueOrNull;
+  return user == null ? null : UserIdFirestore(value: user.id);
 });
 
 /// Login Service provider; dependency injection used for testing purposes
