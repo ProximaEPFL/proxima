@@ -1,3 +1,5 @@
+![Coverage Badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/gruvw/1009ca75162e4a39e4561300eadbc5c4/raw/proxima_badge.json)
+
 # Proxima
 
 **Discover the world, one post at a time!**
