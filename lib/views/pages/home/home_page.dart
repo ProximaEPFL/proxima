@@ -4,7 +4,6 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
-import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 
 class HomePage extends HookConsumerWidget {
@@ -12,16 +11,7 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(isUserLoggedInProvider, (_, isLoggedIn) {
-      if (!isLoggedIn) {
-        // Go to login page when the user is logged out
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          Routes.login.name,
-          (route) => false,
-        );
-      }
-    });
+    navigateToLoginPageOnLogout(context, ref);
 
     final currentPageIndex = useState(NavigationbarRoutes.feed.index);
 
