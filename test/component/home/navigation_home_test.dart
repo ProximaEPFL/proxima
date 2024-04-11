@@ -70,6 +70,7 @@ void main() {
 
     //Click on the middle element of the bottombar
     final bottomBar = find.byKey(NavigationBottomBar.navigationBottomBarKey);
+    expect(bottomBar, findsOneWidget);
     await tester.tap(
       find.descendant(
         of: bottomBar,
@@ -85,7 +86,10 @@ void main() {
     expect(newPostPage, findsOneWidget);
 
     //Go back to the home page
-    await tester.tap(find.byKey(LeadingBackButton.leadingBackButtonKey));
+    final leadingBackButton =
+        find.byKey(LeadingBackButton.leadingBackButtonKey);
+    expect(leadingBackButton, findsOneWidget);
+    await tester.tap(leadingBackButton);
     await tester.pumpAndSettle();
 
     //Check that the home page is displayed
@@ -103,6 +107,7 @@ void main() {
 
     //Click on the new post button on the home page
     final newPostButtonText = find.byKey(PostFeed.newPostButtonTextKey);
+    expect(newPostButtonText, findsOneWidget);
     await tester.tap(newPostButtonText);
     await tester.pumpAndSettle();
 
@@ -111,7 +116,10 @@ void main() {
     expect(newPostPage, findsOneWidget);
 
     //Go back to the home page
-    await tester.tap(find.byKey(LeadingBackButton.leadingBackButtonKey));
+    final leadingBackButton =
+        find.byKey(LeadingBackButton.leadingBackButtonKey);
+    expect(leadingBackButton, findsOneWidget);
+    await tester.tap(leadingBackButton);
     await tester.pumpAndSettle();
 
     //Check that the home page is displayed
