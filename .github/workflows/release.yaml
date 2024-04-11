@@ -29,5 +29,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v0.1.2
+          generate_release_notes: true
           # files: build/Proxima*.apk
           files: README.md
