@@ -7,13 +7,20 @@ import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/pages/home/home_page.dart";
-import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 
+import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
+import "../../viewmodels/mock_home_view_model.dart";
 import "../utils/mock_data/home/mock_posts.dart";
 
 void main() {
   final homePageWidget = ProviderScope(
-    overrides: [postList.overrideWithValue(testPosts)],
+    overrides: [
+      postOverviewProvider.overrideWith(
+        () => MockHomeViewModel(
+          build: () async => testPosts,
+        ),
+      ),
+    ],
     child: const MaterialApp(
       title: "Proxima",
       home: HomePage(),
@@ -21,7 +28,28 @@ void main() {
   );
 
   final emptyHomePageWidget = ProviderScope(
-    overrides: [postList.overrideWithValue(List.empty())],
+    overrides: [
+      postOverviewProvider.overrideWith(
+        () => MockHomeViewModel(),
+      ),
+    ],
+    child: const MaterialApp(
+      title: "Proxima",
+      home: HomePage(),
+    ),
+  );
+
+  final loadingHomePageWidget = ProviderScope(
+    overrides: [
+      postOverviewProvider.overrideWith(
+        () => MockHomeViewModel(
+          build: () {
+            // Future.any([]) will never complete and simulate a loading state
+            return Future.any([]);
+          },
+        ),
+      ),
+    ],
     child: const MaterialApp(
       title: "Proxima",
       home: HomePage(),
@@ -89,6 +117,10 @@ void main() {
     final emptyPostMessage = find.byKey(PostFeed.emptyfeedKey);
     expect(emptyPostMessage, findsOneWidget);
 
+    // Check that the refresh button is displayed
+    final refreshButton = find.byKey(PostFeed.refreshButtonKey);
+    expect(refreshButton, findsOneWidget);
+
     //Check the new post button text is displayed
     final newPostButtonText = find.byKey(PostFeed.newPostButtonTextKey);
     expect(newPostButtonText, findsOneWidget);
@@ -114,4 +146,21 @@ void main() {
       findsExactly(NavigationbarRoutes.values.length),
     );
   });
+
+  testWidgets(
+    "static home display circular value on loading",
+    (tester) async {
+      await tester.pumpWidget(loadingHomePageWidget);
+
+      // Check that the home page is displayed
+      final homePage = find.byType(HomePage);
+      expect(homePage, findsOneWidget);
+
+      // Check that the circular progress indicator is displayed
+      final progressIndicator = find.byType(
+        CircularProgressIndicator,
+      );
+      expect(progressIndicator, findsOneWidget);
+    },
+  );
 }
