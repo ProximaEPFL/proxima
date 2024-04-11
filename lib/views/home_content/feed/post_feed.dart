@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
-import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/home_content/feed/post_card/post_card.dart";
 import "package:proxima/views/navigation/routes.dart";
@@ -63,9 +62,8 @@ class PostFeed extends HookConsumerWidget {
           key: feedSortOptionKey,
         ),
         const Divider(),
-        CircularValue(
-          value: asyncPosts,
-          builder: (context, posts) {
+        asyncPosts.when(
+          data: (posts) {
             final postsList = PostList(
               posts: posts,
               onRefresh: () async {
@@ -75,6 +73,25 @@ class PostFeed extends HookConsumerWidget {
 
             return Expanded(
               child: posts.isEmpty ? emptyHelper : postsList,
+            );
+          },
+          loading: () {
+            return const Expanded(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          },
+          error: (error, _) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("An error occurred"),
+                  const SizedBox(height: 10),
+                  refreshButton,
+                ],
+              ),
             );
           },
         ),
