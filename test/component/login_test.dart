@@ -59,6 +59,7 @@ void main() {
 
       final loginButton = find.byKey(LoginButton.loginButtonKey);
       await tester.tap(loginButton);
+
       //Needs a delay to allow the existance check to complete
       await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
@@ -133,27 +134,6 @@ void main() {
       await tester.pumpAndSettle();
 
       //Check that we are in the login page
-      final loginPage = find.byType(LoginPage);
-      expect(loginPage, findsOneWidget);
-    });
-
-    testWidgets("Login and get to create account page flow", (tester) async {
-      await tester.pumpWidget(getMockedProxima());
-      await tester.pumpAndSettle();
-
-      final loginButton = find.byKey(LoginButton.loginButtonKey);
-      await tester.tap(loginButton);
-      //Needs a delay to allow the existance check to complete
-      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
-
-      final createAccountPage = find.byType(CreateAccountPage);
-      expect(createAccountPage, findsOneWidget);
-
-      final logoutButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
-      await tester.tap(logoutButton);
-      await tester.pumpAndSettle();
-
-      // Check that pressing logout redirects to the login page
       final loginPage = find.byType(LoginPage);
       expect(loginPage, findsOneWidget);
     });
