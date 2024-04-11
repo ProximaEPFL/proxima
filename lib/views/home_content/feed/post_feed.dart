@@ -3,17 +3,20 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
+import "package:proxima/views/home_content/feed/post_card/post_card.dart";
 import "package:proxima/views/navigation/routes.dart";
-import "package:proxima/views/pages/home/posts/post_card/post_card.dart";
 import "package:proxima/views/sort_option_widgets/feed_sort_option/feed_sort_option_chips.dart";
 
 /// This widget is the feed of the home page
 /// It contains the posts
-class HomeFeed extends HookConsumerWidget {
+class PostFeed extends HookConsumerWidget {
   static const feedSortOptionKey = Key("feedSortOption");
-  static const emptyHomeFeedKey = Key("emptyHomeFeed");
+
   static const refreshButtonKey = Key("refreshButton");
-  const HomeFeed({super.key});
+  static const feedKey = Key("feed");
+  static const emptyfeedKey = Key("emptyFeed");
+  static const newPostButtonTextKey = Key("newPostButtonTextKey");
+  const PostFeed({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,6 +27,7 @@ class HomeFeed extends HookConsumerWidget {
         Navigator.pushNamed(context, Routes.newPost.name);
       },
       child: const Text(
+        key: newPostButtonTextKey,
         "create one!",
         style: TextStyle(color: Colors.blue),
       ),
@@ -36,7 +40,7 @@ class HomeFeed extends HookConsumerWidget {
       child: const Text("Refresh"),
     );
     final emptyHelper = Center(
-      key: emptyHomeFeedKey,
+      key: emptyfeedKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
