@@ -1,0 +1,44 @@
+name: Flutter Application GitHub Release
+
+on: workflow_dispatch
+
+jobs:
+  proxima-app-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install Flutter Dependencies
+        run: |
+          flutter config --no-analytics --no-cli-animations
+          flutter --version
+          flutter pub get
+
+      - name: Flutter Build APK
+        run: ./scripts/build
+
+      - name: Get Version From Project
+        run: echo "VERSION=$(grep 'version:' pubspec.yaml | awk '{print $2}')" >> $GITHUB_ENV
+
+      - name: Setup git-cliff Changelog
+        uses: kenji-miyake/setup-git-cliff@v1
+
+      - name: Generate Changelog
+        run: git cliff --unreleased --tag v${{ env.VERSION }} --topo-order -o
+
+      - name: GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Proxima v${{ env.VERSION }}
+          tag_name: v${{ env.VERSION }}
+          files: build/Proxima*.apk
+          body_path: CHANGELOG.md
