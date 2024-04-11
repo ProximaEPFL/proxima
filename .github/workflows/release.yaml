@@ -1,9 +1,9 @@
-name: Flutter App Release
+name: Flutter App GitHub Release
 
 on: workflow_dispatch
 
 jobs:
-  proxima-android-apk:
+  proxima-app-release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -28,4 +28,5 @@ jobs:
       - name: GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v0.1.2
           files: build/Proxima*.apk
