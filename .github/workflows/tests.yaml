@@ -36,6 +36,7 @@ jobs:
           dlcov -c 80 --exclude-files "*.g.dart,*firebase_options.dart" | tee coverage.out
 
       - name: Save Coverage Value to ENV
+        if: github.ref_name == 'main'
         run: echo "COVERAGE=$(tail -n 1 coverage.out | grep -oP '(?<=coverage ).+?(?=%)')" >> $GITHUB_ENV
 
       - name: Update Coverage Badge
