@@ -25,6 +25,10 @@ jobs:
       #   run: |
       #     ./scripts/build
 
+      - name: Get version from pubspec.yaml
+        id: get_version
+        run: echo "VERSION=$(grep 'version:' pubspec.yaml | awk '{print $2}')" >> $GITHUB_ENV
+
       - name: GitHub Release
         uses: softprops/action-gh-release@v2
         with:
