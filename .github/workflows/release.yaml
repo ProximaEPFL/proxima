@@ -6,32 +6,32 @@ jobs:
   proxima-app-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # - name: Setup Flutter SDK
-      #   uses: subosito/flutter-action@v2
-      #   with:
-      #     channel: stable
-      #     cache: true
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
 
-      # - name: Install Flutter dependencies
-      #   run: |
-      #     flutter config --no-analytics --no-cli-animations
-      #     flutter --version
-      #     flutter pub get
+      - name: Install Flutter dependencies
+        run: |
+          flutter config --no-analytics --no-cli-animations
+          flutter --version
+          flutter pub get
 
-      # - name: Flutter Build APK
-      #   run: |
-      #     ./scripts/build
+      - name: Flutter Build APK
+        run: |
+          ./scripts/build
 
-      - name: Get version from pubspec.yaml
-        id: get_version
+      - name: Get Version From Project
         run: echo "VERSION=$(grep 'version:' pubspec.yaml | awk '{print $2}')" >> $GITHUB_ENV
 
       - name: GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ env.VERSION }}
-          # files: build/Proxima*.apk
-          files: README.md
+          name: Proxima v${{ env.VERSION }}
+          tag_name: v${{ env.VERSION }}
+          files: build/Proxima*.apk
+          # files: README.md
