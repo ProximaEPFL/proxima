@@ -18,10 +18,8 @@ class CircularValue<T> extends StatelessWidget {
     return value.maybeWhen(
       data: (data) => builder(context, data),
       orElse: () {
-        return const Expanded(
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
+        return const Center(
+          child: CircularProgressIndicator(),
         );
       },
     );
