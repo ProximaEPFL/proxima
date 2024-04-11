@@ -31,7 +31,9 @@ jobs:
         uses: kenji-miyake/setup-git-cliff@v1
 
       - name: Generate Changelog
-        run: git cliff --unreleased --tag v${{ env.VERSION }} --topo-order -o
+        run: |
+          git push --delete origin v${{ env.VERSION }}
+          git cliff --unreleased --tag v${{ env.VERSION }} --topo-order -o
 
       - name: GitHub Release
         uses: softprops/action-gh-release@v2
@@ -39,5 +41,4 @@ jobs:
           name: Proxima v${{ env.VERSION }}
           tag_name: v${{ env.VERSION }}
           # files: build/Proxima*.apk
-          files: README.md
           body_path: CHANGELOG.md
