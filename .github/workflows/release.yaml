@@ -24,3 +24,8 @@ jobs:
       - name: Flutter Build APK
         run: |
           ./scripts/build
+
+      - name: GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/Proxima*.apk
