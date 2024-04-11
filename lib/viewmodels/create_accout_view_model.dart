@@ -88,12 +88,12 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel?> {
       return CreateAccountModel(
         pseudoError: pseudoError,
         uniqueUsernameError: uniqueUsernameError,
-        valid: pseudoError == null && uniqueUsernameError == null,
+        accountCreated: pseudoError == null && uniqueUsernameError == null,
       );
     });
 
     // Create the account before applying the new state
-    if (newState.valueOrNull?.valid == true) {
+    if (newState.valueOrNull?.accountCreated == true) {
       final uid = ref.read(uidProvider);
       if (uid == null) {
         // The user is no longer logged in, so they will anyway be sent to the login page

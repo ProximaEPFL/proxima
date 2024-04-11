@@ -21,7 +21,7 @@ class CreateAccountPage extends HookConsumerWidget {
     navigateToLoginPageOnLogout(context, ref);
 
     ref.listen(createAccountErrorsProvider, (previous, error) {
-      if (error.valueOrNull?.valid == true) {
+      if (error.valueOrNull?.accountCreated == true) {
         Navigator.pushReplacementNamed(context, Routes.home.name);
       }
     });
