@@ -22,6 +22,16 @@ class CreateAccountModel {
   /// Returns true if the form for account creation is valid, i.e. there is no error.
   bool get noError => uniqueUsernameError == null && pseudoError == null;
 
+  /// Create a new instance of [CreateAccountModel] with its accountCreated attribute set to
+  /// [accountCreated], and all other attirbutes unchanged.
+  CreateAccountModel withAccountCreated(bool accountCreated) {
+    return CreateAccountModel(
+      uniqueUsernameError: uniqueUsernameError,
+      pseudoError: pseudoError,
+      accountCreated: accountCreated,
+    );
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
