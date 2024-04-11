@@ -7,6 +7,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
@@ -23,44 +24,28 @@ import "../services/mock_geo_location_service.dart";
 import "../services/test_data/firestore_user_mock.dart";
 
 void main() {
-  FakeFirebaseFirestore fakeFireStore = FakeFirebaseFirestore();
-  final expectedUser = testingUserFirestore;
-
   setupFirebaseAuthMocks();
-
-  final userRepo = UserRepositoryService(
-    firestore: fakeFireStore,
-  );
 
   MockPostRepositoryService postRepository = MockPostRepositoryService();
   MockGeoLocationService geoLocationService = MockGeoLocationService();
 
+  const TIME_DELTA = 1e-3;
+
   setUpAll(() async {
     await Firebase.initializeApp();
-
-  });
-
-  setUp(() async {
-    final userCollection = fakeFireStore.collection(UserFirestore.collectionName);
-
-    await userCollection
-        .doc(expectedUser.uid.value)
-        .set(expectedUser.data.toDbData());
   });
 
   final mockedPage = ProviderScope(
     overrides: [
       ...firebaseMocksOverrides,
-      ...firebaseAuthMocksOverrides,
       postRepositoryProvider.overrideWithValue(postRepository),
       geoLocationServiceProvider.overrideWithValue(geoLocationService),
-      userRepositoryProvider.overrideWithValue(userRepo),
+      uidProvider.overrideWithValue(testingUserFirestoreId),
     ],
     child: const MaterialApp(
       home: NewPostPage(),
     ),
   );
-
 
   testWidgets("Create post contains title, body and post button",
       (tester) async {
@@ -89,11 +74,11 @@ void main() {
     expect(titleFinder, findsNothing);
   });
 
-
   testWidgets("Writes non empty post to repository", (widgetTester) async {
     await widgetTester.pumpWidget(mockedPage);
     await widgetTester.pumpAndSettle();
 
+    bool repoCalled = false;
     GeoPoint testPoint = const GeoPoint(0, 0);
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) => Future.value(testPoint),
@@ -116,11 +101,6 @@ void main() {
     await widgetTester.pumpAndSettle();
 
     final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
-    final context = widgetTester.element(postButtonFinder);
-
-    final loginService = ProviderScope.containerOf(context).read(loginServiceProvider);
-    await loginService.signIn();
-    await widgetTester.pumpAndSettle();
 
     await widgetTester.tap(postButtonFinder);
     await widgetTester.pumpAndSettle();
