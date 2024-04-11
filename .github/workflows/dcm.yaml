@@ -1,4 +1,4 @@
-name: Dart Code Metrics Report Generation
+name: Dart Code Metrics Report
 
 on: push
 
@@ -15,7 +15,7 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Install Flutter dependencies
+      - name: Install Flutter Dependencies
         run: |
           flutter config --no-analytics --no-cli-animations
           flutter --version

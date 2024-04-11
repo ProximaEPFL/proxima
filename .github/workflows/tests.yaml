@@ -1,4 +1,4 @@
-name: Flutter App Testing CI
+name: Flutter Application Testing
 
 on: push
 
@@ -15,23 +15,40 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Install Flutter dependencies
+      - name: Install Flutter Dependencies
         run: |
           flutter config --no-analytics --no-cli-animations
           flutter --version
           flutter pub get
 
-      - name: Check code formatting
-        run: |
-          dart format --output=none --set-exit-if-changed .
+      - name: Check Code Formatting
+        run: dart format --output=none --set-exit-if-changed .
 
-      - name: Check for code errors
-        run: |
-          flutter analyze
+      - name: Check For Code Errors
+        run: flutter analyze
 
-      - name: Flutter testing
+      - name: Flutter Run Tests (coverage)
         run: |
           dart pub global activate dlcov
           dlcov gen-refs
           flutter test --coverage -r github test
-          dlcov -c 80 --exclude-files "*.g.dart,*firebase_options.dart"
+          set -o pipefail
+          dlcov -c 80 --exclude-files "*.g.dart,*firebase_options.dart" | tee coverage.out
+
+      - name: Save Coverage Value to ENV
+        if: github.ref_name == 'main'
+        run: echo "COVERAGE=$(tail -n 1 coverage.out | grep -oP '(?<=coverage ).+?(?=%)')" >> $GITHUB_ENV
+
+      - name: Update Coverage Badge
+        if: github.ref_name == 'main'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.BADGE_GIST }}
+          gistID: 1009ca75162e4a39e4561300eadbc5c4
+          filename: proxima_badge.json
+          label: Coverage
+          style: for-the-badge
+          message: ${{ env.COVERAGE }}%
+          valColorRange: ${{ env.COVERAGE }}
+          maxColorRange: 90
+          minColorRange: 80
