@@ -12,15 +12,23 @@ import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "../utils/mock_data/home/mock_posts.dart";
 
 void main() {
-  testWidgets("static home display top and bottom bar", (tester) async {
-    final homePageWidget = ProviderScope(
-      overrides: [postList.overrideWithValue(testPosts)],
-      child: const MaterialApp(
-        title: "Proxima",
-        home: HomePage(),
-      ),
-    );
+  final homePageWidget = ProviderScope(
+    overrides: [postList.overrideWithValue(testPosts)],
+    child: const MaterialApp(
+      title: "Proxima",
+      home: HomePage(),
+    ),
+  );
 
+  final emptyHomePageWidget = ProviderScope(
+    overrides: [postList.overrideWithValue(List.empty())],
+    child: const MaterialApp(
+      title: "Proxima",
+      home: HomePage(),
+    ),
+  );
+
+  testWidgets("static home display top and bottom bar", (tester) async {
     await tester.pumpWidget(homePageWidget);
     await tester.pumpAndSettle();
 
@@ -70,15 +78,7 @@ void main() {
   });
 
   testWidgets("static home display no post text", (tester) async {
-    final homePageWidget = ProviderScope(
-      overrides: [postList.overrideWithValue(List.empty())],
-      child: const MaterialApp(
-        title: "Proxima",
-        home: HomePage(),
-      ),
-    );
-
-    await tester.pumpWidget(homePageWidget);
+    await tester.pumpWidget(emptyHomePageWidget);
     await tester.pumpAndSettle();
 
     // Check that the home page is displayed
@@ -97,15 +97,7 @@ void main() {
   testWidgets(
       "check correct number of navigation bottom bar elements are displayed",
       (tester) async {
-    final homePageWidget = ProviderScope(
-      overrides: [postList.overrideWithValue(List.empty())],
-      child: const MaterialApp(
-        title: "Proxima",
-        home: HomePage(),
-      ),
-    );
-
-    await tester.pumpWidget(homePageWidget);
+    await tester.pumpWidget(emptyHomePageWidget);
     await tester.pumpAndSettle();
 
     // Check that the home page is displayed
