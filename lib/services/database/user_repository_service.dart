@@ -40,6 +40,7 @@ class UserRepositoryService {
   Future<bool> isUsernameTaken(String username) async {
     final query = await _collectionRef
         .where(UserData.usernameField, isEqualTo: username)
+        .limit(1)
         .get();
     return query.docs.isNotEmpty;
   }
