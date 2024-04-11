@@ -7,10 +7,10 @@ import "package:proxima/models/ui/create_account_model.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
-class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel?> {
+class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
   @override
-  Future<CreateAccountModel?> build() async {
-    return null;
+  Future<CreateAccountModel> build() async {
+    return const CreateAccountModel();
   }
 
   /// Validate a generic [value], either a pseudo or a username,
@@ -82,22 +82,21 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel?> {
     String uniqueUsername,
   ) async {
     state = const AsyncValue.loading();
-    final newState = await AsyncValue.guard(() async {
+    AsyncValue<CreateAccountModel> newState = await AsyncValue.guard(() async {
       final pseudoError = validatePseudo(pseudo);
       final uniqueUsernameError = await validateUniqueUsername(uniqueUsername);
       return CreateAccountModel(
         pseudoError: pseudoError,
         uniqueUsernameError: uniqueUsernameError,
-        accountCreated: pseudoError == null && uniqueUsernameError == null,
       );
     });
 
     // Create the account before applying the new state
-    if (newState.valueOrNull?.accountCreated == true) {
+    if (newState.valueOrNull?.noError == true) {
       final uid = ref.read(uidProvider);
       if (uid == null) {
         // The user is no longer logged in, so they will anyway be sent to the login page
-        state = const AsyncValue.data(null);
+        state = const AsyncValue.data(CreateAccountModel());
         return;
       }
 
@@ -107,6 +106,9 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel?> {
         joinTime: Timestamp.now(),
       );
       ref.read(userRepositoryProvider).setUser(uid, userData);
+
+      newState =
+          AsyncValue.data(newState.valueOrNull!.withAccountCreated(true));
     }
 
     state = newState;
@@ -115,6 +117,6 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel?> {
 
 /// The provider for the [CreateAccountViewModel]
 final createAccountErrorsProvider =
-    AsyncNotifierProvider<CreateAccountViewModel, CreateAccountModel?>(
+    AsyncNotifierProvider<CreateAccountViewModel, CreateAccountModel>(
   () => CreateAccountViewModel(),
 );

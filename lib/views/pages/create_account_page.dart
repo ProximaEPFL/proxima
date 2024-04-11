@@ -67,7 +67,7 @@ class _CreateAccountPageContent extends HookConsumerWidget {
                 key: CreateAccountPage.uniqueUsernameFieldKey,
                 decoration: InputDecoration(
                   labelText: "Unique username",
-                  errorText: errors?.uniqueUsernameError,
+                  errorText: errors.uniqueUsernameError,
                   helperText:
                       "", // for the error text not to change the widget height
                   border: const OutlineInputBorder(),
@@ -79,7 +79,7 @@ class _CreateAccountPageContent extends HookConsumerWidget {
                 key: CreateAccountPage.pseudoFieldKey,
                 decoration: InputDecoration(
                   labelText: "Pseudo",
-                  errorText: errors?.pseudoError,
+                  errorText: errors.pseudoError,
                   helperText:
                       "", // for the error text not to change the widget height
                   border: const OutlineInputBorder(),
