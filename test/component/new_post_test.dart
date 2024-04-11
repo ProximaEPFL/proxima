@@ -29,7 +29,7 @@ void main() {
   MockPostRepositoryService postRepository = MockPostRepositoryService();
   MockGeoLocationService geoLocationService = MockGeoLocationService();
 
-  const TIME_DELTA = 1e-3;
+  const timeDeltaMils = 100;
 
   setUpAll(() async {
     await Firebase.initializeApp();
@@ -102,10 +102,30 @@ void main() {
 
     final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
 
+    when(postRepository.addPost(any, any)).thenAnswer((_) {
+      return Future.value();
+    });
+
     await widgetTester.tap(postButtonFinder);
     await widgetTester.pumpAndSettle();
 
-    verify(postRepository.addPost(postData, testPoint)).called(1);
+    final PostData capturedPostData =
+        verify(postRepository.addPost(captureAny, testPoint)).captured.first;
+
+    expect(capturedPostData.title, postData.title);
+    expect(capturedPostData.description, postData.description);
+    expect(capturedPostData.ownerId, postData.ownerId);
+    expect(capturedPostData.voteScore, postData.voteScore);
+
+    // check that the publication time is within a reasonable delta
+    expect(
+      capturedPostData.publicationTime.millisecondsSinceEpoch,
+      closeTo(
+        postData.publicationTime.millisecondsSinceEpoch,
+        timeDeltaMils,
+      ),
+    );
+
     expect(titleFinder, findsNothing);
   });
 
