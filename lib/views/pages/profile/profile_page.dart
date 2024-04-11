@@ -69,7 +69,8 @@ class ProfilePage extends HookConsumerWidget {
                 },
               ),
               title: UserAccount(
-                  userEmail: value.user.email ?? "default@mail.com"),
+                userEmail: value.user.email ?? "default@mail.com",
+              ),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.settings),
