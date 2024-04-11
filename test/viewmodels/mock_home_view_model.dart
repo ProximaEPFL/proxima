@@ -23,3 +23,7 @@ class MockHomeViewModel extends AsyncNotifier<List<PostOverview>>
   @override
   Future<void> refresh() => _onRefresh();
 }
+
+final mockEmptyHomeViewModelOverride = [
+  postOverviewProvider.overrideWith(() => MockHomeViewModel()),
+];

@@ -1,6 +1,9 @@
 import "package:flutter/material.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/utils/ui/scrollable_if_too_high.dart";
+import "package:proxima/viewmodels/create_accout_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/navigation/routes.dart";
@@ -16,6 +19,12 @@ class CreateAccountPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     navigateToLoginPageOnLogout(context, ref);
+
+    ref.listen(createAccountErrorsProvider, (previous, error) {
+      if (error.valueOrNull?.accountCreated == true) {
+        Navigator.pushReplacementNamed(context, Routes.home.name);
+      }
+    });
 
     return PopScope(
       canPop: false,
@@ -41,41 +50,62 @@ class _CreateAccountPageContent extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ScrollableIfTooHigh(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Flexible(flex: 20, child: Container()),
-          const SizedBox(height: 20),
-          const TextField(
-            key: CreateAccountPage.uniqueUsernameFieldKey,
-            decoration: InputDecoration(
-              labelText: "Unique username",
-              border: OutlineInputBorder(),
-            ),
+    final asyncErrors = ref.watch(createAccountErrorsProvider);
+    final pseudoController = useTextEditingController();
+    final uniqueUsernameController = useTextEditingController();
+
+    return CircularValue(
+      value: asyncErrors,
+      builder: (context, errors) {
+        return ScrollableIfTooHigh(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Flexible(flex: 20, child: Container()),
+              const SizedBox(height: 20),
+              TextField(
+                key: CreateAccountPage.uniqueUsernameFieldKey,
+                decoration: InputDecoration(
+                  labelText: "Unique username",
+                  errorText: errors.uniqueUsernameError,
+                  helperText:
+                      "", // for the error text not to change the widget height
+                  border: const OutlineInputBorder(),
+                ),
+                controller: uniqueUsernameController,
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                key: CreateAccountPage.pseudoFieldKey,
+                decoration: InputDecoration(
+                  labelText: "Pseudo",
+                  errorText: errors.pseudoError,
+                  helperText:
+                      "", // for the error text not to change the widget height
+                  border: const OutlineInputBorder(),
+                ),
+                controller: pseudoController,
+              ),
+              Flexible(flex: 50, child: Container()),
+              const SizedBox(height: 50),
+              ElevatedButton(
+                key: CreateAccountPage.confirmButtonKey,
+                onPressed: () {
+                  ref
+                      .read(createAccountErrorsProvider.notifier)
+                      .createAccountIfValid(
+                        pseudoController.text,
+                        uniqueUsernameController.text,
+                      );
+                },
+                child: const Text("Confirm"),
+              ),
+              Flexible(flex: 20, child: Container()),
+              const SizedBox(height: 20),
+            ],
           ),
-          const SizedBox(height: 20),
-          const TextField(
-            key: CreateAccountPage.pseudoFieldKey,
-            decoration: InputDecoration(
-              labelText: "Pseudo",
-              border: OutlineInputBorder(),
-            ),
-          ),
-          Flexible(flex: 50, child: Container()),
-          const SizedBox(height: 50),
-          ElevatedButton(
-            key: CreateAccountPage.confirmButtonKey,
-            onPressed: () {
-              // TODO: Also store this to the database
-              Navigator.pushReplacementNamed(context, Routes.home.name);
-            },
-            child: const Text("Confirm"),
-          ),
-          Flexible(flex: 20, child: Container()),
-          const SizedBox(height: 20),
-        ],
-      ),
+        );
+      },
     );
   }
 }

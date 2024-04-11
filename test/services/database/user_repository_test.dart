@@ -96,5 +96,25 @@ void main() {
 
       expect(actualUser, false);
     });
+
+    test("isUsernameTaken returns true when username is taken", () async {
+      final expectedUser = testingUserFirestore;
+
+      await userCollection
+          .doc(expectedUser.uid.value)
+          .set(expectedUser.data.toDbData());
+
+      final isUsernameTaken =
+          await userRepo.isUsernameTaken(expectedUser.data.username);
+
+      expect(isUsernameTaken, true);
+    });
+
+    test("isUsernameTaken returns false when username is not taken", () async {
+      final isUsernameTaken =
+          await userRepo.isUsernameTaken("I love elephants :)");
+
+      expect(isUsernameTaken, false);
+    });
   });
 }
