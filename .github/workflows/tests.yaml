@@ -1,4 +1,4 @@
-name: Flutter App Testing CI
+name: Flutter Application Testing
 
 on: push
 
@@ -15,21 +15,21 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Install Flutter dependencies
+      - name: Install Flutter Dependencies
         run: |
           flutter config --no-analytics --no-cli-animations
           flutter --version
           flutter pub get
 
-      - name: Check code formatting
+      - name: Check Code Formatting
         run: |
           dart format --output=none --set-exit-if-changed .
 
-      - name: Check for code errors
+      - name: Check For Code Errors
         run: |
           flutter analyze
 
-      - name: Flutter testing
+      - name: Flutter Run Tests (coverage)
         run: |
           dart pub global activate dlcov
           dlcov gen-refs

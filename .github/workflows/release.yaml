@@ -11,20 +11,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      # - name: Setup Flutter SDK
-      #   uses: subosito/flutter-action@v2
-      #   with:
-      #     channel: stable
-      #     cache: true
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
 
-      # - name: Install Flutter dependencies
-      #   run: |
-      #     flutter config --no-analytics --no-cli-animations
-      #     flutter --version
-      #     flutter pub get
+      - name: Install Flutter Dependencies
+        run: |
+          flutter config --no-analytics --no-cli-animations
+          flutter --version
+          flutter pub get
 
-      # - name: Flutter Build APK
-      #   run: ./scripts/build
+      - name: Flutter Build APK
+        run: ./scripts/build
 
       - name: Get Version From Project
         run: echo "VERSION=$(grep 'version:' pubspec.yaml | awk '{print $2}')" >> $GITHUB_ENV
@@ -40,5 +40,5 @@ jobs:
         with:
           name: Proxima v${{ env.VERSION }}
           tag_name: v${{ env.VERSION }}
-          # files: build/Proxima*.apk
+          files: build/Proxima*.apk
           body_path: CHANGELOG.md
