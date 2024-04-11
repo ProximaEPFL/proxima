@@ -19,6 +19,9 @@ class CreateAccountModel {
     this.accountCreated = false,
   });
 
+  /// Returns true if the form for account creation is valid, i.e. there is no error.
+  bool get noError => uniqueUsernameError == null && pseudoError == null;
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
