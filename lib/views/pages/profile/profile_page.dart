@@ -40,11 +40,20 @@ class ProfilePage extends HookConsumerWidget {
       );
 
       itemListPosts.add(
-        InfoCardPost(shadow: shadow),
+        InfoCardPost(
+          shadow: shadow,
+          title: "Post title",
+          description:
+              "My super post that talks about something that is super cool and is located in a super spot",
+        ),
       );
 
       itemListComments.add(
-        InfoCardComment(shadow: shadow),
+        InfoCardComment(
+          shadow: shadow,
+          comment:
+              "Here is a super comment on a super post that talks about something that is super cool and is located in a super spot that is very cosy and nice",
+        ),
       );
     }
 

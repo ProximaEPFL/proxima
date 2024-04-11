@@ -7,9 +7,11 @@ class InfoCardComment extends StatelessWidget {
   const InfoCardComment({
     super.key,
     required this.shadow,
+    required this.comment,
   });
 
   final BoxShadow shadow;
+  final String comment;
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +26,8 @@ class InfoCardComment extends StatelessWidget {
       ),
       child: Center(
         child: ListTile(
-          //TODO: replace with real data
           title: Text(
-            "Here is a super comment on a super post that talks about something that is super cool and is located in a super spot that is very cosy and nice",
+            comment,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodySmall,

@@ -7,9 +7,14 @@ class InfoCardPost extends StatelessWidget {
   const InfoCardPost({
     super.key,
     required this.shadow,
+    required this.title,
+    required this.description,
   });
 
   final BoxShadow shadow;
+  final String title;
+  final String description;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,13 +28,12 @@ class InfoCardPost extends StatelessWidget {
       ),
       child: Center(
         child: ListTile(
-          title: //TODO: replace with real data
-              Text(
-            "Post Title",
+          title: Text(
+            title,
             style: Theme.of(context).textTheme.titleSmall,
           ),
           subtitle: Text(
-            "My super post that talks about something that is super cool and is located in a super spot",
+            description,
             style: Theme.of(context).textTheme.bodySmall,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
