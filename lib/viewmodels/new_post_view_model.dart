@@ -19,6 +19,8 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
     );
   }
 
+  /// Validates that the title and description are not empty.
+  /// If either is empty, the state is updated with the appropriate error message.
   bool validate(String title, String description) {
     if (title.isEmpty || description.isEmpty) {
       state = AsyncData(
@@ -33,6 +35,10 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
     return true;
   }
 
+  /// Verifies that the title and description are not empty, then adds a new post to the database.
+  /// If the user is not logged in, an exception is thrown.
+  /// If the title or description is empty, the state is updated with the appropriate error message.
+  /// If the post is successfully added, the state is updated with the posted flag set to true.
   Future<void> addPost(String title, String description) async {
     state = const AsyncLoading();
 
