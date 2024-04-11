@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/post_data.dart";
-import "package:proxima/views/pages/home/posts/post_card/comment_widget.dart";
-import "package:proxima/views/pages/home/posts/post_card/user_bar_widget.dart";
-import "package:proxima/views/pages/home/posts/post_card/votes_widget.dart";
+import "package:proxima/views/home_content/feed/post_card/comment_widget.dart";
+import "package:proxima/views/home_content/feed/post_card/user_bar_widget.dart";
+import "package:proxima/views/home_content/feed/post_card/votes_widget.dart";
 
 /// This widget is used to display the post card in the home feed.
 /// It contains the post title, description, votes, comments

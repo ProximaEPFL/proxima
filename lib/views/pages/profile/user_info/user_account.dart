@@ -2,16 +2,15 @@ import "package:flutter/material.dart";
 
 /// This widget display the user info in the profile page
 class UserAccount extends StatelessWidget {
-  static const userInfoKey = Key("user Info");
+  static const userInfoKey = Key("userInfo");
+  static const centauriPointsKey = Key("centauriPoints");
 
   const UserAccount({
     super.key,
-    required this.theme,
     required this.userEmail,
   });
 
-  final ThemeData theme;
-  final String? userEmail;
+  final String userEmail;
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +29,15 @@ class UserAccount extends StatelessWidget {
             children: [
               //TODO: get the profile info from the viewmodel
               Text(
-                userEmail ?? "averylongemailjusttocheckthatitfades",
-                style: theme.textTheme.titleSmall,
+                userEmail,
+                style: Theme.of(context).textTheme.titleSmall,
                 overflow: TextOverflow.fade,
               ),
               Text(
-                "User Profile",
-                style: theme.textTheme.titleSmall,
+                //TODO: get the user points from the viewmodel
+                "Pseudo · 1000 Centauri ",
+                style: Theme.of(context).textTheme.titleSmall,
+                key: centauriPointsKey,
               ),
             ],
           ),

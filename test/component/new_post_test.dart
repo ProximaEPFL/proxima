@@ -2,6 +2,7 @@ import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/new_post/new_post_page.dart";
 
@@ -40,7 +41,7 @@ void main() {
     await widgetTester.pumpWidget(mockedPage);
     await widgetTester.pumpAndSettle();
 
-    final backButton = find.byKey(NewPostPage.backButtonKey);
+    final backButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
     await widgetTester.tap(backButton);
     await widgetTester.pumpAndSettle();
 
