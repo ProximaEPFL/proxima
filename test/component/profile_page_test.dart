@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/services/login_service.dart";
+import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
@@ -13,11 +14,17 @@ import "package:proxima/views/pages/profile/posts_info/info_row.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 import "package:proxima/views/pages/profile/user_info/user_account.dart";
 import "../services/firebase/setup_firebase_mocks.dart";
+import "../viewmodels/mock_home_view_model.dart";
 
 void main() {
   testWidgets("Navigate to profile page", (tester) async {
-    const homePageWidget = ProviderScope(
-      child: MaterialApp(
+    final homePageWidget = ProviderScope(
+      overrides: [
+        postOverviewProvider.overrideWith(
+          () => MockHomeViewModel(),
+        ),
+      ],
+      child: const MaterialApp(
         onGenerateRoute: generateRoute,
         title: "Proxima",
         home: HomePage(),
