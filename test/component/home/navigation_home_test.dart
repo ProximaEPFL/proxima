@@ -26,7 +26,8 @@ void main() {
     child: homePageApp,
   );
 
-  testWidgets("new post flow with posts, using bottom bar and come back",
+  testWidgets(
+      "new post flow with posts, using bottom bar and use back button to come back to home page",
       (tester) async {
     await tester.pumpWidget(nonEmptyMockedPage);
     await tester.pumpAndSettle();
@@ -59,7 +60,8 @@ void main() {
     expect(homePage, findsOneWidget);
   });
 
-  testWidgets("new post flow without post, using bottom bar and come back",
+  testWidgets(
+      "new post flow without post, using bottom bar and use back button to go back to home page",
       (tester) async {
     await tester.pumpWidget(emptyMockedPage);
     await tester.pumpAndSettle();
@@ -96,7 +98,8 @@ void main() {
     expect(homePage, findsOneWidget);
   });
 
-  testWidgets("new post flow without post, using button text and come back",
+  testWidgets(
+      "new post flow without post, using button creation text and come back to home page using back button",
       (tester) async {
     await tester.pumpWidget(emptyMockedPage);
     await tester.pumpAndSettle();
