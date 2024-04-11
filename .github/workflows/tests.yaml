@@ -33,7 +33,9 @@ jobs:
           dlcov gen-refs
           flutter test --coverage -r github test
           dlcov -c 80 --exclude-files "*.g.dart,*firebase_options.dart" | tee coverage.out
-          echo "COVERAGE=$(tail -n 1 coverage.out | grep -oP '(?<=coverage ).+?(?=%)')" >> $GITHUB_ENV
+
+      - name: Save Coverage Value to ENV
+        run: echo "COVERAGE=$(tail -n 1 coverage.out | grep -oP '(?<=coverage ).+?(?=%)')" >> $GITHUB_ENV
 
       - name: Update Coverage Badge
         if: github.ref_name == 'main'
