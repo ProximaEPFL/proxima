@@ -11,6 +11,7 @@ import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
+import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
 import "../test/services/firebase/setup_firebase_mocks.dart";
@@ -48,75 +49,96 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    /* Login Page */
-    final Finder loginButtonFinder = find.byType(LoginButton);
-    await tester.tap(loginButtonFinder);
-    await tester.pumpAndSettle(); // Wait for page navigation
-
-    /* Create Account Page */
-    expect(find.byType(CreateAccountPage), findsOneWidget);
-
-    // Enter details in the Create Account Page
-    await tester.enterText(
-        find.byKey(CreateAccountPage.uniqueUsernameFieldKey), "newUsername",);
-    await tester.enterText(
-        find.byKey(CreateAccountPage.pseudoFieldKey), "newPseudo",);
-    await tester.pumpAndSettle();
-
-    // Submit the create account form
-    await tester.tap(find.byKey(CreateAccountPage.confirmButtonKey));
-    await tester.pumpAndSettle(); // Wait for navigation
-
-    /* Home Page */
-    expect(find.byType(HomePage), findsOneWidget);
-
-    /* Profile Page */
-
-    final profilePicture = find.byKey(AppTopBar.profilePictureKey);
-    expect(profilePicture, findsOneWidget);
-    await tester.tap(profilePicture);
-    await tester.pumpAndSettle();
-    // Check that the profile page is displayed
-    final profilePage = find.byType(ProfilePage);
-    expect(profilePage, findsOneWidget);
-    // Check that the post tab is displayed
-    final postTab = find.byKey(ProfilePage.postTabKey);
-    expect(postTab, findsOneWidget);
-    // Check that the comment tab is displayed
-    final commentTab = find.byKey(ProfilePage.commentTabKey);
-    expect(commentTab, findsOneWidget);
-    //Check that post column is displayed
-    final postColumn = find.byKey(ProfilePage.postColumnKey);
-    expect(postColumn, findsOneWidget);
-    // Tap on the comment tab
-    await tester.tap(commentTab);
-    await tester.pumpAndSettle();
-    // Check that the comment column is displayed
-    final commentColumn = find.byKey(ProfilePage.commentColumnKey);
-    expect(commentColumn, findsOneWidget);
-
-    // Find arrow back button
-    final backButton = find.byType(LeadingBackButton);
-    expect(backButton, findsOneWidget);
-    await tester.tap(backButton);
-    await tester.pumpAndSettle();
-    expect(find.byType(HomePage), findsOneWidget);
-
-
-    /* Challenges */
-    await tester.tap(find.text("Challenge"));
-    await tester.pumpAndSettle();
-    expect(find.text("Challenges"), findsOneWidget);
-
-    /* Group */
-    await tester.tap(find.text("Group"));
-    await tester.pumpAndSettle();
-    expect(find.text("Proxima"), findsOneWidget);
-
-    /* Map */
-    await tester.tap(find.text("Map"));
-    await tester.pumpAndSettle();
-    expect(find.text("Proxima"), findsOneWidget);
-
+    await loginToCreateAccount(tester);
+    await createAccountToHome(tester);
+    await homeToProfilePage(tester);
+    await bottomNavigation(tester);
   });
+}
+
+/// Navigate to the login page and login
+Future<void> loginToCreateAccount(WidgetTester tester) async {
+  expect(find.byType(LoginPage), findsOneWidget);
+
+  final loginButton = find.byKey(LoginButton.loginButtonKey);
+  await tester.tap(loginButton);
+  await tester.pumpAndSettle();
+}
+
+/// Create an account and navigate to the home page
+Future<void> createAccountToHome(WidgetTester tester) async {
+  expect(find.byType(CreateAccountPage), findsOneWidget);
+
+  // Enter details in the Create Account Page
+  await tester.enterText(
+    find.byKey(CreateAccountPage.uniqueUsernameFieldKey),
+    "newUsername",
+  );
+  await tester.enterText(
+    find.byKey(CreateAccountPage.pseudoFieldKey),
+    "newPseudo",
+  );
+  await tester.pumpAndSettle();
+
+  // Submit the create account form
+  await tester.tap(find.byKey(CreateAccountPage.confirmButtonKey));
+  await tester.pumpAndSettle(); // Wait for navigation
+
+  expect(find.byType(HomePage), findsOneWidget);
+}
+
+/// Navigate to profile page from home page and go back
+Future<void> homeToProfilePage(WidgetTester tester) async {
+  expect(find.byType(HomePage), findsOneWidget);
+
+  final profilePicture = find.byKey(AppTopBar.profilePictureKey);
+  expect(profilePicture, findsOneWidget);
+  await tester.tap(profilePicture);
+  await tester.pumpAndSettle();
+
+  // Check that the profile page is displayed
+  final profilePage = find.byType(ProfilePage);
+  expect(profilePage, findsOneWidget);
+  // Check that the post tab is displayed
+  final postTab = find.byKey(ProfilePage.postTabKey);
+  expect(postTab, findsOneWidget);
+  // Check that the comment tab is displayed
+  final commentTab = find.byKey(ProfilePage.commentTabKey);
+  expect(commentTab, findsOneWidget);
+  //Check that post column is displayed
+  final postColumn = find.byKey(ProfilePage.postColumnKey);
+  expect(postColumn, findsOneWidget);
+  // Tap on the comment tab
+  await tester.tap(commentTab);
+  await tester.pumpAndSettle();
+  // Check that the comment column is displayed
+  final commentColumn = find.byKey(ProfilePage.commentColumnKey);
+  expect(commentColumn, findsOneWidget);
+
+  // Find arrow back button and go back to home page
+  final backButton = find.byType(LeadingBackButton);
+  expect(backButton, findsOneWidget);
+  await tester.tap(backButton);
+  await tester.pumpAndSettle();
+  expect(find.byType(HomePage), findsOneWidget);
+}
+
+/// Navigate to the other pages using bottom navigation bar
+Future<void> bottomNavigation(WidgetTester tester) async {
+  expect(find.byType(HomePage), findsOneWidget);
+
+  // Challenges
+  await tester.tap(find.text("Challenge"));
+  await tester.pumpAndSettle();
+  expect(find.text("Challenges"), findsOneWidget);
+
+  // Group
+  await tester.tap(find.text("Group"));
+  await tester.pumpAndSettle();
+  expect(find.text("Proxima"), findsOneWidget);
+
+  // Map
+  await tester.tap(find.text("Map"));
+  await tester.pumpAndSettle();
+  expect(find.text("Proxima"), findsOneWidget);
 }
