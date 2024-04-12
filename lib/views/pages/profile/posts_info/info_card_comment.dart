@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 
 //info card for the comments
 class InfoCardComment extends StatelessWidget {
-  static const cardKey = Key("card");
+  static const infoCardCommentKey = Key("infoCardComment");
 
   const InfoCardComment({
     super.key,
@@ -16,7 +16,7 @@ class InfoCardComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: cardKey,
+      key: infoCardCommentKey,
       width: 54,
       height: 80,
       decoration: BoxDecoration(
