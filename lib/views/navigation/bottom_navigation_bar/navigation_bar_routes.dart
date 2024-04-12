@@ -49,7 +49,7 @@ enum NavigationbarRoutes {
   String pageLabel() {
     switch (this) {
       case challenge:
-        return "Your challenges";
+        return "Challenges";
       case _:
         return defaultLabelText;
     }
