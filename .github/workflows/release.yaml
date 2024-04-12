@@ -2,6 +2,9 @@ name: Flutter Application GitHub Release
 
 on: workflow_dispatch
 
+permissions:
+  contents: write
+
 jobs:
   proxima-app-release:
     runs-on: ubuntu-latest
