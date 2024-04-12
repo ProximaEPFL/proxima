@@ -4,6 +4,8 @@ import "package:flutter/material.dart";
 class InfoCardPost extends StatelessWidget {
   static const cardKey = Key("card");
 
+  static const borderRadius = BorderRadius.all(Radius.circular(10));
+
   const InfoCardPost({
     super.key,
     required this.shadow,
@@ -23,28 +25,36 @@ class InfoCardPost extends StatelessWidget {
       height: 80,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondaryContainer,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: borderRadius,
         boxShadow: [shadow],
       ),
-      child: Center(
-        child: ListTile(
-          title: Text(
-            title,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          subtitle: Text(
-            description,
-            style: Theme.of(context).textTheme.bodySmall,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: const IconButton(
-            icon: Icon(
-              Icons.delete,
-              size: 32,
+      child: Material(
+        clipBehavior: Clip.hardEdge,
+        borderRadius: borderRadius,
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => {},
+          child: Center(
+            child: ListTile(
+              title: Text(
+                title,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              subtitle: Text(
+                description,
+                style: Theme.of(context).textTheme.bodySmall,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: IconButton(
+                icon: const Icon(
+                  Icons.delete,
+                  size: 32,
+                ),
+                // TODO : add the logic for deleting a post
+                onPressed: () {},
+              ),
             ),
-            // TODO : add the logic for deleting a post
-            onPressed: null,
           ),
         ),
       ),
