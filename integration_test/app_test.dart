@@ -6,9 +6,12 @@ import "package:integration_test/integration_test.dart";
 import "package:proxima/main.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
+import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
+import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
+import "package:proxima/views/pages/profile/profile_page.dart";
 
 import "../test/services/firebase/setup_firebase_mocks.dart";
 import "../test/services/firebase/testing_auth_providers.dart";
@@ -55,9 +58,9 @@ void main() {
 
     // Enter details in the Create Account Page
     await tester.enterText(
-        find.byKey(CreateAccountPage.uniqueUsernameFieldKey), "newUsername");
+        find.byKey(CreateAccountPage.uniqueUsernameFieldKey), "newUsername",);
     await tester.enterText(
-        find.byKey(CreateAccountPage.pseudoFieldKey), "newPseudo");
+        find.byKey(CreateAccountPage.pseudoFieldKey), "newPseudo",);
     await tester.pumpAndSettle();
 
     // Submit the create account form
@@ -66,5 +69,54 @@ void main() {
 
     /* Home Page */
     expect(find.byType(HomePage), findsOneWidget);
+
+    /* Profile Page */
+
+    final profilePicture = find.byKey(AppTopBar.profilePictureKey);
+    expect(profilePicture, findsOneWidget);
+    await tester.tap(profilePicture);
+    await tester.pumpAndSettle();
+    // Check that the profile page is displayed
+    final profilePage = find.byType(ProfilePage);
+    expect(profilePage, findsOneWidget);
+    // Check that the post tab is displayed
+    final postTab = find.byKey(ProfilePage.postTabKey);
+    expect(postTab, findsOneWidget);
+    // Check that the comment tab is displayed
+    final commentTab = find.byKey(ProfilePage.commentTabKey);
+    expect(commentTab, findsOneWidget);
+    //Check that post column is displayed
+    final postColumn = find.byKey(ProfilePage.postColumnKey);
+    expect(postColumn, findsOneWidget);
+    // Tap on the comment tab
+    await tester.tap(commentTab);
+    await tester.pumpAndSettle();
+    // Check that the comment column is displayed
+    final commentColumn = find.byKey(ProfilePage.commentColumnKey);
+    expect(commentColumn, findsOneWidget);
+
+    // Find arrow back button
+    final backButton = find.byType(LeadingBackButton);
+    expect(backButton, findsOneWidget);
+    await tester.tap(backButton);
+    await tester.pumpAndSettle();
+    expect(find.byType(HomePage), findsOneWidget);
+
+
+    /* Challenges */
+    await tester.tap(find.text("Challenge"));
+    await tester.pumpAndSettle();
+    expect(find.text("Challenges"), findsOneWidget);
+
+    /* Group */
+    await tester.tap(find.text("Group"));
+    await tester.pumpAndSettle();
+    expect(find.text("Proxima"), findsOneWidget);
+
+    /* Map */
+    await tester.tap(find.text("Map"));
+    await tester.pumpAndSettle();
+    expect(find.text("Proxima"), findsOneWidget);
+
   });
 }
