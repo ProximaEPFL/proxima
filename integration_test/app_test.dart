@@ -161,6 +161,13 @@ Future<void> bottomNavigation(WidgetTester tester) async {
   await tester.pumpAndSettle();
   expect(find.text("Proxima"), findsOneWidget);
 
+  // New Post
+  await tester.tap(find.text("New post"));
+  await tester.pumpAndSettle();
+  expect(find.text("Create a new post"), findsOneWidget);
+  await tester.tap(find.byKey(LeadingBackButton.leadingBackButtonKey));
+  await tester.pumpAndSettle();
+
   // Home (Feed)
   await tester.tap(find.text("Feed"));
   await tester.pumpAndSettle();
