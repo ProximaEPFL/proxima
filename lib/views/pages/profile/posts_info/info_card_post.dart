@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:proxima/views/pages/profile/posts_info/popup/post_popup.dart";
 
 //info card for the posts
 class InfoCardPost extends StatelessWidget {
@@ -61,31 +62,6 @@ class InfoCardPost extends StatelessWidget {
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class PostPopUp extends StatelessWidget {
-  const PostPopUp({
-    super.key,
-    required this.title,
-    required this.description,
-  });
-
-  final String title;
-  final String description;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(title),
-      content: SingleChildScrollView(
-        child: ListBody(
-          children: <Widget>[
-            Text(description),
-          ],
         ),
       ),
     );
