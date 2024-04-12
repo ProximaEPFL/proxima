@@ -3,7 +3,7 @@ import "package:proxima/views/pages/profile/posts_info/popup/comment_popup.dart"
 
 //info card for the comments
 class InfoCardComment extends StatelessWidget {
-  static const cardKey = Key("card");
+  static const infoCardCommentKey = Key("infoCardComment");
 
   static const borderRadius = BorderRadius.all(Radius.circular(10));
 
@@ -19,7 +19,7 @@ class InfoCardComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: cardKey,
+      key: infoCardCommentKey,
       width: 54,
       height: 80,
       decoration: BoxDecoration(

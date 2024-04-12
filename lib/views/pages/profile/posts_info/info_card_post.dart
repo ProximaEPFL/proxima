@@ -3,7 +3,7 @@ import "package:proxima/views/pages/profile/posts_info/popup/post_popup.dart";
 
 //info card for the posts
 class InfoCardPost extends StatelessWidget {
-  static const cardKey = Key("card");
+  static const infoCardPostKey = Key("infoCardPost");
 
   static const borderRadius = BorderRadius.all(Radius.circular(10));
 
@@ -21,7 +21,7 @@ class InfoCardPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: cardKey,
+      key: infoCardPostKey,
       width: 54,
       height: 80,
       decoration: BoxDecoration(
