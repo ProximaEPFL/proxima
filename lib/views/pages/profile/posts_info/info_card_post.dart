@@ -33,7 +33,12 @@ class InfoCardPost extends StatelessWidget {
         borderRadius: borderRadius,
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => {},
+          onTap: () => showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return PostPopUp(title: title, description: description);
+            },
+          ),
           child: Center(
             child: ListTile(
               title: Text(
@@ -56,6 +61,31 @@ class InfoCardPost extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class PostPopUp extends StatelessWidget {
+  const PostPopUp({
+    super.key,
+    required this.title,
+    required this.description,
+  });
+
+  final String title;
+  final String description;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            Text(description),
+          ],
         ),
       ),
     );
