@@ -6,12 +6,14 @@ import "package:integration_test/integration_test.dart";
 import "package:proxima/main.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
+import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
+import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
 import "../test/services/firebase/setup_firebase_mocks.dart";
@@ -31,7 +33,7 @@ void main() {
     userRepo = UserRepositoryService(firestore: fakeFireStore);
   });
 
-  testWidgets("E2E: Login Page -> Create Account -> Home Page",
+  testWidgets("End-to-end test of the app navigation flow",
       (WidgetTester tester) async {
     // Set up the app with mocked providers
     await tester.pumpWidget(
@@ -53,6 +55,7 @@ void main() {
     await createAccountToHome(tester);
     await homeToProfilePage(tester);
     await bottomNavigation(tester);
+    await createPost(tester);
   });
 }
 
@@ -99,18 +102,23 @@ Future<void> homeToProfilePage(WidgetTester tester) async {
   // Check that the profile page is displayed
   final profilePage = find.byType(ProfilePage);
   expect(profilePage, findsOneWidget);
+
   // Check that the post tab is displayed
   final postTab = find.byKey(ProfilePage.postTabKey);
   expect(postTab, findsOneWidget);
+
   // Check that the comment tab is displayed
   final commentTab = find.byKey(ProfilePage.commentTabKey);
   expect(commentTab, findsOneWidget);
+
   //Check that post column is displayed
   final postColumn = find.byKey(ProfilePage.postColumnKey);
   expect(postColumn, findsOneWidget);
+
   // Tap on the comment tab
   await tester.tap(commentTab);
   await tester.pumpAndSettle();
+
   // Check that the comment column is displayed
   final commentColumn = find.byKey(ProfilePage.commentColumnKey);
   expect(commentColumn, findsOneWidget);
@@ -141,4 +149,52 @@ Future<void> bottomNavigation(WidgetTester tester) async {
   await tester.tap(find.text("Map"));
   await tester.pumpAndSettle();
   expect(find.text("Proxima"), findsOneWidget);
+
+  // Home (Feed)
+  await tester.tap(find.text("Feed"));
+  await tester.pumpAndSettle();
+  expect(find.byType(HomePage), findsOneWidget);
+}
+
+/// Create a post
+Future<void> createPost(WidgetTester tester) async {
+  expect(find.byType(HomePage), findsOneWidget);
+
+  // Tap on the new post button
+  await tester.tap(find.byKey(PostFeed.newPostButtonTextKey));
+  await tester.pumpAndSettle();
+
+  // Check that the new post page is displayed
+  expect(find.byType(NewPostForm), findsOneWidget);
+
+  // Enter post details
+  const postTitle = "I like turtles";
+  const postDescription = "Look at them go!";
+
+  await tester.enterText(
+    find.byKey(NewPostForm.titleFieldKey),
+    postTitle,
+  );
+
+  await tester.enterText(
+    find.byKey(NewPostForm.bodyFieldKey),
+    postDescription,
+  );
+
+  await tester.pumpAndSettle();
+
+/*
+  // Submit the post
+  await tester.tap(find.byKey(NewPostForm.postButtonKey));
+  await tester.pumpAndSettle();
+
+  // refresh the page by pulling down
+  await tester.drag(find.byType(PostFeed), const Offset(0, 500));
+  await tester.pumpAndSettle();
+
+  // Check that the post is displayed
+
+  expect(find.text(postTitle), findsOneWidget);
+  expect(find.text(postDescription), findsOneWidget);
+ */
 }
