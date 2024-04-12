@@ -26,3 +26,11 @@ GoogleSignIn mockGoogleSignIn(ProviderRef<GoogleSignIn> ref) {
 FirebaseAuth mockFirebaseAuth(ProviderRef<FirebaseAuth> ref) {
   return MockFirebaseAuth(mockUser: testingLoginUser);
 }
+
+final loggedInUserOverrides = [
+  firebaseAuthProvider.overrideWith(mockFirebaseAuthSignedIn),
+];
+
+FirebaseAuth mockFirebaseAuthSignedIn(ProviderRef<FirebaseAuth> ref) {
+  return MockFirebaseAuth(mockUser: testingLoginUser, signedIn: true);
+}

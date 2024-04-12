@@ -31,6 +31,20 @@ void main() {
     await Firebase.initializeApp();
   });
 
+  Future<void> enterPseudoAndUsername(WidgetTester tester) async {
+    // Enter a valid username and pseudo to make validation work
+    final pseudoField = find.byKey(CreateAccountPage.pseudoFieldKey);
+    expect(pseudoField, findsOneWidget);
+    await tester.enterText(pseudoField, "ANicePseudo");
+    await tester.pumpAndSettle();
+
+    final uniqueUsernameField =
+        find.byKey(CreateAccountPage.uniqueUsernameFieldKey);
+    expect(uniqueUsernameField, findsOneWidget);
+    await tester.enterText(uniqueUsernameField, "ANiceUsername");
+    await tester.pumpAndSettle();
+  }
+
   group("Existing user data in repository testing", () {
     final expectedUser = testingUserFirestore;
 
@@ -128,6 +142,8 @@ void main() {
       final createAccountPage = find.byType(CreateAccountPage);
       expect(createAccountPage, findsOneWidget);
 
+      await enterPseudoAndUsername(tester);
+
       final confirmAccountCreating =
           find.byKey(CreateAccountPage.confirmButtonKey);
 
@@ -177,6 +193,8 @@ void main() {
       // Check that pressing login redirects to the create account page
       final createAccountPage = find.byType(CreateAccountPage);
       expect(createAccountPage, findsOneWidget);
+
+      await enterPseudoAndUsername(tester);
 
       // And that pushing the confirm button redirects to the home page
       final confirmButton = find.byKey(CreateAccountPage.confirmButtonKey);
