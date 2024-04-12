@@ -1,8 +1,11 @@
 import "package:flutter/material.dart";
+import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/utils/ui/circular_value.dart";
+import "package:proxima/viewmodels/new_post_view_model.dart";
 
 class NewPostForm extends HookConsumerWidget {
-  NewPostForm({super.key});
+  const NewPostForm({super.key});
 
   static const titleFieldKey = Key("title");
   static const bodyFieldKey = Key("body");
@@ -11,11 +14,6 @@ class NewPostForm extends HookConsumerWidget {
   static const _titleHint = "Title";
   static const _bodyHint = "Body";
   static const _postButtonText = "Post";
-
-  static const _titleError = "Please enter a title";
-  static const _bodyError = "Please enter a body";
-
-  final _formKey = GlobalKey<FormState>();
 
   Padding verticallyPadded(Widget child) {
     return Padding(
@@ -26,75 +24,80 @@ class NewPostForm extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final titleField = TextFormField(
-      key: titleFieldKey,
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(),
-        hintText: _titleHint,
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return _titleError;
-        }
-        return null;
-      },
-    );
+    final titleController = useTextEditingController();
+    final bodyController = useTextEditingController();
 
-    final bodyField = TextFormField(
-      key: bodyFieldKey,
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(),
-        hintText: _bodyHint,
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return _bodyError;
-        }
-        return null;
-      },
-      maxLines: null,
-      expands: true,
-      textAlignVertical: TextAlignVertical.top,
-    );
+    ref.listen(newPostStateProvider, (previous, state) {
+      if (state.valueOrNull?.posted == true) {
+        Navigator.pop(context);
+      }
+    });
 
-    final postButton = ElevatedButton(
-      key: postButtonKey,
-      child: const Text(_postButtonText),
-      onPressed: () {
-        if (_formKey.currentState?.validate() ?? false) {
-          // TODO commit the post to the repository
-          Navigator.pop(context);
-        }
-      },
-    );
+    final asyncState = ref.watch(newPostStateProvider);
 
-    final settingsButton = IconButton(
-      onPressed: () {
-        // TODO open tag and notification settings overlay
-      },
-      icon: const Icon(Icons.settings),
-    );
-
-    final buttonRow = Row(
-      children: [
-        Expanded(child: postButton),
-        settingsButton,
-      ],
-    );
-
-    return Form(
-      key: _formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          verticallyPadded(titleField),
-          Flexible(
-            fit: FlexFit.loose,
-            child: verticallyPadded(bodyField),
+    return CircularValue(
+      value: asyncState,
+      builder: (context, state) {
+        var titleField = TextField(
+          key: titleFieldKey,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            hintText: _titleHint,
+            errorText: state.titleError,
           ),
-          verticallyPadded(buttonRow),
-        ],
-      ),
+          controller: titleController,
+        );
+
+        final bodyField = TextField(
+          key: bodyFieldKey,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            hintText: _bodyHint,
+            errorText: state.descriptionError,
+          ),
+          maxLines: null,
+          expands: true,
+          textAlignVertical: TextAlignVertical.top,
+          controller: bodyController,
+        );
+
+        final postButton = ElevatedButton(
+          key: postButtonKey,
+          child: const Text(_postButtonText),
+          onPressed: () async {
+            await ref.read(newPostStateProvider.notifier).addPost(
+                  titleController.text,
+                  bodyController.text,
+                );
+          },
+        );
+
+        final settingsButton = IconButton(
+          onPressed: () {
+            // TODO open tag and notification settings overlay
+          },
+          icon: const Icon(Icons.settings),
+        );
+
+        final buttonRow = Row(
+          children: [
+            Expanded(child: postButton),
+            settingsButton,
+          ],
+        );
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            verticallyPadded(titleField),
+            Flexible(
+              fit: FlexFit.loose,
+              child: verticallyPadded(bodyField),
+            ),
+            verticallyPadded(buttonRow),
+          ],
+        );
+      },
     );
   }
 }

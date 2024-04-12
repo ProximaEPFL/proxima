@@ -16,9 +16,9 @@ class NewPostPage extends HookConsumerWidget {
         title: const Text(_pageTitle),
         leading: const LeadingBackButton(),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-        child: NewPostForm(),
+      body: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+        child: Center(child: NewPostForm()),
       ),
     );
   }
