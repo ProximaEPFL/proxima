@@ -64,8 +64,8 @@ void main() {
 
     await loginToCreateAccount(tester);
     await createAccountToHome(tester);
-    //await homeToProfilePage(tester);
-    //await bottomNavigation(tester);
+    await homeToProfilePage(tester);
+    await bottomNavigation(tester);
     await createPost(tester);
   });
 }
