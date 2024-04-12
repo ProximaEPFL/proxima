@@ -17,7 +17,9 @@ class PostPopUp extends StatelessWidget {
       content: Text(description),
       actions: <Widget>[
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
           icon: const Icon(Icons.delete),
         ),
       ],
