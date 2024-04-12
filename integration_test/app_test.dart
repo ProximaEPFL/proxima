@@ -9,7 +9,6 @@ import "package:proxima/main.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
-import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account_page.dart";
@@ -23,7 +22,6 @@ import "package:proxima/views/pages/profile/profile_page.dart";
 import "../test/services/firebase/setup_firebase_mocks.dart";
 import "../test/services/firebase/testing_auth_providers.dart";
 import "../test/services/mock_geo_location_service.dart";
-import "../test/viewmodels/mock_home_view_model.dart";
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -55,9 +53,6 @@ void main() {
         overrides: [
           ...firebaseAuthMocksOverrides,
           userRepositoryProvider.overrideWithValue(userRepo),
-          postOverviewProvider.overrideWith(
-            () => MockHomeViewModel(),
-          ),
           geoLocationServiceProvider.overrideWithValue(geoLocationService),
           postRepositoryProvider.overrideWithValue(postRepo),
         ],
@@ -206,6 +201,8 @@ Future<void> createPost(WidgetTester tester) async {
   // refresh the page by pulling down
   await tester.drag(find.byType(PostFeed), const Offset(0, 500));
   await tester.pumpAndSettle();
+
+  await Future.delayed(const Duration(seconds: 2));
 
   // Check that the post is displayed
   expect(find.text(postTitle), findsOneWidget);
