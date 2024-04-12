@@ -1,6 +1,10 @@
 import "package:flutter/material.dart";
 
 class CommentPopUp extends StatelessWidget {
+  static const commentPopUpTitleKey = Key("commentPopUpTitle");
+  static const commentPopUpDescriptionKey = Key("commentPopUpDescription");
+  static const commentPopUpDeleteButtonKey = Key("commentPopUpDeleteButton");
+
   const CommentPopUp({
     super.key,
     required this.comment,
@@ -11,10 +15,17 @@ class CommentPopUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Comment"),
-      content: Text(comment),
+      title: const Text(
+        key: commentPopUpTitleKey,
+        "Comment",
+      ),
+      content: Text(
+        key: commentPopUpDescriptionKey,
+        comment,
+      ),
       actions: <Widget>[
         IconButton(
+          key: commentPopUpDeleteButtonKey,
           onPressed: () {
             Navigator.pop(context);
           },

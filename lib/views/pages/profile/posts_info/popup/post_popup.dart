@@ -1,6 +1,10 @@
 import "package:flutter/material.dart";
 
 class PostPopUp extends StatelessWidget {
+  static const postPopUpTitleKey = Key("postPopUpTitle");
+  static const postPopUpDescriptionKey = Key("postPopUpDescription");
+  static const postPopUpDeleteButtonKey = Key("postPopUpDeleteButton");
+
   const PostPopUp({
     super.key,
     required this.title,
@@ -13,10 +17,17 @@ class PostPopUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title),
-      content: Text(description),
+      title: Text(
+        key: postPopUpTitleKey,
+        title,
+      ),
+      content: Text(
+        key: postPopUpDescriptionKey,
+        description,
+      ),
       actions: <Widget>[
         IconButton(
+          key: postPopUpDeleteButtonKey,
           onPressed: () {
             Navigator.pop(context);
           },

@@ -8,8 +8,11 @@ import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_badge.dart";
+import "package:proxima/views/pages/profile/posts_info/info_card_comment.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_post.dart";
 import "package:proxima/views/pages/profile/posts_info/info_row.dart";
+import "package:proxima/views/pages/profile/posts_info/popup/comment_popup.dart";
+import "package:proxima/views/pages/profile/posts_info/popup/post_popup.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 import "package:proxima/views/pages/profile/user_info/user_account.dart";
 import "../services/firebase/setup_firebase_mocks.dart";
@@ -140,5 +143,120 @@ void main() {
     // Check that the comment column is displayed
     final commentColumn = find.byKey(ProfilePage.commentColumnKey);
     expect(commentColumn, findsOneWidget);
+  });
+
+  testWidgets("Post popup working as expected", (tester) async {
+    setupFirebaseAuthMocks();
+
+    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
+
+    final firebaseAuthMocksOverrides = [
+      firebaseAuthProvider.overrideWithValue(auth),
+    ];
+
+    Widget profilePageWidget = ProviderScope(
+      overrides: firebaseAuthMocksOverrides,
+      child: const MaterialApp(
+        onGenerateRoute: generateRoute,
+        title: "Profile page",
+        home: ProfilePage(),
+      ),
+    );
+
+    await tester.pumpWidget(profilePageWidget);
+    await tester.pumpAndSettle();
+
+    //Check that post column is displayed
+    final postColumn = find.byKey(ProfilePage.postColumnKey);
+    expect(postColumn, findsOneWidget);
+
+    //Check tab on the first post
+    final infoCardPost = find.byKey(InfoCardPost.infoCardPostKey);
+    expect(infoCardPost, findsWidgets);
+
+    // Tap on the first post
+    await tester.tap(infoCardPost.first);
+    await tester.pumpAndSettle();
+
+    // Check that the post popup is displayed
+    final postPopup = find.byType(PostPopUp);
+    expect(postPopup, findsOneWidget);
+
+    //Check that the title of the pop up is displayed
+    final postPopupTitle = find.byKey(PostPopUp.postPopUpTitleKey);
+    expect(postPopupTitle, findsOneWidget);
+
+    //Check that the description of the pop up is displayed
+    final postPopupDescription = find.byKey(PostPopUp.postPopUpDescriptionKey);
+    expect(postPopupDescription, findsOneWidget);
+
+    //Check that the delete button is displayed
+    final postPopupDeleteButton =
+        find.byKey(PostPopUp.postPopUpDeleteButtonKey);
+    expect(postPopupDeleteButton, findsOneWidget);
+  });
+
+  testWidgets("Tab working as expected", (tester) async {
+    setupFirebaseAuthMocks();
+
+    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
+
+    final firebaseAuthMocksOverrides = [
+      firebaseAuthProvider.overrideWithValue(auth),
+    ];
+
+    Widget profilePageWidget = ProviderScope(
+      overrides: firebaseAuthMocksOverrides,
+      child: const MaterialApp(
+        onGenerateRoute: generateRoute,
+        title: "Profile page",
+        home: ProfilePage(),
+      ),
+    );
+
+    await tester.pumpWidget(profilePageWidget);
+    await tester.pumpAndSettle();
+
+    // Check that the comment tab is displayed
+    final commentTab = find.byKey(ProfilePage.commentTabKey);
+    expect(commentTab, findsOneWidget);
+
+    //Check that post column is displayed
+    final postColumn = find.byKey(ProfilePage.postColumnKey);
+    expect(postColumn, findsOneWidget);
+
+    // Tap on the comment tab
+    await tester.tap(commentTab);
+    await tester.pumpAndSettle();
+
+    // Check that the comment column is displayed
+    final commentColumn = find.byKey(ProfilePage.commentColumnKey);
+    expect(commentColumn, findsOneWidget);
+
+    //Check tab on the first post
+    final infoCardComment = find.byKey(InfoCardComment.infoCardCommentKey);
+    expect(infoCardComment, findsWidgets);
+
+    // Tap on the first post
+    await tester.tap(infoCardComment.first);
+    await tester.pumpAndSettle();
+
+    // Check that the comment popup is displayed
+    final commentPopup = find.byType(CommentPopUp);
+    expect(commentPopup, findsOneWidget);
+
+    //Check that the title of the pop up is displayed
+    final commentPopupTitle = find.byKey(CommentPopUp.commentPopUpTitleKey);
+    expect(commentPopupTitle, findsOneWidget);
+
+    //Check that the description of the pop up is displayed
+    final commentPopupDescription =
+        find.byKey(CommentPopUp.commentPopUpDescriptionKey);
+    expect(commentPopupDescription, findsOneWidget);
+
+    //Check that the delete button is displayed
+    final commentPopupDeleteButton =
+        find.byKey(CommentPopUp.commentPopUpDeleteButtonKey);
+    expect(commentPopupDeleteButton, findsOneWidget);
   });
 }
