@@ -1,10 +1,14 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:integration_test/integration_test.dart";
+import "package:mockito/mockito.dart";
 import "package:proxima/main.dart";
+import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
+import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
@@ -18,6 +22,7 @@ import "package:proxima/views/pages/profile/profile_page.dart";
 
 import "../test/services/firebase/setup_firebase_mocks.dart";
 import "../test/services/firebase/testing_auth_providers.dart";
+import "../test/services/mock_geo_location_service.dart";
 import "../test/viewmodels/mock_home_view_model.dart";
 
 void main() {
@@ -25,12 +30,21 @@ void main() {
 
   late FakeFirebaseFirestore fakeFireStore;
   late UserRepositoryService userRepo;
+  late PostRepositoryService postRepo;
+
+  MockGeoLocationService geoLocationService = MockGeoLocationService();
+  const GeoPoint testLocation = GeoPoint(0, 0);
 
   setUpAll(() async {
     setupFirebaseAuthMocks();
     await Firebase.initializeApp();
     fakeFireStore = FakeFirebaseFirestore();
     userRepo = UserRepositoryService(firestore: fakeFireStore);
+    postRepo = PostRepositoryService(firestore: fakeFireStore);
+
+    when(geoLocationService.getCurrentPosition()).thenAnswer(
+          (_) => Future.value(testLocation),
+    );
   });
 
   testWidgets("End-to-end test of the app navigation flow",
@@ -44,6 +58,8 @@ void main() {
           postOverviewProvider.overrideWith(
             () => MockHomeViewModel(),
           ),
+          geoLocationServiceProvider.overrideWithValue(geoLocationService),
+          postRepositoryProvider.overrideWithValue(postRepo),
         ],
         child: const ProximaApp(),
       ),
@@ -183,7 +199,6 @@ Future<void> createPost(WidgetTester tester) async {
 
   await tester.pumpAndSettle();
 
-/*
   // Submit the post
   await tester.tap(find.byKey(NewPostForm.postButtonKey));
   await tester.pumpAndSettle();
@@ -193,8 +208,6 @@ Future<void> createPost(WidgetTester tester) async {
   await tester.pumpAndSettle();
 
   // Check that the post is displayed
-
   expect(find.text(postTitle), findsOneWidget);
   expect(find.text(postDescription), findsOneWidget);
- */
 }
