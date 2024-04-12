@@ -52,211 +52,166 @@ void main() {
     final profilePage = find.byType(ProfilePage);
     expect(profilePage, findsOneWidget);
   });
+  group("Profile widget page testing", () {
+    setUp(() async {
+      setupFirebaseAuthMocks();
+    });
 
-  testWidgets("Various widget are displayed", (tester) async {
-    setupFirebaseAuthMocks();
+    ProviderScope getMockedProxima() {
+      MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
 
-    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
+      final firebaseAuthMocksOverrides = [
+        firebaseAuthProvider.overrideWithValue(auth),
+      ];
 
-    final firebaseAuthMocksOverrides = [
-      firebaseAuthProvider.overrideWithValue(auth),
-    ];
+      return ProviderScope(
+        overrides: firebaseAuthMocksOverrides,
+        child: const MaterialApp(
+          onGenerateRoute: generateRoute,
+          title: "Profile page",
+          home: ProfilePage(),
+        ),
+      );
+    }
 
-    Widget profilePageWidget = ProviderScope(
-      overrides: firebaseAuthMocksOverrides,
-      child: const MaterialApp(
-        onGenerateRoute: generateRoute,
-        title: "Profile page",
-        home: ProfilePage(),
-      ),
-    );
+    testWidgets("Various widget are displayed", (tester) async {
+      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpAndSettle();
 
-    await tester.pumpWidget(profilePageWidget);
-    await tester.pumpAndSettle();
+      // Check that badges are displayed
+      final badgeCard = find.byKey(InfoCardBadge.infoCardBadgeKey);
+      expect(badgeCard, findsWidgets);
 
-    // Check that badges are displayed
-    final badgeCard = find.byKey(InfoCardBadge.infoCardBadgeKey);
-    expect(badgeCard, findsWidgets);
+      //Check that the post card is displayed
+      final postCard = find.byKey(InfoCardPost.infoCardPostKey);
+      expect(postCard, findsWidgets);
 
-    //Check that the post card is displayed
-    final postCard = find.byKey(InfoCardPost.infoCardPostKey);
-    expect(postCard, findsWidgets);
+      // Check that the info column is displayed
+      final infoColumn = find.byKey(ProfilePage.postColumnKey);
+      expect(infoColumn, findsOneWidget);
 
-    // Check that the info column is displayed
-    final infoColumn = find.byKey(ProfilePage.postColumnKey);
-    expect(infoColumn, findsOneWidget);
+      // Check that the info row is displayed
+      final infoRowWidget = find.byKey(InfoRow.infoRowKey);
+      expect(infoRowWidget, findsOneWidget);
 
-    // Check that the info row is displayed
-    final infoRowWidget = find.byKey(InfoRow.infoRowKey);
-    expect(infoRowWidget, findsOneWidget);
+      //Check that centauri points are displayed
+      final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
+      expect(centauriPoints, findsOneWidget);
 
-    //Check that centauri points are displayed
-    final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
-    expect(centauriPoints, findsOneWidget);
+      //Check that the user account is displayed
+      final userAccount = find.byKey(UserAccount.userInfoKey);
+      expect(userAccount, findsOneWidget);
 
-    //Check that the user account is displayed
-    final userAccount = find.byKey(UserAccount.userInfoKey);
-    expect(userAccount, findsOneWidget);
+      //Check that the tab is displayed
+      final tab = find.byKey(ProfilePage.tabKey);
+      expect(tab, findsOneWidget);
+    });
 
-    //Check that the tab is displayed
-    final tab = find.byKey(ProfilePage.tabKey);
-    expect(tab, findsOneWidget);
-  });
+    testWidgets("Tab working as expected", (tester) async {
+      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpAndSettle();
 
-  testWidgets("Tab working as expected", (tester) async {
-    setupFirebaseAuthMocks();
+      // Check that the post tab is displayed
+      final postTab = find.byKey(ProfilePage.postTabKey);
+      expect(postTab, findsOneWidget);
 
-    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
+      // Check that the comment tab is displayed
+      final commentTab = find.byKey(ProfilePage.commentTabKey);
+      expect(commentTab, findsOneWidget);
 
-    final firebaseAuthMocksOverrides = [
-      firebaseAuthProvider.overrideWithValue(auth),
-    ];
+      //Check that post column is displayed
+      final postColumn = find.byKey(ProfilePage.postColumnKey);
+      expect(postColumn, findsOneWidget);
 
-    Widget profilePageWidget = ProviderScope(
-      overrides: firebaseAuthMocksOverrides,
-      child: const MaterialApp(
-        onGenerateRoute: generateRoute,
-        title: "Profile page",
-        home: ProfilePage(),
-      ),
-    );
+      // Tap on the comment tab
+      await tester.tap(commentTab);
+      await tester.pumpAndSettle();
 
-    await tester.pumpWidget(profilePageWidget);
-    await tester.pumpAndSettle();
+      // Check that the comment column is displayed
+      final commentColumn = find.byKey(ProfilePage.commentColumnKey);
+      expect(commentColumn, findsOneWidget);
+    });
 
-    // Check that the post tab is displayed
-    final postTab = find.byKey(ProfilePage.postTabKey);
-    expect(postTab, findsOneWidget);
+    testWidgets("Post popup working as expected", (tester) async {
+      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpAndSettle();
 
-    // Check that the comment tab is displayed
-    final commentTab = find.byKey(ProfilePage.commentTabKey);
-    expect(commentTab, findsOneWidget);
+      //Check that post column is displayed
+      final postColumn = find.byKey(ProfilePage.postColumnKey);
+      expect(postColumn, findsOneWidget);
 
-    //Check that post column is displayed
-    final postColumn = find.byKey(ProfilePage.postColumnKey);
-    expect(postColumn, findsOneWidget);
+      //Check tab on the first post
+      final infoCardPost = find.byKey(InfoCardPost.infoCardPostKey);
+      expect(infoCardPost, findsWidgets);
 
-    // Tap on the comment tab
-    await tester.tap(commentTab);
-    await tester.pumpAndSettle();
+      // Tap on the first post
+      await tester.tap(infoCardPost.first);
+      await tester.pumpAndSettle();
 
-    // Check that the comment column is displayed
-    final commentColumn = find.byKey(ProfilePage.commentColumnKey);
-    expect(commentColumn, findsOneWidget);
-  });
+      // Check that the post popup is displayed
+      final postPopup = find.byType(PostPopUp);
+      expect(postPopup, findsOneWidget);
 
-  testWidgets("Post popup working as expected", (tester) async {
-    setupFirebaseAuthMocks();
+      //Check that the title of the pop up is displayed
+      final postPopupTitle = find.byKey(PostPopUp.postPopUpTitleKey);
+      expect(postPopupTitle, findsOneWidget);
 
-    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
+      //Check that the description of the pop up is displayed
+      final postPopupDescription =
+          find.byKey(PostPopUp.postPopUpDescriptionKey);
+      expect(postPopupDescription, findsOneWidget);
 
-    final firebaseAuthMocksOverrides = [
-      firebaseAuthProvider.overrideWithValue(auth),
-    ];
+      //Check that the delete button is displayed
+      final postPopupDeleteButton =
+          find.byKey(PostPopUp.postPopUpDeleteButtonKey);
+      expect(postPopupDeleteButton, findsOneWidget);
+    });
 
-    Widget profilePageWidget = ProviderScope(
-      overrides: firebaseAuthMocksOverrides,
-      child: const MaterialApp(
-        onGenerateRoute: generateRoute,
-        title: "Profile page",
-        home: ProfilePage(),
-      ),
-    );
+    testWidgets("Tab working as expected", (tester) async {
+      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpAndSettle();
 
-    await tester.pumpWidget(profilePageWidget);
-    await tester.pumpAndSettle();
+      // Check that the comment tab is displayed
+      final commentTab = find.byKey(ProfilePage.commentTabKey);
+      expect(commentTab, findsOneWidget);
 
-    //Check that post column is displayed
-    final postColumn = find.byKey(ProfilePage.postColumnKey);
-    expect(postColumn, findsOneWidget);
+      //Check that post column is displayed
+      final postColumn = find.byKey(ProfilePage.postColumnKey);
+      expect(postColumn, findsOneWidget);
 
-    //Check tab on the first post
-    final infoCardPost = find.byKey(InfoCardPost.infoCardPostKey);
-    expect(infoCardPost, findsWidgets);
+      // Tap on the comment tab
+      await tester.tap(commentTab);
+      await tester.pumpAndSettle();
 
-    // Tap on the first post
-    await tester.tap(infoCardPost.first);
-    await tester.pumpAndSettle();
+      // Check that the comment column is displayed
+      final commentColumn = find.byKey(ProfilePage.commentColumnKey);
+      expect(commentColumn, findsOneWidget);
 
-    // Check that the post popup is displayed
-    final postPopup = find.byType(PostPopUp);
-    expect(postPopup, findsOneWidget);
+      //Check tab on the first post
+      final infoCardComment = find.byKey(InfoCardComment.infoCardCommentKey);
+      expect(infoCardComment, findsWidgets);
 
-    //Check that the title of the pop up is displayed
-    final postPopupTitle = find.byKey(PostPopUp.postPopUpTitleKey);
-    expect(postPopupTitle, findsOneWidget);
+      // Tap on the first post
+      await tester.tap(infoCardComment.first);
+      await tester.pumpAndSettle();
 
-    //Check that the description of the pop up is displayed
-    final postPopupDescription = find.byKey(PostPopUp.postPopUpDescriptionKey);
-    expect(postPopupDescription, findsOneWidget);
+      // Check that the comment popup is displayed
+      final commentPopup = find.byType(CommentPopUp);
+      expect(commentPopup, findsOneWidget);
 
-    //Check that the delete button is displayed
-    final postPopupDeleteButton =
-        find.byKey(PostPopUp.postPopUpDeleteButtonKey);
-    expect(postPopupDeleteButton, findsOneWidget);
-  });
+      //Check that the title of the pop up is displayed
+      final commentPopupTitle = find.byKey(CommentPopUp.commentPopUpTitleKey);
+      expect(commentPopupTitle, findsOneWidget);
 
-  testWidgets("Tab working as expected", (tester) async {
-    setupFirebaseAuthMocks();
+      //Check that the description of the pop up is displayed
+      final commentPopupDescription =
+          find.byKey(CommentPopUp.commentPopUpDescriptionKey);
+      expect(commentPopupDescription, findsOneWidget);
 
-    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
-
-    final firebaseAuthMocksOverrides = [
-      firebaseAuthProvider.overrideWithValue(auth),
-    ];
-
-    Widget profilePageWidget = ProviderScope(
-      overrides: firebaseAuthMocksOverrides,
-      child: const MaterialApp(
-        onGenerateRoute: generateRoute,
-        title: "Profile page",
-        home: ProfilePage(),
-      ),
-    );
-
-    await tester.pumpWidget(profilePageWidget);
-    await tester.pumpAndSettle();
-
-    // Check that the comment tab is displayed
-    final commentTab = find.byKey(ProfilePage.commentTabKey);
-    expect(commentTab, findsOneWidget);
-
-    //Check that post column is displayed
-    final postColumn = find.byKey(ProfilePage.postColumnKey);
-    expect(postColumn, findsOneWidget);
-
-    // Tap on the comment tab
-    await tester.tap(commentTab);
-    await tester.pumpAndSettle();
-
-    // Check that the comment column is displayed
-    final commentColumn = find.byKey(ProfilePage.commentColumnKey);
-    expect(commentColumn, findsOneWidget);
-
-    //Check tab on the first post
-    final infoCardComment = find.byKey(InfoCardComment.infoCardCommentKey);
-    expect(infoCardComment, findsWidgets);
-
-    // Tap on the first post
-    await tester.tap(infoCardComment.first);
-    await tester.pumpAndSettle();
-
-    // Check that the comment popup is displayed
-    final commentPopup = find.byType(CommentPopUp);
-    expect(commentPopup, findsOneWidget);
-
-    //Check that the title of the pop up is displayed
-    final commentPopupTitle = find.byKey(CommentPopUp.commentPopUpTitleKey);
-    expect(commentPopupTitle, findsOneWidget);
-
-    //Check that the description of the pop up is displayed
-    final commentPopupDescription =
-        find.byKey(CommentPopUp.commentPopUpDescriptionKey);
-    expect(commentPopupDescription, findsOneWidget);
-
-    //Check that the delete button is displayed
-    final commentPopupDeleteButton =
-        find.byKey(CommentPopUp.commentPopUpDeleteButtonKey);
-    expect(commentPopupDeleteButton, findsOneWidget);
+      //Check that the delete button is displayed
+      final commentPopupDeleteButton =
+          find.byKey(CommentPopUp.commentPopUpDeleteButtonKey);
+      expect(commentPopupDeleteButton, findsOneWidget);
+    });
   });
 }
