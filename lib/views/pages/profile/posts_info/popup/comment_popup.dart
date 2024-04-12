@@ -27,6 +27,7 @@ class CommentPopUp extends StatelessWidget {
         IconButton(
           key: commentPopUpDeleteButtonKey,
           onPressed: () {
+            //TODO: Handle delete comment
             Navigator.pop(context);
           },
           icon: const Icon(Icons.delete),
