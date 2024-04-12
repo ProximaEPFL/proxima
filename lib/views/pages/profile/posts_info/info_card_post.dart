@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 
 //info card for the posts
 class InfoCardPost extends StatelessWidget {
-  static const cardKey = Key("card");
+  static const infoCardPostKey = Key("infoCardPost");
 
   const InfoCardPost({
     super.key,
@@ -18,7 +18,7 @@ class InfoCardPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: cardKey,
+      key: infoCardPostKey,
       width: 54,
       height: 80,
       decoration: BoxDecoration(

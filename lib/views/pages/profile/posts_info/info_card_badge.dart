@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 
 //info card for the badges
 class InfoCardBadge extends StatelessWidget {
-  static const cardKey = Key("card");
+  static const infoCardBadgeKey = Key("infoCardBadge");
 
   const InfoCardBadge({
     super.key,
@@ -14,7 +14,7 @@ class InfoCardBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: cardKey,
+      key: infoCardBadgeKey,
       width: 54,
       height: 80,
       decoration: BoxDecoration(
