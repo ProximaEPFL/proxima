@@ -11,6 +11,7 @@ class CommentPopUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      title: const Text("Comment"),
       content: Text(comment),
       actions: <Widget>[
         IconButton(
