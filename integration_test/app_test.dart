@@ -41,7 +41,7 @@ void main() {
     postRepo = PostRepositoryService(firestore: fakeFireStore);
 
     when(geoLocationService.getCurrentPosition()).thenAnswer(
-          (_) => Future.value(testLocation),
+      (_) => Future.value(testLocation),
     );
   });
 
