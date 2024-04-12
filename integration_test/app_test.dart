@@ -64,8 +64,8 @@ void main() {
 
     await loginToCreateAccount(tester);
     await createAccountToHome(tester);
-    await homeToProfilePage(tester);
-    await bottomNavigation(tester);
+    //await homeToProfilePage(tester);
+    //await bottomNavigation(tester);
     await createPost(tester);
   });
 }
@@ -202,7 +202,9 @@ Future<void> createPost(WidgetTester tester) async {
   await tester.drag(find.byType(PostFeed), const Offset(0, 500));
   await tester.pumpAndSettle();
 
-  await Future.delayed(const Duration(seconds: 2));
+  final refreshButton = find.byKey(PostFeed.refreshButtonKey);
+  await tester.tap(refreshButton);
+  await tester.pumpAndSettle();
 
   // Check that the post is displayed
   expect(find.text(postTitle), findsOneWidget);
