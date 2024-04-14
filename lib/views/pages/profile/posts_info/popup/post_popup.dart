@@ -17,9 +17,13 @@ class PostPopUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(
-        key: postPopUpTitleKey,
-        title,
+      title: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Text(
+          key: postPopUpTitleKey,
+          maxLines: 1,
+          title,
+        ),
       ),
       content: Scrollbar(
         thumbVisibility: true,
