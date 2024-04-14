@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 
 class CommentPopUp extends StatelessWidget {
-  static const commentPopUpTitleKey = Key("commentPopUpTitle");
   static const commentPopUpDescriptionKey = Key("commentPopUpDescription");
   static const commentPopUpDeleteButtonKey = Key("commentPopUpDeleteButton");
 
@@ -15,10 +14,6 @@ class CommentPopUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(
-        key: commentPopUpTitleKey,
-        "Comment",
-      ),
       content: Scrollbar(
         thumbVisibility: true,
         child: SingleChildScrollView(

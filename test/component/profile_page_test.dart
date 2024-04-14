@@ -191,10 +191,6 @@ void main() {
         final commentPopup = find.byType(CommentPopUp);
         expect(commentPopup, findsOneWidget);
 
-        //Check that the title of the pop up is displayed
-        final commentPopupTitle = find.byKey(CommentPopUp.commentPopUpTitleKey);
-        expect(commentPopupTitle, findsOneWidget);
-
         //Check that the description of the pop up is displayed
         final commentPopupDescription =
             find.byKey(CommentPopUp.commentPopUpDescriptionKey);
