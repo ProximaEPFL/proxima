@@ -56,6 +56,20 @@ void main() {
     ),
   );
 
+  final errorHomePageWidget = ProviderScope(
+    overrides: [
+      postOverviewProvider.overrideWith(
+        () => MockHomeViewModel(
+          build: () => Stream.error(""),
+        ),
+      ),
+    ],
+    child: const MaterialApp(
+      title: "Proxima",
+      home: HomePage(),
+    ),
+  );
+
   testWidgets("static home display top and bottom bar", (tester) async {
     await tester.pumpWidget(homePageWidget);
     await tester.pumpAndSettle();
@@ -163,4 +177,103 @@ void main() {
       expect(progressIndicator, findsOneWidget);
     },
   );
+
+  testWidgets(
+    "static home display error message on fetching error",
+    (tester) async {
+      await tester.pumpWidget(errorHomePageWidget);
+      await tester.pumpAndSettle();
+
+      // Check that the home page is displayed
+      final homePage = find.byType(HomePage);
+      expect(homePage, findsOneWidget);
+
+      // Check that the error message is displayed
+      final errorMessage = find.text("An error occurred");
+      expect(errorMessage, findsOneWidget);
+
+      // Check that the refresh button is displayed
+      final refreshButton = find.byKey(PostFeed.refreshButtonKey);
+      expect(refreshButton, findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    "static home call refresh on clicking refresh button",
+    (tester) async {
+      bool refreshCalled = false;
+
+      // We need to recreate the home page widget to detect
+      // the refresh method call
+      final homePageWidget = ProviderScope(
+        overrides: [
+          postOverviewProvider.overrideWith(
+            () => MockHomeViewModel(
+              build: () => Stream.value([]), // Empty list of posts
+              onRefresh: () {
+                refreshCalled = true;
+              },
+            ),
+          ),
+        ],
+        child: const MaterialApp(
+          title: "Proxima",
+          home: HomePage(),
+        ),
+      );
+
+      await tester.pumpWidget(homePageWidget);
+      await tester.pumpAndSettle();
+
+      // Check that the home page is displayed
+      final homePage = find.byType(HomePage);
+      expect(homePage, findsOneWidget);
+
+      // Check that the refresh button is displayed
+      final refreshButton = find.byKey(PostFeed.refreshButtonKey);
+      expect(refreshButton, findsOneWidget);
+
+      // Tap on the refresh button
+      await tester.tap(refreshButton);
+      await tester.pumpAndSettle();
+
+      expect(refreshCalled, true);
+    },
+  );
+
+  testWidgets("static home call refresh on scrolling down", (tester) async {
+    bool refreshCalled = false;
+
+    // We need to recreate the home page widget to detect
+    // the refresh method call
+    final homePageWidget = ProviderScope(
+      overrides: [
+        postOverviewProvider.overrideWith(
+          () => MockHomeViewModel(
+            build: () => Stream.value(testPosts), // List of tests posts
+            onRefresh: () {
+              refreshCalled = true;
+            },
+          ),
+        ),
+      ],
+      child: const MaterialApp(
+        title: "Proxima",
+        home: HomePage(),
+      ),
+    );
+
+    await tester.pumpWidget(homePageWidget);
+    await tester.pumpAndSettle();
+
+    // Check that the home page is displayed
+    final homePage = find.byType(HomePage);
+    expect(homePage, findsOneWidget);
+
+    // Scroll down to trigger the refresh
+    await tester.drag(find.byType(PostFeed), const Offset(0, 500));
+    await tester.pumpAndSettle();
+
+    expect(refreshCalled, true);
+  });
 }
