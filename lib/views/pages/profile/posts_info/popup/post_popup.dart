@@ -42,7 +42,7 @@ class PostPopUp extends StatelessWidget {
           ),
         ),
       ),
-      contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
+      contentPadding: const EdgeInsets.fromLTRB(24.0, 8.0, 24.0, 0.0),
       actionsPadding: const EdgeInsets.only(
         right: 24.0,
         bottom: 12.0,
