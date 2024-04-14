@@ -45,32 +45,42 @@ class PostRepositoryService {
 
   /// This method will retrieve all the posts that are within a radius of [radius]
   /// from the geo point [point] in the database
-  /// And then those posts are returned
-  Future<List<PostFirestore>> getNearPosts(
+  /// The returned stream will emit a list of posts
+  ///
+  /// Each time the relevant posts in the database change, the stream will emit a new list
+  /// with the updated posts
+  ///
+  /// This also applies to when the posts are added or removed from the database.
+  /// In this case, the new posts will be in the emitted list and the removed posts will not be
+  Stream<List<PostFirestore>> getNearPosts(
     GeoPoint point,
     double radius,
-  ) async {
+  ) {
     final geoFirePoint = _getGeoFirePoint(point);
 
-    final posts = await _geoFire
+    final postStream = _geoFire
         .collection(collectionRef: _collectionRef)
         .withinAsSingleStreamSubscription(
           center: geoFirePoint,
           radius: radius,
           field: PostFirestore.locationField,
           strictMode: false,
-        )
-        .first;
+        );
 
-    return posts.map((docSnap) => PostFirestore.fromDb(docSnap)).where((post) {
-      // We need to filter the posts because the query is not exact
-      final postPoint = post.location.geoPoint;
-      return geoFirePoint.distance(
-            lat: postPoint.latitude,
-            lng: postPoint.longitude,
-          ) <=
-          radius;
-    }).toList();
+    return postStream.map(
+      // Map a list of DocumentSnapshot to a list of PostFirestore
+      (docSnapList) => docSnapList
+          .map((docSnap) => PostFirestore.fromDb(docSnap))
+          .where((post) {
+        // We need to filter the posts because the query is not exact
+        final postPoint = post.location.geoPoint;
+        return geoFirePoint.distance(
+              lat: postPoint.latitude,
+              lng: postPoint.longitude,
+            ) <=
+            radius;
+      }).toList(),
+    );
   }
 
   GeoFirePoint _getGeoFirePoint(GeoPoint point) {
