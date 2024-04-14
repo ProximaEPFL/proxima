@@ -74,7 +74,7 @@ void main() {
       );
     }
 
-    Future<void> commonSetup(WidgetTester tester) async {
+    testWidgets("Various widget are displayed", (tester) async {
       await tester.pumpWidget(getMockedProxima());
       await tester.pumpAndSettle();
 
@@ -89,10 +89,6 @@ void main() {
       // Check that the comment tab is displayed
       final commentTab = find.byKey(ProfilePage.commentTabKey);
       expect(commentTab, findsOneWidget);
-    }
-
-    testWidgets("Various widget are displayed", (tester) async {
-      await commonSetup(tester);
 
       // Check that badges are displayed
       final badgeCard = find.byKey(InfoCardBadge.infoCardBadgeKey);
@@ -123,7 +119,6 @@ void main() {
       expect(postColumn, findsOneWidget);
 
       // Tap on the comment tab
-      final commentTab = find.byKey(ProfilePage.commentTabKey);
       await tester.tap(commentTab);
       await tester.pumpAndSettle();
 
@@ -134,7 +129,8 @@ void main() {
 
     group("Popups working as expected", () {
       testWidgets("Post popup working as expected", (tester) async {
-        await commonSetup(tester);
+        await tester.pumpWidget(getMockedProxima());
+        await tester.pumpAndSettle();
 
         //Check tab on the first post
         final infoCardPost = find.byKey(InfoCardPost.infoCardPostKey);
@@ -172,7 +168,8 @@ void main() {
       });
 
       testWidgets("Comment popup working as expected", (tester) async {
-        await commonSetup(tester);
+        await tester.pumpWidget(getMockedProxima());
+        await tester.pumpAndSettle();
 
         // Tap on the comment tab
         final commentTab = find.byKey(ProfilePage.commentTabKey);
