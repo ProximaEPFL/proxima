@@ -44,6 +44,8 @@ class InfoCardPost extends StatelessWidget {
             child: ListTile(
               title: Text(
                 title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.titleSmall,
               ),
               subtitle: Text(
