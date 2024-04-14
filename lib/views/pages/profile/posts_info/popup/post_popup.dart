@@ -24,9 +24,12 @@ class PostPopUp extends StatelessWidget {
       content: Scrollbar(
         thumbVisibility: true,
         child: SingleChildScrollView(
-          child: Text(
-            key: postPopUpDescriptionKey,
-            description,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              key: postPopUpDescriptionKey,
+              description,
+            ),
           ),
         ),
       ),

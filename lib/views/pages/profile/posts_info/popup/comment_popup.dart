@@ -22,9 +22,12 @@ class CommentPopUp extends StatelessWidget {
       content: Scrollbar(
         thumbVisibility: true,
         child: SingleChildScrollView(
-          child: Text(
-            key: commentPopUpDescriptionKey,
-            comment,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              key: commentPopUpDescriptionKey,
+              comment,
+            ),
           ),
         ),
       ),
