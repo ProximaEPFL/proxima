@@ -165,6 +165,14 @@ void main() {
       final postPopupDeleteButton =
           find.byKey(PostPopUp.postPopUpDeleteButtonKey);
       expect(postPopupDeleteButton, findsOneWidget);
+
+      //Check clicking on the delete button come back to the profile page
+      await tester.tap(postPopupDeleteButton);
+      await tester.pumpAndSettle();
+
+      //Check that the profile page is displayed
+      final profilePage = find.byType(ProfilePage);
+      expect(profilePage, findsOneWidget);
     });
 
     testWidgets("Tab working as expected", (tester) async {
@@ -212,6 +220,14 @@ void main() {
       final commentPopupDeleteButton =
           find.byKey(CommentPopUp.commentPopUpDeleteButtonKey);
       expect(commentPopupDeleteButton, findsOneWidget);
+
+      //Check clicking on the delete button come back to the profile page
+      await tester.tap(commentPopupDeleteButton);
+      await tester.pumpAndSettle();
+
+      //Check that the profile page is displayed
+      final profilePage = find.byType(ProfilePage);
+      expect(profilePage, findsOneWidget);
     });
   });
 }
