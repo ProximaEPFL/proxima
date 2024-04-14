@@ -53,7 +53,7 @@ void main() {
       );
       when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
           .thenAnswer(
-        (_) async => [],
+        (_) => Stream.value([]),
       );
 
       final posts = await container.read(postOverviewProvider.future);
@@ -97,7 +97,7 @@ void main() {
       );
       when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
           .thenAnswer(
-        (_) async => [post],
+        (_) => Stream.value([post]),
       );
       when(userRepository.getUser(post.data.ownerId)).thenAnswer(
         (_) async => owner,
@@ -149,7 +149,7 @@ void main() {
         );
         when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
             .thenAnswer(
-          (_) async => posts,
+          (_) => Stream.value(posts),
         );
 
         // Check the actual posts
@@ -205,7 +205,7 @@ void main() {
         );
         when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
             .thenAnswer(
-          (_) async => posts,
+          (_) => Stream.value(posts),
         );
 
         // Check the actual posts
@@ -221,7 +221,7 @@ void main() {
       );
       when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
           .thenAnswer(
-        (_) async => [],
+        (_) => Stream.value([]),
       );
 
       // Query the posts a first time
@@ -256,14 +256,14 @@ void main() {
 
       when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
           .thenAnswer(
-        (_) async => [post],
+        (_) => Stream.value([post]),
       );
       when(userRepository.getUser(post.data.ownerId)).thenAnswer(
         (_) async => owner,
       );
 
       // Refresh the posts
-      await container.read(postOverviewProvider.notifier).refresh();
+      container.read(postOverviewProvider.notifier).refresh();
 
       // Check the actual posts
       final postAfterRefresh =
@@ -272,7 +272,7 @@ void main() {
       expect(postAfterRefresh, expectedPosts);
     });
 
-    test("Error is exposed correctly on refresh", () async {
+    test("Error is exposed correctly", () async {
       when(geoLocationService.getCurrentPosition()).thenAnswer(
         (_) async => point,
       );
@@ -281,10 +281,15 @@ void main() {
       when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
           .thenThrow(Exception(expectedErrorMessage));
 
-      // Refresh the posts
-      await container.read(postOverviewProvider.notifier).refresh();
+      // Wait for the exception to be thrown in the stream
+      try {
+        await container.read(postOverviewProvider.future);
+        fail("Exception not thrown");
+      } on Exception catch (e) {
+        expect(e.toString(), "Exception: $expectedErrorMessage");
+      }
 
-      // Check the actual posts
+      // Check the read value is the expected AsyncError
       final asyncPosts = container.read(postOverviewProvider);
 
       expect(

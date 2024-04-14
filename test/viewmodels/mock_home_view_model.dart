@@ -6,22 +6,22 @@ import "package:proxima/viewmodels/home_view_model.dart";
 /// This class is particularly useful for the UI tests where we want to expose
 /// particular data to the views.
 /// By default it exposes an empty list of [PostOverview] and does nothing on refresh.
-class MockHomeViewModel extends AsyncNotifier<List<PostOverview>>
+class MockHomeViewModel extends AutoDisposeStreamNotifier<List<PostOverview>>
     implements HomeViewModel {
-  final Future<List<PostOverview>> Function() _build;
-  final Future<void> Function() _onRefresh;
+  final Stream<List<PostOverview>> Function() _build;
+  final void Function() _onRefresh;
 
   MockHomeViewModel({
-    Future<List<PostOverview>> Function()? build,
+    Stream<List<PostOverview>> Function()? build,
     Future<void> Function()? onRefresh,
-  })  : _build = build ?? (() async => List<PostOverview>.empty()),
-        _onRefresh = onRefresh ?? (() async {});
+  })  : _build = build ?? (() => Stream.value(List<PostOverview>.empty())),
+        _onRefresh = onRefresh ?? (() {});
 
   @override
-  Future<List<PostOverview>> build() => _build();
+  Stream<List<PostOverview>> build() => _build();
 
   @override
-  Future<void> refresh() => _onRefresh();
+  void refresh() => _onRefresh();
 }
 
 final mockEmptyHomeViewModelOverride = [

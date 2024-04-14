@@ -31,7 +31,7 @@ void main() {
     overrides: [
       postOverviewProvider.overrideWith(
         () => MockHomeViewModel(
-          build: () async => testPosts,
+          build: () => Stream.value(testPosts),
         ),
       ),
     ],

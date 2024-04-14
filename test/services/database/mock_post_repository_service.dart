@@ -51,10 +51,10 @@ class MockPostRepositoryService extends Mock implements PostRepositoryService {
   }
 
   @override
-  Future<List<PostFirestore>> getNearPosts(GeoPoint point, double radius) {
+  Stream<List<PostFirestore>> getNearPosts(GeoPoint point, double radius) {
     return super.noSuchMethod(
       Invocation.method(#getNearPosts, [point, radius]),
-      returnValue: Future.value(List<PostFirestore>.empty()),
+      returnValue: Stream.value(List<PostFirestore>.empty()),
     );
   }
 }

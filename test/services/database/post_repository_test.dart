@@ -96,9 +96,8 @@ void main() {
 
       await setPostFirestore(expectedPost);
 
-      final actualPosts =
-          await postRepository.getNearPosts(userPosition, kmRadius);
-      expect(actualPosts, [expectedPost]);
+      final actualPosts = postRepository.getNearPosts(userPosition, kmRadius);
+      expect(actualPosts, emits([expectedPost]));
     });
 
     test("post is not queried when far away", () async {
@@ -111,9 +110,8 @@ void main() {
 
       await setPostFirestore(expectedPost);
 
-      final actualPosts =
-          await postRepository.getNearPosts(userPosition, kmRadius);
-      expect(actualPosts, isEmpty);
+      final actualPosts = postRepository.getNearPosts(userPosition, kmRadius);
+      expect(actualPosts, emits([]));
     });
 
     test("post on edge (inside) is queried", () async {
@@ -128,9 +126,8 @@ void main() {
 
       await setPostFirestore(expectedPost);
 
-      final actualPosts =
-          await postRepository.getNearPosts(userPosition, kmRadius);
-      expect(actualPosts, [expectedPost]);
+      final actualPosts = postRepository.getNearPosts(userPosition, kmRadius);
+      expect(actualPosts, emits([expectedPost]));
     });
 
     test("post on edge (outside) is not queried", () async {
@@ -145,9 +142,8 @@ void main() {
 
       await setPostFirestore(expectedPost);
 
-      final actualPosts =
-          await postRepository.getNearPosts(userPosition, kmRadius);
-      expect(actualPosts, isEmpty);
+      final actualPosts = postRepository.getNearPosts(userPosition, kmRadius);
+      expect(actualPosts, emits([]));
     });
 
     test("add post at location correctly", () async {
@@ -196,8 +192,7 @@ void main() {
 
       await setPostsFirestore(allPosts);
 
-      final actualPosts =
-          await postRepository.getNearPosts(userPosition, kmRadius);
+      final actualPosts = postRepository.getNearPosts(userPosition, kmRadius);
 
       final expectedPosts = allPosts.where((element) {
         final geoFirePoint = GeoFirePoint(
@@ -211,7 +206,7 @@ void main() {
         return distance <= kmRadius;
       }).toList();
 
-      expect(actualPosts, expectedPosts);
+      expect(actualPosts, emits(expectedPosts));
     });
   });
 }

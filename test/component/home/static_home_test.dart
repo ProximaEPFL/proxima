@@ -17,7 +17,7 @@ void main() {
     overrides: [
       postOverviewProvider.overrideWith(
         () => MockHomeViewModel(
-          build: () async => testPosts,
+          build: () => Stream.value(testPosts),
         ),
       ),
     ],
@@ -44,8 +44,8 @@ void main() {
       postOverviewProvider.overrideWith(
         () => MockHomeViewModel(
           build: () {
-            // Future.any([]) will never complete and simulate a loading state
-            return Future.any([]);
+            // The stream will never emit any data simulating a loading state
+            return const Stream.empty();
           },
         ),
       ),
