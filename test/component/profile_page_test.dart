@@ -175,7 +175,7 @@ void main() {
       expect(profilePage, findsOneWidget);
     });
 
-    testWidgets("Tab working as expected", (tester) async {
+    testWidgets("Comment popup working as expected", (tester) async {
       await tester.pumpWidget(getMockedProxima());
       await tester.pumpAndSettle();
 
