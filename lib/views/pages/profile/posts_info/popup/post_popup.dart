@@ -21,9 +21,14 @@ class PostPopUp extends StatelessWidget {
         key: postPopUpTitleKey,
         title,
       ),
-      content: Text(
-        key: postPopUpDescriptionKey,
-        description,
+      content: Scrollbar(
+        thumbVisibility: true,
+        child: SingleChildScrollView(
+          child: Text(
+            key: postPopUpDescriptionKey,
+            description,
+          ),
+        ),
       ),
       actions: <Widget>[
         IconButton(

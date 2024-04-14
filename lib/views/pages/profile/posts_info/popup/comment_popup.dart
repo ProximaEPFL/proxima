@@ -19,9 +19,14 @@ class CommentPopUp extends StatelessWidget {
         key: commentPopUpTitleKey,
         "Comment",
       ),
-      content: Text(
-        key: commentPopUpDescriptionKey,
-        comment,
+      content: Scrollbar(
+        thumbVisibility: true,
+        child: SingleChildScrollView(
+          child: Text(
+            key: commentPopUpDescriptionKey,
+            comment,
+          ),
+        ),
       ),
       actions: <Widget>[
         IconButton(
