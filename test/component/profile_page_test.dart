@@ -74,9 +74,25 @@ void main() {
       );
     }
 
-    testWidgets("Various widget are displayed", (tester) async {
+    Future<void> commonSetup(WidgetTester tester) async {
       await tester.pumpWidget(getMockedProxima());
       await tester.pumpAndSettle();
+
+      //Check that the tab is displayed
+      final tab = find.byKey(ProfilePage.tabKey);
+      expect(tab, findsOneWidget);
+
+      // Check that the post tab is displayed
+      final postTab = find.byKey(ProfilePage.postTabKey);
+      expect(postTab, findsOneWidget);
+
+      // Check that the comment tab is displayed
+      final commentTab = find.byKey(ProfilePage.commentTabKey);
+      expect(commentTab, findsOneWidget);
+    }
+
+    testWidgets("Various widget are displayed", (tester) async {
+      await commonSetup(tester);
 
       // Check that badges are displayed
       final badgeCard = find.byKey(InfoCardBadge.infoCardBadgeKey);
@@ -102,28 +118,12 @@ void main() {
       final userAccount = find.byKey(UserAccount.userInfoKey);
       expect(userAccount, findsOneWidget);
 
-      //Check that the tab is displayed
-      final tab = find.byKey(ProfilePage.tabKey);
-      expect(tab, findsOneWidget);
-    });
-
-    testWidgets("Tab working as expected", (tester) async {
-      await tester.pumpWidget(getMockedProxima());
-      await tester.pumpAndSettle();
-
-      // Check that the post tab is displayed
-      final postTab = find.byKey(ProfilePage.postTabKey);
-      expect(postTab, findsOneWidget);
-
-      // Check that the comment tab is displayed
-      final commentTab = find.byKey(ProfilePage.commentTabKey);
-      expect(commentTab, findsOneWidget);
-
       //Check that post column is displayed
       final postColumn = find.byKey(ProfilePage.postColumnKey);
       expect(postColumn, findsOneWidget);
 
       // Tap on the comment tab
+      final commentTab = find.byKey(ProfilePage.commentTabKey);
       await tester.tap(commentTab);
       await tester.pumpAndSettle();
 
@@ -132,102 +132,87 @@ void main() {
       expect(commentColumn, findsOneWidget);
     });
 
-    testWidgets("Post popup working as expected", (tester) async {
-      await tester.pumpWidget(getMockedProxima());
-      await tester.pumpAndSettle();
+    group("Popups working as expected", () {
+      testWidgets("Post popup working as expected", (tester) async {
+        await commonSetup(tester);
 
-      //Check that post column is displayed
-      final postColumn = find.byKey(ProfilePage.postColumnKey);
-      expect(postColumn, findsOneWidget);
+        //Check tab on the first post
+        final infoCardPost = find.byKey(InfoCardPost.infoCardPostKey);
+        expect(infoCardPost, findsWidgets);
 
-      //Check tab on the first post
-      final infoCardPost = find.byKey(InfoCardPost.infoCardPostKey);
-      expect(infoCardPost, findsWidgets);
+        // Tap on the first post
+        await tester.tap(infoCardPost.first);
+        await tester.pumpAndSettle();
 
-      // Tap on the first post
-      await tester.tap(infoCardPost.first);
-      await tester.pumpAndSettle();
+        // Check that the post popup is displayed
+        final postPopup = find.byType(PostPopUp);
+        expect(postPopup, findsOneWidget);
 
-      // Check that the post popup is displayed
-      final postPopup = find.byType(PostPopUp);
-      expect(postPopup, findsOneWidget);
+        //Check that the title of the pop up is displayed
+        final postPopupTitle = find.byKey(PostPopUp.postPopUpTitleKey);
+        expect(postPopupTitle, findsOneWidget);
 
-      //Check that the title of the pop up is displayed
-      final postPopupTitle = find.byKey(PostPopUp.postPopUpTitleKey);
-      expect(postPopupTitle, findsOneWidget);
+        //Check that the description of the pop up is displayed
+        final postPopupDescription =
+            find.byKey(PostPopUp.postPopUpDescriptionKey);
+        expect(postPopupDescription, findsOneWidget);
 
-      //Check that the description of the pop up is displayed
-      final postPopupDescription =
-          find.byKey(PostPopUp.postPopUpDescriptionKey);
-      expect(postPopupDescription, findsOneWidget);
+        //Check that the delete button is displayed
+        final postPopupDeleteButton =
+            find.byKey(PostPopUp.postPopUpDeleteButtonKey);
+        expect(postPopupDeleteButton, findsOneWidget);
 
-      //Check that the delete button is displayed
-      final postPopupDeleteButton =
-          find.byKey(PostPopUp.postPopUpDeleteButtonKey);
-      expect(postPopupDeleteButton, findsOneWidget);
+        //Check clicking on the delete button come back to the profile page
+        await tester.tap(postPopupDeleteButton);
+        await tester.pumpAndSettle();
 
-      //Check clicking on the delete button come back to the profile page
-      await tester.tap(postPopupDeleteButton);
-      await tester.pumpAndSettle();
+        //Check that the profile page is displayed
+        final profilePage = find.byType(ProfilePage);
+        expect(profilePage, findsOneWidget);
+      });
 
-      //Check that the profile page is displayed
-      final profilePage = find.byType(ProfilePage);
-      expect(profilePage, findsOneWidget);
-    });
+      testWidgets("Comment popup working as expected", (tester) async {
+        await commonSetup(tester);
 
-    testWidgets("Comment popup working as expected", (tester) async {
-      await tester.pumpWidget(getMockedProxima());
-      await tester.pumpAndSettle();
+        // Tap on the comment tab
+        final commentTab = find.byKey(ProfilePage.commentTabKey);
+        await tester.tap(commentTab);
+        await tester.pumpAndSettle();
 
-      // Check that the comment tab is displayed
-      final commentTab = find.byKey(ProfilePage.commentTabKey);
-      expect(commentTab, findsOneWidget);
+        //Check tab on the first comment
+        final infoCardComment = find.byKey(InfoCardComment.infoCardCommentKey);
+        expect(infoCardComment, findsWidgets);
 
-      //Check that post column is displayed
-      final postColumn = find.byKey(ProfilePage.postColumnKey);
-      expect(postColumn, findsOneWidget);
+        // Tap on the first comment
+        await tester.tap(infoCardComment.first);
+        await tester.pumpAndSettle();
 
-      // Tap on the comment tab
-      await tester.tap(commentTab);
-      await tester.pumpAndSettle();
+        // Check that the comment popup is displayed
+        final commentPopup = find.byType(CommentPopUp);
+        expect(commentPopup, findsOneWidget);
 
-      // Check that the comment column is displayed
-      final commentColumn = find.byKey(ProfilePage.commentColumnKey);
-      expect(commentColumn, findsOneWidget);
+        //Check that the title of the pop up is displayed
+        final commentPopupTitle = find.byKey(CommentPopUp.commentPopUpTitleKey);
+        expect(commentPopupTitle, findsOneWidget);
 
-      //Check tab on the first post
-      final infoCardComment = find.byKey(InfoCardComment.infoCardCommentKey);
-      expect(infoCardComment, findsWidgets);
+        //Check that the description of the pop up is displayed
+        final commentPopupDescription =
+            find.byKey(CommentPopUp.commentPopUpDescriptionKey);
+        expect(commentPopupDescription, findsOneWidget);
 
-      // Tap on the first post
-      await tester.tap(infoCardComment.first);
-      await tester.pumpAndSettle();
+        //Check that the delete button is displayed
+        final commentPopupDeleteButton =
+            find.byKey(CommentPopUp.commentPopUpDeleteButtonKey);
+        expect(commentPopupDeleteButton, findsOneWidget);
 
-      // Check that the comment popup is displayed
-      final commentPopup = find.byType(CommentPopUp);
-      expect(commentPopup, findsOneWidget);
+        //Check clicking on the delete button come back to the profile page
+        await tester.tap(commentPopupDeleteButton);
+        await tester.pumpAndSettle();
 
-      //Check that the title of the pop up is displayed
-      final commentPopupTitle = find.byKey(CommentPopUp.commentPopUpTitleKey);
-      expect(commentPopupTitle, findsOneWidget);
-
-      //Check that the description of the pop up is displayed
-      final commentPopupDescription =
-          find.byKey(CommentPopUp.commentPopUpDescriptionKey);
-      expect(commentPopupDescription, findsOneWidget);
-
-      //Check that the delete button is displayed
-      final commentPopupDeleteButton =
-          find.byKey(CommentPopUp.commentPopUpDeleteButtonKey);
-      expect(commentPopupDeleteButton, findsOneWidget);
-
-      //Check clicking on the delete button come back to the profile page
-      await tester.tap(commentPopupDeleteButton);
-      await tester.pumpAndSettle();
-
-      //Check that the profile page is displayed
-      final profilePage = find.byType(ProfilePage);
-      expect(profilePage, findsOneWidget);
+        //Check that the profile page is displayed
+        final profilePage = find.byType(ProfilePage);
+        expect(profilePage, findsOneWidget);
+      });
     });
   });
 }
