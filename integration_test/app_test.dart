@@ -205,14 +205,6 @@ Future<void> createPost(WidgetTester tester) async {
   await tester.tap(find.byKey(NewPostForm.postButtonKey));
   await tester.pumpAndSettle();
 
-  // refresh the page by pulling down
-  await tester.drag(find.byType(PostFeed), const Offset(0, 500));
-  await tester.pumpAndSettle();
-
-  final refreshButton = find.byKey(PostFeed.refreshButtonKey);
-  await tester.tap(refreshButton);
-  await tester.pumpAndSettle();
-
   // Check that the post is displayed
   expect(find.text(postTitle), findsOneWidget);
   expect(find.text(postDescription), findsOneWidget);
