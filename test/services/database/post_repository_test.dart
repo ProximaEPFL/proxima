@@ -1,4 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:collection/collection.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:geoflutterfire2/geoflutterfire2.dart";
@@ -207,6 +208,43 @@ void main() {
       }).toList();
 
       expect(actualPosts, emits(expectedPosts));
+    });
+
+    test("stream emits when post is added", () async {
+      const userPosition = GeoPoint(40, 20);
+
+      // Create two posts
+      final postDatas = MockPostFirestore.generatePostData(2);
+      final posts = postDatas.mapIndexed(
+        (i, postData) => MockPostFirestore.createPostAt(
+          postData,
+          userPosition,
+          id: "post_$i",
+        ),
+      );
+
+      // Get the stream
+      final actualPostsStream =
+          postRepository.getNearPosts(userPosition, kmRadius);
+
+      // Check that the stream will emits the posts correctly
+      // This must be placed before adding the posts in order to have
+      // the listener set up on the stream
+      expect(
+        actualPostsStream,
+        emitsInOrder(
+          [
+            [],
+            [posts.first],
+            posts,
+          ],
+        ),
+      );
+
+      // Add the posts to the db
+      for (final post in posts) {
+        await setPostFirestore(post);
+      }
     });
   });
 }
