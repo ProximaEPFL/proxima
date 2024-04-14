@@ -34,7 +34,7 @@ class PostFeed extends HookConsumerWidget {
     final refreshButton = ElevatedButton(
       key: refreshButtonKey,
       onPressed: () async {
-        ref.read(postOverviewProvider.notifier).refresh();
+        return ref.read(postOverviewProvider.notifier).refresh();
       },
       child: const Text("Refresh"),
     );
