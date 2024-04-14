@@ -13,7 +13,7 @@ class MockHomeViewModel extends AutoDisposeStreamNotifier<List<PostOverview>>
 
   MockHomeViewModel({
     Stream<List<PostOverview>> Function()? build,
-    Future<void> Function()? onRefresh,
+    void Function()? onRefresh,
   })  : _build = build ?? (() => Stream.value(List<PostOverview>.empty())),
         _onRefresh = onRefresh ?? (() {});
 
