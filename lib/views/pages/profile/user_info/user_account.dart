@@ -15,6 +15,7 @@ class UserAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+
     return Row(
       key: userInfoKey,
       children: [

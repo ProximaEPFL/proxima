@@ -64,12 +64,10 @@ class NewPostForm extends HookConsumerWidget {
         final postButton = ElevatedButton(
           key: postButtonKey,
           child: const Text(_postButtonText),
-          onPressed: () async {
-            await ref.read(newPostStateProvider.notifier).addPost(
-                  titleController.text,
-                  bodyController.text,
-                );
-          },
+          onPressed: () => ref.read(newPostStateProvider.notifier).addPost(
+                titleController.text,
+                bodyController.text,
+              ),
         );
 
         final settingsButton = IconButton(

@@ -21,6 +21,7 @@ class InfoCardPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+
     return Container(
       key: infoCardPostKey,
       width: 54,
