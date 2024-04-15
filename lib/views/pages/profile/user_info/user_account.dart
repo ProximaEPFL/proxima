@@ -15,6 +15,7 @@ class UserAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    TextStyle? textStyle = themeData.textTheme.titleSmall;
 
     return Row(
       key: userInfoKey,
@@ -32,13 +33,13 @@ class UserAccount extends StatelessWidget {
               //TODO: get the profile info from the viewmodel
               Text(
                 userEmail,
-                style: themeData.textTheme.titleSmall,
+                style: textStyle,
                 overflow: TextOverflow.fade,
               ),
               Text(
                 //TODO: get the user points from the viewmodel
                 "Pseudo · 1000 Centauri ",
-                style: themeData.textTheme.titleSmall,
+                style: textStyle,
                 key: centauriPointsKey,
               ),
             ],
