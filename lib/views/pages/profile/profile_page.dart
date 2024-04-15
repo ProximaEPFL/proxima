@@ -70,7 +70,9 @@ class ProfilePage extends HookConsumerWidget {
               actions: [
                 IconButton(
                   icon: const Icon(Icons.settings),
-                  onPressed: () {},
+                  onPressed: () {
+                    //TODO: implement settings page
+                  },
                 ),
               ],
             ),

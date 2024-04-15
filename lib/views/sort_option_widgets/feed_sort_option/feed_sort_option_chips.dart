@@ -9,10 +9,10 @@ class FeedSortOptionChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sortOptions = SortOptions.values.map((sortOption) {
+    final sortOptions = FeedSortOptions.values.map((sortOption) {
       return ChoiceChip(
         //TODO: Handle the sort option selection
-        selected: sortOption == SortOptions.values[0],
+        selected: sortOption == FeedSortOptions.values[0],
         label: Text(sortOption.name),
       );
     }).toList();

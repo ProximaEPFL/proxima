@@ -20,12 +20,13 @@ class InfoCardPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
     return Container(
       key: infoCardPostKey,
       width: 54,
       height: 80,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondaryContainer,
+        color: themeData.colorScheme.secondaryContainer,
         borderRadius: borderRadius,
         boxShadow: [shadow],
       ),
@@ -46,11 +47,11 @@ class InfoCardPost extends StatelessWidget {
                 title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleSmall,
+                style: themeData.textTheme.titleSmall,
               ),
               subtitle: Text(
                 description,
-                style: Theme.of(context).textTheme.bodySmall,
+                style: themeData.textTheme.bodySmall,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -59,8 +60,9 @@ class InfoCardPost extends StatelessWidget {
                   Icons.delete,
                   size: 32,
                 ),
-                // TODO : add the logic for deleting a post
-                onPressed: () {},
+                onPressed: () {
+                  // TODO : add the logic for deleting a post
+                },
               ),
             ),
           ),

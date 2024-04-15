@@ -24,6 +24,7 @@ final isUserLoggedInProvider = Provider<bool>((ref) {
 /// Firebase logged in user id provider
 final uidProvider = Provider<UserIdFirestore?>((ref) {
   final user = ref.watch(userProvider).valueOrNull;
+
   return user == null ? null : UserIdFirestore(value: user.id);
 });
 

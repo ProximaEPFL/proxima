@@ -65,6 +65,7 @@ class PostRepositoryService {
     return posts.map((docSnap) => PostFirestore.fromDb(docSnap)).where((post) {
       // We need to filter the posts because the query is not exact
       final postPoint = post.location.geoPoint;
+
       return geoFirePoint.distance(
             lat: postPoint.latitude,
             lng: postPoint.longitude,
