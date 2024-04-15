@@ -1,6 +1,6 @@
 /// This enum is used to create the timeline sort options.
 /// It contains the name of the sort options.
-enum FeedSortOptions {
+enum FeedSortOption {
   top("Top"),
   nearest("Nearest"),
   latest("New"),
@@ -8,5 +8,5 @@ enum FeedSortOptions {
 
   final String name;
 
-  const FeedSortOptions(this.name);
+  const FeedSortOption(this.name);
 }
