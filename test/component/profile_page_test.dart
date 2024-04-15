@@ -1,7 +1,10 @@
-import "package:firebase_auth_mocks/firebase_auth_mocks.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/login_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
@@ -13,9 +16,28 @@ import "package:proxima/views/pages/profile/posts_info/info_row.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 import "package:proxima/views/pages/profile/user_info/user_account.dart";
 import "../services/firebase/setup_firebase_mocks.dart";
+import "../services/firebase/testing_auth_providers.dart";
+import "../services/test_data/firestore_user_mock.dart";
 import "../viewmodels/mock_home_view_model.dart";
 
 void main() {
+  late FakeFirebaseFirestore fakeFireStore;
+  late CollectionReference<Map<String, dynamic>> userCollection;
+  late UserRepositoryService userRepo;
+
+  final expectedUser = testingUserFirestore;
+  setupFirebaseAuthMocks();
+
+  setUp(() async {
+    fakeFireStore = FakeFirebaseFirestore();
+    userCollection = fakeFireStore.collection(UserFirestore.collectionName);
+    userRepo = UserRepositoryService(
+      firestore: fakeFireStore,
+    );
+    await userCollection
+        .doc(expectedUser.uid.value)
+        .set(expectedUser.data.toDbData());
+  });
   testWidgets("Navigate to profile page", (tester) async {
     final homePageWidget = ProviderScope(
       overrides: [
@@ -53,14 +75,11 @@ void main() {
   testWidgets("Various widget are displayed", (tester) async {
     setupFirebaseAuthMocks();
 
-    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
-
-    final firebaseAuthMocksOverrides = [
-      firebaseAuthProvider.overrideWithValue(auth),
-    ];
-
     Widget profilePageWidget = ProviderScope(
-      overrides: firebaseAuthMocksOverrides,
+      overrides: [
+        firebaseAuthProvider.overrideWith(mockFirebaseAuthSignedIn),
+        userRepositoryProvider.overrideWithValue(userRepo),
+      ],
       child: const MaterialApp(
         onGenerateRoute: generateRoute,
         title: "Profile page",
@@ -103,14 +122,11 @@ void main() {
   testWidgets("Tab working as expected", (tester) async {
     setupFirebaseAuthMocks();
 
-    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
-
-    final firebaseAuthMocksOverrides = [
-      firebaseAuthProvider.overrideWithValue(auth),
-    ];
-
     Widget profilePageWidget = ProviderScope(
-      overrides: firebaseAuthMocksOverrides,
+      overrides: [
+        firebaseAuthProvider.overrideWith(mockFirebaseAuthSignedIn),
+        userRepositoryProvider.overrideWithValue(userRepo),
+      ],
       child: const MaterialApp(
         onGenerateRoute: generateRoute,
         title: "Profile page",

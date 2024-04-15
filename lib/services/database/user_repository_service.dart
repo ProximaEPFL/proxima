@@ -44,6 +44,13 @@ class UserRepositoryService {
         .get();
     return query.docs.isNotEmpty;
   }
+
+  /// This method will add [points] to the user with id [uid]
+  Future<void> addPoints(UserIdFirestore uid, int points) async {
+    final user = await getUser(uid);
+    final updatedData = user.data.addPointstoDbData(points);
+    await _collectionRef.doc(uid.value).update(updatedData);
+  }
 }
 
 final userRepositoryProvider = Provider<UserRepositoryService>(

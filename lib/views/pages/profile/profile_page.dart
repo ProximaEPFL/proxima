@@ -65,12 +65,17 @@ class ProfilePage extends HookConsumerWidget {
             appBar: AppBar(
               leading: const LeadingBackButton(),
               title: UserAccount(
-                userEmail: value.user.email ?? "default@mail.com",
+                userName: value.firestoreUser.data.username,
+                userDisplayName: value.firestoreUser.data.displayName,
+                centauriPoints: value.firestoreUser.data.centauriPoints,
               ),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.settings),
-                  onPressed: () {},
+                  onPressed: () {
+                    //add 5 points to the user
+                    ref.read(profileProvider.notifier).addPoints(5);
+                  },
                 ),
               ],
             ),

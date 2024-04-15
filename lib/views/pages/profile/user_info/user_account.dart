@@ -7,10 +7,14 @@ class UserAccount extends StatelessWidget {
 
   const UserAccount({
     super.key,
-    required this.userEmail,
+    required this.userName,
+    required this.userDisplayName,
+    required this.centauriPoints,
   });
 
-  final String userEmail;
+  final String userName;
+  final String userDisplayName;
+  final int centauriPoints;
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +33,13 @@ class UserAccount extends StatelessWidget {
             children: [
               //TODO: get the profile info from the viewmodel
               Text(
-                userEmail,
+                userDisplayName,
                 style: Theme.of(context).textTheme.titleSmall,
                 overflow: TextOverflow.fade,
               ),
               Text(
                 //TODO: get the user points from the viewmodel
-                "Pseudo · 1000 Centauri ",
+                "$userName · $centauriPoints Centauri ",
                 style: Theme.of(context).textTheme.titleSmall,
                 key: centauriPointsKey,
               ),
