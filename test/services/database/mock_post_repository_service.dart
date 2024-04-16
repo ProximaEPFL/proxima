@@ -30,7 +30,7 @@ class MockPostRepositoryService extends Mock implements PostRepositoryService {
   Future<PostIdFirestore> addPost(PostData? postData, GeoPoint? position) {
     return super.noSuchMethod(
       Invocation.method(#addPost, [postData, position]),
-      returnValue: Future.value(),
+      returnValue: Future.value(const PostIdFirestore(value: "id")),
     );
   }
 
