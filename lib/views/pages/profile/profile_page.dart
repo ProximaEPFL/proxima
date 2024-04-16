@@ -18,6 +18,7 @@ class ProfilePage extends HookConsumerWidget {
   static const tabKey = Key("tab");
   static const postColumnKey = Key("postColumn");
   static const commentColumnKey = Key("commentColumn");
+  static const settingsKey = Key("settings");
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -71,6 +72,7 @@ class ProfilePage extends HookConsumerWidget {
               ),
               actions: [
                 IconButton(
+                  key: settingsKey,
                   icon: const Icon(Icons.settings),
                   onPressed: () {
                     //add 5 points to the user

@@ -157,4 +157,43 @@ void main() {
     final commentColumn = find.byKey(ProfilePage.commentColumnKey);
     expect(commentColumn, findsOneWidget);
   });
+
+  testWidgets("Centauri points incrementing correctly", (tester) async {
+    setupFirebaseAuthMocks();
+
+    Widget profilePageWidget = ProviderScope(
+      overrides: [
+        firebaseAuthProvider.overrideWith(mockFirebaseAuthSignedIn),
+        userRepositoryProvider.overrideWithValue(userRepo),
+      ],
+      child: const MaterialApp(
+        onGenerateRoute: generateRoute,
+        title: "Profile page",
+        home: ProfilePage(),
+      ),
+    );
+
+    await tester.pumpWidget(profilePageWidget);
+    await tester.pumpAndSettle();
+
+    //Check that centauri points are displayed
+    final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
+    expect(centauriPoints, findsOneWidget);
+
+    // checking the text
+    final centauriText = find.text("username_8456 · 0 Centauri");
+    expect(centauriText, findsOneWidget);
+
+    //TODO: remove this test when the setting button is implemented
+    final settingsButton = find.byKey(ProfilePage.settingsKey);
+    expect(settingsButton, findsOneWidget);
+
+    // Tap on the settings button
+    await tester.tap(settingsButton);
+    await tester.pumpAndSettle();
+
+    //Check that the centauri points are incremented
+    final centauriPointsIncremented = find.text("username_8456 · 5 Centauri");
+    expect(centauriPointsIncremented, findsOneWidget);
+  });
 }
