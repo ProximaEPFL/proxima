@@ -19,28 +19,34 @@ import "../services/firebase/setup_firebase_mocks.dart";
 import "../viewmodels/mock_home_view_model.dart";
 
 void main() {
-  group("Widgets display", () {
-    setUp(() async {
-      setupFirebaseAuthMocks();
-    });
+  late ProviderScope mockedProfilePage;
+  late MockFirebaseAuth auth;
 
-    ProviderScope getMockedProxima() {
-      MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
 
-      final firebaseAuthMocksOverrides = [
+  setUp(() async {
+    setupFirebaseAuthMocks();
+    auth = MockFirebaseAuth(signedIn: true);
+    mockedProfilePage = ProviderScope(
+      overrides: [
         firebaseAuthProvider.overrideWithValue(auth),
-      ];
-
-      return ProviderScope(
-        overrides: firebaseAuthMocksOverrides,
-        child: const MaterialApp(
-          home: ProfilePage(),
+        postOverviewProvider.overrideWith(
+          () => MockHomeViewModel(),
         ),
-      );
-    }
+      ],
+      child: const MaterialApp(
+        onGenerateRoute: generateRoute,
+        title: "Proxima",
+        home: ProfilePage(),
+      ),
+    );
+  });
+
+
+  group("Widgets display", () {
+
 
     testWidgets("Display badges, posts and comments", (tester) async {
-      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpWidget(mockedProfilePage);
       await tester.pumpAndSettle();
 
       //Check that the tab is displayed
@@ -94,9 +100,6 @@ void main() {
   });
 
   group("Popups working as expected", () {
-    setUp(() async {
-      setupFirebaseAuthMocks();
-    });
 
     ProviderScope getMockedProxima() {
       MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
@@ -114,7 +117,7 @@ void main() {
     }
 
     testWidgets("Post popup working as expected", (tester) async {
-      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpWidget(mockedProfilePage);
       await tester.pumpAndSettle();
 
       //Check tab on the first post
@@ -153,7 +156,7 @@ void main() {
     });
 
     testWidgets("Comment popup working as expected", (tester) async {
-      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpWidget(mockedProfilePage);
       await tester.pumpAndSettle();
 
       // Tap on the comment tab
