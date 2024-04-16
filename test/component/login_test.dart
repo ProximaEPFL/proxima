@@ -108,7 +108,7 @@ void main() {
       );
     });
 
-    testWidgets("Login and get to home page flow", (tester) async {
+    testWidgets("Login flow to HomePage", (tester) async {
       await tester.pumpWidget(mockedProxima);
       await tester.pumpAndSettle();
 

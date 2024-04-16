@@ -20,7 +20,7 @@ import "../services/test_data/firestore_user_mock.dart";
 void main() {
   late MockPostRepositoryService postRepository;
   late MockGeoLocationService geoLocationService;
-  late ProviderScope mockedPage;
+  late ProviderScope mockedNewPostPage;
 
   const timeDeltaMils = 500;
 
@@ -30,7 +30,7 @@ void main() {
     postRepository = MockPostRepositoryService();
     geoLocationService = MockGeoLocationService();
 
-    mockedPage = ProviderScope(
+    mockedNewPostPage = ProviderScope(
       overrides: [
         ...firebaseMocksOverrides,
         postRepositoryProvider.overrideWithValue(postRepository),
@@ -46,7 +46,7 @@ void main() {
   group("Widgets display", () {
     testWidgets("Display title, body, post button and back button",
         (tester) async {
-      await tester.pumpWidget(mockedPage);
+      await tester.pumpWidget(mockedNewPostPage);
       await tester.pumpAndSettle();
 
       final titleFinder = find.byKey(NewPostForm.titleFieldKey);
@@ -62,7 +62,7 @@ void main() {
   });
 
   testWidgets("Back button navigation", (widgetTester) async {
-    await widgetTester.pumpWidget(mockedPage);
+    await widgetTester.pumpWidget(mockedNewPostPage);
     await widgetTester.pumpAndSettle();
 
     final backButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
@@ -75,7 +75,7 @@ void main() {
   });
 
   testWidgets("Writes non empty post to repository", (widgetTester) async {
-    await widgetTester.pumpWidget(mockedPage);
+    await widgetTester.pumpWidget(mockedNewPostPage);
     await widgetTester.pumpAndSettle();
 
     GeoPoint testPoint = const GeoPoint(0, 0);
@@ -129,7 +129,7 @@ void main() {
   });
 
   testWidgets("Refuses empty post", (widgetTester) async {
-    await widgetTester.pumpWidget(mockedPage);
+    await widgetTester.pumpWidget(mockedNewPostPage);
     await widgetTester.pumpAndSettle();
 
     final postButtonFinder = find.byKey(NewPostForm.postButtonKey);

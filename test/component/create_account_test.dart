@@ -143,7 +143,7 @@ void main() {
     const username = "evryoneloveelephants";
     final errorText = find.textContaining("already taken");
 
-    // another scope just to simplify the variable names
+    // User 1 attempts to register
     {
       final (uniqueUsernameField, pseudoField, confirmButton) =
           await preparePage(tester);
@@ -159,14 +159,11 @@ void main() {
       final homePage = find.byType(HomePage);
       expect(homePage, findsOneWidget);
     }
-
-    // a bit hacky, but it appears to be necessary. I have tried many other things, this one
-    // appears to be the one that makes the most sense amongst the ones that worked
-    // (thank you copilot)
+    // reset
     await tester.pumpWidget(Container());
     await tester.pumpAndSettle();
 
-    // another scope just to simplify the variable names
+    // User 2 attempts to register with the same username
     {
       final (uniqueUsernameField, pseudoField, confirmButton) =
           await preparePage(tester);
