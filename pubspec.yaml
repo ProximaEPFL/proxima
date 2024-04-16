@@ -2,10 +2,11 @@ name: proxima
 description: "A new Flutter project."
 
 publish_to: "none"
-version: 0.1.3
+version: 0.2.1
 
 environment:
   sdk: '>=3.3.1 <4.0.0'
+  flutter: 3.19.3
 
 dependencies:
   flutter:
@@ -20,7 +21,7 @@ dependencies:
   collection: ^1.18.0
   firebase_auth_mocks: ^0.13.0
   google_sign_in_mocks: ^0.3.0
-  cloud_firestore: ^4.15.9
+  cloud_firestore: 4.15.9
   fake_cloud_firestore: ^2.4.8
   geoflutterfire2: ^2.3.15
   geolocator: ^11.0.0
