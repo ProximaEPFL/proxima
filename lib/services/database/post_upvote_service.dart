@@ -85,27 +85,34 @@ class PostUpvoteRepositoryService {
       int increment = 0;
 
       // Remove the current state, setting it to none.
-      if (currState == UpvoteState.upvoted) {
-        transaction.delete(_upvotersCollection(postId).doc(userId.value));
-        increment -= 1;
-      } else if (currState == UpvoteState.downvoted) {
-        transaction.delete(_downvotersCollection(postId).doc(userId.value));
-        increment += 1;
+      if (currState != UpvoteState.none) {
+        if (currState == UpvoteState.upvoted) {
+          increment -= 1;
+        } else /* currState == UpvoteState.downvoted */ {
+          increment += 1;
+        }
+
+        final voterCollection = currState == UpvoteState.upvoted
+            ? _upvotersCollection
+            : _downvotersCollection;
+        transaction.delete(voterCollection(postId).doc(userId.value));
       }
 
       // Apply the wanted state.
-      if (newState == UpvoteState.upvoted) {
+      if (newState != UpvoteState.none) {
+        if (newState == UpvoteState.upvoted) {
+          increment += 1;
+        } else /* newState == UpvoteState.downvoted */ {
+          increment -= 1;
+        }
+
+        final voterCollection = newState == UpvoteState.upvoted
+            ? _upvotersCollection
+            : _downvotersCollection;
         transaction.set(
-          _upvotersCollection(postId).doc(userId.value),
+          voterCollection(postId).doc(userId.value),
           <String, dynamic>{},
         );
-        increment += 1;
-      } else if (newState == UpvoteState.downvoted) {
-        transaction.set(
-          _downvotersCollection(postId).doc(userId.value),
-          <String, dynamic>{},
-        );
-        increment -= 1;
       }
 
       // Update the vote count
