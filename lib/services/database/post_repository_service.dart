@@ -4,6 +4,8 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/models/database/post/post_location_firestore.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
 
 /// This repository service is responsible for managing the posts in the database
@@ -71,6 +73,15 @@ class PostRepositoryService {
           ) <=
           radius;
     }).toList();
+  }
+
+  /// This method will retrieve all the posts belonging to a given user
+  Future<List<PostFirestore>> getUserPosts(UserIdFirestore userId) async {
+    final userPosts = await _collectionRef
+        .where(PostData.ownerIdField, isEqualTo: userId.value)
+        .get();
+
+    return userPosts.docs.map((data) => PostFirestore.fromDb(data)).toList();
   }
 
   GeoFirePoint _getGeoFirePoint(GeoPoint point) {
