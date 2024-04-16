@@ -1,5 +1,7 @@
 enum UpvoteState {
   none,
   upvoted,
-  downvoted,
+  downvoted;
+
+  String get name => toString().split(".").last;
 }
