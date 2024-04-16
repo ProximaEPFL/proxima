@@ -117,4 +117,45 @@ void main() {
       ]);
     },
   );
+
+  group(
+    "Operations work for a single user on multiple posts",
+    () {
+      const nPosts = 100;
+      late List<PostFirestore> posts;
+      const userId = UserIdFirestore(value: "user_id");
+
+      setUp(() async {
+        posts = [];
+        for (int i = 0; i < nPosts; ++i) {
+          final id = await postRepository.addPost(postData, postLocation);
+          posts.add(await postRepository.getPost(id));
+        }
+      });
+
+      for (final newState in UpvoteState.values) {
+        test(
+          "User can apply action ${newState.name} on $nPosts different posts",
+          () async {
+            for (final post in posts) {
+              assertPostUpvoteState(userId, post.id, UpvoteState.none);
+            }
+
+            final futures = posts.map(
+              (post) => postUpvoteRepository.setUpvoteState(
+                userId,
+                post.id,
+                newState,
+              ),
+            );
+            await Future.wait(futures);
+
+            for (final post in posts) {
+              assertPostUpvoteState(userId, post.id, newState);
+            }
+          },
+        );
+      }
+    },
+  );
 }
