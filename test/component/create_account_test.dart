@@ -10,7 +10,7 @@ import "../services/firestore/testing_firestore_provider.dart";
 import "../viewmodels/mock_home_view_model.dart";
 
 void main() {
-  final mockedPage = ProviderScope(
+  late ProviderScope mockedPage = ProviderScope(
     overrides: firebaseMocksOverrides +
         loggedInUserOverrides +
         mockEmptyHomeViewModelOverride,
@@ -41,40 +41,42 @@ void main() {
     return (uniqueUsernameField, pseudoField, confirmButton);
   }
 
-  testWidgets("Text fields and buttons are visible", (tester) async {
-    final (uniqueUsernameField, pseudoField, confirmButton) =
-        await preparePage(tester);
+  group("Widgets display", () {
+    testWidgets("Display text fields and buttons", (tester) async {
+      final (uniqueUsernameField, pseudoField, confirmButton) =
+          await preparePage(tester);
 
-    expect(uniqueUsernameField, findsOneWidget);
-    expect(pseudoField, findsOneWidget);
-    expect(confirmButton, findsOneWidget);
+      expect(uniqueUsernameField, findsOneWidget);
+      expect(pseudoField, findsOneWidget);
+      expect(confirmButton, findsOneWidget);
+    });
   });
 
-  const blank = "blank";
-  const space = "space";
-  const short = "short";
-  const long = "long";
-  const specialCharacter = "Invalid characters";
-
-  final incorrectStrings = [
-    ("", blank),
-    (" ", space),
-    ("he llo", space),
-    ("heLlo ", space),
-    ("A", short),
-    ("a%", short),
-    ("0" * 21, long),
-    ("j" * 512, long),
-    (
-      "jdsfklsdjflkdsjlfkjwioeoiwelkfmscvhklwjefkhjwiejfknsdkjfsdklfmjksdjfwmkfn",
-      long
-    ),
-    ("abc&", specialCharacter),
-    ("_é_Jsdljadlkfjsd", specialCharacter),
-    ("🐘🐋🐘", specialCharacter),
-  ];
-
   group("Invalid username and pseudos should produce an error", () {
+    const blank = "blank";
+    const space = "space";
+    const short = "short";
+    const long = "long";
+    const specialCharacter = "Invalid characters";
+
+    final incorrectStrings = [
+      ("", blank),
+      (" ", space),
+      ("he llo", space),
+      ("heLlo ", space),
+      ("A", short),
+      ("a%", short),
+      ("0" * 21, long),
+      ("j" * 512, long),
+      (
+        "jdsfklsdjflkdsjlfkjwioeoiwelkfmscvhklwjefkhjwiejfknsdkjfsdklfmjksdjfwmkfn",
+        long
+      ),
+      ("abc&", specialCharacter),
+      ("_é_Jsdljadlkfjsd", specialCharacter),
+      ("🐘🐋🐘", specialCharacter),
+    ];
+
     for (final field in ["username", "pseudo"]) {
       for (final (value, error) in incorrectStrings) {
         testWidgets(

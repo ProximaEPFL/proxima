@@ -45,6 +45,37 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  group("Widgets display", () {
+    testWidgets("Display logo, slogan and login button", (tester) async {
+      ProviderScope getMockedProxima() {
+        return const ProviderScope(
+          child: ProximaApp(),
+        );
+      }
+
+      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpAndSettle();
+
+      // Check for the logo on the Login Page
+      final logoFinder = find.byKey(LoginPage.logoKey);
+      expect(logoFinder, findsOneWidget);
+
+      // Check for the slogan on the Login Page
+      final sloganFinder = find.text(LoginPage.tagLineText);
+      expect(sloganFinder, findsOneWidget);
+
+      final loginButton = find.byKey(LoginButton.loginButtonKey);
+      // Check that the login button is displayed and contains the "Login" text
+      expect(
+        find.descendant(
+          of: loginButton,
+          matching: find.text("Sign in with Google"),
+        ),
+        findsOneWidget,
+      );
+    });
+  });
+
   group("Existing user data in repository testing", () {
     final expectedUser = testingUserFirestore;
 
@@ -168,23 +199,7 @@ void main() {
       await tester.pumpWidget(getMockedProxima());
       await tester.pumpAndSettle();
 
-      // Check for the logo on the Login Page
-      final logoFinder = find.byKey(LoginPage.logoKey);
-      expect(logoFinder, findsOneWidget);
-
-      // Check for the slogan on the Login Page
-      final sloganFinder = find.text(LoginPage.tagLineText);
-      expect(sloganFinder, findsOneWidget);
-
       final loginButton = find.byKey(LoginButton.loginButtonKey);
-      // Check that the login button is displayed and contains the "Login" text
-      expect(
-        find.descendant(
-          of: loginButton,
-          matching: find.text("Sign in with Google"),
-        ),
-        findsOneWidget,
-      );
 
       await tester.tap(loginButton);
       //Needs a delay to allow the existance check to complete
