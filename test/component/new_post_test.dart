@@ -1,4 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -19,10 +20,13 @@ import "../services/mock_geo_location_service.dart";
 import "../services/test_data/firestore_user_mock.dart";
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   setupFirebaseAuthMocks();
 
-  MockPostRepositoryService postRepository = MockPostRepositoryService();
-  MockGeoLocationService geoLocationService = MockGeoLocationService();
+  late MockPostRepositoryService postRepository;
+  late MockGeoLocationService geoLocationService;
+  late ProviderScope mockedPage;
 
   const timeDeltaMils = 500;
 
@@ -30,109 +34,118 @@ void main() {
     await Firebase.initializeApp();
   });
 
-  final mockedPage = ProviderScope(
-    overrides: [
-      ...firebaseMocksOverrides,
-      postRepositoryProvider.overrideWithValue(postRepository),
-      geoLocationServiceProvider.overrideWithValue(geoLocationService),
-      uidProvider.overrideWithValue(testingUserFirestoreId),
-    ],
-    child: const MaterialApp(
-      home: NewPostPage(),
-    ),
-  );
+  group("New post creation", () {
+    setUp(() {
+      postRepository = MockPostRepositoryService();
+      geoLocationService = MockGeoLocationService();
 
-  testWidgets("Create post contains title, body and post button",
-      (tester) async {
-    await tester.pumpWidget(mockedPage);
-    await tester.pumpAndSettle();
+       mockedPage = ProviderScope(
+        overrides: [
+          ...firebaseMocksOverrides,
+          postRepositoryProvider.overrideWithValue(postRepository),
+          geoLocationServiceProvider.overrideWithValue(geoLocationService),
+          uidProvider.overrideWithValue(testingUserFirestoreId),
+        ],
+        child: const MaterialApp(
+          home: NewPostPage(),
+        ),
+      );
 
-    final titleFinder = find.byKey(NewPostForm.titleFieldKey);
-    final bodyFinder = find.byKey(NewPostForm.bodyFieldKey);
-    final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
+    });
+    
 
-    expect(titleFinder, findsOneWidget);
-    expect(bodyFinder, findsOneWidget);
-    expect(postButtonFinder, findsOneWidget);
-  });
+    testWidgets("Create post contains title, body and post button",
+        (tester) async {
+      await tester.pumpWidget(mockedPage);
+      await tester.pumpAndSettle();
 
-  testWidgets("Back button works", (widgetTester) async {
-    await widgetTester.pumpWidget(mockedPage);
-    await widgetTester.pumpAndSettle();
+      final titleFinder = find.byKey(NewPostForm.titleFieldKey);
+      final bodyFinder = find.byKey(NewPostForm.bodyFieldKey);
+      final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
 
-    final backButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
-    await widgetTester.tap(backButton);
-    await widgetTester.pumpAndSettle();
-
-    // check that we are no longer on the new post page
-    final titleFinder = find.byKey(NewPostForm.titleFieldKey);
-    expect(titleFinder, findsNothing);
-  });
-
-  testWidgets("Writes non empty post to repository", (widgetTester) async {
-    await widgetTester.pumpWidget(mockedPage);
-    await widgetTester.pumpAndSettle();
-
-    GeoPoint testPoint = const GeoPoint(0, 0);
-    when(geoLocationService.getCurrentPosition()).thenAnswer(
-      (_) => Future.value(testPoint),
-    );
-
-    PostData postData = PostData(
-      ownerId: testingUserFirestoreId,
-      title: "I like turtles",
-      description: "Look at them go!",
-      publicationTime: Timestamp.now(),
-      voteScore: 0,
-    );
-
-    final titleFinder = find.byKey(NewPostForm.titleFieldKey);
-    await widgetTester.enterText(titleFinder, postData.title);
-    await widgetTester.pumpAndSettle();
-
-    final bodyFinder = find.byKey(NewPostForm.bodyFieldKey);
-    await widgetTester.enterText(bodyFinder, postData.description);
-    await widgetTester.pumpAndSettle();
-
-    final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
-
-    when(postRepository.addPost(any, any)).thenAnswer((_) {
-      return Future.value();
+      expect(titleFinder, findsOneWidget);
+      expect(bodyFinder, findsOneWidget);
+      expect(postButtonFinder, findsOneWidget);
     });
 
-    await widgetTester.tap(postButtonFinder);
-    await widgetTester.pumpAndSettle();
+    testWidgets("Back button works", (widgetTester) async {
+      await widgetTester.pumpWidget(mockedPage);
+      await widgetTester.pumpAndSettle();
 
-    final PostData capturedPostData =
-        verify(postRepository.addPost(captureAny, testPoint)).captured.first;
+      final backButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
+      await widgetTester.tap(backButton);
+      await widgetTester.pumpAndSettle();
 
-    expect(capturedPostData.title, postData.title);
-    expect(capturedPostData.description, postData.description);
-    expect(capturedPostData.ownerId, postData.ownerId);
-    expect(capturedPostData.voteScore, postData.voteScore);
+      // check that we are no longer on the new post page
+      final titleFinder = find.byKey(NewPostForm.titleFieldKey);
+      expect(titleFinder, findsNothing);
+    });
 
-    // check that the publication time is within a reasonable delta
-    expect(
-      capturedPostData.publicationTime.millisecondsSinceEpoch,
-      closeTo(
-        postData.publicationTime.millisecondsSinceEpoch,
-        timeDeltaMils,
-      ),
-    );
+    testWidgets("Writes non empty post to repository", (widgetTester) async {
+      await widgetTester.pumpWidget(mockedPage);
+      await widgetTester.pumpAndSettle();
 
-    expect(titleFinder, findsNothing);
-  });
+      GeoPoint testPoint = const GeoPoint(0, 0);
+      when(geoLocationService.getCurrentPosition()).thenAnswer(
+        (_) => Future.value(testPoint),
+      );
 
-  testWidgets("Refuses empty post", (widgetTester) async {
-    await widgetTester.pumpWidget(mockedPage);
-    await widgetTester.pumpAndSettle();
+      PostData postData = PostData(
+        ownerId: testingUserFirestoreId,
+        title: "I like turtles",
+        description: "Look at them go!",
+        publicationTime: Timestamp.now(),
+        voteScore: 0,
+      );
 
-    final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
-    await widgetTester.tap(postButtonFinder);
-    await widgetTester.pumpAndSettle();
+      final titleFinder = find.byKey(NewPostForm.titleFieldKey);
+      await widgetTester.enterText(titleFinder, postData.title);
+      await widgetTester.pumpAndSettle();
 
-    // check that we are still on the new post page
-    final titleFinder = find.byKey(NewPostForm.titleFieldKey);
-    expect(titleFinder, findsOne);
+      final bodyFinder = find.byKey(NewPostForm.bodyFieldKey);
+      await widgetTester.enterText(bodyFinder, postData.description);
+      await widgetTester.pumpAndSettle();
+
+      final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
+
+      when(postRepository.addPost(any, any)).thenAnswer((_) {
+        return Future.value();
+      });
+
+      await widgetTester.tap(postButtonFinder);
+      await widgetTester.pumpAndSettle();
+
+      final PostData capturedPostData =
+          verify(postRepository.addPost(captureAny, testPoint)).captured.first;
+
+      expect(capturedPostData.title, postData.title);
+      expect(capturedPostData.description, postData.description);
+      expect(capturedPostData.ownerId, postData.ownerId);
+      expect(capturedPostData.voteScore, postData.voteScore);
+
+      // check that the publication time is within a reasonable delta
+      expect(
+        capturedPostData.publicationTime.millisecondsSinceEpoch,
+        closeTo(
+          postData.publicationTime.millisecondsSinceEpoch,
+          timeDeltaMils,
+        ),
+      );
+
+      expect(titleFinder, findsNothing);
+    });
+
+    testWidgets("Refuses empty post", (widgetTester) async {
+      await widgetTester.pumpWidget(mockedPage);
+      await widgetTester.pumpAndSettle();
+
+      final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
+      await widgetTester.tap(postButtonFinder);
+      await widgetTester.pumpAndSettle();
+
+      // check that we are still on the new post page
+      final titleFinder = find.byKey(NewPostForm.titleFieldKey);
+      expect(titleFinder, findsOne);
+    });
   });
 }
