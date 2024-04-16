@@ -20,8 +20,6 @@ import "../services/mock_geo_location_service.dart";
 import "../services/test_data/firestore_user_mock.dart";
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-
   setupFirebaseAuthMocks();
 
   late MockPostRepositoryService postRepository;
@@ -35,11 +33,11 @@ void main() {
   });
 
   group("New post creation", () {
-    setUp(() {
+    setUp(() async {
       postRepository = MockPostRepositoryService();
       geoLocationService = MockGeoLocationService();
 
-       mockedPage = ProviderScope(
+      mockedPage = ProviderScope(
         overrides: [
           ...firebaseMocksOverrides,
           postRepositoryProvider.overrideWithValue(postRepository),
@@ -50,9 +48,7 @@ void main() {
           home: NewPostPage(),
         ),
       );
-
     });
-    
 
     testWidgets("Create post contains title, body and post button",
         (tester) async {

@@ -10,7 +10,7 @@ import "package:proxima/views/pages/home/home_page.dart";
 
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "../../viewmodels/mock_home_view_model.dart";
-import "../utils/mock_data/home/mock_posts.dart";
+import "../utils/mock_data/mock_posts.dart";
 
 void main() {
   final homePageWidget = ProviderScope(

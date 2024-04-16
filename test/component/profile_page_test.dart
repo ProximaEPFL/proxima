@@ -52,6 +52,7 @@ void main() {
     final profilePage = find.byType(ProfilePage);
     expect(profilePage, findsOneWidget);
   });
+
   group("Profile widget page testing", () {
     setUp(() async {
       setupFirebaseAuthMocks();
@@ -67,8 +68,6 @@ void main() {
       return ProviderScope(
         overrides: firebaseAuthMocksOverrides,
         child: const MaterialApp(
-          onGenerateRoute: generateRoute,
-          title: "Profile page",
           home: ProfilePage(),
         ),
       );
