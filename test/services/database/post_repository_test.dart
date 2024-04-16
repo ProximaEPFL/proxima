@@ -10,6 +10,7 @@ import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
 import "../../models/database/post/mock_post_data.dart";
+import "../test_data/user_posts_fake_data.dart";
 
 void main() {
   group("Post Repository testing", () {
@@ -212,6 +213,37 @@ void main() {
       }).toList();
 
       expect(actualPosts, expectedPosts);
+    });
+
+    test("get simple user posts correctly", () async {
+      const userId1 = UserIdFirestore(value: "user_id_1");
+
+      final postsData1 =
+          MockPostFirestore.createUserPost(userId1, fakeDataPosition1);
+      final postsData2 =
+          MockPostFirestore.createUserPost(userId1, fakeDataPosition2);
+      await setPostsFirestore([postsData1, postsData2]);
+
+      const userId2 = UserIdFirestore(value: "user_id_2");
+
+      final postsData3 =
+          MockPostFirestore.createUserPost(userId2, fakeDataPosition1);
+      final postsData4 =
+          MockPostFirestore.createUserPost(userId2, fakeDataPosition2);
+      await setPostsFirestore([postsData3, postsData4]);
+
+      final actualPosts1 = await postRepository.getUserPosts(userId1);
+      final actualPosts2 = await postRepository.getUserPosts(userId2);
+
+      expect(actualPosts1.length, 2);
+      expect(actualPosts1.length, actualPosts2.length);
+
+      for (final post in actualPosts1) {
+        expect(post.data.ownerId.value, userId1.value);
+      }
+      for (final post in actualPosts2) {
+        expect(post.data.ownerId.value, userId2.value);
+      }
     });
   });
 }
