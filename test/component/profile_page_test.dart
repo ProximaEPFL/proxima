@@ -75,129 +75,189 @@ void main() {
     expect(profilePage, findsOneWidget);
   });
 
+  group("Profile widget page testing", () {
+    setUp(() async {
+      setupFirebaseAuthMocks();
+    });
 
-  testWidgets("Various widget are displayed", (tester) async {
-    setupFirebaseAuthMocks();
+    ProviderScope getMockedProxima() {
+      return ProviderScope(
+        overrides: [
+          firebaseAuthProvider.overrideWith(mockFirebaseAuthSignedIn),
+          userRepositoryProvider.overrideWithValue(userRepo),
+        ],
+        child: const MaterialApp(
+          onGenerateRoute: generateRoute,
+          title: "Profile page",
+          home: ProfilePage(),
+        ),
+      );
+    }
 
-    Widget profilePageWidget = ProviderScope(
-      overrides: [
-        firebaseAuthProvider.overrideWith(mockFirebaseAuthSignedIn),
-        userRepositoryProvider.overrideWithValue(userRepo),
-      ],
-      child: const MaterialApp(
-        onGenerateRoute: generateRoute,
-        title: "Profile page",
-        home: ProfilePage(),
-      ),
-    );
+    testWidgets("Various widget are displayed", (tester) async {
+      setupFirebaseAuthMocks();
 
-    await tester.pumpWidget(profilePageWidget);
-    await tester.pumpAndSettle();
+      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpAndSettle();
 
-    // Check that badges are displayed
-    final badgeCard = find.byKey(InfoCardBadge.infoCardBadgeKey);
-    expect(badgeCard, findsWidgets);
+      // Check that badges are displayed
+      final badgeCard = find.byKey(InfoCardBadge.infoCardBadgeKey);
+      expect(badgeCard, findsWidgets);
 
-    //Check that the post card is displayed
-    final postCard = find.byKey(InfoCardPost.infoCardPostKey);
-    expect(postCard, findsWidgets);
+      //Check that the post card is displayed
+      final postCard = find.byKey(InfoCardPost.infoCardPostKey);
+      expect(postCard, findsWidgets);
 
-    // Check that the info column is displayed
-    final infoColumn = find.byKey(ProfilePage.postColumnKey);
-    expect(infoColumn, findsOneWidget);
+      // Check that the info column is displayed
+      final infoColumn = find.byKey(ProfilePage.postColumnKey);
+      expect(infoColumn, findsOneWidget);
 
-    // Check that the info row is displayed
-    final infoRowWidget = find.byKey(InfoRow.infoRowKey);
-    expect(infoRowWidget, findsOneWidget);
+      // Check that the info row is displayed
+      final infoRowWidget = find.byKey(InfoRow.infoRowKey);
+      expect(infoRowWidget, findsOneWidget);
 
-    //Check that centauri points are displayed
-    final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
-    expect(centauriPoints, findsOneWidget);
+      //Check that centauri points are displayed
+      final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
+      expect(centauriPoints, findsOneWidget);
 
-    //Check that the user account is displayed
-    final userAccount = find.byKey(UserAccount.userInfoKey);
-    expect(userAccount, findsOneWidget);
+      //Check that the user account is displayed
+      final userAccount = find.byKey(UserAccount.userInfoKey);
+      expect(userAccount, findsOneWidget);
 
-    //Check that the tab is displayed
-    final tab = find.byKey(ProfilePage.tabKey);
-    expect(tab, findsOneWidget);
-  });
+      //Check that the tab is displayed
+      final tab = find.byKey(ProfilePage.tabKey);
+      expect(tab, findsOneWidget);
+    });
 
-  testWidgets("Tab working as expected", (tester) async {
-    setupFirebaseAuthMocks();
+    group("Popups working as expected", () {
+      testWidgets("Post popup working as expected", (tester) async {
+        await tester.pumpWidget(getMockedProxima());
+        await tester.pumpAndSettle();
 
-    Widget profilePageWidget = ProviderScope(
-      overrides: [
-        firebaseAuthProvider.overrideWith(mockFirebaseAuthSignedIn),
-        userRepositoryProvider.overrideWithValue(userRepo),
-      ],
-      child: const MaterialApp(
-        onGenerateRoute: generateRoute,
-        title: "Profile page",
-        home: ProfilePage(),
-      ),
-    );
+        //Check tab on the first post
+        final infoCardPost = find.byKey(InfoCardPost.infoCardPostKey);
+        expect(infoCardPost, findsWidgets);
 
-    await tester.pumpWidget(profilePageWidget);
-    await tester.pumpAndSettle();
+        // Tap on the first post
+        await tester.tap(infoCardPost.first);
+        await tester.pumpAndSettle();
 
-    // Check that the post tab is displayed
-    final postTab = find.byKey(ProfilePage.postTabKey);
-    expect(postTab, findsOneWidget);
+        // Check that the post popup is displayed
+        final postPopup = find.byType(PostPopUp);
+        expect(postPopup, findsOneWidget);
 
-    // Check that the comment tab is displayed
-    final commentTab = find.byKey(ProfilePage.commentTabKey);
-    expect(commentTab, findsOneWidget);
+        //Check that the title of the pop up is displayed
+        final postPopupTitle = find.byKey(PostPopUp.postPopUpTitleKey);
+        expect(postPopupTitle, findsOneWidget);
 
-    //Check that post column is displayed
-    final postColumn = find.byKey(ProfilePage.postColumnKey);
-    expect(postColumn, findsOneWidget);
+        //Check that the description of the pop up is displayed
+        final postPopupDescription =
+            find.byKey(PostPopUp.postPopUpDescriptionKey);
+        expect(postPopupDescription, findsOneWidget);
 
-    // Tap on the comment tab
-    await tester.tap(commentTab);
-    await tester.pumpAndSettle();
+        //Check that the delete button is displayed
+        final postPopupDeleteButton =
+            find.byKey(PostPopUp.postPopUpDeleteButtonKey);
+        expect(postPopupDeleteButton, findsOneWidget);
 
-    // Check that the comment column is displayed
-    final commentColumn = find.byKey(ProfilePage.commentColumnKey);
-    expect(commentColumn, findsOneWidget);
-  });
+        //Check clicking on the delete button come back to the profile page
+        await tester.tap(postPopupDeleteButton);
+        await tester.pumpAndSettle();
 
-  testWidgets("Centauri points incrementing correctly", (tester) async {
-    setupFirebaseAuthMocks();
+        //Check that the profile page is displayed
+        final profilePage = find.byType(ProfilePage);
+        expect(profilePage, findsOneWidget);
+      });
 
-    Widget profilePageWidget = ProviderScope(
-      overrides: [
-        firebaseAuthProvider.overrideWith(mockFirebaseAuthSignedIn),
-        userRepositoryProvider.overrideWithValue(userRepo),
-      ],
-      child: const MaterialApp(
-        onGenerateRoute: generateRoute,
-        title: "Profile page",
-        home: ProfilePage(),
-      ),
-    );
+      testWidgets("Comment popup working as expected", (tester) async {
+        await tester.pumpWidget(getMockedProxima());
+        await tester.pumpAndSettle();
 
-    await tester.pumpWidget(profilePageWidget);
-    await tester.pumpAndSettle();
+        // Tap on the comment tab
+        final commentTab = find.byKey(ProfilePage.commentTabKey);
+        await tester.tap(commentTab);
+        await tester.pumpAndSettle();
 
-    //Check that centauri points are displayed
-    final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
-    expect(centauriPoints, findsOneWidget);
+        //Check tab on the first comment
+        final infoCardComment = find.byKey(InfoCardComment.infoCardCommentKey);
+        expect(infoCardComment, findsWidgets);
 
-    // checking the text
-    final centauriText = find.text("username_8456 · 0 Centauri");
-    expect(centauriText, findsOneWidget);
+        // Tap on the first comment
+        await tester.tap(infoCardComment.first);
+        await tester.pumpAndSettle();
 
-    //TODO: remove this test when the setting button is implemented
-    final settingsButton = find.byKey(ProfilePage.settingsKey);
-    expect(settingsButton, findsOneWidget);
+        // Check that the comment popup is displayed
+        final commentPopup = find.byType(CommentPopUp);
+        expect(commentPopup, findsOneWidget);
 
-    // Tap on the settings button
-    await tester.tap(settingsButton);
-    await tester.pumpAndSettle();
+        //Check that the description of the pop up is displayed
+        final commentPopupDescription =
+            find.byKey(CommentPopUp.commentPopUpDescriptionKey);
+        expect(commentPopupDescription, findsOneWidget);
 
-    //Check that the centauri points are incremented
-    final centauriPointsIncremented = find.text("username_8456 · 5 Centauri");
-    expect(centauriPointsIncremented, findsOneWidget);
+        //Check that the delete button is displayed
+        final commentPopupDeleteButton =
+            find.byKey(CommentPopUp.commentPopUpDeleteButtonKey);
+        expect(commentPopupDeleteButton, findsOneWidget);
+
+        //Check clicking on the delete button come back to the profile page
+        await tester.tap(commentPopupDeleteButton);
+        await tester.pumpAndSettle();
+
+        //Check that the profile page is displayed
+        final profilePage = find.byType(ProfilePage);
+        expect(profilePage, findsOneWidget);
+      });
+    });
+
+    testWidgets("Tab working as expected", (tester) async {
+      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpAndSettle();
+
+      // Check that the post tab is displayed
+      final postTab = find.byKey(ProfilePage.postTabKey);
+      expect(postTab, findsOneWidget);
+
+      // Check that the comment tab is displayed
+      final commentTab = find.byKey(ProfilePage.commentTabKey);
+      expect(commentTab, findsOneWidget);
+
+      //Check that post column is displayed
+      final postColumn = find.byKey(ProfilePage.postColumnKey);
+      expect(postColumn, findsOneWidget);
+
+      // Tap on the comment tab
+      await tester.tap(commentTab);
+      await tester.pumpAndSettle();
+
+      // Check that the comment column is displayed
+      final commentColumn = find.byKey(ProfilePage.commentColumnKey);
+      expect(commentColumn, findsOneWidget);
+    });
+
+    testWidgets("Centauri points incrementing correctly", (tester) async {
+      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpAndSettle();
+
+      //Check that centauri points are displayed
+      final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
+      expect(centauriPoints, findsOneWidget);
+
+      // checking the text
+      final centauriText = find.text("username_8456 · 0 Centauri");
+      expect(centauriText, findsOneWidget);
+
+      //TODO: remove this test when the setting button is implemented
+      final settingsButton = find.byKey(ProfilePage.settingsKey);
+      expect(settingsButton, findsOneWidget);
+
+      // Tap on the settings button
+      await tester.tap(settingsButton);
+      await tester.pumpAndSettle();
+
+      //Check that the centauri points are incremented
+      final centauriPointsIncremented = find.text("username_8456 · 5 Centauri");
+      expect(centauriPointsIncremented, findsOneWidget);
+    });
   });
 }
