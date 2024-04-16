@@ -1,6 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
-import "package:firebase_core/firebase_core.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
@@ -125,7 +124,7 @@ void main() {
   });
 
   group("Non existing user data in repository testing", () {
-    testWidgets("Login and Logout using create account page", (tester) async {
+    testWidgets("Login flow to CreateAccount and log out", (tester) async {
       await tester.pumpWidget(mockedProxima);
       await tester.pumpAndSettle();
 
@@ -146,7 +145,7 @@ void main() {
       expect(loginPage, findsOneWidget);
     });
 
-    testWidgets("Login and Logout using home page", (tester) async {
+    testWidgets("Login flow to HomePage and log out", (tester) async {
       await tester.pumpWidget(mockedProxima);
       await tester.pumpAndSettle();
 
@@ -177,33 +176,6 @@ void main() {
       //Check that we are in the login page
       final loginPage = find.byType(LoginPage);
       expect(loginPage, findsOneWidget);
-    });
-
-    testWidgets("Login to Create Account Page to Home Page flow",
-        (tester) async {
-      await tester.pumpWidget(mockedProxima);
-      await tester.pumpAndSettle();
-
-      final loginButton = find.byKey(LoginButton.loginButtonKey);
-
-      await tester.tap(loginButton);
-      //Needs a delay to allow the existance check to complete
-      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
-
-      // Check that pressing login redirects to the create account page
-      final createAccountPage = find.byType(CreateAccountPage);
-      expect(createAccountPage, findsOneWidget);
-
-      await enterPseudoAndUsername(tester);
-
-      // And that pushing the confirm button redirects to the home page
-      final confirmButton = find.byKey(CreateAccountPage.confirmButtonKey);
-      await tester.tap(confirmButton);
-      await tester.pumpAndSettle();
-
-      // We must now be on the home page
-      final homePage = find.byType(HomePage);
-      expect(homePage, findsOneWidget);
     });
   });
 }

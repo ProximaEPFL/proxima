@@ -96,21 +96,6 @@ void main() {
   });
 
   group("Popups working as expected", () {
-    ProviderScope getMockedProxima() {
-      MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
-
-      final firebaseAuthMocksOverrides = [
-        firebaseAuthProvider.overrideWithValue(auth),
-      ];
-
-      return ProviderScope(
-        overrides: firebaseAuthMocksOverrides,
-        child: const MaterialApp(
-          home: ProfilePage(),
-        ),
-      );
-    }
-
     testWidgets("Post popup working as expected", (tester) async {
       await tester.pumpWidget(mockedProfilePage);
       await tester.pumpAndSettle();
