@@ -7,8 +7,12 @@ import "package:proxima/models/database/upvote_state.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
 
+/// This repository service is responsible for handling the upvotes of posts
 class PostUpvoteRepositoryService {
+  /// The name of the subcollection that contains the list of users who upvoted
   static const upvotersSubCollectionName = "upvoters";
+
+  /// The name of the subcollection that contains the list of users who downvoted
   static const downvotersSubCollectionName = "downvoters";
 
   final FirebaseFirestore firestore;
@@ -17,24 +21,31 @@ class PostUpvoteRepositoryService {
     required this.firestore,
   });
 
+  /// Returns the document reference of the post with id [postId]
   DocumentReference<Map<String, dynamic>> _postDocument(
     PostIdFirestore postId,
   ) {
     return firestore.collection(PostFirestore.collectionName).doc(postId.value);
   }
 
+  /// Returns the collection reference of the subcollection that contains the
+  /// list of users who upvoted the post with id [postId]
   CollectionReference<Map<String, dynamic>> _upvotersCollection(
     PostIdFirestore postId,
   ) {
     return _postDocument(postId).collection(upvotersSubCollectionName);
   }
 
+  /// Returns the collection reference of the subcollection that contains the
+  /// list of users who downvoted the post with id [postId]
   CollectionReference<Map<String, dynamic>> _downvotersCollection(
     PostIdFirestore postId,
   ) {
     return _postDocument(postId).collection(downvotersSubCollectionName);
   }
 
+  /// Returns the upvote state of the user with id [userId] on the post with id [postId]
+  /// This is done atomically.
   Future<UpvoteState> getUpvoteState(
     UserIdFirestore userId,
     PostIdFirestore postId,
@@ -60,6 +71,8 @@ class PostUpvoteRepositoryService {
     });
   }
 
+  /// Sets the upvote state of the user with id [userId] on the post with id [postId]
+  /// to [newState]. This is done atomically.
   Future<void> setUpvoteState(
     UserIdFirestore userId,
     PostIdFirestore postId,
