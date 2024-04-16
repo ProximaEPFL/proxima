@@ -11,8 +11,11 @@ import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_badge.dart";
+import "package:proxima/views/pages/profile/posts_info/info_card_comment.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_post.dart";
 import "package:proxima/views/pages/profile/posts_info/info_row.dart";
+import "package:proxima/views/pages/profile/posts_info/popup/comment_popup.dart";
+import "package:proxima/views/pages/profile/posts_info/popup/post_popup.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 import "package:proxima/views/pages/profile/user_info/user_account.dart";
 import "../services/firebase/setup_firebase_mocks.dart";
@@ -71,6 +74,7 @@ void main() {
     final profilePage = find.byType(ProfilePage);
     expect(profilePage, findsOneWidget);
   });
+
 
   testWidgets("Various widget are displayed", (tester) async {
     setupFirebaseAuthMocks();

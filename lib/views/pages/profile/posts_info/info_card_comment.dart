@@ -1,8 +1,11 @@
 import "package:flutter/material.dart";
+import "package:proxima/views/pages/profile/posts_info/popup/comment_popup.dart";
 
 //info card for the comments
 class InfoCardComment extends StatelessWidget {
   static const infoCardCommentKey = Key("infoCardComment");
+
+  static const borderRadius = BorderRadius.all(Radius.circular(10));
 
   const InfoCardComment({
     super.key,
@@ -21,24 +24,37 @@ class InfoCardComment extends StatelessWidget {
       height: 80,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondaryContainer,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: borderRadius,
         boxShadow: [shadow],
       ),
-      child: Center(
-        child: ListTile(
-          title: Text(
-            comment,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.bodySmall,
+      child: Material(
+        clipBehavior: Clip.hardEdge,
+        borderRadius: borderRadius,
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return CommentPopUp(comment: comment);
+            },
           ),
-          trailing: const IconButton(
-            icon: Icon(
-              Icons.delete,
-              size: 32,
+          child: Center(
+            child: ListTile(
+              title: Text(
+                comment,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              trailing: const IconButton(
+                icon: Icon(
+                  Icons.delete,
+                  size: 32,
+                ),
+                //TODO: add the delete function
+                onPressed: null,
+              ),
             ),
-            //TODO: add the delete function
-            onPressed: null,
           ),
         ),
       ),
