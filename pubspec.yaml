@@ -22,7 +22,7 @@ dependencies:
   google_sign_in_mocks: ^0.3.0
   cloud_firestore: ^4.15.9
   fake_cloud_firestore: ^2.4.8
-  geoflutterfire2: ^2.3.15
+  geoflutterfire_plus: ^0.0.20
   geolocator: ^11.0.0
   mockito: ^5.4.4
   google_fonts: ^6.2.1
