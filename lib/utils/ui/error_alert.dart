@@ -1,19 +1,19 @@
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 
-class ExceptionAlert extends StatelessWidget {
-  const ExceptionAlert({
+class ErrorAlert extends StatelessWidget {
+  const ErrorAlert({
     super.key,
-    required this.exception,
+    required this.error,
   });
 
-  final Exception exception;
+  final Object error;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text("An error occurred"),
-      content: Text(exception.toString()),
+      content: Text(error.toString()),
       actions: <Widget>[
         TextButton(
           onPressed: () {
