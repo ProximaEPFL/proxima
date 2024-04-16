@@ -44,8 +44,9 @@ void main() {
     );
   });
 
-  group("Post creation flow using bottom bar", () {
-    testWidgets("From non-empty feed, flow to create a post", (tester) async {
+  group("Post creation flow", () {
+    testWidgets("From non-empty feed, flow to create a post using bottomBar",
+        (tester) async {
       await tester.pumpWidget(nonEmptyMockedPage);
       await tester.pumpAndSettle();
 
@@ -77,7 +78,8 @@ void main() {
       expect(homePage, findsOneWidget);
     });
 
-    testWidgets("From empty feed, flow to create a post", (tester) async {
+    testWidgets("From empty feed, flow to create a post using bottom bar",
+        (tester) async {
       await tester.pumpWidget(emptyMockedPage);
       await tester.pumpAndSettle();
 
@@ -114,7 +116,7 @@ void main() {
     });
 
     testWidgets(
-        "new post flow without post, using button creation text and come back to home page using back button",
+        "From empty feed, flow to create a post, clicking on 'create one!' button",
         (tester) async {
       await tester.pumpWidget(emptyMockedPage);
       await tester.pumpAndSettle();

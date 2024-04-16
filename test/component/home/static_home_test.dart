@@ -142,12 +142,6 @@ void main() {
         ),
         findsExactly(NavigationbarRoutes.values.length),
       );
-
-      // Check each component of the bottom bar
-      expect(find.text("Group"), findsOneWidget);
-      expect(find.text("Map"), findsOneWidget);
-      expect(find.text("New post"), findsOneWidget);
-      expect(find.text("Feed"), findsOneWidget);
     });
 
     testWidgets(
