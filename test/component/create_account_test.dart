@@ -10,15 +10,19 @@ import "../services/firestore/testing_firestore_provider.dart";
 import "../viewmodels/mock_home_view_model.dart";
 
 void main() {
-  late ProviderScope mockedPage = ProviderScope(
-    overrides: firebaseMocksOverrides +
-        loggedInUserOverrides +
-        mockEmptyHomeViewModelOverride,
-    child: MaterialApp(
-      onGenerateRoute: generateRoute,
-      initialRoute: Routes.createAccount.name,
-    ),
-  );
+  late ProviderScope mockedPage;
+
+  setUp(() {
+    mockedPage = ProviderScope(
+      overrides: firebaseMocksOverrides +
+          loggedInUserOverrides +
+          mockEmptyHomeViewModelOverride,
+      child: MaterialApp(
+        onGenerateRoute: generateRoute,
+        initialRoute: Routes.createAccount.name,
+      ),
+    );
+  });
 
   Future<(Finder, Finder, Finder)> preparePage(WidgetTester tester) async {
     await tester.pumpWidget(mockedPage);

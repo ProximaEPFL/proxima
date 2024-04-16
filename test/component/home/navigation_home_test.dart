@@ -13,30 +13,36 @@ import "../../viewmodels/mock_home_view_model.dart";
 import "../utils/mock_data/mock_posts.dart";
 
 void main() {
-  final homePageApp = MaterialApp(
-    onGenerateRoute: generateRoute,
-    initialRoute: Routes.home.name,
-  );
+  late MaterialApp homePageApp;
+  late ProviderScope emptyMockedPage;
+  late ProviderScope nonEmptyMockedPage;
 
-  final emptyMockedPage = ProviderScope(
-    overrides: [
-      postOverviewProvider.overrideWith(
-        () => MockHomeViewModel(),
-      ),
-    ],
-    child: homePageApp,
-  );
+  setUp(() async {
+    homePageApp = MaterialApp(
+      onGenerateRoute: generateRoute,
+      initialRoute: Routes.home.name,
+    );
 
-  final nonEmptyMockedPage = ProviderScope(
-    overrides: [
-      postOverviewProvider.overrideWith(
-        () => MockHomeViewModel(
-          build: () async => testPosts,
+    emptyMockedPage = ProviderScope(
+      overrides: [
+        postOverviewProvider.overrideWith(
+          () => MockHomeViewModel(),
         ),
-      ),
-    ],
-    child: homePageApp,
-  );
+      ],
+      child: homePageApp,
+    );
+
+    nonEmptyMockedPage = ProviderScope(
+      overrides: [
+        postOverviewProvider.overrideWith(
+          () => MockHomeViewModel(
+            build: () async => testPosts,
+          ),
+        ),
+      ],
+      child: homePageApp,
+    );
+  });
 
   testWidgets(
       "new post flow with posts, using bottom bar and use back button to come back to home page",

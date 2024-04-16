@@ -13,48 +13,51 @@ import "../../viewmodels/mock_home_view_model.dart";
 import "../utils/mock_data/mock_posts.dart";
 
 void main() {
-  final homePageWidget = ProviderScope(
-    overrides: [
-      postOverviewProvider.overrideWith(
-        () => MockHomeViewModel(
-          build: () async => testPosts,
-        ),
-      ),
-    ],
-    child: const MaterialApp(
-      title: "Proxima",
-      home: HomePage(),
-    ),
-  );
+  late ProviderScope homePageWidget;
+  late ProviderScope emptyHomePageWidget;
+  late ProviderScope loadingHomePageWidget;
 
-  final emptyHomePageWidget = ProviderScope(
-    overrides: [
-      postOverviewProvider.overrideWith(
-        () => MockHomeViewModel(),
-      ),
-    ],
-    child: const MaterialApp(
-      title: "Proxima",
-      home: HomePage(),
-    ),
-  );
-
-  final loadingHomePageWidget = ProviderScope(
-    overrides: [
-      postOverviewProvider.overrideWith(
-        () => MockHomeViewModel(
-          build: () {
-            // Future.any([]) will never complete and simulate a loading state
-            return Future.any([]);
-          },
+  setUp(() async {
+    homePageWidget = ProviderScope(
+      overrides: [
+        postOverviewProvider.overrideWith(
+          () => MockHomeViewModel(
+            build: () async => testPosts,
+          ),
         ),
+      ],
+      child: const MaterialApp(
+        home: HomePage(),
       ),
-    ],
-    child: const MaterialApp(
-      title: "Proxima",
-      home: HomePage(),
-    ),
-  );
+    );
+
+    emptyHomePageWidget = ProviderScope(
+      overrides: [
+        postOverviewProvider.overrideWith(
+          () => MockHomeViewModel(),
+        ),
+      ],
+      child: const MaterialApp(
+        home: HomePage(),
+      ),
+    );
+
+    loadingHomePageWidget = ProviderScope(
+      overrides: [
+        postOverviewProvider.overrideWith(
+          () => MockHomeViewModel(
+            build: () {
+              // Future.any([]) will never complete and simulate a loading state
+              return Future.any([]);
+            },
+          ),
+        ),
+      ],
+      child: const MaterialApp(
+        home: HomePage(),
+      ),
+    );
+  });
 
   group("Widgets display", () {
     testWidgets("Display top bar", (tester) async {
