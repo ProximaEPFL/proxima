@@ -1,32 +1,27 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:geoflutterfire2/geoflutterfire2.dart";
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
 
 /// This repository service is responsible for managing the posts in the database
 class PostRepositoryService {
-  final GeoFlutterFire _geoFire;
   final CollectionReference _collectionRef;
 
   PostRepositoryService({
     required FirebaseFirestore firestore,
-  })  : _collectionRef = firestore.collection(PostFirestore.collectionName),
-        _geoFire = GeoFlutterFire();
+  }) : _collectionRef = firestore.collection(PostFirestore.collectionName);
 
   /// This method creates a new post that has for data [postData]
   /// and that is located at [position] and adds it to the database
   Future<void> addPost(PostData postData, GeoPoint position) async {
-    // The `geoFirePoint.data` returns a Map<String, dynamic> consistent with the
-    // class [PostLocationFirestore]. This is because the field name values
-    // are hardcoded in the [GeoFlutterFire] library
-
-    final geoFirePoint = _getGeoFirePoint(position);
+    final geoFirePoint = GeoFirePoint(position);
 
     await _collectionRef.add({
-      PostFirestore.locationField: geoFirePoint.data,
+      PostFirestore.locationField: _geoFirePointToDataDb(geoFirePoint),
       ...postData.toDbData(),
     });
   }
@@ -50,34 +45,40 @@ class PostRepositoryService {
     GeoPoint point,
     double radius,
   ) async {
-    final geoFirePoint = _getGeoFirePoint(point);
+    final geoFirePoint = GeoFirePoint(point);
 
-    final posts = await _geoFire
-        .collection(collectionRef: _collectionRef)
-        .withinAsSingleStreamSubscription(
-          center: geoFirePoint,
-          radius: radius,
-          field: PostFirestore.locationField,
-          strictMode: false,
-        )
-        .first;
+    // Function to get the GeoPoint from the data
+    // This is needed because the GeoCollectionReference does not know how to
+    // extract the GeoPoint from the data otherwise
+    GeoPoint geopointFrom(data) => (data[PostFirestore.locationField]
+            as Map<String, dynamic>)[PostLocationFirestore.geoPointField]
+        as GeoPoint;
 
-    return posts.map((docSnap) => PostFirestore.fromDb(docSnap)).where((post) {
+    final posts =
+        await GeoCollectionReference(_collectionRef).fetchWithinWithDistance(
+      center: geoFirePoint,
+      radiusInKm: radius,
+      field: PostFirestore.locationField,
+      geohashField: PostLocationFirestore.geohashField,
+      geopointFrom: geopointFrom,
+    );
+
+    return posts
+        .map((docSnap) => PostFirestore.fromDb(docSnap.documentSnapshot))
+        .where((post) {
       // We need to filter the posts because the query is not exact
       final postPoint = post.location.geoPoint;
-      return geoFirePoint.distance(
-            lat: postPoint.latitude,
-            lng: postPoint.longitude,
-          ) <=
-          radius;
+      return geoFirePoint.distanceBetweenInKm(geopoint: postPoint) <= radius;
     }).toList();
   }
 
-  GeoFirePoint _getGeoFirePoint(GeoPoint point) {
-    return _geoFire.point(
-      latitude: point.latitude,
-      longitude: point.longitude,
-    );
+  Map<String, dynamic> _geoFirePointToDataDb(GeoFirePoint geoFirePoint) {
+    return {
+      PostLocationFirestore.geoPointField:
+          geoFirePoint.data[PostLocationFirestore.geoPointField],
+      PostLocationFirestore.geohashField:
+          geoFirePoint.data[PostLocationFirestore.geohashField],
+    };
   }
 }
 
