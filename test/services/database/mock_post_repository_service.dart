@@ -27,7 +27,7 @@ final _mockEmptyFirestorePost = PostFirestore(
 
 class MockPostRepositoryService extends Mock implements PostRepositoryService {
   @override
-  Future<void> addPost(PostData? postData, GeoPoint? position) {
+  Future<PostIdFirestore> addPost(PostData? postData, GeoPoint? position) {
     return super.noSuchMethod(
       Invocation.method(#addPost, [postData, position]),
       returnValue: Future.value(),
