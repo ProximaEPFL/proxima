@@ -26,13 +26,8 @@ void main() {
   late UserRepositoryService userRepo;
   late ProviderScope mockedProxima;
 
-  setupFirebaseAuthMocks();
-
-  setUpAll(() async {
-    await Firebase.initializeApp();
-  });
-
   setUp(() async {
+    setupFirebaseAuthMocks();
     fakeFireStore = FakeFirebaseFirestore();
     userCollection = fakeFireStore.collection(UserFirestore.collectionName);
     userRepo = UserRepositoryService(

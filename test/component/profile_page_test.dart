@@ -22,7 +22,6 @@ void main() {
   late ProviderScope mockedProfilePage;
   late MockFirebaseAuth auth;
 
-
   setUp(() async {
     setupFirebaseAuthMocks();
     auth = MockFirebaseAuth(signedIn: true);
@@ -41,10 +40,7 @@ void main() {
     );
   });
 
-
   group("Widgets display", () {
-
-
     testWidgets("Display badges, posts and comments", (tester) async {
       await tester.pumpWidget(mockedProfilePage);
       await tester.pumpAndSettle();
@@ -100,7 +96,6 @@ void main() {
   });
 
   group("Popups working as expected", () {
-
     ProviderScope getMockedProxima() {
       MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
 

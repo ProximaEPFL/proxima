@@ -19,19 +19,15 @@ import "../services/mock_geo_location_service.dart";
 import "../services/test_data/firestore_user_mock.dart";
 
 void main() {
-  setupFirebaseAuthMocks();
-
   late MockPostRepositoryService postRepository;
   late MockGeoLocationService geoLocationService;
   late ProviderScope mockedPage;
 
   const timeDeltaMils = 500;
 
-  setUpAll(() async {
-    await Firebase.initializeApp();
-  });
-
   setUp(() async {
+    setupFirebaseAuthMocks();
+
     postRepository = MockPostRepositoryService();
     geoLocationService = MockGeoLocationService();
 
