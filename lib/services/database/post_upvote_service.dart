@@ -5,14 +5,11 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/database/vote/upvote_state.dart";
+import "package:proxima/models/database/vote/vote_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
 
 /// This repository service is responsible for handling the upvotes of posts
 class PostUpvoteRepositoryService {
-  /// The name of the subcollection that contains the list of users who voted
-  static const votersSubCollectionName = "voters";
-  static const hasUpvotedField = "hasUpvoted";
-
   final FirebaseFirestore _firestore;
 
   PostUpvoteRepositoryService({
@@ -33,7 +30,8 @@ class PostUpvoteRepositoryService {
   CollectionReference<Map<String, dynamic>> _votersCollection(
     PostIdFirestore postId,
   ) {
-    return _postDocument(postId).collection(votersSubCollectionName);
+    return _postDocument(postId)
+        .collection(VoteFirestore.votersSubCollectionName);
   }
 
   /// Returns the upvote state of the user with id [userId] on the post with id [postId]
@@ -53,7 +51,7 @@ class PostUpvoteRepositoryService {
     if (!voteState.exists) {
       return UpvoteState.none;
     } else {
-      return voteState[hasUpvotedField]
+      return VoteFirestore.fromDbData(voteState.data()!).hasUpvoted
           ? UpvoteState.upvoted
           : UpvoteState.downvoted;
     }
@@ -87,9 +85,7 @@ class PostUpvoteRepositoryService {
       } else {
         transaction.set(
           _votersCollection(postId).doc(userId.value),
-          <String, dynamic>{
-            hasUpvotedField: newState == UpvoteState.upvoted,
-          },
+          VoteFirestore(hasUpvoted: newState == UpvoteState.upvoted).toDbData(),
         );
       }
 
