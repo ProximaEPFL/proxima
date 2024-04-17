@@ -7,11 +7,16 @@ import "package:proxima/utils/ui/error_alert.dart";
 class CircularValue<T> extends StatelessWidget {
   final AsyncValue<T> value;
   final Widget Function(BuildContext context, T data) builder;
+  final Widget Function(BuildContext context, Object error) fallbackBuilder;
+
+  static Widget _defaultFallback(BuildContext context, Object error) =>
+      const SizedBox.shrink();
 
   const CircularValue({
     super.key,
     required this.value,
     required this.builder,
+    this.fallbackBuilder = _defaultFallback,
   });
 
   @override
@@ -21,7 +26,7 @@ class CircularValue<T> extends StatelessWidget {
       error: (error, _) {
         final dialog = ErrorAlert(error: error);
         showDialog(context: context, builder: dialog.build);
-        return Container();
+        return fallbackBuilder(context, error);
       },
       orElse: () {
         return const Center(
