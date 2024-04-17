@@ -35,7 +35,7 @@ class MockPostRepositoryService extends Mock implements PostRepositoryService {
   }
 
   @override
-  Future<void> deletePost(PostIdFirestore postId) {
+  Future<void> deletePost(PostIdFirestore? postId) {
     return super.noSuchMethod(
       Invocation.method(#deletePost, [postId]),
       returnValue: Future.value(),
@@ -43,7 +43,7 @@ class MockPostRepositoryService extends Mock implements PostRepositoryService {
   }
 
   @override
-  Future<PostFirestore> getPost(PostIdFirestore postId) {
+  Future<PostFirestore> getPost(PostIdFirestore? postId) {
     return super.noSuchMethod(
       Invocation.method(#getPost, [postId]),
       returnValue: Future.value(_mockEmptyFirestorePost),
@@ -51,7 +51,7 @@ class MockPostRepositoryService extends Mock implements PostRepositoryService {
   }
 
   @override
-  Future<List<PostFirestore>> getNearPosts(GeoPoint point, double radius) {
+  Future<List<PostFirestore>> getNearPosts(GeoPoint? point, double? radius) {
     return super.noSuchMethod(
       Invocation.method(#getNearPosts, [point, radius]),
       returnValue: Future.value(List<PostFirestore>.empty()),
