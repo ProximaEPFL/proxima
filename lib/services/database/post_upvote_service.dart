@@ -15,17 +15,19 @@ class PostUpvoteRepositoryService {
   /// The name of the subcollection that contains the list of users who downvoted
   static const downvotersSubCollectionName = "downvoters";
 
-  final FirebaseFirestore firestore;
+  final FirebaseFirestore _firestore;
 
   PostUpvoteRepositoryService({
-    required this.firestore,
-  });
+    required FirebaseFirestore firestore,
+  }) : _firestore = firestore;
 
   /// Returns the document reference of the post with id [postId]
   DocumentReference<Map<String, dynamic>> _postDocument(
     PostIdFirestore postId,
   ) {
-    return firestore.collection(PostFirestore.collectionName).doc(postId.value);
+    return _firestore
+        .collection(PostFirestore.collectionName)
+        .doc(postId.value);
   }
 
   /// Returns the collection reference of the subcollection that contains the
@@ -55,7 +57,7 @@ class PostUpvoteRepositoryService {
     final hasDownVotedReference =
         _downvotersCollection(postId).doc(userId.value);
 
-    return await firestore.runTransaction((transaction) async {
+    return await _firestore.runTransaction((transaction) async {
       final hasUpVotedDocument = await transaction.get(hasUpVotedReference);
       if (hasUpVotedDocument.exists) {
         return UpvoteState.upvoted;
@@ -78,7 +80,7 @@ class PostUpvoteRepositoryService {
     PostIdFirestore postId,
     UpvoteState newState,
   ) async {
-    return await firestore.runTransaction((transaction) async {
+    return await _firestore.runTransaction((transaction) async {
       final currState = await getUpvoteState(userId, postId);
       if (currState == newState) return;
 
