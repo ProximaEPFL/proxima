@@ -235,7 +235,7 @@ void main() {
       expect(commentColumn, findsOneWidget);
     });
 
-    testWidgets("Centauri points incrementing correctly", (tester) async {
+    testWidgets("Centauri points displayed correctly", (tester) async {
       await tester.pumpWidget(getMockedProxima());
       await tester.pumpAndSettle();
 
@@ -246,18 +246,6 @@ void main() {
       // checking the text
       final centauriText = find.text("username_8456 · 0 Centauri");
       expect(centauriText, findsOneWidget);
-
-      //TODO: remove this test when the setting button is implemented
-      final settingsButton = find.byKey(ProfilePage.settingsKey);
-      expect(settingsButton, findsOneWidget);
-
-      // Tap on the settings button
-      await tester.tap(settingsButton);
-      await tester.pumpAndSettle();
-
-      //Check that the centauri points are incremented
-      final centauriPointsIncremented = find.text("username_8456 · 5 Centauri");
-      expect(centauriPointsIncremented, findsOneWidget);
     });
   });
 }

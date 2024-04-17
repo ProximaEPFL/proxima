@@ -7,7 +7,8 @@ import "package:proxima/viewmodels/login_view_model.dart";
 class ProfileViewModel extends AsyncNotifier<ProfileData> {
   ProfileViewModel();
 
-  Future<ProfileData> _fetchData() async {
+  @override
+  Future<ProfileData> build() async {
     final user = ref.watch(userProvider).valueOrNull;
     final userDataBase = ref.watch(userRepositoryProvider);
     final uid = ref.watch(uidProvider);
@@ -25,28 +26,6 @@ class ProfileViewModel extends AsyncNotifier<ProfileData> {
     final userData = await userDataBase.getUser(uid);
 
     return ProfileData(loginUser: user, firestoreUser: userData);
-  }
-
-  @override
-  Future<ProfileData> build() async {
-    return _fetchData();
-  }
-
-  Future<void> addPoints(int points) async {
-    state = const AsyncValue.loading();
-
-    state = await AsyncValue.guard(() async {
-      final uid = ref.watch(uidProvider);
-      final userDataBase = ref.watch(userRepositoryProvider);
-
-      if (uid == null) {
-        return Future.error(
-          "User id was not found.",
-        );
-      }
-      await userDataBase.addPoints(uid, points);
-      return _fetchData();
-    });
   }
 }
 

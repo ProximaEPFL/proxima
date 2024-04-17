@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:proxima/models/database/user/user_data.dart";
 
 /// This widget display the user info in the profile page
 class UserAccount extends StatelessWidget {
@@ -7,17 +8,17 @@ class UserAccount extends StatelessWidget {
 
   const UserAccount({
     super.key,
-    required this.userName,
-    required this.userDisplayName,
-    required this.centauriPoints,
+    required this.userData,
   });
 
-  final String userName;
-  final String userDisplayName;
-  final int centauriPoints;
+  final UserData userData;
 
   @override
   Widget build(BuildContext context) {
+    final userName = userData.username;
+    final userDisplayName = userData.displayName;
+    final centauriPoints = userData.centauriPoints;
+
     return Row(
       key: userInfoKey,
       children: [

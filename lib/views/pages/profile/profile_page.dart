@@ -58,7 +58,6 @@ class ProfilePage extends HookConsumerWidget {
         ),
       );
     }
-
     return switch (asyncUserData) {
       AsyncData(:final value) => DefaultTabController(
           length: 2,
@@ -66,17 +65,14 @@ class ProfilePage extends HookConsumerWidget {
             appBar: AppBar(
               leading: const LeadingBackButton(),
               title: UserAccount(
-                userName: value.firestoreUser.data.username,
-                userDisplayName: value.firestoreUser.data.displayName,
-                centauriPoints: value.firestoreUser.data.centauriPoints,
+                userData: value.firestoreUser.data,
               ),
               actions: [
                 IconButton(
                   key: settingsKey,
                   icon: const Icon(Icons.settings),
                   onPressed: () {
-                    //add 5 points to the user
-                    ref.read(profileProvider.notifier).addPoints(5);
+                    //TODO: implement settings page
                   },
                 ),
               ],

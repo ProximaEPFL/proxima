@@ -10,10 +10,12 @@ import "package:proxima/services/database/firestore_service.dart";
 /// This repository service is responsible for managing the users in the database
 class UserRepositoryService {
   final CollectionReference _collectionRef;
+  final FirebaseFirestore _firestore;
 
   UserRepositoryService({
     required FirebaseFirestore firestore,
-  }) : _collectionRef = firestore.collection(UserFirestore.collectionName);
+  })  : _collectionRef = firestore.collection(UserFirestore.collectionName),
+        _firestore = firestore;
 
   /// This method will retrieve the user with id [uid] from the database
   Future<UserFirestore> getUser(UserIdFirestore uid) async {
@@ -47,9 +49,21 @@ class UserRepositoryService {
 
   /// This method will add [points] to the user with id [uid]
   Future<void> addPoints(UserIdFirestore uid, int points) async {
-    final user = await getUser(uid);
-    final updatedData = user.data.addPointstoDbData(points);
-    await _collectionRef.doc(uid.value).update(updatedData);
+    return _firestore.runTransaction((transaction) async {
+      final userDocRef = _collectionRef.doc(uid.value);
+
+      final userDocSnap = await transaction.get(userDocRef);
+
+      final userData =
+          UserData.fromDbData(userDocSnap.data() as Map<String, dynamic>);
+
+      final updatedUserData = userData.withPointsAddition(points).toDbData();
+
+      transaction.update(userDocRef, updatedUserData);
+    });
+    //final user = await getUser(uid);
+    // final updatedUserData = user.data.withPointsAddition(points).toDbData();
+    // await _collectionRef.doc(uid.value).update(updatedUserData);
   }
 }
 

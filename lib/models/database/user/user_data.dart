@@ -19,7 +19,7 @@ class UserData {
     required this.username,
     required this.displayName,
     required this.joinTime,
-    this.centauriPoints = 0,
+    required this.centauriPoints,
   });
 
   /// This method will create an instance of [UserData] from the
@@ -30,7 +30,7 @@ class UserData {
         username: data[usernameField],
         displayName: data[displayNameField],
         joinTime: data[joinTimeField],
-        centauriPoints: data[centauriPointsField],
+        centauriPoints: data[centauriPointsField] ?? 0,
       );
     } catch (e) {
       if (e is TypeError) {
@@ -43,13 +43,13 @@ class UserData {
     }
   }
 
-  Map<String, dynamic> addPointstoDbData(int points) {
-    return {
-      usernameField: username,
-      displayNameField: displayName,
-      joinTimeField: joinTime,
-      centauriPointsField: centauriPoints + points,
-    };
+  UserData withPointsAddition(int points) {
+    return UserData(
+      username: username,
+      displayName: displayName,
+      joinTime: joinTime,
+      centauriPoints: centauriPoints + points,
+    );
   }
 
   /// This method will create a map from the current instance of [UserData]
