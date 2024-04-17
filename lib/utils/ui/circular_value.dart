@@ -21,14 +21,16 @@ class CircularValue<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return value.maybeWhen(
+    return value.when(
       data: (data) => builder(context, data),
       error: (error, _) {
         final dialog = ErrorAlert(error: error);
-        showDialog(context: context, builder: dialog.build);
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          showDialog(context: context, builder: dialog.build);
+        });
         return fallbackBuilder(context, error);
       },
-      orElse: () {
+      loading: () {
         return const Center(
           child: CircularProgressIndicator(),
         );
