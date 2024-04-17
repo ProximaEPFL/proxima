@@ -58,13 +58,15 @@ class PostFeed extends HookConsumerWidget {
       ),
     );
 
-    final fallback = Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text("An error occurred"),
-        const SizedBox(height: 10),
-        refreshButton,
-      ],
+    final fallback = Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("An error occurred"),
+          const SizedBox(height: 10),
+          refreshButton,
+        ],
+      ),
     );
 
     return Column(
@@ -73,61 +75,24 @@ class PostFeed extends HookConsumerWidget {
           key: feedSortOptionKey,
         ),
         const Divider(),
-        CircularValue(
-          value: asyncPosts,
-          builder: (context, posts) {
-            final postsList = PostList(
-              posts: posts,
-              onRefresh: () async {
-                return ref.read(postOverviewProvider.notifier).refresh();
-              },
-            );
+        Expanded(
+          child: CircularValue(
+            value: asyncPosts,
+            builder: (context, posts) {
+              final postsList = PostList(
+                posts: posts,
+                onRefresh: () async {
+                  return ref.read(postOverviewProvider.notifier).refresh();
+                },
+              );
 
-            return Expanded(
-              child: posts.isEmpty ? emptyHelper : postsList,
-            );
-          },
-          fallbackBuilder: (context, error) {
-            return fallback;
-          },
+              return posts.isEmpty ? emptyHelper : postsList;
+            },
+            fallbackBuilder: (context, error) {
+              return fallback;
+            },
+          ),
         ),
-
-        /*
-        asyncPosts.when(
-          data: (posts) {
-            final postsList = PostList(
-              posts: posts,
-              onRefresh: () async {
-                return ref.read(postOverviewProvider.notifier).refresh();
-              },
-            );
-
-            return Expanded(
-              child: posts.isEmpty ? emptyHelper : postsList,
-            );
-          },
-          loading: () {
-            return const Expanded(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          },
-          error: (error, _) {
-            return Expanded(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("An error occurred"),
-                    const SizedBox(height: 10),
-                    refreshButton,
-                  ],
-                ),
-              ),
-            );
-          },
-        ),*/
       ],
     );
   }
