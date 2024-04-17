@@ -67,6 +67,8 @@ void main() {
         post = await postRepository.getPost(id);
       });
 
+      /// Those tests run a sequence of actions, given by [states],
+      /// for a single user on a single post. Everything is done atomically.
       void testActions(List<UpvoteState> states) {
         final stateNames = states.map((state) => state.name).join(", ");
         test(
@@ -125,6 +127,7 @@ void main() {
         }
       });
 
+      /// In this tests, a single user applies the same action, [newState], to multiple posts
       for (final newState in UpvoteState.values) {
         test(
           "User can apply action ${newState.name} on $nPosts different posts",
@@ -169,9 +172,16 @@ void main() {
         rng = Random(0);
       });
 
-      /// Tests the input sequence given by [testCases], where each test case
-      /// is a tuple of (nUpvoter, nUnvoters, nDownvoters). The other users
-      /// are considered to idle.
+      /// In those tests, we consider a group of [nUsers] users that take
+      /// a different role every iteration.
+      /// On some given iteration i, all users apply their action at the
+      /// same time on the same post. We then wait they are all done, check
+      /// the result is coherent, and go to the next iteration.
+      /// The roles of the ith iterations are defined in testCases[i]. This
+      /// represents (nUpvoter, nUnvoters, nDownvoters), i.e. the number of
+      /// users who will upvote their post this ith iteration, the number of
+      /// unvoters and the number of downvoters. The other users are considered to idle.
+      /// Which user is an upvoter, unvoter downvoter or an idler is determined randomly.
       void testInputSequence(List<(int, int, int)> testCases) {
         final sequenceName = testCases
             .map(
