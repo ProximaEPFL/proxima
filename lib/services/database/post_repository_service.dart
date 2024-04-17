@@ -17,13 +17,14 @@ class PostRepositoryService {
 
   /// This method creates a new post that has for data [postData]
   /// and that is located at [position] and adds it to the database
-  Future<void> addPost(PostData postData, GeoPoint position) async {
+  Future<PostIdFirestore> addPost(PostData postData, GeoPoint position) async {
     final geoFirePoint = GeoFirePoint(position);
 
-    await _collectionRef.add({
+    final reference = await _collectionRef.add({
       PostFirestore.locationField: _geoFirePointToDataDb(geoFirePoint),
       ...postData.toDbData(),
     });
+    return PostIdFirestore(value: reference.id);
   }
 
   /// This method deletes the post with id [postId] from the database
