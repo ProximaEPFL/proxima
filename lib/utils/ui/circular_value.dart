@@ -4,6 +4,9 @@ import "package:proxima/utils/ui/error_alert.dart";
 
 /// Utilitiy widget used to display a [CircularProgressIndicator] while waiting
 /// for an [AsyncValue] to complete; and another widget once the data resolves.
+/// In case the data resolves to an error, an [ErrorAlert] dialog is shown, and
+/// a fallback widget is displayed. The default fallback widget is empty, but it
+/// can be overridden.
 class CircularValue<T> extends StatelessWidget {
   final AsyncValue<T> value;
   final Widget Function(BuildContext context, T data) builder;
@@ -12,6 +15,11 @@ class CircularValue<T> extends StatelessWidget {
   static Widget _defaultFallback(BuildContext context, Object error) =>
       const SizedBox.shrink();
 
+  /// Constructor for the [CircularValue] widget.
+  /// [value] is the underlying [AsyncValue] that controls the display.
+  /// [builder] is the widget to display when the [value] is [AsyncValue.data].
+  /// [fallbackBuilder] is the widget to display when the [value] is [AsyncValue.error].
+  /// The default [fallbackBuilder] is an empty [SizedBox].
   const CircularValue({
     super.key,
     required this.value,
