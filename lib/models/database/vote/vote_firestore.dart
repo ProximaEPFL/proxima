@@ -15,9 +15,17 @@ class VoteFirestore {
   /// This method will create an instance of [VoteFirestore] from the
   /// data [data] that comes from firestore
   factory VoteFirestore.fromDbData(Map<String, dynamic> data) {
-    return VoteFirestore(
-      hasUpvoted: data[hasUpvotedField],
-    );
+    try {
+      return VoteFirestore(
+        hasUpvoted: data[hasUpvotedField],
+      );
+    } catch (e) {
+      if (e is TypeError) {
+        throw FormatException("Cannot parse vote document: ${e.toString()}");
+      } else {
+        rethrow;
+      }
+    }
   }
 
   /// This method will convert the [VoteFirestore] instance to a Map
