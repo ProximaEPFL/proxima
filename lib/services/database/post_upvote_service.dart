@@ -37,12 +37,18 @@ class PostUpvoteRepositoryService {
   }
 
   /// Returns the upvote state of the user with id [userId] on the post with id [postId]
-  /// This is done atomically.
+  /// This is done atomically, possibly as part of the transaction [transaction].
+  /// This only reads and writes nothing to the transaction, so it must be run before any
+  /// transaction write (see [FirebaseFirestore::runWithTransaction] documentation).
   Future<UpvoteState> getUpvoteState(
     UserIdFirestore userId,
-    PostIdFirestore postId,
-  ) async {
-    final voteState = await _votersCollection(postId).doc(userId.value).get();
+    PostIdFirestore postId, {
+    Transaction? transaction,
+  }) async {
+    final voteStateCollection = _votersCollection(postId).doc(userId.value);
+    final voteState = transaction != null
+        ? await transaction.get(voteStateCollection)
+        : await voteStateCollection.get();
 
     if (!voteState.exists) {
       return UpvoteState.none;
@@ -61,7 +67,11 @@ class PostUpvoteRepositoryService {
     UpvoteState newState,
   ) async {
     return await _firestore.runTransaction((transaction) async {
-      final currState = await getUpvoteState(userId, postId);
+      final currState = await getUpvoteState(
+        userId,
+        postId,
+        transaction: transaction,
+      );
       if (currState == newState) return;
 
       int increment = 0;
