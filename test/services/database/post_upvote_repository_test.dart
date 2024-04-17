@@ -7,8 +7,8 @@ import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/database/upvote_state.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
+import "package:proxima/models/database/vote/upvote_state.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/post_upvote_service.dart";
 
