@@ -1,5 +1,3 @@
-import "dart:math";
-
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -51,7 +49,8 @@ void main() {
       ProviderScope(
         child: MaterialApp(
           home: testCircularValue(
-              AsyncValue.error(testException, StackTrace.empty)),
+            AsyncValue.error(testException, StackTrace.empty),
+          ),
         ),
       ),
     );
