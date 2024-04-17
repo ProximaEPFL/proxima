@@ -130,7 +130,7 @@ void main() {
           "User can apply action ${newState.name} on $nPosts different posts",
           () async {
             for (final post in posts) {
-              assertPostUpvoteState(userId, post.id, UpvoteState.none);
+              await assertPostUpvoteState(userId, post.id, UpvoteState.none);
             }
 
             final futures = posts.map(
@@ -143,7 +143,7 @@ void main() {
             await Future.wait(futures);
 
             for (final post in posts) {
-              assertPostUpvoteState(userId, post.id, newState);
+              await assertPostUpvoteState(userId, post.id, newState);
             }
           },
         );
