@@ -9,11 +9,9 @@ import "package:proxima/services/database/firestore_service.dart";
 
 /// This repository service is responsible for handling the upvotes of posts
 class PostUpvoteRepositoryService {
-  /// The name of the subcollection that contains the list of users who upvoted
-  static const upvotersSubCollectionName = "upvoters";
-
-  /// The name of the subcollection that contains the list of users who downvoted
-  static const downvotersSubCollectionName = "downvoters";
+  /// The name of the subcollection that contains the list of users who voted
+  static const votersSubCollectionName = "voters";
+  static const hasUpvotedField = "hasUpvoted";
 
   final FirebaseFirestore _firestore;
 
@@ -31,19 +29,11 @@ class PostUpvoteRepositoryService {
   }
 
   /// Returns the collection reference of the subcollection that contains the
-  /// list of users who upvoted the post with id [postId]
-  CollectionReference<Map<String, dynamic>> _upvotersCollection(
+  /// list of users who voted the post with id [postId]
+  CollectionReference<Map<String, dynamic>> _votersCollection(
     PostIdFirestore postId,
   ) {
-    return _postDocument(postId).collection(upvotersSubCollectionName);
-  }
-
-  /// Returns the collection reference of the subcollection that contains the
-  /// list of users who downvoted the post with id [postId]
-  CollectionReference<Map<String, dynamic>> _downvotersCollection(
-    PostIdFirestore postId,
-  ) {
-    return _postDocument(postId).collection(downvotersSubCollectionName);
+    return _postDocument(postId).collection(votersSubCollectionName);
   }
 
   /// Returns the upvote state of the user with id [userId] on the post with id [postId]
@@ -52,25 +42,15 @@ class PostUpvoteRepositoryService {
     UserIdFirestore userId,
     PostIdFirestore postId,
   ) async {
-    final hasUpVotedReference = _upvotersCollection(postId).doc(userId.value);
+    final voteState = await _votersCollection(postId).doc(userId.value).get();
 
-    final hasDownVotedReference =
-        _downvotersCollection(postId).doc(userId.value);
-
-    return await _firestore.runTransaction((transaction) async {
-      final hasUpVotedDocument = await transaction.get(hasUpVotedReference);
-      if (hasUpVotedDocument.exists) {
-        return UpvoteState.upvoted;
-      }
-
-      final hasDownVotedCollection =
-          await transaction.get(hasDownVotedReference);
-      if (hasDownVotedCollection.exists) {
-        return UpvoteState.downvoted;
-      }
-
+    if (!voteState.exists) {
       return UpvoteState.none;
-    });
+    } else {
+      return voteState[hasUpvotedField]
+          ? UpvoteState.upvoted
+          : UpvoteState.downvoted;
+    }
   }
 
   /// Sets the upvote state of the user with id [userId] on the post with id [postId]
@@ -93,28 +73,31 @@ class PostUpvoteRepositoryService {
         } else /* currState == UpvoteState.downvoted */ {
           increment += 1;
         }
-
-        final voterCollection = currState == UpvoteState.upvoted
-            ? _upvotersCollection
-            : _downvotersCollection;
-        transaction.delete(voterCollection(postId).doc(userId.value));
       }
 
       // Apply the wanted state.
-      if (newState != UpvoteState.none) {
-        if (newState == UpvoteState.upvoted) {
+      switch (newState) {
+        case UpvoteState.upvoted:
           increment += 1;
-        } else /* newState == UpvoteState.downvoted */ {
+          transaction.set(
+            _votersCollection(postId).doc(userId.value),
+            <String, dynamic>{
+              hasUpvotedField: true,
+            },
+          );
+          break;
+        case UpvoteState.downvoted:
           increment -= 1;
-        }
-
-        final voterCollection = newState == UpvoteState.upvoted
-            ? _upvotersCollection
-            : _downvotersCollection;
-        transaction.set(
-          voterCollection(postId).doc(userId.value),
-          <String, dynamic>{},
-        );
+          transaction.set(
+            _votersCollection(postId).doc(userId.value),
+            <String, dynamic>{
+              hasUpvotedField: false,
+            },
+          );
+          break;
+        case UpvoteState.none:
+          transaction.delete(_votersCollection(postId).doc(userId.value));
+          break;
       }
 
       // Update the vote count
