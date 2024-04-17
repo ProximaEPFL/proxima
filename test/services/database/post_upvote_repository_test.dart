@@ -38,17 +38,6 @@ void main() {
     postUpvoteRepository = PostUpvoteRepositoryService(firestore: firestore);
   });
 
-  int stateToValue(UpvoteState state) {
-    switch (state) {
-      case UpvoteState.none:
-        return 0;
-      case UpvoteState.upvoted:
-        return 1;
-      case UpvoteState.downvoted:
-        return -1;
-    }
-  }
-
   Future<void> assertPostUpvoteState(
     UserIdFirestore userId,
     PostIdFirestore postId,
@@ -62,7 +51,7 @@ void main() {
     expect(upvoteState, expectedState);
 
     if (testScore) {
-      final expectedScore = stateToValue(expectedState);
+      final expectedScore = expectedState.increment;
       expect(await getUpvoteCount(postId), expectedScore);
     }
   }
@@ -254,7 +243,8 @@ void main() {
             }
 
             // Check that the score is correct
-            final expectedScore = currentState.map(stateToValue).sum;
+            final expectedScore =
+                currentState.map((state) => state.increment).sum;
             expect(await getUpvoteCount(post.id), expectedScore);
           }
         });

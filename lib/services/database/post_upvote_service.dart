@@ -67,37 +67,20 @@ class PostUpvoteRepositoryService {
       int increment = 0;
 
       // Remove the current state, setting it to none.
-      if (currState != UpvoteState.none) {
-        if (currState == UpvoteState.upvoted) {
-          increment -= 1;
-        } else /* currState == UpvoteState.downvoted */ {
-          increment += 1;
-        }
-      }
+      increment -= currState.increment;
 
       // Apply the wanted state.
-      switch (newState) {
-        case UpvoteState.upvoted:
-          increment += 1;
-          transaction.set(
-            _votersCollection(postId).doc(userId.value),
-            <String, dynamic>{
-              hasUpvotedField: true,
-            },
-          );
-          break;
-        case UpvoteState.downvoted:
-          increment -= 1;
-          transaction.set(
-            _votersCollection(postId).doc(userId.value),
-            <String, dynamic>{
-              hasUpvotedField: false,
-            },
-          );
-          break;
-        case UpvoteState.none:
-          transaction.delete(_votersCollection(postId).doc(userId.value));
-          break;
+      increment += newState.increment;
+
+      if (newState == UpvoteState.none) {
+        transaction.delete(_votersCollection(postId).doc(userId.value));
+      } else {
+        transaction.set(
+          _votersCollection(postId).doc(userId.value),
+          <String, dynamic>{
+            hasUpvotedField: newState == UpvoteState.upvoted,
+          },
+        );
       }
 
       // Update the vote count
