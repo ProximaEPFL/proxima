@@ -78,7 +78,7 @@ void main() {
         post = await postRepository.getPost(id);
       });
 
-      void testActions(List<UpvoteState> states) async {
+      void testActions(List<UpvoteState> states) {
         final stateNames = states.map((state) => state.name).join(", ");
         test(
           "User can use actions [$stateNames] correctly",
