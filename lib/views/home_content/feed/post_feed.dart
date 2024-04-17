@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/home_content/feed/post_card/post_card.dart";
 import "package:proxima/views/navigation/routes.dart";
@@ -15,6 +16,7 @@ class PostFeed extends HookConsumerWidget {
   static const feedKey = Key("feed");
   static const emptyfeedKey = Key("emptyFeed");
   static const newPostButtonTextKey = Key("newPostButtonTextKey");
+
   const PostFeed({super.key});
 
   @override
@@ -56,12 +58,41 @@ class PostFeed extends HookConsumerWidget {
       ),
     );
 
+    final fallback = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text("An error occurred"),
+        const SizedBox(height: 10),
+        refreshButton,
+      ],
+    );
+
     return Column(
       children: [
         const FeedSortOptionChips(
           key: feedSortOptionKey,
         ),
         const Divider(),
+        CircularValue(
+          value: asyncPosts,
+          builder: (context, posts) {
+            final postsList = PostList(
+              posts: posts,
+              onRefresh: () async {
+                return ref.read(postOverviewProvider.notifier).refresh();
+              },
+            );
+
+            return Expanded(
+              child: posts.isEmpty ? emptyHelper : postsList,
+            );
+          },
+          fallbackBuilder: (context, error) {
+            return fallback;
+          },
+        ),
+
+        /*
         asyncPosts.when(
           data: (posts) {
             final postsList = PostList(
@@ -96,7 +127,7 @@ class PostFeed extends HookConsumerWidget {
               ),
             );
           },
-        ),
+        ),*/
       ],
     );
   }
