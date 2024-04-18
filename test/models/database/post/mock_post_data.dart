@@ -1,5 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:geoflutterfire2/geoflutterfire2.dart";
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
@@ -13,13 +13,13 @@ class MockPostFirestore {
     GeoPoint location, {
     id = "post_id",
   }) {
-    final point = GeoFirePoint(location.latitude, location.longitude);
+    final point = GeoFirePoint(location);
 
     return PostFirestore(
       id: PostIdFirestore(value: id),
       location: PostLocationFirestore(
         geoPoint: location,
-        geohash: point.hash,
+        geohash: point.geohash,
       ),
       data: data,
     );

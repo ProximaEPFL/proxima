@@ -6,13 +6,8 @@ class PostLocationFirestore {
   final GeoPoint geoPoint;
   final String geohash;
 
-  /// Do not change !
-  /// The [GeoFlutterFire] library that is used to perform the geo queries uses
-  /// hardcoded field name values in its implementation and does not provide
-  /// methods to automatically parse the point data. Thus we must manually specify
-  /// the field name for the geo point and the geo hash
-  static const String geoPointField = "geopoint"; // Do not change
-  static const String geohashField = "geohash"; // Do not change
+  static const String geoPointField = "geopoint";
+  static const String geohashField = "geohash";
 
   const PostLocationFirestore({
     required this.geoPoint,
