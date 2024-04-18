@@ -37,6 +37,7 @@ void main() {
       ),
     );
 
+    await tester.pumpAndSettle();
     expect(find.text("Completed"), findsOneWidget);
   });
 
