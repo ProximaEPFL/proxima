@@ -24,7 +24,6 @@ void main() {
   late CollectionReference<Map<String, dynamic>> userCollection;
   late UserRepositoryService userRepo;
   late ProviderScope mockedProxima;
-  late ProviderScope mockedProximaWithUser;
 
   setUp(() async {
     setupFirebaseAuthMocks();
@@ -89,28 +88,14 @@ void main() {
 
     // override the setup to add a user
     setUp(() async {
-      fakeFireStore = FakeFirebaseFirestore();
-      userCollection = fakeFireStore.collection(UserFirestore.collectionName);
-      userRepo = UserRepositoryService(
-        firestore: fakeFireStore,
-      );
+      // Add a user to the collection
       await userCollection
           .doc(expectedUser.uid.value)
           .set(expectedUser.data.toDbData());
-      mockedProximaWithUser = ProviderScope(
-        overrides: [
-          ...firebaseAuthMocksOverrides,
-          userRepositoryProvider.overrideWithValue(userRepo),
-          postOverviewProvider.overrideWith(
-            () => MockHomeViewModel(),
-          ),
-        ],
-        child: const ProximaApp(),
-      );
     });
 
     testWidgets("Login flow to HomePage", (tester) async {
-      await tester.pumpWidget(mockedProximaWithUser);
+      await tester.pumpWidget(mockedProxima);
       await tester.pumpAndSettle();
 
       final loginButton = find.byKey(LoginButton.loginButtonKey);
