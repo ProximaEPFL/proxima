@@ -18,6 +18,7 @@ class ProfilePage extends HookConsumerWidget {
   static const tabKey = Key("tab");
   static const postColumnKey = Key("postColumn");
   static const commentColumnKey = Key("commentColumn");
+  static const settingsKey = Key("settings");
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,7 +58,6 @@ class ProfilePage extends HookConsumerWidget {
         ),
       );
     }
-
     return switch (asyncUserData) {
       AsyncData(:final value) => DefaultTabController(
           length: 2,
@@ -65,10 +65,11 @@ class ProfilePage extends HookConsumerWidget {
             appBar: AppBar(
               leading: const LeadingBackButton(),
               title: UserAccount(
-                userEmail: value.user.email ?? "default@mail.com",
+                userData: value.firestoreUser.data,
               ),
               actions: [
                 IconButton(
+                  key: settingsKey,
                   icon: const Icon(Icons.settings),
                   onPressed: () {
                     //TODO: implement settings page

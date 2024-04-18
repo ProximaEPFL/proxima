@@ -12,6 +12,7 @@ final _mockEmptyFirestoreUser = UserFirestore(
     displayName: "",
     username: "",
     joinTime: Timestamp.fromMillisecondsSinceEpoch(0),
+    centauriPoints: 0,
   ),
   uid: const UserIdFirestore(value: ""),
 );
