@@ -12,6 +12,7 @@ class MockUserFirestore {
         displayName: "display_name_$i",
         username: "username_$i",
         joinTime: Timestamp.fromMillisecondsSinceEpoch(1000 * i),
+        centauriPoints: i,
       );
     });
   }

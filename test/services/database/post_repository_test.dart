@@ -1,7 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:geoflutterfire2/geoflutterfire2.dart";
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
@@ -153,8 +153,7 @@ void main() {
 
     test("add post at location correctly", () async {
       const userPosition = GeoPoint(40, 20);
-      final userGeoFirePoint =
-          GeoFirePoint(userPosition.latitude, userPosition.longitude);
+      const userGeoFirePoint = GeoFirePoint(userPosition);
 
       final postData = MockPostFirestore.generatePostData(1).first;
 
@@ -168,7 +167,7 @@ void main() {
         id: PostIdFirestore(value: actualPosts.docs.first.id),
         location: PostLocationFirestore(
           geoPoint: userPosition,
-          geohash: userGeoFirePoint.hash,
+          geohash: userGeoFirePoint.geohash,
         ),
         data: postData,
       );
@@ -201,13 +200,9 @@ void main() {
           await postRepository.getNearPosts(userPosition, kmRadius);
 
       final expectedPosts = allPosts.where((element) {
-        final geoFirePoint = GeoFirePoint(
-          element.location.geoPoint.latitude,
-          element.location.geoPoint.longitude,
-        );
-        final distance = geoFirePoint.distance(
-          lat: userPosition.latitude,
-          lng: userPosition.longitude,
+        final geoFirePoint = GeoFirePoint(element.location.geoPoint);
+        final distance = geoFirePoint.distanceBetweenInKm(
+          geopoint: userPosition,
         );
         return distance <= kmRadius;
       }).toList();
