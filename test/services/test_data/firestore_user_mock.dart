@@ -9,6 +9,7 @@ final testingUserData = UserData(
   username: "username_8456",
   displayName: "display_name_8456",
   joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
+  centauriPoints: 0,
 );
 
 final testingUserFirestoreId = UserIdFirestore(value: testingLoginUser.uid);
