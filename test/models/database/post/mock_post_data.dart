@@ -1,3 +1,5 @@
+import "dart:math";
+
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:proxima/models/database/post/post_data.dart";
@@ -22,6 +24,30 @@ class MockPostFirestore {
         geohash: point.geohash,
       ),
       data: data,
+    );
+  }
+
+  static PostFirestore createUserPost(
+    UserIdFirestore userId,
+    GeoPoint location,
+  ) {
+    final point = GeoPoint(location.latitude, location.longitude);
+
+    return PostFirestore(
+      id: PostIdFirestore(
+        value: DateTime.now().microsecondsSinceEpoch.toString(),
+      ),
+      location: PostLocationFirestore(
+        geoPoint: location,
+        geohash: point.toString(),
+      ),
+      data: PostData(
+        ownerId: userId,
+        title: "title",
+        description: "desciption",
+        publicationTime: Timestamp.fromMicrosecondsSinceEpoch(1000000),
+        voteScore: Random().nextInt(100),
+      ),
     );
   }
 
