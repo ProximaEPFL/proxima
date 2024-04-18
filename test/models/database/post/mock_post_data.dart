@@ -45,7 +45,7 @@ class MockPostFirestore {
         ownerId: userId,
         title: "title",
         description: "desciption",
-        publicationTime: Timestamp.now(),
+        publicationTime: Timestamp.fromMicrosecondsSinceEpoch(1000000),
         voteScore: Random().nextInt(100),
       ),
     );
