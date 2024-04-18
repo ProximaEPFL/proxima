@@ -159,7 +159,9 @@ void main() {
       final homePage = find.byType(HomePage);
       expect(homePage, findsOneWidget);
     }
-    // reset
+    // a bit hacky, but it appears to be necessary to reset the home page
+    // I have tried many other things, this one appears to be
+    // the one that makes the most sense amongst the ones that worked
     await tester.pumpWidget(Container());
     await tester.pumpAndSettle();
 

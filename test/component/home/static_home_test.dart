@@ -110,7 +110,7 @@ void main() {
       expect(postUser, findsExactly(testPosts.length));
     });
 
-    testWidgets("Display post on refresh", (tester) async {
+    testWidgets("Display text and refresh button when feed is empty", (tester) async {
       await tester.pumpWidget(emptyHomePageWidget);
       await tester.pumpAndSettle();
 
