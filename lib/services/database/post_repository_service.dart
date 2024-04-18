@@ -18,17 +18,18 @@ class PostRepositoryService {
 
   /// This method creates a new post that has for data [postData]
   /// and that is located at [position] and adds it to the database
-  Future<void> addPost(PostData postData, GeoPoint position) async {
+  Future<PostIdFirestore> addPost(PostData postData, GeoPoint position) async {
     // The `geoFirePoint.data` returns a Map<String, dynamic> consistent with the
     // class [PostLocationFirestore]. This is because the field name values
     // are hardcoded in the [GeoFlutterFire] library
 
     final geoFirePoint = _getGeoFirePoint(position);
 
-    await _collectionRef.add({
+    final reference = await _collectionRef.add({
       PostFirestore.locationField: geoFirePoint.data,
       ...postData.toDbData(),
     });
+    return PostIdFirestore(value: reference.id);
   }
 
   /// This method deletes the post with id [postId] from the database
