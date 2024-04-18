@@ -61,9 +61,6 @@ class UserRepositoryService {
 
       transaction.update(userDocRef, updatedUserData);
     });
-    //final user = await getUser(uid);
-    // final updatedUserData = user.data.withPointsAddition(points).toDbData();
-    // await _collectionRef.doc(uid.value).update(updatedUserData);
   }
 }
 
