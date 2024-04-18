@@ -235,15 +235,8 @@ void main() {
       final actualPosts1 = await postRepository.getUserPosts(userId1);
       final actualPosts2 = await postRepository.getUserPosts(userId2);
 
-      expect(actualPosts1.length, 2);
-      expect(actualPosts1.length, actualPosts2.length);
-
-      for (final post in actualPosts1) {
-        expect(post.data.ownerId.value, userId1.value);
-      }
-      for (final post in actualPosts2) {
-        expect(post.data.ownerId.value, userId2.value);
-      }
+      expect(actualPosts1, unorderedEquals([postsData1, postsData2]));
+      expect(actualPosts2, unorderedEquals([postsData3, postsData4]));
     });
   });
 }
