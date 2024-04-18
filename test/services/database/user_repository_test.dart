@@ -129,9 +129,16 @@ void main() {
       await userRepo.addPoints(expectedUser.uid, pointsToAdd);
 
       //get the centauri points from the db
-      await userCollection.doc(expectedUser.uid.value).get().then((value) {
-        expect(value.data()![UserData.centauriPointsField], pointsToAdd);
-      });
+      final actualUserDoc =
+          await userCollection.doc(expectedUser.uid.value).get();
+
+      final actualCentauriPoints =
+          actualUserDoc.data()![UserData.centauriPointsField];
+
+      expect(
+        actualCentauriPoints,
+        expectedUser.data.centauriPoints + pointsToAdd,
+      );
     });
   });
 }
