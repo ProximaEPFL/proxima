@@ -18,18 +18,18 @@ class LoginPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userRepository = ref.watch(userRepositoryProvider);
-    ref.listen(uidProvider, (_, user) {
+    ref.listen(uidProvider, (_, user) async {
       if (user != null) {
-        userRepository.doesUserExist(user).then((exists) {
-          //Ensure that the page is still mounted before navigating
-          if (!context.mounted) return;
+        final exists = await userRepository.doesUserExist(user);
 
-          if (exists) {
-            Navigator.pushReplacementNamed(context, Routes.home.name);
-          } else {
-            Navigator.pushReplacementNamed(context, Routes.createAccount.name);
-          }
-        });
+        //Ensure that the page is still mounted before navigating
+        if (!context.mounted) return;
+
+        if (exists) {
+          Navigator.pushReplacementNamed(context, Routes.home.name);
+        } else {
+          Navigator.pushReplacementNamed(context, Routes.createAccount.name);
+        }
       }
     });
 
