@@ -36,6 +36,7 @@ class CircularValue<T> extends StatelessWidget {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           showDialog(context: context, builder: dialog.build);
         });
+
         return fallbackBuilder(context, error);
       },
       loading: () {
