@@ -10,15 +10,19 @@ import "../services/firestore/testing_firestore_provider.dart";
 import "../viewmodels/mock_home_view_model.dart";
 
 void main() {
-  final mockedPage = ProviderScope(
-    overrides: firebaseMocksOverrides +
-        loggedInUserOverrides +
-        mockEmptyHomeViewModelOverride,
-    child: MaterialApp(
-      onGenerateRoute: generateRoute,
-      initialRoute: Routes.createAccount.name,
-    ),
-  );
+  late ProviderScope mockedPage;
+
+  setUp(() {
+    mockedPage = ProviderScope(
+      overrides: firebaseMocksOverrides +
+          loggedInUserOverrides +
+          mockEmptyHomeViewModelOverride,
+      child: MaterialApp(
+        onGenerateRoute: generateRoute,
+        initialRoute: Routes.createAccount.name,
+      ),
+    );
+  });
 
   Future<(Finder, Finder, Finder)> preparePage(WidgetTester tester) async {
     await tester.pumpWidget(mockedPage);
@@ -41,40 +45,42 @@ void main() {
     return (uniqueUsernameField, pseudoField, confirmButton);
   }
 
-  testWidgets("Text fields and buttons are visible", (tester) async {
-    final (uniqueUsernameField, pseudoField, confirmButton) =
-        await preparePage(tester);
+  group("Widgets display", () {
+    testWidgets("Display text fields and buttons", (tester) async {
+      final (uniqueUsernameField, pseudoField, confirmButton) =
+          await preparePage(tester);
 
-    expect(uniqueUsernameField, findsOneWidget);
-    expect(pseudoField, findsOneWidget);
-    expect(confirmButton, findsOneWidget);
+      expect(uniqueUsernameField, findsOneWidget);
+      expect(pseudoField, findsOneWidget);
+      expect(confirmButton, findsOneWidget);
+    });
   });
 
-  const blank = "blank";
-  const space = "space";
-  const short = "short";
-  const long = "long";
-  const specialCharacter = "Invalid characters";
-
-  final incorrectStrings = [
-    ("", blank),
-    (" ", space),
-    ("he llo", space),
-    ("heLlo ", space),
-    ("A", short),
-    ("a%", short),
-    ("0" * 21, long),
-    ("j" * 512, long),
-    (
-      "jdsfklsdjflkdsjlfkjwioeoiwelkfmscvhklwjefkhjwiejfknsdkjfsdklfmjksdjfwmkfn",
-      long
-    ),
-    ("abc&", specialCharacter),
-    ("_é_Jsdljadlkfjsd", specialCharacter),
-    ("🐘🐋🐘", specialCharacter),
-  ];
-
   group("Invalid username and pseudos should produce an error", () {
+    const blank = "blank";
+    const space = "space";
+    const short = "short";
+    const long = "long";
+    const specialCharacter = "Invalid characters";
+
+    final incorrectStrings = [
+      ("", blank),
+      (" ", space),
+      ("he llo", space),
+      ("heLlo ", space),
+      ("A", short),
+      ("a%", short),
+      ("0" * 21, long),
+      ("j" * 512, long),
+      (
+        "jdsfklsdjflkdsjlfkjwioeoiwelkfmscvhklwjefkhjwiejfknsdkjfsdklfmjksdjfwmkfn",
+        long
+      ),
+      ("abc&", specialCharacter),
+      ("_é_Jsdljadlkfjsd", specialCharacter),
+      ("🐘🐋🐘", specialCharacter),
+    ];
+
     for (final field in ["username", "pseudo"]) {
       for (final (value, error) in incorrectStrings) {
         testWidgets(
@@ -137,7 +143,7 @@ void main() {
     const username = "evryoneloveelephants";
     final errorText = find.textContaining("already taken");
 
-    // another scope just to simplify the variable names
+    // User 1 attempts to register
     {
       final (uniqueUsernameField, pseudoField, confirmButton) =
           await preparePage(tester);
@@ -153,14 +159,13 @@ void main() {
       final homePage = find.byType(HomePage);
       expect(homePage, findsOneWidget);
     }
-
-    // a bit hacky, but it appears to be necessary. I have tried many other things, this one
-    // appears to be the one that makes the most sense amongst the ones that worked
-    // (thank you copilot)
+    // a bit hacky, but it appears to be necessary to reset the home page
+    // I have tried many other things, this one appears to be
+    // the one that makes the most sense amongst the ones that worked
     await tester.pumpWidget(Container());
     await tester.pumpAndSettle();
 
-    // another scope just to simplify the variable names
+    // User 2 attempts to register with the same username
     {
       final (uniqueUsernameField, pseudoField, confirmButton) =
           await preparePage(tester);

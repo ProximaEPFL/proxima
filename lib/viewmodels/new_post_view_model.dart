@@ -38,19 +38,22 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
   }
 
   /// Verifies that the title and description are not empty, then adds a new post to the database.
-  /// If the user is not logged in, an exception is thrown.
   /// If the title or description is empty, the state is updated with the appropriate error message.
   /// If the post is successfully added, the state is updated with the posted flag set to true.
   Future<void> addPost(String title, String description) async {
     state = const AsyncLoading();
+    state = await AsyncValue.guard(() => _addPost(title, description));
+  }
 
+  Future<NewPostState> _addPost(String title, String description) async {
     final currentUser = ref.read(uidProvider);
     if (currentUser == null) {
       throw Exception("User must be logged in before creating a post");
     }
 
     if (!validate(title, description)) {
-      return;
+      // not loading or error since validation failed and wrote to the state
+      return state.value!;
     }
 
     final currPosition =
@@ -67,12 +70,10 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
 
     await postRepository.addPost(post, currPosition);
 
-    state = AsyncData(
-      NewPostState(
-        titleError: null,
-        descriptionError: null,
-        posted: true,
-      ),
+    return NewPostState(
+      titleError: null,
+      descriptionError: null,
+      posted: true,
     );
   }
 }
