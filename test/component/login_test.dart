@@ -1,6 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
-import "package:firebase_core/firebase_core.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
@@ -24,11 +23,25 @@ void main() {
   late FakeFirebaseFirestore fakeFireStore;
   late CollectionReference<Map<String, dynamic>> userCollection;
   late UserRepositoryService userRepo;
+  late ProviderScope mockedProxima;
 
-  setupFirebaseAuthMocks();
-
-  setUpAll(() async {
-    await Firebase.initializeApp();
+  setUp(() async {
+    setupFirebaseAuthMocks();
+    fakeFireStore = FakeFirebaseFirestore();
+    userCollection = fakeFireStore.collection(UserFirestore.collectionName);
+    userRepo = UserRepositoryService(
+      firestore: fakeFireStore,
+    );
+    mockedProxima = ProviderScope(
+      overrides: [
+        ...firebaseAuthMocksOverrides,
+        userRepositoryProvider.overrideWithValue(userRepo),
+        postOverviewProvider.overrideWith(
+          () => MockHomeViewModel(),
+        ),
+      ],
+      child: const ProximaApp(),
+    );
   });
 
   Future<void> enterPseudoAndUsername(WidgetTester tester) async {
@@ -45,41 +58,50 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  group("Widgets display", () {
+    testWidgets("Display logo, slogan and login button", (tester) async {
+      await tester.pumpWidget(mockedProxima);
+      await tester.pumpAndSettle();
+
+      // Check for the logo on the Login Page
+      final logoFinder = find.byKey(LoginPage.logoKey);
+      expect(logoFinder, findsOneWidget);
+
+      // Check for the slogan on the Login Page
+      final sloganFinder = find.text(LoginPage.tagLineText);
+      expect(sloganFinder, findsOneWidget);
+
+      final loginButton = find.byKey(LoginButton.loginButtonKey);
+      // Check that the login button is displayed and contains the "Login" text
+      expect(
+        find.descendant(
+          of: loginButton,
+          matching: find.text("Sign in with Google"),
+        ),
+        findsOneWidget,
+      );
+    });
+  });
+
   group("Existing user data in repository testing", () {
     final expectedUser = testingUserFirestore;
 
+    // override the setup to add a user
     setUp(() async {
-      fakeFireStore = FakeFirebaseFirestore();
-      userCollection = fakeFireStore.collection(UserFirestore.collectionName);
-      userRepo = UserRepositoryService(
-        firestore: fakeFireStore,
-      );
+      // Add a user to the collection
       await userCollection
           .doc(expectedUser.uid.value)
           .set(expectedUser.data.toDbData());
     });
 
-    ProviderScope getMockedProxima() {
-      return ProviderScope(
-        overrides: [
-          ...firebaseAuthMocksOverrides,
-          userRepositoryProvider.overrideWithValue(userRepo),
-          postOverviewProvider.overrideWith(
-            () => MockHomeViewModel(),
-          ),
-        ],
-        child: const ProximaApp(),
-      );
-    }
-
-    testWidgets("Login and get to home page flow", (tester) async {
-      await tester.pumpWidget(getMockedProxima());
+    testWidgets("Login flow to HomePage", (tester) async {
+      await tester.pumpWidget(mockedProxima);
       await tester.pumpAndSettle();
 
       final loginButton = find.byKey(LoginButton.loginButtonKey);
       await tester.tap(loginButton);
 
-      //Needs a delay to allow the existance check to complete
+      //Needs a delay to allow the existence check to complete
       await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
       final homePage = find.byType(HomePage);
@@ -88,34 +110,13 @@ void main() {
   });
 
   group("Non existing user data in repository testing", () {
-    setUp(() async {
-      fakeFireStore = FakeFirebaseFirestore();
-      userCollection = fakeFireStore.collection(UserFirestore.collectionName);
-      userRepo = UserRepositoryService(
-        firestore: fakeFireStore,
-      );
-    });
-
-    ProviderScope getMockedProxima() {
-      return ProviderScope(
-        overrides: [
-          ...firebaseAuthMocksOverrides,
-          userRepositoryProvider.overrideWithValue(userRepo),
-          postOverviewProvider.overrideWith(
-            () => MockHomeViewModel(),
-          ),
-        ],
-        child: const ProximaApp(),
-      );
-    }
-
-    testWidgets("Login and Logout using create account page", (tester) async {
-      await tester.pumpWidget(getMockedProxima());
+    testWidgets("Login flow to CreateAccount and log out", (tester) async {
+      await tester.pumpWidget(mockedProxima);
       await tester.pumpAndSettle();
 
       final loginButton = find.byKey(LoginButton.loginButtonKey);
       await tester.tap(loginButton);
-      //Needs a delay to allow the existance check to complete
+      //Needs a delay to allow the existence check to complete
       await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
       final createAccountPage = find.byType(CreateAccountPage);
@@ -130,13 +131,13 @@ void main() {
       expect(loginPage, findsOneWidget);
     });
 
-    testWidgets("Login and Logout using home page", (tester) async {
-      await tester.pumpWidget(getMockedProxima());
+    testWidgets("Login flow to HomePage and log out", (tester) async {
+      await tester.pumpWidget(mockedProxima);
       await tester.pumpAndSettle();
 
       final loginButton = find.byKey(LoginButton.loginButtonKey);
       await tester.tap(loginButton);
-      //Needs a delay to allow the existance check to complete
+      //Needs a delay to allow the existence check to complete
       await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
       final createAccountPage = find.byType(CreateAccountPage);
@@ -161,49 +162,6 @@ void main() {
       //Check that we are in the login page
       final loginPage = find.byType(LoginPage);
       expect(loginPage, findsOneWidget);
-    });
-
-    testWidgets("Login to Create Account Page to Home Page flow",
-        (tester) async {
-      await tester.pumpWidget(getMockedProxima());
-      await tester.pumpAndSettle();
-
-      // Check for the logo on the Login Page
-      final logoFinder = find.byKey(LoginPage.logoKey);
-      expect(logoFinder, findsOneWidget);
-
-      // Check for the slogan on the Login Page
-      final sloganFinder = find.text(LoginPage.tagLineText);
-      expect(sloganFinder, findsOneWidget);
-
-      final loginButton = find.byKey(LoginButton.loginButtonKey);
-      // Check that the login button is displayed and contains the "Login" text
-      expect(
-        find.descendant(
-          of: loginButton,
-          matching: find.text("Sign in with Google"),
-        ),
-        findsOneWidget,
-      );
-
-      await tester.tap(loginButton);
-      //Needs a delay to allow the existance check to complete
-      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
-
-      // Check that pressing login redirects to the create account page
-      final createAccountPage = find.byType(CreateAccountPage);
-      expect(createAccountPage, findsOneWidget);
-
-      await enterPseudoAndUsername(tester);
-
-      // And that pushing the confirm button redirects to the home page
-      final confirmButton = find.byKey(CreateAccountPage.confirmButtonKey);
-      await tester.tap(confirmButton);
-      await tester.pumpAndSettle();
-
-      // We must now be on the home page
-      final homePage = find.byType(HomePage);
-      expect(homePage, findsOneWidget);
     });
   });
 }

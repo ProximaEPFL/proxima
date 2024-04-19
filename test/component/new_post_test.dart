@@ -1,5 +1,4 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -20,45 +19,51 @@ import "../services/mock_geo_location_service.dart";
 import "../services/test_data/firestore_user_mock.dart";
 
 void main() {
-  setupFirebaseAuthMocks();
-
-  MockPostRepositoryService postRepository = MockPostRepositoryService();
-  MockGeoLocationService geoLocationService = MockGeoLocationService();
+  late MockPostRepositoryService postRepository;
+  late MockGeoLocationService geoLocationService;
+  late ProviderScope mockedNewPostPage;
 
   const timeDeltaMils = 500;
 
-  setUpAll(() async {
-    await Firebase.initializeApp();
+  setUp(() async {
+    setupFirebaseAuthMocks();
+
+    postRepository = MockPostRepositoryService();
+    geoLocationService = MockGeoLocationService();
+
+    mockedNewPostPage = ProviderScope(
+      overrides: [
+        ...firebaseMocksOverrides,
+        postRepositoryProvider.overrideWithValue(postRepository),
+        geoLocationServiceProvider.overrideWithValue(geoLocationService),
+        uidProvider.overrideWithValue(testingUserFirestoreId),
+      ],
+      child: const MaterialApp(
+        home: NewPostPage(),
+      ),
+    );
   });
 
-  final mockedPage = ProviderScope(
-    overrides: [
-      ...firebaseMocksOverrides,
-      postRepositoryProvider.overrideWithValue(postRepository),
-      geoLocationServiceProvider.overrideWithValue(geoLocationService),
-      uidProvider.overrideWithValue(testingUserFirestoreId),
-    ],
-    child: const MaterialApp(
-      home: NewPostPage(),
-    ),
-  );
+  group("Widgets display", () {
+    testWidgets("Display title, body, post button and back button",
+        (tester) async {
+      await tester.pumpWidget(mockedNewPostPage);
+      await tester.pumpAndSettle();
 
-  testWidgets("Create post contains title, body and post button",
-      (tester) async {
-    await tester.pumpWidget(mockedPage);
-    await tester.pumpAndSettle();
+      final titleFinder = find.byKey(NewPostForm.titleFieldKey);
+      final bodyFinder = find.byKey(NewPostForm.bodyFieldKey);
+      final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
+      final backButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
 
-    final titleFinder = find.byKey(NewPostForm.titleFieldKey);
-    final bodyFinder = find.byKey(NewPostForm.bodyFieldKey);
-    final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
-
-    expect(titleFinder, findsOneWidget);
-    expect(bodyFinder, findsOneWidget);
-    expect(postButtonFinder, findsOneWidget);
+      expect(titleFinder, findsOneWidget);
+      expect(bodyFinder, findsOneWidget);
+      expect(postButtonFinder, findsOneWidget);
+      expect(backButton, findsOneWidget);
+    });
   });
 
-  testWidgets("Back button works", (widgetTester) async {
-    await widgetTester.pumpWidget(mockedPage);
+  testWidgets("Back button navigation", (widgetTester) async {
+    await widgetTester.pumpWidget(mockedNewPostPage);
     await widgetTester.pumpAndSettle();
 
     final backButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
@@ -71,7 +76,7 @@ void main() {
   });
 
   testWidgets("Writes non empty post to repository", (widgetTester) async {
-    await widgetTester.pumpWidget(mockedPage);
+    await widgetTester.pumpWidget(mockedNewPostPage);
     await widgetTester.pumpAndSettle();
 
     GeoPoint testPoint = const GeoPoint(0, 0);
@@ -125,7 +130,7 @@ void main() {
   });
 
   testWidgets("Refuses empty post", (widgetTester) async {
-    await widgetTester.pumpWidget(mockedPage);
+    await widgetTester.pumpWidget(mockedNewPostPage);
     await widgetTester.pumpAndSettle();
 
     final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
