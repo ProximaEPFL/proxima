@@ -35,9 +35,7 @@ class PostFeed extends HookConsumerWidget {
     );
     final refreshButton = ElevatedButton(
       key: refreshButtonKey,
-      onPressed: () async {
-        ref.read(postOverviewProvider.notifier).refresh();
-      },
+      onPressed: () => ref.read(postOverviewProvider.notifier).refresh(),
       child: const Text("Refresh"),
     );
     final emptyHelper = Center(
@@ -81,9 +79,8 @@ class PostFeed extends HookConsumerWidget {
             builder: (context, posts) {
               final postsList = PostList(
                 posts: posts,
-                onRefresh: () async {
-                  return ref.read(postOverviewProvider.notifier).refresh();
-                },
+                onRefresh: () =>
+                    ref.read(postOverviewProvider.notifier).refresh(),
               );
 
               return posts.isEmpty ? emptyHelper : postsList;

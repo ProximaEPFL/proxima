@@ -26,6 +26,7 @@ class LoginService {
       if (googleUser != null) {
         await _googleSignIn.signOut();
       }
+
       return;
     }
 

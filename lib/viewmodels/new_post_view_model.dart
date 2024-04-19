@@ -30,8 +30,10 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
           posted: false,
         ),
       );
+
       return false;
     }
+
     return true;
   }
 

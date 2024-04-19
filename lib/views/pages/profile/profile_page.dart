@@ -58,6 +58,7 @@ class ProfilePage extends HookConsumerWidget {
         ),
       );
     }
+
     return switch (asyncUserData) {
       AsyncData(:final value) => DefaultTabController(
           length: 2,

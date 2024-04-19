@@ -15,9 +15,7 @@ class LoginButton extends HookConsumerWidget {
       padding: const EdgeInsets.all(8),
       child: ElevatedButton(
         key: loginButtonKey,
-        onPressed: () async {
-          await ref.read(loginServiceProvider).signIn();
-        },
+        onPressed: () => ref.read(loginServiceProvider).signIn(),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

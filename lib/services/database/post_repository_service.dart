@@ -25,6 +25,7 @@ class PostRepositoryService {
       PostFirestore.locationField: _geoFirePointToDataDb(geoFirePoint),
       ...postData.toDbData(),
     });
+
     return PostIdFirestore(value: reference.id);
   }
 
@@ -70,6 +71,7 @@ class PostRepositoryService {
         .where((post) {
       // We need to filter the posts because the query is not exact
       final postPoint = post.location.geoPoint;
+
       return geoFirePoint.distanceBetweenInKm(geopoint: postPoint) <= radius;
     }).toList();
   }

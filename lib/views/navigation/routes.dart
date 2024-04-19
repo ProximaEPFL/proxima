@@ -38,5 +38,6 @@ enum Routes {
 
 Route generateRoute(RouteSettings settings) {
   final route = Routes.parse(settings.name!);
+
   return MaterialPageRoute(builder: (_) => route.page(settings.arguments));
 }

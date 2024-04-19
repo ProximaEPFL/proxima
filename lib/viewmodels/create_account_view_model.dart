@@ -71,6 +71,7 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
         .isUsernameTaken(uniqueUsername)) {
       return "This username is already taken.";
     }
+
     return null;
   }
 
@@ -85,6 +86,7 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
     AsyncValue<CreateAccountModel> newState = await AsyncValue.guard(() async {
       final pseudoError = validatePseudo(pseudo);
       final uniqueUsernameError = await validateUniqueUsername(uniqueUsername);
+
       return CreateAccountModel(
         pseudoError: pseudoError,
         uniqueUsernameError: uniqueUsernameError,
@@ -97,6 +99,7 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
       if (uid == null) {
         // The user is no longer logged in, so they will anyway be sent to the login page
         state = const AsyncValue.data(CreateAccountModel());
+
         return;
       }
 

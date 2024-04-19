@@ -3,7 +3,7 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/utils/ui/scrollable_if_too_high.dart";
-import "package:proxima/viewmodels/create_accout_view_model.dart";
+import "package:proxima/viewmodels/create_account_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/navigation/routes.dart";
