@@ -25,29 +25,39 @@ import "../services/test_data/firestore_user_mock.dart";
 import "../viewmodels/mock_home_view_model.dart";
 
 void main() {
+  late FakeFirebaseFirestore fakeFireStore;
+  late CollectionReference<Map<String, dynamic>> userCollection;
+  late UserRepositoryService userRepo;
   late ProviderScope mockedProfilePage;
-  late MockFirebaseAuth auth;
+
+  final expectedUser = testingUserFirestore;
 
   setUp(() async {
     setupFirebaseAuthMocks();
-    auth = MockFirebaseAuth(signedIn: true);
+    fakeFireStore = FakeFirebaseFirestore();
+    userCollection = fakeFireStore.collection(UserFirestore.collectionName);
+    userRepo = UserRepositoryService(
+      firestore: fakeFireStore,
+    );
+    await userCollection
+        .doc(expectedUser.uid.value)
+        .set(expectedUser.data.toDbData());
+
     mockedProfilePage = ProviderScope(
       overrides: [
-        firebaseAuthProvider.overrideWithValue(auth),
-        postOverviewProvider.overrideWith(
-          () => MockHomeViewModel(),
-        ),
+        firebaseAuthProvider.overrideWith(mockFirebaseAuthSignedIn),
+        userRepositoryProvider.overrideWithValue(userRepo),
       ],
       child: const MaterialApp(
         onGenerateRoute: generateRoute,
-        title: "Proxima",
+        title: "Profile page",
         home: ProfilePage(),
       ),
     );
   });
 
   group("Widgets display", () {
-    testWidgets("Display badges, posts and comments", (tester) async {
+    testWidgets("Display badges, posts comments and centauri", (tester) async {
       await tester.pumpWidget(mockedProfilePage);
       await tester.pumpAndSettle();
 
@@ -81,7 +91,7 @@ void main() {
     });
   });
 
-  group("Popups working as expected", () {
+  group("Functionality", () {
     testWidgets("Post popup working as expected", (tester) async {
       await tester.pumpWidget(mockedProfilePage);
       await tester.pumpAndSettle();
@@ -162,7 +172,7 @@ void main() {
     });
 
     testWidgets("Tab working as expected", (tester) async {
-      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpWidget(mockedProfilePage);
       await tester.pumpAndSettle();
 
       // Check that the post tab is displayed
@@ -187,7 +197,7 @@ void main() {
     });
 
     testWidgets("Centauri points displayed correctly", (tester) async {
-      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpWidget(mockedProfilePage);
       await tester.pumpAndSettle();
 
       //Check that centauri points are displayed
@@ -200,37 +210,39 @@ void main() {
     });
   });
 
-  testWidgets("Navigate from overview to profile page", (tester) async {
-    final homePageWidget = ProviderScope(
-      overrides: [
-        postOverviewProvider.overrideWith(
-          () => MockHomeViewModel(),
+  group("Navigation", () {
+    testWidgets("Navigate from overview to profile page", (tester) async {
+      final homePageWidget = ProviderScope(
+        overrides: [
+          postOverviewProvider.overrideWith(
+            () => MockHomeViewModel(),
+          ),
+        ],
+        child: const MaterialApp(
+          onGenerateRoute: generateRoute,
+          title: "Proxima",
+          home: HomePage(),
         ),
-      ],
-      child: const MaterialApp(
-        onGenerateRoute: generateRoute,
-        title: "Proxima",
-        home: HomePage(),
-      ),
-    );
+      );
 
-    await tester.pumpWidget(homePageWidget);
-    await tester.pumpAndSettle();
+      await tester.pumpWidget(homePageWidget);
+      await tester.pumpAndSettle();
 
-    // Check that the top bar is displayed
-    final topBar = find.byKey(AppTopBar.homeTopBarKey);
-    expect(topBar, findsOneWidget);
+      // Check that the top bar is displayed
+      final topBar = find.byKey(AppTopBar.homeTopBarKey);
+      expect(topBar, findsOneWidget);
 
-    //Check profile picture is displayed
-    final profilePicture = find.byKey(AppTopBar.profilePictureKey);
-    expect(profilePicture, findsOneWidget);
+      //Check profile picture is displayed
+      final profilePicture = find.byKey(AppTopBar.profilePictureKey);
+      expect(profilePicture, findsOneWidget);
 
-    // Tap on the profile picture
-    await tester.tap(profilePicture);
-    await tester.pumpAndSettle();
+      // Tap on the profile picture
+      await tester.tap(profilePicture);
+      await tester.pumpAndSettle();
 
-    // Check that the profile page is displayed
-    final profilePage = find.byType(ProfilePage);
-    expect(profilePage, findsOneWidget);
+      // Check that the profile page is displayed
+      final profilePage = find.byType(ProfilePage);
+      expect(profilePage, findsOneWidget);
+    });
   });
 }
