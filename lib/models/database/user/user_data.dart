@@ -12,10 +12,14 @@ class UserData {
   final Timestamp joinTime;
   static const joinTimeField = "joinTime";
 
+  final int centauriPoints;
+  static const centauriPointsField = "centauriPoints";
+
   const UserData({
     required this.username,
     required this.displayName,
     required this.joinTime,
+    required this.centauriPoints,
   });
 
   /// This method will create an instance of [UserData] from the
@@ -26,6 +30,7 @@ class UserData {
         username: data[usernameField],
         displayName: data[displayNameField],
         joinTime: data[joinTimeField],
+        centauriPoints: data[centauriPointsField] ?? 0,
       );
     } catch (e) {
       if (e is TypeError) {
@@ -38,6 +43,15 @@ class UserData {
     }
   }
 
+  UserData withPointsAddition(int points) {
+    return UserData(
+      username: username,
+      displayName: displayName,
+      joinTime: joinTime,
+      centauriPoints: centauriPoints + points,
+    );
+  }
+
   /// This method will create a map from the current instance of [UserData]
   /// to be stored in firestore
   Map<String, dynamic> toDbData() {
@@ -45,6 +59,7 @@ class UserData {
       usernameField: username,
       displayNameField: displayName,
       joinTimeField: joinTime,
+      centauriPointsField: centauriPoints,
     };
   }
 

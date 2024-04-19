@@ -116,5 +116,29 @@ void main() {
 
       expect(isUsernameTaken, false);
     });
+
+    test("Update centauri points", () async {
+      final expectedUser = testingUserFirestore;
+
+      await userCollection
+          .doc(expectedUser.uid.value)
+          .set(expectedUser.data.toDbData());
+
+      const pointsToAdd = 100;
+
+      await userRepo.addPoints(expectedUser.uid, pointsToAdd);
+
+      //get the centauri points from the db
+      final actualUserDoc =
+          await userCollection.doc(expectedUser.uid.value).get();
+
+      final actualCentauriPoints =
+          actualUserDoc.data()![UserData.centauriPointsField];
+
+      expect(
+        actualCentauriPoints,
+        expectedUser.data.centauriPoints + pointsToAdd,
+      );
+    });
   });
 }

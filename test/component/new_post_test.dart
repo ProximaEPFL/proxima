@@ -4,6 +4,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_data.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
@@ -102,7 +103,7 @@ void main() {
     final postButtonFinder = find.byKey(NewPostForm.postButtonKey);
 
     when(postRepository.addPost(any, any)).thenAnswer((_) {
-      return Future.value();
+      return Future.value(const PostIdFirestore(value: "id"));
     });
 
     await widgetTester.tap(postButtonFinder);

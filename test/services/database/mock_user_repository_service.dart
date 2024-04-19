@@ -12,13 +12,14 @@ final _mockEmptyFirestoreUser = UserFirestore(
     displayName: "",
     username: "",
     joinTime: Timestamp.fromMillisecondsSinceEpoch(0),
+    centauriPoints: 0,
   ),
   uid: const UserIdFirestore(value: ""),
 );
 
 class MockUserRepositoryService extends Mock implements UserRepositoryService {
   @override
-  Future<UserFirestore> getUser(UserIdFirestore uid) {
+  Future<UserFirestore> getUser(UserIdFirestore? uid) {
     return super.noSuchMethod(
       Invocation.method(#getUser, [uid]),
       returnValue: Future.value(_mockEmptyFirestoreUser),
@@ -26,7 +27,7 @@ class MockUserRepositoryService extends Mock implements UserRepositoryService {
   }
 
   @override
-  Future<void> setUser(UserIdFirestore uid, UserData userData) {
+  Future<void> setUser(UserIdFirestore? uid, UserData? userData) {
     return super.noSuchMethod(
       Invocation.method(#setUser, [uid, userData]),
       returnValue: Future.value(),
@@ -34,7 +35,7 @@ class MockUserRepositoryService extends Mock implements UserRepositoryService {
   }
 
   @override
-  Future<bool> doesUserExist(UserIdFirestore uid) {
+  Future<bool> doesUserExist(UserIdFirestore? uid) {
     return super.noSuchMethod(
       Invocation.method(#doesUserExist, [uid]),
       returnValue: Future.value(false),

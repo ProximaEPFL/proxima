@@ -1,7 +1,10 @@
-import "package:firebase_auth_mocks/firebase_auth_mocks.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/login_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
@@ -15,7 +18,10 @@ import "package:proxima/views/pages/profile/posts_info/popup/comment_popup.dart"
 import "package:proxima/views/pages/profile/posts_info/popup/post_popup.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 import "package:proxima/views/pages/profile/user_info/user_account.dart";
+
 import "../services/firebase/setup_firebase_mocks.dart";
+import "../services/firebase/testing_auth_providers.dart";
+import "../services/test_data/firestore_user_mock.dart";
 import "../viewmodels/mock_home_view_model.dart";
 
 void main() {
@@ -45,18 +51,6 @@ void main() {
       await tester.pumpWidget(mockedProfilePage);
       await tester.pumpAndSettle();
 
-      //Check that the tab is displayed
-      final tab = find.byKey(ProfilePage.tabKey);
-      expect(tab, findsOneWidget);
-
-      // Check that the post tab is displayed
-      final postTab = find.byKey(ProfilePage.postTabKey);
-      expect(postTab, findsOneWidget);
-
-      // Check that the comment tab is displayed
-      final commentTab = find.byKey(ProfilePage.commentTabKey);
-      expect(commentTab, findsOneWidget);
-
       // Check that badges are displayed
       final badgeCard = find.byKey(InfoCardBadge.infoCardBadgeKey);
       expect(badgeCard, findsWidgets);
@@ -81,17 +75,9 @@ void main() {
       final userAccount = find.byKey(UserAccount.userInfoKey);
       expect(userAccount, findsOneWidget);
 
-      //Check that post column is displayed
-      final postColumn = find.byKey(ProfilePage.postColumnKey);
-      expect(postColumn, findsOneWidget);
-
-      // Tap on the comment tab
-      await tester.tap(commentTab);
-      await tester.pumpAndSettle();
-
-      // Check that the comment column is displayed
-      final commentColumn = find.byKey(ProfilePage.commentColumnKey);
-      expect(commentColumn, findsOneWidget);
+      //Check that the tab is displayed
+      final tab = find.byKey(ProfilePage.tabKey);
+      expect(tab, findsOneWidget);
     });
   });
 
@@ -173,6 +159,44 @@ void main() {
       //Check that the profile page is displayed
       final profilePage = find.byType(ProfilePage);
       expect(profilePage, findsOneWidget);
+    });
+
+    testWidgets("Tab working as expected", (tester) async {
+      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpAndSettle();
+
+      // Check that the post tab is displayed
+      final postTab = find.byKey(ProfilePage.postTabKey);
+      expect(postTab, findsOneWidget);
+
+      // Check that the comment tab is displayed
+      final commentTab = find.byKey(ProfilePage.commentTabKey);
+      expect(commentTab, findsOneWidget);
+
+      //Check that post column is displayed
+      final postColumn = find.byKey(ProfilePage.postColumnKey);
+      expect(postColumn, findsOneWidget);
+
+      // Tap on the comment tab
+      await tester.tap(commentTab);
+      await tester.pumpAndSettle();
+
+      // Check that the comment column is displayed
+      final commentColumn = find.byKey(ProfilePage.commentColumnKey);
+      expect(commentColumn, findsOneWidget);
+    });
+
+    testWidgets("Centauri points displayed correctly", (tester) async {
+      await tester.pumpWidget(getMockedProxima());
+      await tester.pumpAndSettle();
+
+      //Check that centauri points are displayed
+      final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
+      expect(centauriPoints, findsOneWidget);
+
+      // checking the text
+      final centauriText = find.text("username_8456 · 0 Centauri");
+      expect(centauriText, findsOneWidget);
     });
   });
 

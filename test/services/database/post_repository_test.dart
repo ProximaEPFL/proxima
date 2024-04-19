@@ -1,7 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:geoflutterfire2/geoflutterfire2.dart";
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
@@ -10,6 +10,7 @@ import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
 import "../../models/database/post/mock_post_data.dart";
+import "../test_data/user_posts_fake_data.dart";
 
 void main() {
   group("Post Repository testing", () {
@@ -152,8 +153,7 @@ void main() {
 
     test("add post at location correctly", () async {
       const userPosition = GeoPoint(40, 20);
-      final userGeoFirePoint =
-          GeoFirePoint(userPosition.latitude, userPosition.longitude);
+      const userGeoFirePoint = GeoFirePoint(userPosition);
 
       final postData = MockPostFirestore.generatePostData(1).first;
 
@@ -167,7 +167,7 @@ void main() {
         id: PostIdFirestore(value: actualPosts.docs.first.id),
         location: PostLocationFirestore(
           geoPoint: userPosition,
-          geohash: userGeoFirePoint.hash,
+          geohash: userGeoFirePoint.geohash,
         ),
         data: postData,
       );
@@ -200,18 +200,38 @@ void main() {
           await postRepository.getNearPosts(userPosition, kmRadius);
 
       final expectedPosts = allPosts.where((element) {
-        final geoFirePoint = GeoFirePoint(
-          element.location.geoPoint.latitude,
-          element.location.geoPoint.longitude,
-        );
-        final distance = geoFirePoint.distance(
-          lat: userPosition.latitude,
-          lng: userPosition.longitude,
+        final geoFirePoint = GeoFirePoint(element.location.geoPoint);
+        final distance = geoFirePoint.distanceBetweenInKm(
+          geopoint: userPosition,
         );
         return distance <= kmRadius;
       }).toList();
 
       expect(actualPosts, expectedPosts);
+    });
+
+    test("get simple user posts correctly", () async {
+      const userId1 = UserIdFirestore(value: "user_id_1");
+
+      final postsData1 =
+          MockPostFirestore.createUserPost(userId1, fakeDataPosition1);
+      final postsData2 =
+          MockPostFirestore.createUserPost(userId1, fakeDataPosition2);
+      await setPostsFirestore([postsData1, postsData2]);
+
+      const userId2 = UserIdFirestore(value: "user_id_2");
+
+      final postsData3 =
+          MockPostFirestore.createUserPost(userId2, fakeDataPosition1);
+      final postsData4 =
+          MockPostFirestore.createUserPost(userId2, fakeDataPosition2);
+      await setPostsFirestore([postsData3, postsData4]);
+
+      final actualPosts1 = await postRepository.getUserPosts(userId1);
+      final actualPosts2 = await postRepository.getUserPosts(userId2);
+
+      expect(actualPosts1, unorderedEquals([postsData1, postsData2]));
+      expect(actualPosts2, unorderedEquals([postsData3, postsData4]));
     });
   });
 }
