@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
+import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.dart";
+import "package:proxima/views/pages/post/post_page_widget/entire_post_widget.dart";
 
 class PostPage extends StatelessWidget {
   const PostPage({
@@ -12,13 +14,67 @@ class PostPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
+
+    List<Widget> bodyChildren = [
+      EntirePostWidget(post: postOverview),
+      const SizedBox(height: 10),
+      const Padding(
+        padding: EdgeInsets.only(left: 16, right: 16),
+        child: Wrap(
+          runSpacing: 15,
+          children: [
+            CommentPostWidget(
+              comment: "This is a comment",
+              posterUsername: "Username",
+            ),
+            CommentPostWidget(
+              comment: "This is a comment",
+              posterUsername: "Username",
+            ),
+            CommentPostWidget(
+              comment: "This is a comment",
+              posterUsername: "Username",
+            ),
+            CommentPostWidget(
+              comment: "This is a comment",
+              posterUsername: "Username",
+            ),
+            CommentPostWidget(
+              comment: "This is a comment",
+              posterUsername: "Username",
+            ),
+            CommentPostWidget(
+              comment: "This is a comment",
+              posterUsername: "Username",
+            ),
+          ],
+        ),
+      ),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         leading: const LeadingBackButton(),
-        title: const Text("Post"),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Post"),
+            //TODO: Add distance to post
+            Text(
+              "50m away",
+              style: themeData.textTheme.titleSmall,
+            ),
+          ],
+        ),
       ),
-      body: Center(
-        child: Text(postOverview.title),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 8),
+        child: Center(
+          child: ListView(
+            children: bodyChildren,
+          ),
+        ),
       ),
     );
   }
