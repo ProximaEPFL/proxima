@@ -1,55 +1,29 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
-import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/new_post/new_post_page.dart";
 
-import "../../../mocks/mock_home_view_model.dart";
-import "../../../mocks/mock_posts.dart";
+import "../../../mocks/pages/mock_homepage.dart";
 
 void main() {
-  late MaterialApp homePageApp;
-  late ProviderScope emptyMockedPage;
-  late ProviderScope nonEmptyMockedPage;
+  late ProviderScope emptyHomePageWidget;
+  late ProviderScope nonEmptyHomePageWidget;
 
   setUp(() async {
-    homePageApp = const MaterialApp(
-      onGenerateRoute: generateRoute,
-      home: HomePage(),
-    );
-
-    emptyMockedPage = ProviderScope(
-      overrides: [
-        postOverviewProvider.overrideWith(
-          () => MockHomeViewModel(),
-        ),
-      ],
-      child: homePageApp,
-    );
-
-    nonEmptyMockedPage = ProviderScope(
-      overrides: [
-        postOverviewProvider.overrideWith(
-          () => MockHomeViewModel(
-            build: () async => testPosts,
-          ),
-        ),
-      ],
-      child: homePageApp,
-    );
+    emptyHomePageWidget = mockedEmptyHomePage;
+    nonEmptyHomePageWidget = mockedNonEmptyHomePage;
   });
 
   group("Post creation flow", () {
     testWidgets(
         "From non-empty feed, flow to create a post using bottom bar then go back",
         (tester) async {
-      await tester.pumpWidget(nonEmptyMockedPage);
+      await tester.pumpWidget(nonEmptyHomePageWidget);
       await tester.pumpAndSettle();
 
       // Check that the home page is displayed
@@ -83,7 +57,7 @@ void main() {
     testWidgets(
         "From empty feed, flow to create a post using bottom bar then go back",
         (tester) async {
-      await tester.pumpWidget(emptyMockedPage);
+      await tester.pumpWidget(emptyHomePageWidget);
       await tester.pumpAndSettle();
 
       // Check that the home page is displayed
@@ -121,7 +95,7 @@ void main() {
     testWidgets(
         "From empty feed, flow to create a post, clicking on 'create one!' button then go back",
         (tester) async {
-      await tester.pumpWidget(emptyMockedPage);
+      await tester.pumpWidget(emptyHomePageWidget);
       await tester.pumpAndSettle();
 
       // Check that the home page is displayed
