@@ -10,11 +10,11 @@ import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 
-import "../mocks/mock_post_data.dart";
-import "../mocks/mock_user_data.dart";
-import "../mocks/mock_post_repository_service.dart";
-import "../mocks/mock_user_repository_service.dart";
 import "../mocks/mock_geo_location_service.dart";
+import "../mocks/mock_post_data.dart";
+import "../mocks/mock_post_repository_service.dart";
+import "../mocks/mock_user_data.dart";
+import "../mocks/mock_user_repository_service.dart";
 
 void main() {
   group("Post Overview Provider unit testing", () {

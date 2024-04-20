@@ -11,9 +11,9 @@ import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:test/test.dart";
 
+import "../mocks/mock_geo_location_service.dart";
 import "../mocks/mock_post_data.dart";
 import "../mocks/mock_user_data.dart";
-import "../mocks/mock_geo_location_service.dart";
 
 void main() {
   // This aims to test the [postOverviewProvider] with the real implementation

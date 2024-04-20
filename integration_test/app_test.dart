@@ -19,9 +19,9 @@ import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
+import "../test/mocks/mock_geo_location_service.dart";
 import "../test/mocks/setup_firebase_mocks.dart";
 import "../test/services/firebase/testing_auth_providers.dart";
-import "../test/mocks/mock_geo_location_service.dart";
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
