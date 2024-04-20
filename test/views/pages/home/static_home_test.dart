@@ -9,8 +9,8 @@ import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 
+import "../../../mocks/mock_home_view_model.dart";
 import "../../../mocks/mock_posts.dart";
-import "../../../viewmodels/mock_home_view_model.dart";
 
 void main() {
   late ProviderScope homePageWidget;

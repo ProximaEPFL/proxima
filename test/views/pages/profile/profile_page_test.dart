@@ -19,10 +19,10 @@ import "package:proxima/views/pages/profile/posts_info/popup/post_popup.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 import "package:proxima/views/pages/profile/user_info/user_account.dart";
 
-import "../../../services/firebase/setup_firebase_mocks.dart";
+import "../../../mocks/firestore_user_mock.dart";
+import "../../../mocks/mock_home_view_model.dart";
+import "../../../mocks/setup_firebase_mocks.dart";
 import "../../../services/firebase/testing_auth_providers.dart";
-import "../../../services/test_data/firestore_user_mock.dart";
-import "../../../viewmodels/mock_home_view_model.dart";
 
 void main() {
   late FakeFirebaseFirestore fakeFireStore;

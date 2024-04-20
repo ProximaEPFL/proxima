@@ -1,7 +1,7 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/user/user_data.dart";
 
-import "../../../services/test_data/firestore_user_mock.dart";
+import "../../../mocks/firestore_user_mock.dart";
 
 void main() {
   group("User Data testing", () {
