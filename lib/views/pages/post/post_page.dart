@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
+import "package:proxima/views/pages/post/post_page_widget/bottom_bar_add_comment.dart";
 import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.dart";
 import "package:proxima/views/pages/post/post_page_widget/entire_post_widget.dart";
 
@@ -24,30 +25,10 @@ class PostPage extends StatelessWidget {
         child: Wrap(
           runSpacing: 15,
           children: [
-            CommentPostWidget(
-              comment: "This is a comment",
-              posterUsername: "Username",
-            ),
-            CommentPostWidget(
-              comment: "This is a comment",
-              posterUsername: "Username",
-            ),
-            CommentPostWidget(
-              comment: "This is a comment",
-              posterUsername: "Username",
-            ),
-            CommentPostWidget(
-              comment: "This is a comment",
-              posterUsername: "Username",
-            ),
-            CommentPostWidget(
-              comment: "This is a comment",
-              posterUsername: "Username",
-            ),
-            CommentPostWidget(
-              comment: "This is a comment",
-              posterUsername: "Username",
-            ),
+            // CommentPostWidget(
+            //   comment: "This is a mock comment",
+            //   posterUsername: "Comment_poster",
+            // ),
           ],
         ),
       ),
@@ -76,6 +57,17 @@ class PostPage extends StatelessWidget {
           ),
         ),
       ),
+      persistentFooterButtons: [
+        Padding(
+          padding:
+              // This is necessary to prevent the keyboard from covering the bottom bar
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: const BottomBarAddComment(
+            //TODO: Replace with actual username
+            currentDisplayName: "Username",
+          ),
+        ),
+      ],
     );
   }
 }
