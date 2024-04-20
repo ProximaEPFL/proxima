@@ -17,9 +17,9 @@ void main() {
       overrides: firebaseMocksOverrides +
           loggedInUserOverrides +
           mockEmptyHomeViewModelOverride,
-      child: MaterialApp(
+      child: const MaterialApp(
         onGenerateRoute: generateRoute,
-        initialRoute: Routes.createAccount.name,
+        home: CreateAccountPage(),
       ),
     );
   });

@@ -19,9 +19,9 @@ void main() {
   late ProviderScope nonEmptyMockedPage;
 
   setUp(() async {
-    homePageApp = MaterialApp(
+    homePageApp = const MaterialApp(
       onGenerateRoute: generateRoute,
-      initialRoute: Routes.home.name,
+      home: HomePage(),
     );
 
     emptyMockedPage = ProviderScope(
