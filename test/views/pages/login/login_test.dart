@@ -13,10 +13,10 @@ import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 
-import "../services/firebase/setup_firebase_mocks.dart";
-import "../services/firebase/testing_auth_providers.dart";
-import "../services/test_data/firestore_user_mock.dart";
-import "../viewmodels/mock_home_view_model.dart";
+import "../../../services/firebase/setup_firebase_mocks.dart";
+import "../../../services/firebase/testing_auth_providers.dart";
+import "../../../services/test_data/firestore_user_mock.dart";
+import "../../../viewmodels/mock_home_view_model.dart";
 
 void main() {
   const delayNeededForAsyncFunctionExecution = Duration(seconds: 1);

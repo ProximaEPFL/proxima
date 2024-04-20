@@ -12,11 +12,11 @@ import "package:proxima/views/navigation/leading_back_button/leading_back_button
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/new_post/new_post_page.dart";
 
-import "../services/database/mock_post_repository_service.dart";
-import "../services/firebase/setup_firebase_mocks.dart";
-import "../services/firestore/testing_firestore_provider.dart";
-import "../services/mock_geo_location_service.dart";
-import "../services/test_data/firestore_user_mock.dart";
+import "../../../services/database/mock_post_repository_service.dart";
+import "../../../services/firebase/setup_firebase_mocks.dart";
+import "../../../services/firestore/testing_firestore_provider.dart";
+import "../../../services/mock_geo_location_service.dart";
+import "../../../services/test_data/firestore_user_mock.dart";
 
 void main() {
   late MockPostRepositoryService postRepository;

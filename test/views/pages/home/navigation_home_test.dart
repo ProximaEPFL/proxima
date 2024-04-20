@@ -9,8 +9,9 @@ import "package:proxima/views/navigation/leading_back_button/leading_back_button
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/new_post/new_post_page.dart";
-import "../../viewmodels/mock_home_view_model.dart";
-import "../utils/mock_data/mock_posts.dart";
+
+import "../../../mocks/mock_posts.dart";
+import "../../../viewmodels/mock_home_view_model.dart";
 
 void main() {
   late MaterialApp homePageApp;
