@@ -4,6 +4,7 @@ import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/views/home_content/feed/post_card/comment_widget.dart";
 import "package:proxima/views/home_content/feed/post_card/user_bar_widget.dart";
 import "package:proxima/views/home_content/feed/post_card/votes_widget.dart";
+import "package:proxima/views/navigation/routes.dart";
 
 /// This widget is used to display the post card in the home feed.
 /// It contains the post title, description, votes, comments
@@ -23,6 +24,10 @@ class PostCard extends StatelessWidget {
     required this.post,
   });
 
+  void _onPostSelect(BuildContext context, PostOverview post) {
+    Navigator.pushNamed(context, Routes.post.name, arguments: post);
+  }
+
   @override
   Widget build(BuildContext context) {
     final postBottomBar = Padding(
@@ -35,8 +40,7 @@ class PostCard extends StatelessWidget {
             customBorder: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            //TODO: Implement the logic to navigate to the post
-            onTap: () => {},
+            onTap: () => _onPostSelect(context, post),
             child: CommentWidget(
               key: postCardCommentsKey,
               commentNumber: post.commentNumber,
@@ -66,8 +70,7 @@ class PostCard extends StatelessWidget {
       key: postCardKey,
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        //TODO: Implement the logic to navigate to the post
-        onTap: () => {},
+        onTap: () => _onPostSelect(context, post),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
