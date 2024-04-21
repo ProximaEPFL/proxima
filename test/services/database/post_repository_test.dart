@@ -2,7 +2,6 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
-import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/post/post_location_firestore.dart";
@@ -48,19 +47,9 @@ void main() {
       );
     });
 
-    final post = PostFirestore(
-      id: const PostIdFirestore(value: "post_id"),
-      location: const PostLocationFirestore(
-        geoPoint: GeoPoint(40, 20),
-        geohash: "afed",
-      ),
-      data: PostData(
-        ownerId: const UserIdFirestore(value: "owner_id"),
-        title: "post_tiltle",
-        description: "description",
-        publicationTime: Timestamp.fromMillisecondsSinceEpoch(4564654),
-        voteScore: 12,
-      ),
+    final post = MockPostFirestore.createPostAt(
+      MockPostFirestore.generatePostData(1).first,
+      fakeDataPosition1,
     );
 
     test("delete post correctly", () async {

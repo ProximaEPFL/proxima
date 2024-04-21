@@ -7,7 +7,6 @@ import "package:integration_test/integration_test.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/main.dart";
 import "package:proxima/services/database/post_repository_service.dart";
-import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
@@ -28,7 +27,6 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   late FakeFirebaseFirestore fakeFireStore;
-  late UserRepositoryService userRepo;
   late PostRepositoryService postRepo;
 
   MockGeoLocationService geoLocationService = MockGeoLocationService();
@@ -38,7 +36,6 @@ void main() {
     setupFirebaseAuthMocks();
     await Firebase.initializeApp();
     fakeFireStore = FakeFirebaseFirestore();
-    userRepo = UserRepositoryService(firestore: fakeFireStore);
     postRepo = PostRepositoryService(firestore: fakeFireStore);
 
     when(geoLocationService.getCurrentPosition()).thenAnswer(
