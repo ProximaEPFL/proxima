@@ -1,5 +1,6 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
+import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/main.dart";
@@ -7,6 +8,7 @@ import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
+import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
@@ -23,16 +25,25 @@ void main() {
   late FakeFirebaseFirestore fakeFireStore;
   late CollectionReference<Map<String, dynamic>> userCollection;
   late UserRepositoryService userRepo;
-  late ProviderScope mockedProxima;
+  late ProviderScope mockedLoginPage;
 
   setUp(() async {
     setupFirebaseAuthMocks();
     fakeFireStore = FakeFirebaseFirestore();
     userCollection = fakeFireStore.collection(UserFirestore.collectionName);
-
-    mockedProxima = ProviderScope(
-      overrides: firebaseAuthMocksOverrides + mockEmptyHomeViewModelOverride,
-      child: const ProximaApp(),
+    userRepo = UserRepositoryService(
+      firestore: fakeFireStore,
+    );
+    mockedLoginPage = ProviderScope(
+      overrides: [
+            ...firebaseAuthMocksOverrides,
+            userRepositoryProvider.overrideWithValue(userRepo),
+          ] +
+          mockEmptyHomeViewModelOverride,
+      child: const MaterialApp(
+        onGenerateRoute: generateRoute,
+        home: LoginPage(),
+      ),
     );
   });
 
@@ -52,7 +63,7 @@ void main() {
 
   group("Widgets display", () {
     testWidgets("Display logo, slogan and login button", (tester) async {
-      await tester.pumpWidget(mockedProxima);
+      await tester.pumpWidget(mockedLoginPage);
       await tester.pumpAndSettle();
 
       // Check for the logo on the Login Page
@@ -87,7 +98,7 @@ void main() {
     });
 
     testWidgets("Login flow to HomePage", (tester) async {
-      await tester.pumpWidget(mockedProxima);
+      await tester.pumpWidget(mockedLoginPage);
       await tester.pumpAndSettle();
 
       final loginButton = find.byKey(LoginButton.loginButtonKey);
@@ -103,7 +114,7 @@ void main() {
 
   group("Non existing user data in repository testing", () {
     testWidgets("Login flow to CreateAccount and log out", (tester) async {
-      await tester.pumpWidget(mockedProxima);
+      await tester.pumpWidget(mockedLoginPage);
       await tester.pumpAndSettle();
 
       final loginButton = find.byKey(LoginButton.loginButtonKey);
@@ -124,7 +135,7 @@ void main() {
     });
 
     testWidgets("Login flow to HomePage and log out", (tester) async {
-      await tester.pumpWidget(mockedProxima);
+      await tester.pumpWidget(mockedLoginPage);
       await tester.pumpAndSettle();
 
       final loginButton = find.byKey(LoginButton.loginButtonKey);
