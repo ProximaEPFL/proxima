@@ -5,8 +5,8 @@ import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 
-import "../overrides/mock_auth_providers.dart";
-import "../overrides/mock_home_view_model.dart";
+import "../overrides/override_auth_providers.dart";
+import "../overrides/override_home_view_model.dart";
 
 ProviderScope loginPageProvider(FakeFirebaseFirestore fakeFireStore) {
   final userRepo = UserRepositoryService(firestore: fakeFireStore);
