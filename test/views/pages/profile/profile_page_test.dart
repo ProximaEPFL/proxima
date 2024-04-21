@@ -3,7 +3,6 @@ import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
-import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_badge.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_comment.dart";
@@ -22,7 +21,6 @@ import "../../../mocks/services/setup_firebase_mocks.dart";
 void main() {
   late FakeFirebaseFirestore fakeFireStore;
   late CollectionReference<Map<String, dynamic>> userCollection;
-  late UserRepositoryService userRepo;
   late ProviderScope mockedProfilePage;
 
   final expectedUser = testingUserFirestore;

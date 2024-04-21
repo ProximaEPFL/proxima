@@ -28,8 +28,10 @@ List<GeoPoint> generatePositions(
   double userLongitude = userPosition.longitude;
 
   final postInRange = List.generate(inRange, (i) {
-    return GeoPoint(userLatitude + 0.0001 + (i % 7) * 0.0001,
-        userLongitude + 0.0001 + (i % 7) * 0.0001);
+    return GeoPoint(
+      userLatitude + 0.0001 + (i % 7) * 0.0001,
+      userLongitude + 0.0001 + (i % 7) * 0.0001,
+    );
   });
 
   // Generate post positions that are not in the range.
@@ -37,8 +39,10 @@ List<GeoPoint> generatePositions(
   // latitude 0.0006 and longitude 0.0006 is about 0.11 km.
   final postsNotInRange = List.generate(outRange, (i) {
     i = i + 7; // makes it out of range
-    return GeoPoint(userLatitude + 0.0001 + i * 0.0001,
-        userLongitude + 0.0001 + i * 0.0001);
+    return GeoPoint(
+      userLatitude + 0.0001 + i * 0.0001,
+      userLongitude + 0.0001 + i * 0.0001,
+    );
   });
 
   return [...postInRange, ...postsNotInRange];
