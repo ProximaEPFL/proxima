@@ -1,18 +1,23 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 
 /// This viewmodel is used to fetch the list of posts that are displayed in the home feed.
-/// It fetches the posts from the database and returns a list of [PostOverview] objects to be displayed.
-class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
+/// It fetches the posts from the database and returns a list of
+/// (postId: [PostIdFirestore], postOverview: [PostOverview]) objects to be displayed.
+/// These represent the overview data to be displayed associated to the corresponding post id.
+class HomeViewModel extends AsyncNotifier<
+    List<({PostIdFirestore postId, PostOverview postOverview})>> {
   HomeViewModel();
 
   static const kmPostRadius = 0.1;
 
   @override
-  Future<List<PostOverview>> build() async {
+  Future<List<({PostIdFirestore postId, PostOverview postOverview})>>
+      build() async {
     final geoLocationService = ref.watch(geoLocationServiceProvider);
     final postRepository = ref.watch(postRepositoryProvider);
     final userRepository = ref.watch(userRepositoryProvider);
@@ -29,7 +34,8 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
       postOwnersId.map((userId) => userRepository.getUser(userId)),
     );
 
-    final posts = postsFirestore.map((post) {
+    final posts = postsFirestore
+        .map<({PostIdFirestore postId, PostOverview postOverview})>((post) {
       final owner = postOwners.firstWhere(
         (user) => user.uid == post.data.ownerId,
         // This should never be executed in practice as if the owner is not found,
@@ -37,7 +43,7 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
         orElse: () => throw Exception("Owner not found"),
       );
 
-      return PostOverview(
+      final postOverview = PostOverview(
         title: post.data.title,
         description: post.data.description,
         voteScore: post.data.voteScore,
@@ -45,6 +51,8 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
         commentNumber:
             0, // TODO: Update appropriately when comments are implemented
       );
+
+      return (postId: post.id, postOverview: postOverview);
     }).toList();
 
     return posts;
@@ -59,7 +67,7 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
   }
 }
 
-final postOverviewProvider =
-    AsyncNotifierProvider<HomeViewModel, List<PostOverview>>(
+final postOverviewProvider = AsyncNotifierProvider<HomeViewModel,
+    List<({PostIdFirestore postId, PostOverview postOverview})>>(
   () => HomeViewModel(),
 );

@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
@@ -104,7 +105,7 @@ class PostList extends StatelessWidget {
     required this.onRefresh,
   });
 
-  final List<PostOverview> posts;
+  final List<({PostIdFirestore postId, PostOverview postOverview})> posts;
   final Future<void> Function() onRefresh;
 
   @override
@@ -113,7 +114,14 @@ class PostList extends StatelessWidget {
       onRefresh: onRefresh,
       child: ListView(
         key: homeFeedKey,
-        children: posts.map((post) => PostCard(post: post)).toList(),
+        children: posts
+            .map(
+              (post) => PostCard(
+                postOverview: post.postOverview,
+                postId: post.postId,
+              ),
+            )
+            .toList(),
       ),
     );
   }

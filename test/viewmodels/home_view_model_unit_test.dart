@@ -83,12 +83,15 @@ void main() {
       );
 
       final expectedPosts = [
-        PostOverview(
-          title: post.data.title,
-          description: post.data.description,
-          voteScore: post.data.voteScore,
-          commentNumber: 0,
-          ownerDisplayName: owner.data.displayName,
+        (
+          postId: post.id,
+          postOverview: PostOverview(
+            title: post.data.title,
+            description: post.data.description,
+            voteScore: post.data.voteScore,
+            commentNumber: 0,
+            ownerDisplayName: owner.data.displayName,
+          )
         ),
       ];
 
@@ -129,15 +132,18 @@ void main() {
           return MockPostFirestore.createPostAt(data, point);
         }).toList();
 
-        final expectedPosts = postsData.map((data) {
-          return PostOverview(
-            title: data.title,
-            description: data.description,
-            voteScore: data.voteScore,
+        final expectedPosts = posts.map((post) {
+          final postId = post.id;
+          final postOverview = PostOverview(
+            title: post.data.title,
+            description: post.data.description,
+            voteScore: post.data.voteScore,
             commentNumber: 0,
             ownerDisplayName: owner.data.displayName,
           );
-        }).toList();
+
+          return (postId: postId, postOverview: postOverview);
+        });
 
         // Mock the repository calls
         when(userRepository.getUser(posts[0].data.ownerId)).thenAnswer(
@@ -181,17 +187,18 @@ void main() {
           return MockPostFirestore.createPostAt(data, point);
         }).toList();
 
-        final expectedPosts = postsData.mapIndexed(
-          (index, data) {
-            return PostOverview(
-              title: data.title,
-              description: data.description,
-              voteScore: data.voteScore,
-              commentNumber: 0,
-              ownerDisplayName: owners[index].data.displayName,
-            );
-          },
-        );
+        final expectedPosts = posts.mapIndexed((index, element) {
+          final postId = element.id;
+          final postOverview = PostOverview(
+            title: element.data.title,
+            description: element.data.description,
+            voteScore: element.data.voteScore,
+            commentNumber: 0,
+            ownerDisplayName: owners[index].data.displayName,
+          );
+
+          return (postId: postId, postOverview: postOverview);
+        });
 
         // Mock the repository calls
         for (var i = 0; i < numberOfPosts; i++) {
@@ -245,12 +252,15 @@ void main() {
       final post = MockPostFirestore.createPostAt(postData, point);
 
       final expectedPosts = [
-        PostOverview(
-          title: post.data.title,
-          description: post.data.description,
-          voteScore: post.data.voteScore,
-          commentNumber: 0,
-          ownerDisplayName: owner.data.displayName,
+        (
+          postId: post.id,
+          postOverview: PostOverview(
+            title: post.data.title,
+            description: post.data.description,
+            voteScore: post.data.voteScore,
+            commentNumber: 0,
+            ownerDisplayName: owner.data.displayName,
+          )
         ),
       ];
 

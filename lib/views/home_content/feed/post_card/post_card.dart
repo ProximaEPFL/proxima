@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
 
 import "package:proxima/views/home_content/feed/post_card/comment_widget.dart";
@@ -16,11 +17,13 @@ class PostCard extends StatelessWidget {
   static const postCardCommentsKey = Key("postCardComments");
   static const postCardUserKey = Key("postCardUser");
 
-  final PostOverview post;
+  final PostOverview postOverview;
+  final PostIdFirestore postId;
 
   const PostCard({
     super.key,
-    required this.post,
+    required this.postOverview,
+    required this.postId,
   });
 
   @override
@@ -30,7 +33,11 @@ class PostCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          VotesWidget(key: postCardVotesKey, votes: post.voteScore),
+          VotesWidget(
+            key: postCardVotesKey,
+            votes: postOverview.voteScore,
+            postId: postId,
+          ),
           InkWell(
             customBorder: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -39,7 +46,7 @@ class PostCard extends StatelessWidget {
             onTap: () => {},
             child: CommentWidget(
               key: postCardCommentsKey,
-              commentNumber: post.commentNumber,
+              commentNumber: postOverview.commentNumber,
             ),
           ),
         ],
@@ -49,13 +56,13 @@ class PostCard extends StatelessWidget {
     final postBody = ListTile(
       title: Text(
         key: postCardTitleKey,
-        post.title,
+        postOverview.title,
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
       ),
       subtitle: Text(
         key: postCardDescriptionKey,
-        post.description,
+        postOverview.description,
         overflow: TextOverflow.ellipsis,
         maxLines: 7,
       ),
@@ -75,7 +82,7 @@ class PostCard extends StatelessWidget {
               padding: const EdgeInsets.only(left: 16, right: 0.8, top: 8),
               child: UserBarWidget(
                 key: postCardUserKey,
-                posterUsername: post.ownerDisplayName,
+                posterUsername: postOverview.ownerDisplayName,
               ),
             ),
             postBody,

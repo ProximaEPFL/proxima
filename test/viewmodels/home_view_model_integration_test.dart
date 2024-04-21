@@ -95,19 +95,22 @@ void main() {
       const postPosition =
           GeoPoint(0.0001, 0); // This is < 0.1 km away from the (0,0)
 
-      await postRepo.addPost(
+      final postId = await postRepo.addPost(
         postData,
         postPosition,
       );
 
       // Get the expected post overview
       final expectedPosts = [
-        PostOverview(
-          title: postData.title,
-          description: postData.description,
-          voteScore: postData.voteScore,
-          ownerDisplayName: owner.data.displayName,
-          commentNumber: 0,
+        (
+          postId: postId,
+          postOverview: PostOverview(
+            title: postData.title,
+            description: postData.description,
+            voteScore: postData.voteScore,
+            ownerDisplayName: owner.data.displayName,
+            commentNumber: 0,
+          )
         ),
       ];
 
@@ -170,28 +173,36 @@ void main() {
         nbPosts - nbPostsInRange,
       );
 
+      final postIds = [];
+
       // Add the posts to the database
       for (var i = 0; i < postDatas.length; i++) {
-        await postRepo.addPost(
+        final postId = await postRepo.addPost(
           postDatas[i],
           postPositions[i],
         );
+
+        postIds.add(postId);
       }
 
       // Get the expected post overviews
-      final expectedPosts = postDatas.getRange(0, nbPostsInRange).map((data) {
+      final expectedPosts =
+          postDatas.getRange(0, nbPostsInRange).mapIndexed((index, data) {
         final owner = owners.firstWhere(
           (user) => user.uid == data.ownerId,
           orElse: () => throw Exception("Owner not found"), // Should not happen
         );
 
-        return PostOverview(
+        final postId = postIds[index];
+        final postOverview = PostOverview(
           title: data.title,
           description: data.description,
           voteScore: data.voteScore,
           ownerDisplayName: owner.data.displayName,
           commentNumber: 0,
         );
+
+        return (postId: postId, postOverview: postOverview);
       }).toList();
 
       final actualPosts = await container.read(postOverviewProvider.future);
