@@ -11,6 +11,7 @@ import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:test/test.dart";
 
+import "../mocks/data/mock_position.dart";
 import "../mocks/data/mock_user_data.dart";
 import "../mocks/mock_geo_location_service.dart";
 import "../mocks/mock_post_data.dart";
@@ -163,18 +164,11 @@ void main() {
 
       // The 6 first posts are under 100m away from the user and are the ones expected
       const nbPostsInRange = 6;
-      final postInRange = List.generate(nbPostsInRange, (i) {
-        return GeoPoint(0.0001 + i * 0.0001, 0.0001 + i * 0.0001);
-      });
-
-      // Generate post positions that are not in the range.
-      // The distance between [userPosition = GeoPoint(0, 0)] and a GetPoint at
-      // latitude 0.0006 and longitude 0.0006 is about 0.11 km.
-      final postsNotInRange = List.generate(nbPosts - nbPostsInRange, (i) {
-        i = i + nbPostsInRange;
-        return GeoPoint(0.0001 + i * 0.0001, 0.0001 + i * 0.0001);
-      });
-      final postPositions = [...postInRange, ...postsNotInRange];
+      final postPositions = generatePositions(
+        userPosition0,
+        nbPostsInRange,
+        nbPosts - nbPostsInRange,
+      );
 
       // Add the posts to the database
       for (var i = 0; i < postDatas.length; i++) {
