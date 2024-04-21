@@ -78,6 +78,7 @@ void main() {
     });
 
     test("get single near post correctly", () async {
+      // TODO: put all geopoints in this test file in mocks
       const userPosition = GeoPoint(40, 20);
       const postPoint = GeoPoint(40.0001, 20.0001); // 14m away
 
@@ -107,10 +108,10 @@ void main() {
     });
 
     test("post on edge (inside) is queried", () async {
-      const userPosition = GeoPoint(41, 52);
+      const userPosition = GeoPoint(40, 20);
       const postPoint = GeoPoint(
-        40.999999993872564,
-        52.001188563379976 - 1e-5,
+        39.999999993872564,
+        20.001188563379976 - 1e-5,
       ); // just below 100m away
 
       final postData = MockPostFirestore.generatePostData(1).first;
@@ -124,10 +125,10 @@ void main() {
     });
 
     test("post on edge (outside) is not queried", () async {
-      const userPosition = GeoPoint(41, 52);
+      const userPosition = GeoPoint(40, 20);
       const postPoint = GeoPoint(
-        40.999999993872564,
-        52.001188563379976 + 1e-5,
+        39.999999993872564,
+        20.001188563379976 + 1e-5,
       ); // just above 100m away
 
       final postData = MockPostFirestore.generatePostData(1).first;
