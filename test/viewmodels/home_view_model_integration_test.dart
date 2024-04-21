@@ -11,9 +11,9 @@ import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:test/test.dart";
 
+import "../mocks/data/mock_user_data.dart";
 import "../mocks/mock_geo_location_service.dart";
 import "../mocks/mock_post_data.dart";
-import "../mocks/mock_user_data.dart";
 
 void main() {
   // This aims to test the [postOverviewProvider] with the real implementation
@@ -82,7 +82,8 @@ void main() {
       // Add the post to the database
       final postData = MockPostFirestore.generatePostData(1).map((postData) {
         return PostData(
-          ownerId: owner.uid, // Map to the owner
+          ownerId: owner.uid,
+          // Map to the owner
           title: postData.title,
           description: postData.description,
           publicationTime: postData.publicationTime,
@@ -150,7 +151,8 @@ void main() {
       final postDatas = MockPostFirestore.generatePostData(nbPosts)
           .mapIndexed(
             (index, element) => PostData(
-              ownerId: owners[index % nbOwners].uid, // Map to an owner
+              ownerId: owners[index % nbOwners].uid,
+              // Map to an owner
               title: element.title,
               description: element.description,
               publicationTime: element.publicationTime,

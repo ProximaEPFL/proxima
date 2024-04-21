@@ -2,7 +2,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 
-import "mock_post_overview.dart";
+import "data/mock_post_overview.dart";
 
 /// A mock implementation of the [HomeViewModel] class.
 /// This class is particularly useful for the UI tests where we want to expose

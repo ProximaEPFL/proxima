@@ -6,6 +6,7 @@ import "package:proxima/models/database/user/user_id_firestore.dart";
 void main() {
   group("Post Data testing", () {
     test("hash overrides correctly", () {
+      //TODO: moves this mock to package
       final data = PostData(
         ownerId: const UserIdFirestore(value: "owner_id"),
         title: "post_tiltle",
