@@ -10,17 +10,17 @@ const homePageApp = MaterialApp(
   home: HomePage(),
 );
 
-final mockedEmptyHomePage = ProviderScope(
+final emptyHomePageProvider = ProviderScope(
   overrides: mockEmptyHomeViewModelOverride,
   child: homePageApp,
 );
 
-final mockedNonEmptyHomePage = ProviderScope(
+final nonEmptyHomePageProvider = ProviderScope(
   overrides: mockNonEmptyHomeViewModelOverride,
   child: homePageApp,
 );
 
-final mockedLoadingHomePage = ProviderScope(
+final loadingHomePageProvider = ProviderScope(
   overrides: mockLoadingHomeViewModelOverride,
   child: homePageApp,
 );

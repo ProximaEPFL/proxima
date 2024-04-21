@@ -1,47 +1,30 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/services/database/post_repository_service.dart";
-import "package:proxima/services/geolocation_service.dart";
-import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
-import "package:proxima/views/pages/new_post/new_post_page.dart";
 
 import "../../../mocks/data/mock_firestore_user.dart";
+import "../../../mocks/providers/provider_new_post_page.dart";
 import "../../../mocks/services/mock_geo_location_service.dart";
 import "../../../mocks/services/mock_post_repository_service.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
-import "../../../services/firestore/testing_firestore_provider.dart";
 
 void main() {
+  late ProviderScope mockedNewPostPage;
   late MockPostRepositoryService postRepository;
   late MockGeoLocationService geoLocationService;
-  late ProviderScope mockedNewPostPage;
 
   const timeDeltaMils = 500;
 
   setUp(() async {
     setupFirebaseAuthMocks();
-
     postRepository = MockPostRepositoryService();
     geoLocationService = MockGeoLocationService();
-
-    mockedNewPostPage = ProviderScope(
-      overrides: [
-        ...firebaseMocksOverrides,
-        postRepositoryProvider.overrideWithValue(postRepository),
-        geoLocationServiceProvider.overrideWithValue(geoLocationService),
-        uidProvider.overrideWithValue(testingUserFirestoreId),
-      ],
-      child: const MaterialApp(
-        home: NewPostPage(),
-      ),
-    );
+    mockedNewPostPage = newPostPageProvider(postRepository, geoLocationService);
   });
 
   group("Widgets display", () {

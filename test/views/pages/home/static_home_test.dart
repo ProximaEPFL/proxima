@@ -9,7 +9,7 @@ import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 
 import "../../../mocks/data/mock_post_overview.dart";
-import "../../../mocks/pages/mock_homepage.dart";
+import "../../../mocks/providers/provider_homepage.dart";
 
 void main() {
   late ProviderScope nonEmptyHomePageWidget;
@@ -17,10 +17,10 @@ void main() {
   late ProviderScope loadingHomePageWidget;
 
   setUp(() async {
-    nonEmptyHomePageWidget = mockedNonEmptyHomePage;
-    emptyHomePageWidget = mockedEmptyHomePage;
+    nonEmptyHomePageWidget = nonEmptyHomePageProvider;
+    emptyHomePageWidget = emptyHomePageProvider;
 
-    loadingHomePageWidget = mockedLoadingHomePage;
+    loadingHomePageWidget = loadingHomePageProvider;
   });
 
   group("Widgets display", () {

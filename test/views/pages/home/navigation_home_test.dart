@@ -8,15 +8,15 @@ import "package:proxima/views/navigation/leading_back_button/leading_back_button
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/new_post/new_post_page.dart";
 
-import "../../../mocks/pages/mock_homepage.dart";
+import "../../../mocks/providers/provider_homepage.dart";
 
 void main() {
   late ProviderScope emptyHomePageWidget;
   late ProviderScope nonEmptyHomePageWidget;
 
   setUp(() async {
-    emptyHomePageWidget = mockedEmptyHomePage;
-    nonEmptyHomePageWidget = mockedNonEmptyHomePage;
+    emptyHomePageWidget = emptyHomePageProvider;
+    nonEmptyHomePageWidget = nonEmptyHomePageProvider;
   });
 
   group("Post creation flow", () {

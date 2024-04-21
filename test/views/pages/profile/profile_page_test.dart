@@ -1,12 +1,9 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
-import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/services/database/user_repository_service.dart";
-import "package:proxima/services/login_service.dart";
-import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_badge.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_comment.dart";
@@ -18,8 +15,8 @@ import "package:proxima/views/pages/profile/profile_page.dart";
 import "package:proxima/views/pages/profile/user_info/user_account.dart";
 
 import "../../../mocks/data/mock_firestore_user.dart";
-import "../../../mocks/overrides/mock_auth_providers.dart";
-import "../../../mocks/pages/mock_homepage.dart";
+import "../../../mocks/providers/provider_homepage.dart";
+import "../../../mocks/providers/provider_profile_page.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
 
 void main() {
@@ -34,23 +31,13 @@ void main() {
     setupFirebaseAuthMocks();
     fakeFireStore = FakeFirebaseFirestore();
     userCollection = fakeFireStore.collection(UserFirestore.collectionName);
-    userRepo = UserRepositoryService(
-      firestore: fakeFireStore,
-    );
+
     await userCollection
         .doc(expectedUser.uid.value)
         .set(expectedUser.data.toDbData());
 
-    mockedProfilePage = ProviderScope(
-      overrides: [
-        firebaseAuthProvider.overrideWith(mockFirebaseAuthSignedIn),
-        userRepositoryProvider.overrideWithValue(userRepo),
-      ],
-      child: const MaterialApp(
-        onGenerateRoute: generateRoute,
-        title: "Profile page",
-        home: ProfilePage(),
-      ),
+    mockedProfilePage = profilePageProvider(
+      fakeFireStore,
     );
   });
 
@@ -210,7 +197,7 @@ void main() {
 
   group("Navigation", () {
     testWidgets("Navigate from overview to profile page", (tester) async {
-      final homePageWidget = mockedEmptyHomePage;
+      final homePageWidget = emptyHomePageProvider;
       await tester.pumpWidget(homePageWidget);
       await tester.pumpAndSettle();
 

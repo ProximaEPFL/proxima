@@ -1,12 +1,9 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
-import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
-import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
-import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
@@ -14,35 +11,20 @@ import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 
 import "../../../mocks/data/mock_firestore_user.dart";
-import "../../../mocks/overrides/mock_auth_providers.dart";
-import "../../../mocks/overrides/mock_home_view_model.dart";
+import "../../../mocks/providers/provider_login_page.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
 
 void main() {
   const delayNeededForAsyncFunctionExecution = Duration(seconds: 1);
   late FakeFirebaseFirestore fakeFireStore;
   late CollectionReference<Map<String, dynamic>> userCollection;
-  late UserRepositoryService userRepo;
   late ProviderScope mockedLoginPage;
 
   setUp(() async {
     setupFirebaseAuthMocks();
     fakeFireStore = FakeFirebaseFirestore();
     userCollection = fakeFireStore.collection(UserFirestore.collectionName);
-    userRepo = UserRepositoryService(
-      firestore: fakeFireStore,
-    );
-    mockedLoginPage = ProviderScope(
-      overrides: [
-            ...firebaseAuthMocksOverrides,
-            userRepositoryProvider.overrideWithValue(userRepo),
-          ] +
-          mockEmptyHomeViewModelOverride,
-      child: const MaterialApp(
-        onGenerateRoute: generateRoute,
-        home: LoginPage(),
-      ),
-    );
+    mockedLoginPage = loginPageProvider(fakeFireStore);
   });
 
   Future<void> enterPseudoAndUsername(WidgetTester tester) async {
