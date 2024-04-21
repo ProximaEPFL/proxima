@@ -13,9 +13,9 @@ import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/new_post/new_post_page.dart";
 
 import "../../../mocks/data/mock_firestore_user.dart";
-import "../../../mocks/mock_geo_location_service.dart";
-import "../../../mocks/mock_post_repository_service.dart";
-import "../../../mocks/setup_firebase_mocks.dart";
+import "../../../mocks/services/mock_geo_location_service.dart";
+import "../../../mocks/services/mock_post_repository_service.dart";
+import "../../../mocks/services/setup_firebase_mocks.dart";
 import "../../../services/firestore/testing_firestore_provider.dart";
 
 void main() {

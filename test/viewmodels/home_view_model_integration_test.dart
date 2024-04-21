@@ -12,9 +12,9 @@ import "package:proxima/viewmodels/home_view_model.dart";
 import "package:test/test.dart";
 
 import "../mocks/data/mock_position.dart";
+import "../mocks/data/mock_post_data.dart";
 import "../mocks/data/mock_user_data.dart";
-import "../mocks/mock_geo_location_service.dart";
-import "../mocks/mock_post_data.dart";
+import "../mocks/services/mock_geo_location_service.dart";
 
 void main() {
   // This aims to test the [postOverviewProvider] with the real implementation

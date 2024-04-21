@@ -5,7 +5,7 @@ import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 
-import "../../mocks/mock_home_view_model.dart";
+import "../../mocks/overrides/mock_home_view_model.dart";
 import "../../services/firebase/testing_auth_providers.dart";
 import "../../services/firestore/testing_firestore_provider.dart";
 

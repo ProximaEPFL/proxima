@@ -4,7 +4,7 @@ import "package:mockito/mockito.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:test/test.dart";
 
-import "../mocks/mock_geolocator_platform.dart";
+import "../mocks/services/mock_geolocator_platform.dart";
 
 void main() {
   group("GeoLocationService", () {

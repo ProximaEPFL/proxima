@@ -18,9 +18,9 @@ import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
-import "../test/mocks/mock_geo_location_service.dart";
-import "../test/mocks/overrides/override_user_repo.dart";
-import "../test/mocks/setup_firebase_mocks.dart";
+import "../test/mocks/overrides/mock_user_repo.dart";
+import "../test/mocks/services/mock_geo_location_service.dart";
+import "../test/mocks/services/setup_firebase_mocks.dart";
 import "../test/services/firebase/testing_auth_providers.dart";
 
 void main() {
