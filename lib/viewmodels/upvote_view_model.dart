@@ -8,8 +8,8 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/post_upvote_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
-class UpVoteViewModel
-    extends FamilyAsyncNotifier<PostVote, ({PostIdFirestore postId})> {
+class UpVoteViewModel extends AutoDisposeFamilyAsyncNotifier<PostVote,
+    ({PostIdFirestore postId})> {
   @override
   FutureOr<PostVote> build(({PostIdFirestore postId}) arg) async {
     final postId = arg.postId;
@@ -67,7 +67,7 @@ class UpVoteViewModel
   }
 }
 
-final upvoteStateProvider = AsyncNotifierProvider.family<UpVoteViewModel,
-    PostVote, ({PostIdFirestore postId})>(
+final upvoteStateProvider = AsyncNotifierProvider.autoDispose
+    .family<UpVoteViewModel, PostVote, ({PostIdFirestore postId})>(
   UpVoteViewModel.new,
 );
