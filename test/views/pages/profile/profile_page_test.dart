@@ -6,9 +6,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/login_service.dart";
-import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
-import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_badge.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_comment.dart";
@@ -20,7 +18,7 @@ import "package:proxima/views/pages/profile/profile_page.dart";
 import "package:proxima/views/pages/profile/user_info/user_account.dart";
 
 import "../../../mocks/firestore_user_mock.dart";
-import "../../../mocks/mock_home_view_model.dart";
+import "../../../mocks/pages/mock_homepage.dart";
 import "../../../mocks/setup_firebase_mocks.dart";
 import "../../../services/firebase/testing_auth_providers.dart";
 
@@ -212,19 +210,7 @@ void main() {
 
   group("Navigation", () {
     testWidgets("Navigate from overview to profile page", (tester) async {
-      final homePageWidget = ProviderScope(
-        overrides: [
-          postOverviewProvider.overrideWith(
-            () => MockHomeViewModel(),
-          ),
-        ],
-        child: const MaterialApp(
-          onGenerateRoute: generateRoute,
-          title: "Proxima",
-          home: HomePage(),
-        ),
-      );
-
+      final homePageWidget = mockedEmptyHomePage;
       await tester.pumpWidget(homePageWidget);
       await tester.pumpAndSettle();
 

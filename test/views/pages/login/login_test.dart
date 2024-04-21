@@ -29,17 +29,9 @@ void main() {
     setupFirebaseAuthMocks();
     fakeFireStore = FakeFirebaseFirestore();
     userCollection = fakeFireStore.collection(UserFirestore.collectionName);
-    userRepo = UserRepositoryService(
-      firestore: fakeFireStore,
-    );
+
     mockedProxima = ProviderScope(
-      overrides: [
-        ...firebaseAuthMocksOverrides,
-        userRepositoryProvider.overrideWithValue(userRepo),
-        postOverviewProvider.overrideWith(
-          () => MockHomeViewModel(),
-        ),
-      ],
+      overrides: firebaseAuthMocksOverrides + mockEmptyHomeViewModelOverride,
       child: const ProximaApp(),
     );
   });
