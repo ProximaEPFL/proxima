@@ -5,16 +5,11 @@ import "package:proxima/models/database/vote/upvote_state.dart";
 class PostVote {
   final UpvoteState upvoteState;
 
-  // This represents the value that needs to be added in order to get the right
-  // vote score of the post after the user has performed an up/downvote action.
-  // This is used to update the vote score of the post in the UI without querying
-  // the post document from the database.
-  // This allows for a more responsive UI while limiting interaction with the database.
-  final int incrementToBaseState;
+  final int votes;
 
   const PostVote({
     required this.upvoteState,
-    required this.incrementToBaseState,
+    required this.votes,
   });
 
   @override
@@ -23,9 +18,9 @@ class PostVote {
 
     return other is PostVote &&
         other.upvoteState == upvoteState &&
-        other.incrementToBaseState == incrementToBaseState;
+        other.votes == votes;
   }
 
   @override
-  int get hashCode => Object.hash(upvoteState, incrementToBaseState);
+  int get hashCode => Object.hash(upvoteState, votes);
 }

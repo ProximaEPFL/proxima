@@ -7,20 +7,19 @@ import "package:proxima/viewmodels/upvote_view_model.dart";
 /// This widget is used to display the votes of a post.
 /// It contains two buttons to upvote and downvote the post and the number of votes.
 class VotesWidget extends HookConsumerWidget {
-  final int votes;
+  final int initalVotes;
   final PostIdFirestore postId;
 
   const VotesWidget({
     super.key,
-    required this.votes,
+    required this.initalVotes,
     required this.postId,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncPostVote = ref.watch(upvoteStateProvider((postId: postId)));
-    final incrementToBase =
-        asyncPostVote.valueOrNull?.incrementToBaseState ?? 0;
+    final votes = asyncPostVote.valueOrNull?.votes ?? 0;
     final upvoteState =
         asyncPostVote.valueOrNull?.upvoteState ?? UpvoteState.none;
 
@@ -61,7 +60,7 @@ class VotesWidget extends HookConsumerWidget {
 
     final voteCount = Padding(
       padding: const EdgeInsets.only(left: 8, right: 8),
-      child: Text(_votesString(votes + incrementToBase)),
+      child: Text(_votesString(votes)),
     );
 
     return Container(

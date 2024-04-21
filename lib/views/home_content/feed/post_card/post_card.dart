@@ -35,7 +35,6 @@ class PostCard extends StatelessWidget {
         children: [
           VotesWidget(
             key: postCardVotesKey,
-            votes: postOverview.voteScore,
             postId: postId,
           ),
           InkWell(

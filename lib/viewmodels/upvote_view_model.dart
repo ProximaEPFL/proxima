@@ -4,6 +4,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/vote/upvote_state.dart";
 import "package:proxima/models/ui/post_vote.dart";
+import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/post_upvote_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
@@ -16,15 +17,20 @@ class UpVoteViewModel
     if (uid == null) {
       return const PostVote(
         upvoteState: UpvoteState.none,
-        incrementToBaseState: 0,
+        votes: 0,
       );
     }
 
     final voteRepository = ref.watch(postUpvoteRepositoryProvider);
+    final postRepository = ref.watch(postRepositoryProvider);
 
+    final post = await postRepository.getPost(postId);
     final upvoteState = await voteRepository.getUpvoteState(uid, postId);
 
-    return PostVote(upvoteState: upvoteState, incrementToBaseState: 0);
+    return PostVote(
+      upvoteState: upvoteState,
+      votes: post.data.voteScore,
+    );
   }
 
   Future<void> triggerUpVote() => _triggerVote(UpvoteState.upvoted);
@@ -47,14 +53,13 @@ class UpVoteViewModel
         ? UpvoteState.none
         : selectedUpVoteState;
 
-    final newIncrementToBase = currPostVote.incrementToBaseState +
-        newVoteState.increment -
-        currUpVoteState.increment;
+    final newVotes =
+        currPostVote.votes + newVoteState.increment - currUpVoteState.increment;
 
     state = AsyncData(
       PostVote(
         upvoteState: newVoteState,
-        incrementToBaseState: newIncrementToBase,
+        votes: newVotes,
       ),
     );
 
@@ -63,4 +68,6 @@ class UpVoteViewModel
 }
 
 final upvoteStateProvider = AsyncNotifierProvider.family<UpVoteViewModel,
-    PostVote, ({PostIdFirestore postId})>(UpVoteViewModel.new);
+    PostVote, ({PostIdFirestore postId})>(
+  UpVoteViewModel.new,
+);
