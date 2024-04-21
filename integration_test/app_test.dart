@@ -7,6 +7,7 @@ import "package:integration_test/integration_test.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/main.dart";
 import "package:proxima/services/database/post_repository_service.dart";
+import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
@@ -18,16 +19,16 @@ import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
-import "../test/mocks/overrides/mock_user_repo.dart";
+import "../test/mocks/overrides/mock_auth_providers.dart";
 import "../test/mocks/services/mock_geo_location_service.dart";
 import "../test/mocks/services/setup_firebase_mocks.dart";
-import "../test/services/firebase/testing_auth_providers.dart";
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   late FakeFirebaseFirestore fakeFireStore;
   late PostRepositoryService postRepo;
+  late UserRepositoryService userRepo;
 
   MockGeoLocationService geoLocationService = MockGeoLocationService();
   const GeoPoint testLocation = GeoPoint(0, 0);
@@ -37,7 +38,9 @@ void main() {
     await Firebase.initializeApp();
     fakeFireStore = FakeFirebaseFirestore();
     postRepo = PostRepositoryService(firestore: fakeFireStore);
-
+    userRepo = UserRepositoryService(
+      firestore: fakeFireStore,
+    );
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) => Future.value(testLocation),
     );
@@ -50,7 +53,7 @@ void main() {
       ProviderScope(
         overrides: [
           ...firebaseAuthMocksOverrides,
-          userRepoOverride,
+          userRepositoryProvider.overrideWithValue(userRepo),
           geoLocationServiceProvider.overrideWithValue(geoLocationService),
           postRepositoryProvider.overrideWithValue(postRepo),
         ],

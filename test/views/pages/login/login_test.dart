@@ -14,9 +14,9 @@ import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 
 import "../../../mocks/data/mock_firestore_user.dart";
+import "../../../mocks/overrides/mock_auth_providers.dart";
 import "../../../mocks/overrides/mock_home_view_model.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
-import "../../../services/firebase/testing_auth_providers.dart";
 
 void main() {
   const delayNeededForAsyncFunctionExecution = Duration(seconds: 1);

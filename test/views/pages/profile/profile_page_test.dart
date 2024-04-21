@@ -18,9 +18,9 @@ import "package:proxima/views/pages/profile/profile_page.dart";
 import "package:proxima/views/pages/profile/user_info/user_account.dart";
 
 import "../../../mocks/data/mock_firestore_user.dart";
+import "../../../mocks/overrides/mock_auth_providers.dart";
 import "../../../mocks/pages/mock_homepage.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
-import "../../../services/firebase/testing_auth_providers.dart";
 
 void main() {
   late FakeFirebaseFirestore fakeFireStore;
