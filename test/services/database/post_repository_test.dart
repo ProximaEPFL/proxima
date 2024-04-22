@@ -77,21 +77,28 @@ void main() {
     });
 
     test("Get single nearby post correctly", () async {
+      const userPosition = userPosition1;
       final postData = MockPostFirestore.generatePostData(1).first;
-      final expectedPost =
-          MockPostFirestore.createPostAt(postData, nearbyPostPosition);
+      final expectedPost = MockPostFirestore.createPostAt(
+        postData,
+        MockGeoPoint().createNearbyPostPosition(userPosition),
+      );
 
       await setPostFirestore(expectedPost);
 
       final actualPosts =
-          await postRepository.getNearPosts(userPosition1, kmRadius);
+          await postRepository.getNearPosts(userPosition, kmRadius);
       expect(actualPosts, [expectedPost]);
     });
 
     test("Post is not queried when far away", () async {
       final postData = MockPostFirestore.generatePostData(1).first;
-      final expectedPost =
-          MockPostFirestore.createPostAt(postData, farAwayPostPosition);
+      const userPosition = userPosition1;
+
+      final expectedPost = MockPostFirestore.createPostAt(
+        postData,
+        createFarAwayPostPosition(userPosition),
+      );
 
       await setPostFirestore(expectedPost);
 
@@ -102,8 +109,11 @@ void main() {
 
     test("Post on edge (inside) is queried", () async {
       final postData = MockPostFirestore.generatePostData(1).first;
-      final expectedPost =
-          MockPostFirestore.createPostAt(postData, postOnEdgeInsidePosition);
+      const userPosition = userPosition1;
+      final expectedPost = MockPostFirestore.createPostAt(
+        postData,
+        createPostOnEdgeInsidePosition(userPosition),
+      );
 
       await setPostFirestore(expectedPost);
 
@@ -114,8 +124,11 @@ void main() {
 
     test("Post on edge (outside) is not queried", () async {
       final postData = MockPostFirestore.generatePostData(1).first;
-      final expectedPost =
-          MockPostFirestore.createPostAt(postData, postOnEdgeOutsidePosition);
+      const userPosition = userPosition1;
+      final expectedPost = MockPostFirestore.createPostAt(
+        postData,
+        createPostOnEdgeOutsidePosition(userPosition),
+      );
 
       await setPostFirestore(expectedPost);
 

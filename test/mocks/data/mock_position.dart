@@ -1,22 +1,41 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 
 const userPosition0 = GeoPoint(0, 0);
-
 const userPosition1 = GeoPoint(40, 20);
-
-const nearbyPostPosition = GeoPoint(40.0001, 20.0001); // 14m away
-const farAwayPostPosition = GeoPoint(40.001, 20.001); // about 140m away
-const postOnEdgeInsidePosition = GeoPoint(
-  39.999999993872564,
-  20.001188563379976 - 1e-5,
-); // just below 100m away
-const postOnEdgeOutsidePosition = GeoPoint(
-  39.999999993872564,
-  20.001188563379976 + 1e-5,
-); // just above 100m away
-
 const userPosition2 = GeoPoint(10, 10);
 const userPosition3 = GeoPoint(50, 100);
+
+/// Method to create a nearby post position
+GeoPoint createNearbyPostPosition(GeoPoint userPosition) {
+  return GeoPoint(
+    userPosition.latitude + 0.0001,
+    userPosition.longitude + 0.0001,
+  );
+}
+
+/// Method to create a far away post position
+GeoPoint createFarAwayPostPosition(GeoPoint userPosition) {
+  return GeoPoint(
+    userPosition.latitude + 0.001,
+    userPosition.longitude + 0.001,
+  );
+}
+
+/// Method to create a post on the edge of the range but inside
+GeoPoint createPostOnEdgeInsidePosition(GeoPoint userPosition) {
+  return GeoPoint(
+    userPosition.latitude - 1e-8,
+    userPosition.longitude + 1e-5,
+  );
+}
+
+/// Method to create a post on the edge of the range but outside
+GeoPoint createPostOnEdgeOutsidePosition(GeoPoint userPosition) {
+  return GeoPoint(
+    userPosition.latitude + 1e-8,
+    userPosition.longitude + 1e-5,
+  );
+}
 
 /// Generate a list of [GeoPoint] positions, some in range (max 7) and some out of range
 List<GeoPoint> generatePositions(
