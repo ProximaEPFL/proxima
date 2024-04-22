@@ -1,19 +1,13 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/post/post_data.dart";
-import "package:proxima/models/database/user/user_id_firestore.dart";
+
+import "../../../mocks/data/mock_post_data.dart";
 
 void main() {
   group("Post Data testing", () {
     test("hash overrides correctly", () {
-      //TODO: moves this mock to package
-      final data = PostData(
-        ownerId: const UserIdFirestore(value: "owner_id"),
-        title: "post_tiltle",
-        description: "description",
-        publicationTime: Timestamp.fromMillisecondsSinceEpoch(4564654),
-        voteScore: 12,
-      );
+      final data = MockPostFirestore.generatePostData(1).first;
 
       final expectedHash = Object.hash(
         data.ownerId,
@@ -24,8 +18,14 @@ void main() {
       );
 
       final actualHash = data.hashCode;
-
       expect(actualHash, expectedHash);
+
+      const geoPoint = GeoPoint(40, 20);
+      final data2 = MockPostFirestore.generatePostData(1).first;
+      final post = MockPostFirestore.createPostAt(data2, geoPoint);
+      final expectedHash2 = Object.hash(post.id, post.location, post.data);
+      final actualHash2 = post.hashCode;
+      expect(actualHash2, expectedHash2);
     });
 
     test("fromDbData throw error when missing fields", () {
