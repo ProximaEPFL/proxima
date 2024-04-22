@@ -56,3 +56,4 @@ web/
 macos/
 linux/
 ios/
+.vscode/settings.json

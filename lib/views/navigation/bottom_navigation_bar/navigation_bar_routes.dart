@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:proxima/utils/ui/not_implemented.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
+import "package:proxima/views/home_content/map/map_feed.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 /// This enum is used to create the navigation bar routes.
@@ -41,6 +42,8 @@ enum NavigationbarRoutes {
     switch (this) {
       case feed:
         return const PostFeed();
+      case map:
+        return const MapFeed();
       case _:
         return const NotImplemented();
     }
