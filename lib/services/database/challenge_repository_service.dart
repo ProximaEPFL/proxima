@@ -11,12 +11,10 @@ import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
-import "package:proxima/services/geolocation_service.dart";
 
 class ChallengeRepositoryService {
   final FirebaseFirestore _firestore;
   final PostRepositoryService _postRepositoryService;
-  final GeoLocationService _geoLocationService;
 
   static const int _maxActiveChallenges = 3;
   static const double _maxChallengeRadius = 3; // in km
@@ -26,10 +24,8 @@ class ChallengeRepositoryService {
   ChallengeRepositoryService({
     required FirebaseFirestore firestore,
     required PostRepositoryService postRepositoryService,
-    required GeoLocationService geoLocationService,
   })  : _firestore = firestore,
-        _postRepositoryService = postRepositoryService,
-        _geoLocationService = geoLocationService;
+        _postRepositoryService = postRepositoryService;
 
   Future<void> completeChallenge(
     UserIdFirestore uid,
@@ -52,15 +48,17 @@ class ChallengeRepositoryService {
     });
   }
 
-  Future<List<ChallengeFirestore>> getChallenges(UserIdFirestore uid) async {
+  Future<List<ChallengeFirestore>> getChallenges(UserIdFirestore uid,
+      GeoPoint pos,) async {
     final userDocRef =
         _firestore.collection(UserFirestore.collectionName).doc(uid.value);
 
-    return _getChallenges(userDocRef);
+    return _getChallenges(userDocRef, pos);
   }
 
   Future<List<ChallengeFirestore>> _getChallenges(
     DocumentReference parentRef,
+    GeoPoint pos,
   ) async {
     final challengesCollectionRef =
         parentRef.collection(ChallengeFirestore.subCollectionName);
@@ -95,7 +93,7 @@ class ChallengeRepositoryService {
         now.day + _challengeDuration,
       ); // truncates to at most challengeDuration days, ends at midnight
 
-      final possiblePosts = await inRangeUnsortedPosts();
+      final possiblePosts = await inRangeUnsortedPosts(pos);
       final postIt = possiblePosts.iterator;
       while (
           activeChallenges.length < _maxActiveChallenges && postIt.moveNext()) {
@@ -121,12 +119,11 @@ class ChallengeRepositoryService {
     });
   }
 
-  Future<Iterable<PostIdFirestore>> inRangeUnsortedPosts() async {
-    final position = await _geoLocationService.getCurrentPosition();
-    final geoFirePosition = GeoFirePoint(position);
+  Future<Iterable<PostIdFirestore>> inRangeUnsortedPosts(GeoPoint pos) async {
+    final geoFirePosition = GeoFirePoint(pos);
     List<PostFirestore> possiblePosts =
         await _postRepositoryService.getNearPosts(
-      position,
+      pos,
       _maxChallengeRadius,
     );
 
@@ -147,7 +144,6 @@ final challengeRepositoryServiceProvider = Provider<ChallengeRepositoryService>(
     return ChallengeRepositoryService(
       firestore: ref.watch(firestoreProvider),
       postRepositoryService: ref.watch(postRepositoryProvider),
-      geoLocationService: ref.watch(geoLocationServiceProvider),
     );
   },
 );
