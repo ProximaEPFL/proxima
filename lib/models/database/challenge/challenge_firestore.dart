@@ -1,34 +1,46 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/foundation.dart";
+import "package:proxima/models/database/challenge/challenge_data.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
 
 @immutable
 class ChallengeFirestore {
   static const subCollectionName = "challenges";
 
-  final bool isCompleted;
-  static const String isCompletedField = "isCompleted";
+  final PostIdFirestore postId;
+  final ChallengeData data;
 
   const ChallengeFirestore({
-    required this.isCompleted,
+    required this.postId,
+    required this.data,
   });
 
-  factory ChallengeFirestore.fromDb(Map<String, dynamic> data) {
+  factory ChallengeFirestore.fromDb(DocumentSnapshot docSnap) {
     try {
+      final data = docSnap.data() as Map<String, dynamic>;
+
       return ChallengeFirestore(
-        isCompleted: data[isCompletedField],
+        postId: PostIdFirestore(value: docSnap.id),
+        data: ChallengeData.fromDb(data),
       );
     } catch (e) {
       if (e is TypeError) {
         throw FormatException(
-            "Cannot parse challenge document: ${e.toString()}");
+          "Cannot parse challenge document: ${e.toString()}",
+        );
       } else {
         rethrow;
       }
     }
   }
 
-  Map<String, dynamic> toDbData() {
-    return {
-      isCompletedField: isCompleted,
-    };
+  @override
+  bool operator ==(Object other) {
+    return other is ChallengeFirestore &&
+        other.postId == postId &&
+        other.data == data;
   }
+
+  @override
+  int get hashCode => Object.hash(postId, data);
 }
