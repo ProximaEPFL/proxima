@@ -1,6 +1,7 @@
 import "dart:async";
 
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/vote/upvote_state.dart";
 import "package:proxima/models/ui/post_vote.dart";
@@ -34,8 +35,13 @@ class UpVoteViewModel extends AutoDisposeFamilyAsyncNotifier<PostVote,
     final voteRepository = ref.watch(postUpvoteRepositoryProvider);
     final postRepository = ref.watch(postRepositoryProvider);
 
-    final post = await postRepository.getPost(postId);
-    final upvoteState = await voteRepository.getUpvoteState(uid, postId);
+    final postFuture = postRepository.getPost(postId);
+    final upvoteStateFuture = voteRepository.getUpvoteState(uid, postId);
+
+    // Await the futures in parallel for better responsiveness
+    final results = await Future.wait([postFuture, upvoteStateFuture]);
+    final post = results[0] as PostFirestore;
+    final upvoteState = results[1] as UpvoteState;
 
     return PostVote(
       upvoteState: upvoteState,
