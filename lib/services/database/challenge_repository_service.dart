@@ -28,7 +28,7 @@ class ChallengeRepositoryService {
 
   Future<List<ChallengeFirestore>> _getChallenges(
     DocumentReference parentRef,
-    PostIdFirestore Function() postProvider,
+    PostIdFirestore? Function() postProvider,
   ) async {
     final challengesCollectionRef =
         parentRef.collection(ChallengeFirestore.subCollectionName);
@@ -40,6 +40,8 @@ class ChallengeRepositoryService {
       // move expired challenges to past challenges
       final challengesSnap = await challengesCollectionRef.get();
       final pastChallengesSnap = await pastChallengesCollectionRef.get();
+      final pastPostIds = pastChallengesSnap.docs.map((doc) => doc.id).toSet();
+
       final activeChallenges = List.empty();
 
       for (final challengeSnap in challengesSnap.docs) {
@@ -59,6 +61,14 @@ class ChallengeRepositoryService {
 
       while (activeChallenges.length < _maxActiveChallenges) {
         final post = postProvider();
+        if (post == null) {
+          break;
+        }
+
+        if (pastPostIds.contains(post.value)) {
+          continue;
+        }
+
         final newChallenge = ChallengeFirestore(
           postId: post,
           data: ChallengeData(
