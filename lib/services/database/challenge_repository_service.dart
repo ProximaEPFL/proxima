@@ -72,7 +72,8 @@ class ChallengeRepositoryService {
       final pastChallengesSnap = await pastChallengesCollectionRef.get();
       final pastPostIds = pastChallengesSnap.docs.map((doc) => doc.id).toSet();
 
-      final List<ChallengeFirestore> activeChallenges = List.empty();
+      final List<ChallengeFirestore> activeChallenges =
+          List.empty(growable: true);
 
       for (final challengeSnap in challengesSnap.docs) {
         final challenge = ChallengeFirestore.fromDb(challengeSnap);
