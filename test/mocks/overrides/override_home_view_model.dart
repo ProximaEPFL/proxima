@@ -41,10 +41,8 @@ final mockNonEmptyHomeViewModelOverride = [
 final mockLoadingHomeViewModelOverride = [
   postOverviewProvider.overrideWith(
     () => MockHomeViewModel(
-      build: () {
-        // Future.any([]) will never complete and simulate a loading state
-        return Future.any([]);
-      },
+      // Future.any([]) will never complete and simulate a loading state
+      build: () => Future.any([]),
     ),
   ),
 ];

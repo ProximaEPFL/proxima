@@ -7,6 +7,7 @@ import "package:proxima/services/login_service.dart";
 
 import "../data/mock_firebase_auth_user.dart";
 
+/// Override to use to test the login process
 final firebaseAuthMocksOverrides = [
   googleSignInProvider.overrideWith(mockGoogleSignIn),
   firebaseAuthProvider.overrideWith(mockFirebaseAuth),

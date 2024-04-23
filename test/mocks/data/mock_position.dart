@@ -65,30 +65,35 @@ GeoPoint createPostOnEdgeOutsidePosition(GeoPoint userPosition, double range) {
   );
 }
 
-/// Generate a list of [GeoPoint] positions, some in range (max 7) and some out of range
+/// Generate a list of [GeoPoint] positions, in and out of range
 List<GeoPoint> generatePositions(
   GeoPoint userPosition,
   int inRange,
   int outRange,
 ) {
+  assert(inRange >= 0 && outRange >= 0);
+
+  const maxDiagonalDistanceInRange = 0.0005;
+  const minDiagonalOutRange = 0.001;
+  double distanceBetweenPosts = maxDiagonalDistanceInRange / (inRange + 1);
+
   double userLatitude = userPosition.latitude;
   double userLongitude = userPosition.longitude;
 
   final postInRange = List.generate(inRange, (i) {
+    double dDirection = distanceBetweenPosts * i;
     return GeoPoint(
-      userLatitude + 0.0001 + (i % 7) * 0.0001,
-      userLongitude + 0.0001 + (i % 7) * 0.0001,
+      userLatitude + dDirection,
+      userLongitude + dDirection,
     );
   });
 
   // Generate post positions that are not in the range.
-  // The distance between [userPosition = GeoPoint(0, 0)] and a GetPoint at
-  // latitude 0.0006 and longitude 0.0006 is about 0.11 km.
   final postsNotInRange = List.generate(outRange, (i) {
-    i = i + 7; // makes it out of range
+    double dDirection = minDiagonalOutRange + distanceBetweenPosts * i;
     return GeoPoint(
-      userLatitude + 0.0001 + i * 0.0001,
-      userLongitude + 0.0001 + i * 0.0001,
+      userLatitude + dDirection,
+      userLongitude + dDirection,
     );
   });
 
