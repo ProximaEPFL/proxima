@@ -9,6 +9,7 @@ import "package:proxima/services/database/post_repository_service.dart";
 
 import "../../mocks/data/mock_position.dart";
 import "../../mocks/data/mock_post_data.dart";
+import "../../mocks/data/mock_post_firestore.dart";
 
 void main() {
   group("Post Repository testing", () {
@@ -131,7 +132,7 @@ void main() {
     test("Add post at location correctly", () async {
       const userGeoFirePoint = GeoFirePoint(userPosition1);
 
-      final postData = PostFirestoreGenerator.generatePostData(1).first;
+      final postData = PostDataGenerator.generatePostData(1).first;
 
       await postRepository.addPost(postData, userPosition1);
 
@@ -163,7 +164,7 @@ void main() {
         nbPosts - nbPostsInRange,
       );
 
-      final postsData = PostFirestoreGenerator.generatePostData(nbPosts);
+      final postsData = PostDataGenerator.generatePostData(nbPosts);
 
       final allPosts = List.generate(nbPosts, (i) {
         return PostFirestoreGenerator.createPostAt(

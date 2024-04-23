@@ -63,7 +63,7 @@ void main() {
     });
 
     test("No posts are returned when they are far way from the user", () async {
-      final postData = PostFirestoreGenerator.generatePostData(1)[0];
+      final postData = PostDataGenerator.generatePostData(1)[0];
 
       await postRepo.addPost(
         postData,
@@ -81,8 +81,7 @@ void main() {
       await userRepo.setUser(owner.uid, owner.data);
 
       // Add the post to the database
-      final postData =
-          PostFirestoreGenerator.generatePostData(1).map((postData) {
+      final postData = PostDataGenerator.generatePostData(1).map((postData) {
         return PostData(
           ownerId: owner.uid,
           // Map to the owner
@@ -119,7 +118,7 @@ void main() {
 
     test("Throws an exception when the owner of a post is not found", () async {
       // Add the post to the database
-      final postData = PostFirestoreGenerator.generatePostData(1).first;
+      final postData = PostDataGenerator.generatePostData(1).first;
 
       await postRepo.addPost(
         postData,
@@ -150,7 +149,7 @@ void main() {
       }
 
       // Add the posts to the database
-      final postDatas = PostFirestoreGenerator.generatePostData(nbPosts)
+      final postDatas = PostDataGenerator.generatePostData(nbPosts)
           .mapIndexed(
             (index, element) => PostData(
               ownerId: owners[index % nbOwners].uid,

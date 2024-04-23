@@ -4,11 +4,12 @@ import "package:proxima/models/database/post/post_data.dart";
 
 import "../../../mocks/data/mock_position.dart";
 import "../../../mocks/data/mock_post_data.dart";
+import "../../../mocks/data/mock_post_firestore.dart";
 
 void main() {
   group("Post Data testing", () {
     test("hash overrides correctly", () {
-      final data = PostFirestoreGenerator.generatePostData(1).first;
+      final data = PostDataGenerator.generatePostData(1).first;
 
       final expectedHash = Object.hash(
         data.ownerId,

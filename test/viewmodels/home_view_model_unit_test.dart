@@ -12,6 +12,7 @@ import "package:proxima/viewmodels/home_view_model.dart";
 
 import "../mocks/data/mock_firestore_user.dart";
 import "../mocks/data/mock_post_data.dart";
+import "../mocks/data/mock_post_firestore.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 import "../mocks/services/mock_post_repository_service.dart";
 import "../mocks/services/mock_user_repository_service.dart";
@@ -65,7 +66,7 @@ void main() {
         "Post is returned correctly when single post is returned by the repository",
         () async {
       final owner = UserFirestoreGenerator.generateUserFirestore(1)[0];
-      final postData = PostFirestoreGenerator.generatePostData(1)
+      final postData = PostDataGenerator.generatePostData(1)
           .map(
             (postData) => PostData(
               ownerId: owner.uid,
@@ -113,7 +114,7 @@ void main() {
       () async {
         // Generate the data for the test
         final owner = UserFirestoreGenerator.generateUserFirestore(1)[0];
-        final postsData = PostFirestoreGenerator.generatePostData(10)
+        final postsData = PostDataGenerator.generatePostData(10)
             .map(
               (postData) => PostData(
                 ownerId: owner.uid,
@@ -168,7 +169,7 @@ void main() {
         final owners =
             UserFirestoreGenerator.generateUserFirestore(numberOfPosts);
         final postsData =
-            PostFirestoreGenerator.generatePostData(numberOfPosts).mapIndexed(
+            PostDataGenerator.generatePostData(numberOfPosts).mapIndexed(
           (index, element) => PostData(
             ownerId: owners[index].uid,
             title: element.title,
@@ -232,7 +233,7 @@ void main() {
 
       // Simulate a new post being added
       final owner = UserFirestoreGenerator.generateUserFirestore(1)[0];
-      final postData = PostFirestoreGenerator.generatePostData(1)
+      final postData = PostDataGenerator.generatePostData(1)
           .map(
             (postData) => PostData(
               ownerId: owner.uid,
