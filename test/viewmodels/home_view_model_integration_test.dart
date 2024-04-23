@@ -63,7 +63,7 @@ void main() {
     });
 
     test("No posts are returned when they are far way from the user", () async {
-      final postData = MockPostFirestore.generatePostData(1)[0];
+      final postData = PostFirestoreGenerator.generatePostData(1)[0];
 
       await postRepo.addPost(
         postData,
@@ -77,11 +77,12 @@ void main() {
 
     test("Single near post returned correctly", () async {
       // Add the post owner to the database
-      final owner = MockUserFirestore.generateUserFirestore(1)[0];
+      final owner = UserFirestoreGenerator.generateUserFirestore(1)[0];
       await userRepo.setUser(owner.uid, owner.data);
 
       // Add the post to the database
-      final postData = MockPostFirestore.generatePostData(1).map((postData) {
+      final postData =
+          PostFirestoreGenerator.generatePostData(1).map((postData) {
         return PostData(
           ownerId: owner.uid,
           // Map to the owner
@@ -118,7 +119,7 @@ void main() {
 
     test("Throws an exception when the owner of a post is not found", () async {
       // Add the post to the database
-      final postData = MockPostFirestore.generatePostData(1).first;
+      final postData = PostFirestoreGenerator.generatePostData(1).first;
 
       await postRepo.addPost(
         postData,
@@ -143,13 +144,13 @@ void main() {
       const nbPosts = 10;
 
       // Add the post owners to the database
-      final owners = MockUserFirestore.generateUserFirestore(nbOwners);
+      final owners = UserFirestoreGenerator.generateUserFirestore(nbOwners);
       for (final owner in owners) {
         await userRepo.setUser(owner.uid, owner.data);
       }
 
       // Add the posts to the database
-      final postDatas = MockPostFirestore.generatePostData(nbPosts)
+      final postDatas = PostFirestoreGenerator.generatePostData(nbPosts)
           .mapIndexed(
             (index, element) => PostData(
               ownerId: owners[index % nbOwners].uid,

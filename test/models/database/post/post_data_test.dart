@@ -8,7 +8,7 @@ import "../../../mocks/data/mock_post_data.dart";
 void main() {
   group("Post Data testing", () {
     test("hash overrides correctly", () {
-      final data = MockPostFirestore.generatePostData(1).first;
+      final data = PostFirestoreGenerator.generatePostData(1).first;
 
       final expectedHash = Object.hash(
         data.ownerId,
@@ -22,7 +22,7 @@ void main() {
       expect(actualHash, expectedHash);
 
       const geoPoint = userPosition1;
-      final post = MockPostFirestore.createPostAt(data, geoPoint);
+      final post = PostFirestoreGenerator.createPostAt(data, geoPoint);
       final expectedHash2 = Object.hash(post.id, post.location, post.data);
       final actualHash2 = post.hashCode;
       expect(actualHash2, expectedHash2);

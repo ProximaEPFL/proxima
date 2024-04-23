@@ -8,7 +8,7 @@ import "mock_firebase_auth_user.dart";
 
 /// Not a coherent representation of a [UserFirestore]
 /// This is just here as a placeholder value that will be overridden in the tests
-final mockEmptyFirestoreUser = UserFirestore(
+final emptyFirestoreUser = UserFirestore(
   data: UserData(
     displayName: "",
     username: "",
@@ -33,7 +33,7 @@ final testingUserFirestore = UserFirestore(
 );
 
 /// Helper class to generate mock user data to be used in tests
-class MockUserFirestore {
+class UserFirestoreGenerator {
   static List<UserData> generateUserData(int count) {
     return List.generate(count, (i) {
       return UserData(

@@ -64,8 +64,8 @@ void main() {
     test(
         "Post is returned correctly when single post is returned by the repository",
         () async {
-      final owner = MockUserFirestore.generateUserFirestore(1)[0];
-      final postData = MockPostFirestore.generatePostData(1)
+      final owner = UserFirestoreGenerator.generateUserFirestore(1)[0];
+      final postData = PostFirestoreGenerator.generatePostData(1)
           .map(
             (postData) => PostData(
               ownerId: owner.uid,
@@ -76,7 +76,7 @@ void main() {
             ),
           )
           .toList()[0];
-      final post = MockPostFirestore.createPostAt(postData, point);
+      final post = PostFirestoreGenerator.createPostAt(postData, point);
 
       when(userRepository.getUser(post.data.ownerId)).thenAnswer(
         (_) async => owner,
@@ -112,8 +112,8 @@ void main() {
       "Posts are returned correctly when multiple posts are returned by the repository with all posts corresponding to the same owner",
       () async {
         // Generate the data for the test
-        final owner = MockUserFirestore.generateUserFirestore(1)[0];
-        final postsData = MockPostFirestore.generatePostData(10)
+        final owner = UserFirestoreGenerator.generateUserFirestore(1)[0];
+        final postsData = PostFirestoreGenerator.generatePostData(10)
             .map(
               (postData) => PostData(
                 ownerId: owner.uid,
@@ -126,7 +126,7 @@ void main() {
             .toList();
 
         final posts = postsData.map((data) {
-          return MockPostFirestore.createPostAt(data, point);
+          return PostFirestoreGenerator.createPostAt(data, point);
         }).toList();
 
         final expectedPosts = postsData.map((data) {
@@ -165,9 +165,10 @@ void main() {
         const numberOfPosts = 10;
 
         // Generate the data for the test
-        final owners = MockUserFirestore.generateUserFirestore(numberOfPosts);
+        final owners =
+            UserFirestoreGenerator.generateUserFirestore(numberOfPosts);
         final postsData =
-            MockPostFirestore.generatePostData(numberOfPosts).mapIndexed(
+            PostFirestoreGenerator.generatePostData(numberOfPosts).mapIndexed(
           (index, element) => PostData(
             ownerId: owners[index].uid,
             title: element.title,
@@ -178,7 +179,7 @@ void main() {
         );
 
         final posts = postsData.map((data) {
-          return MockPostFirestore.createPostAt(data, point);
+          return PostFirestoreGenerator.createPostAt(data, point);
         }).toList();
 
         final expectedPosts = postsData.mapIndexed(
@@ -230,8 +231,8 @@ void main() {
       expect(postBeforeRefresh, []);
 
       // Simulate a new post being added
-      final owner = MockUserFirestore.generateUserFirestore(1)[0];
-      final postData = MockPostFirestore.generatePostData(1)
+      final owner = UserFirestoreGenerator.generateUserFirestore(1)[0];
+      final postData = PostFirestoreGenerator.generatePostData(1)
           .map(
             (postData) => PostData(
               ownerId: owner.uid,
@@ -242,7 +243,7 @@ void main() {
             ),
           )
           .toList()[0];
-      final post = MockPostFirestore.createPostAt(postData, point);
+      final post = PostFirestoreGenerator.createPostAt(postData, point);
 
       final expectedPosts = [
         PostOverview(

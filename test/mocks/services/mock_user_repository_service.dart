@@ -11,7 +11,7 @@ class MockUserRepositoryService extends Mock implements UserRepositoryService {
   Future<UserFirestore> getUser(UserIdFirestore? uid) {
     return super.noSuchMethod(
       Invocation.method(#getUser, [uid]),
-      returnValue: Future.value(mockEmptyFirestoreUser),
+      returnValue: Future.value(emptyFirestoreUser),
     );
   }
 

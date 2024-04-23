@@ -39,11 +39,11 @@ GeoPoint createPostOnEdgeInsidePosition(GeoPoint userPosition, double range) {
   double rangeInDegreesLongitude = kmToDegreesLng(range, userPosition.latitude);
 
 // Smaller reduction to ensure it's inside for very small ranges like 100 meters
-  double reductionOffset = 0.001;
+  double reductionOffset = 0.0001; // approx 11 meters
 
   return GeoPoint(
     userPosition.latitude + rangeInDegreesLatitude - reductionOffset,
-    userPosition.longitude + rangeInDegreesLongitude - reductionOffset,
+    userPosition.longitude,
   );
 }
 
@@ -56,16 +56,17 @@ GeoPoint createPostOnEdgeOutsidePosition(GeoPoint userPosition, double range) {
   double rangeInDegreesLongitude = kmToDegreesLng(range, userPosition.latitude);
 
 // Slightly increase the range to ensure the position is outside
-  double additionalOffset =
-      0.0001; // Small offset to ensure it's outside the range
+  double additionalOffset = 0.0001; // approx 11 meters
 
   return GeoPoint(
     userPosition.latitude + rangeInDegreesLatitude + additionalOffset,
-    userPosition.longitude + rangeInDegreesLongitude + additionalOffset,
+    userPosition.longitude,
   );
 }
 
-/// Generate a list of [GeoPoint] positions, in and out of range
+/// Generate a list of [GeoPoint] positions, [inRange] of which are in range
+/// (i.e. less than 100 m away) of the [userPosition], and [outRange] of which
+/// are out of range of this position
 List<GeoPoint> generatePositions(
   GeoPoint userPosition,
   int inRange,
