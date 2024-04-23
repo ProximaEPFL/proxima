@@ -86,6 +86,7 @@ class ChallengeRepositoryService {
               .doc(challengeSnap.id)
               .set(challengeSnap.data());
           await challengesCollectionRef.doc(challengeSnap.id).delete();
+          pastPostIds.add(challenge.postId);
         } else {
           activeChallenges.add(challenge);
         }
