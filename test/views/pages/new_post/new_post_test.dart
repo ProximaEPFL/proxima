@@ -8,6 +8,7 @@ import "package:proxima/views/navigation/leading_back_button/leading_back_button
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 
 import "../../../mocks/data/mock_firestore_user.dart";
+import "../../../mocks/data/mock_position.dart";
 import "../../../mocks/providers/provider_new_post_page.dart";
 import "../../../mocks/services/mock_geo_location_service.dart";
 import "../../../mocks/services/mock_post_repository_service.dart";
@@ -62,7 +63,7 @@ void main() {
     await widgetTester.pumpWidget(mockedNewPostPage);
     await widgetTester.pumpAndSettle();
 
-    GeoPoint testPoint = const GeoPoint(0, 0);
+    GeoPoint testPoint = userPosition0;
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) => Future.value(testPoint),
     );
