@@ -6,6 +6,7 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 @immutable
 class ChallengeFirestore {
   static const subCollectionName = "challenges";
+  static const pastChallengesSubCollectionName = "pastChallenges";
 
   final PostIdFirestore postId;
   final ChallengeData data;

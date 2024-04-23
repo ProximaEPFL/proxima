@@ -40,6 +40,8 @@ class ChallengeData {
     };
   }
 
+  bool get isExpired => expiresOn.compareTo(Timestamp.now()) < 0;
+
   @override
   bool operator ==(Object other) {
     return other is ChallengeData &&
