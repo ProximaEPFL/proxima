@@ -48,8 +48,10 @@ class ChallengeRepositoryService {
     });
   }
 
-  Future<List<ChallengeFirestore>> getChallenges(UserIdFirestore uid,
-      GeoPoint pos,) async {
+  Future<List<ChallengeFirestore>> getChallenges(
+    UserIdFirestore uid,
+    GeoPoint pos,
+  ) async {
     final userDocRef =
         _firestore.collection(UserFirestore.collectionName).doc(uid.value);
 
@@ -70,7 +72,9 @@ class ChallengeRepositoryService {
       // move expired challenges to past challenges
       final challengesSnap = await challengesCollectionRef.get();
       final pastChallengesSnap = await pastChallengesCollectionRef.get();
-      final pastPostIds = pastChallengesSnap.docs.map((doc) => doc.id).toSet();
+      final pastPostIds = pastChallengesSnap.docs
+          .map((doc) => PostIdFirestore(value: doc.id))
+          .toSet();
 
       final List<ChallengeFirestore> activeChallenges =
           List.empty(growable: true);
@@ -96,11 +100,12 @@ class ChallengeRepositoryService {
 
       final possiblePosts = await inRangeUnsortedPosts(pos);
       final postIt = possiblePosts.iterator;
+      final activePostIds = activeChallenges.map((e) => e.postId).toSet();
       while (
           activeChallenges.length < _maxActiveChallenges && postIt.moveNext()) {
         final post = postIt.current;
 
-        if (pastPostIds.contains(post.value)) {
+        if (pastPostIds.contains(post) || activePostIds.contains(post)) {
           continue;
         }
 
@@ -116,6 +121,7 @@ class ChallengeRepositoryService {
             .doc(post.value)
             .set(newChallenge.data.toDbData());
         activeChallenges.add(newChallenge);
+        activePostIds.add(post);
       }
 
       return activeChallenges;
