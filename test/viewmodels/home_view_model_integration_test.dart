@@ -164,7 +164,7 @@ void main() {
 
       // The 6 first posts are under 100m away from the user and are the ones expected
       const nbPostsInRange = 6;
-      final postPositions = generatePositions(
+      final postPositions = GeoPointGenerator().generatePositions(
         userPosition0,
         nbPostsInRange,
         nbPosts - nbPostsInRange,
