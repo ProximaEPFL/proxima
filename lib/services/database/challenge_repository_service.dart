@@ -21,6 +21,7 @@ class ChallengeRepositoryService {
   static const int _maxActiveChallenges = 3;
   static const double _maxChallengeRadius = 3; // in km
   static const double _minChallengeRadius = 0.5;
+  static const int _challengeDuration = 1; // in days
 
   ChallengeRepositoryService({
     required FirebaseFirestore firestore,
@@ -30,16 +31,36 @@ class ChallengeRepositoryService {
         _postRepositoryService = postRepositoryService,
         _geoLocationService = geoLocationService;
 
+  Future<void> completeChallenge(
+    UserIdFirestore uid,
+    PostIdFirestore pid,
+  ) async {
+    final userDocRef =
+        _firestore.collection(UserFirestore.collectionName).doc(uid.value);
+    await _completeChallenge(userDocRef, pid);
+  }
+
+  Future<void> _completeChallenge(
+    DocumentReference parentRef,
+    PostIdFirestore pid,
+  ) async {
+    parentRef
+        .collection(ChallengeFirestore.subCollectionName)
+        .doc(pid.value)
+        .update({
+      ChallengeData.isCompletedField: true,
+    });
+  }
+
   Future<List<ChallengeFirestore>> getChallenges(UserIdFirestore uid) async {
     final userDocRef =
         _firestore.collection(UserFirestore.collectionName).doc(uid.value);
 
-    return _getChallenges(userDocRef, await inRangeUnsortedPosts());
+    return _getChallenges(userDocRef);
   }
 
   Future<List<ChallengeFirestore>> _getChallenges(
     DocumentReference parentRef,
-    Iterable<PostIdFirestore> possiblePosts,
   ) async {
     final challengesCollectionRef =
         parentRef.collection(ChallengeFirestore.subCollectionName);
@@ -68,8 +89,13 @@ class ChallengeRepositoryService {
       }
 
       final now = DateTime.now();
-      final endOfDay = DateTime(now.year, now.month, now.day + 1);
+      final expiresOn = DateTime(
+        now.year,
+        now.month,
+        now.day + _challengeDuration,
+      ); // truncates to at most challengeDuration days, ends at midnight
 
+      final possiblePosts = await inRangeUnsortedPosts();
       final postIt = possiblePosts.iterator;
       while (
           activeChallenges.length < _maxActiveChallenges && postIt.moveNext()) {
@@ -83,7 +109,7 @@ class ChallengeRepositoryService {
           postId: post,
           data: ChallengeData(
             isCompleted: false,
-            expiresOn: Timestamp.fromDate(endOfDay),
+            expiresOn: Timestamp.fromDate(expiresOn),
           ),
         );
 
