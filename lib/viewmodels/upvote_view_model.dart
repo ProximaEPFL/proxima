@@ -15,10 +15,7 @@ class UpVoteViewModel extends AutoDisposeFamilyAsyncNotifier<PostVote,
     final postId = arg.postId;
     final uid = ref.watch(uidProvider);
     if (uid == null) {
-      return const PostVote(
-        upvoteState: UpvoteState.none,
-        votes: 0,
-      );
+      throw Exception("User is not logged in");
     }
 
     final voteRepository = ref.watch(postUpvoteRepositoryProvider);
@@ -41,7 +38,7 @@ class UpVoteViewModel extends AutoDisposeFamilyAsyncNotifier<PostVote,
     final postId = arg.postId;
     final uid = ref.watch(uidProvider);
     if (uid == null) {
-      return;
+      throw Exception("User is not logged in");
     }
 
     final voteRepository = ref.read(postUpvoteRepositoryProvider);
