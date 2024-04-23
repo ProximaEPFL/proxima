@@ -9,6 +9,8 @@ import "package:proxima/models/database/vote/upvote_state.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/post_upvote_repository_service.dart";
 
+import "../../mocks/data/mock_position.dart";
+
 void main() {
   late FakeFirebaseFirestore firestore;
   late PostRepositoryService postRepository;
@@ -27,7 +29,7 @@ void main() {
     publicationTime: Timestamp.fromMillisecondsSinceEpoch(0),
     voteScore: 0,
   );
-  const postLocation = GeoPoint(40, 20);
+  const postLocation = userPosition1;
 
   setUp(() async {
     firestore = FakeFirebaseFirestore();

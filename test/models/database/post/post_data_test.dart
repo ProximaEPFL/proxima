@@ -2,6 +2,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/post/post_data.dart";
 
+import "../../../mocks/data/mock_position.dart";
 import "../../../mocks/data/mock_post_data.dart";
 
 void main() {
@@ -20,9 +21,8 @@ void main() {
       final actualHash = data.hashCode;
       expect(actualHash, expectedHash);
 
-      const geoPoint = GeoPoint(40, 20);
-      final data2 = MockPostFirestore.generatePostData(1).first;
-      final post = MockPostFirestore.createPostAt(data2, geoPoint);
+      const geoPoint = userPosition1;
+      final post = MockPostFirestore.createPostAt(data, geoPoint);
       final expectedHash2 = Object.hash(post.id, post.location, post.data);
       final actualHash2 = post.hashCode;
       expect(actualHash2, expectedHash2);
