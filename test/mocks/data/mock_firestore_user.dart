@@ -33,7 +33,7 @@ final testingUserFirestore = UserFirestore(
 );
 
 /// Helper class to generate mock user data to be used in tests
-class UserFirestoreGenerator {
+class FirestoreUserGenerator {
   static List<UserData> generateUserData(int count) {
     return List.generate(count, (i) {
       return UserData(

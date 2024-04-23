@@ -30,7 +30,7 @@ void main() {
     late ProviderContainer container;
 
     // Base point used in the tests
-    const userPosition = GeoPoint(0, 0);
+    const userPosition = userPosition0;
 
     setUp(() async {
       fakeFireStore = FakeFirebaseFirestore();
@@ -77,7 +77,7 @@ void main() {
 
     test("Single near post returned correctly", () async {
       // Add the post owner to the database
-      final owner = UserFirestoreGenerator.generateUserFirestore(1)[0];
+      final owner = FirestoreUserGenerator.generateUserFirestore(1)[0];
       await userRepo.setUser(owner.uid, owner.data);
 
       // Add the post to the database
@@ -143,7 +143,7 @@ void main() {
       const nbPosts = 10;
 
       // Add the post owners to the database
-      final owners = UserFirestoreGenerator.generateUserFirestore(nbOwners);
+      final owners = FirestoreUserGenerator.generateUserFirestore(nbOwners);
       for (final owner in owners) {
         await userRepo.setUser(owner.uid, owner.data);
       }

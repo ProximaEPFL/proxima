@@ -1,5 +1,3 @@
-import "dart:math";
-
 import "package:cloud_firestore/cloud_firestore.dart";
 
 const userPosition0 = GeoPoint(0, 0);
@@ -26,17 +24,10 @@ GeoPoint createFarAwayPostPosition(GeoPoint userPosition, double range) {
 /// Conversion factor from kilometers to degrees (latitude).
 double kmToDegreesLat(double km) => km / 111.0;
 
-/// Conversion factor from kilometers to degrees (longitude) at a given latitude.
-double kmToDegreesLng(double km, double latitude) {
-  double radiusAtLat = cos(latitude * pi / 180) * 111.0;
-  return km / radiusAtLat;
-}
-
 /// Method to create a post on the edge of the range but inside
 GeoPoint createPostOnEdgeInsidePosition(GeoPoint userPosition, double range) {
 // Convert range to degrees
   double rangeInDegreesLatitude = kmToDegreesLat(range);
-  double rangeInDegreesLongitude = kmToDegreesLng(range, userPosition.latitude);
 
 // Smaller reduction to ensure it's inside for very small ranges like 100 meters
   double reductionOffset = 0.0001; // approx 11 meters
@@ -51,9 +42,6 @@ GeoPoint createPostOnEdgeInsidePosition(GeoPoint userPosition, double range) {
 GeoPoint createPostOnEdgeOutsidePosition(GeoPoint userPosition, double range) {
 // Conversion of range from kilometers to degrees
   double rangeInDegreesLatitude = kmToDegreesLat(range);
-
-// Calculating degrees for longitude based on user's latitude
-  double rangeInDegreesLongitude = kmToDegreesLng(range, userPosition.latitude);
 
 // Slightly increase the range to ensure the position is outside
   double additionalOffset = 0.0001; // approx 11 meters

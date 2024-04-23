@@ -11,7 +11,7 @@ import "package:proxima/models/database/user/user_id_firestore.dart";
 import "mock_post_data.dart";
 
 /// Helper class to create mock post data to be used in tests
-class PostFirestoreGenerator {
+class FirestorePostGenerator {
   /// Create a [PostFirestore] with given data
   static PostFirestore createPostAt(
     PostData data,

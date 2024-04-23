@@ -1,7 +1,5 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
@@ -10,6 +8,7 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/post_upvote_repository_service.dart";
 
 import "../../mocks/data/mock_position.dart";
+import "../../mocks/data/mock_post_data.dart";
 
 void main() {
   late FakeFirebaseFirestore firestore;
@@ -21,14 +20,7 @@ void main() {
     return post.data.voteScore;
   }
 
-  const ownerId = UserIdFirestore(value: "owner_id");
-  final postData = PostData(
-    ownerId: ownerId,
-    title: "",
-    description: "",
-    publicationTime: Timestamp.fromMillisecondsSinceEpoch(0),
-    voteScore: 0,
-  );
+  final postData = PostDataGenerator().emptyPost;
   const postLocation = userPosition1;
 
   setUp(() async {

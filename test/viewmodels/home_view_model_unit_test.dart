@@ -10,9 +10,9 @@ import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 
+import "../mocks/data/mock_firestore_post.dart";
 import "../mocks/data/mock_firestore_user.dart";
 import "../mocks/data/mock_post_data.dart";
-import "../mocks/data/mock_post_firestore.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 import "../mocks/services/mock_post_repository_service.dart";
 import "../mocks/services/mock_user_repository_service.dart";
@@ -65,7 +65,7 @@ void main() {
     test(
         "Post is returned correctly when single post is returned by the repository",
         () async {
-      final owner = UserFirestoreGenerator.generateUserFirestore(1)[0];
+      final owner = FirestoreUserGenerator.generateUserFirestore(1)[0];
       final postData = PostDataGenerator.generatePostData(1)
           .map(
             (postData) => PostData(
@@ -77,7 +77,7 @@ void main() {
             ),
           )
           .toList()[0];
-      final post = PostFirestoreGenerator.createPostAt(postData, point);
+      final post = FirestorePostGenerator.createPostAt(postData, point);
 
       when(userRepository.getUser(post.data.ownerId)).thenAnswer(
         (_) async => owner,
@@ -113,7 +113,7 @@ void main() {
       "Posts are returned correctly when multiple posts are returned by the repository with all posts corresponding to the same owner",
       () async {
         // Generate the data for the test
-        final owner = UserFirestoreGenerator.generateUserFirestore(1)[0];
+        final owner = FirestoreUserGenerator.generateUserFirestore(1)[0];
         final postsData = PostDataGenerator.generatePostData(10)
             .map(
               (postData) => PostData(
@@ -127,7 +127,7 @@ void main() {
             .toList();
 
         final posts = postsData.map((data) {
-          return PostFirestoreGenerator.createPostAt(data, point);
+          return FirestorePostGenerator.createPostAt(data, point);
         }).toList();
 
         final expectedPosts = postsData.map((data) {
@@ -167,7 +167,7 @@ void main() {
 
         // Generate the data for the test
         final owners =
-            UserFirestoreGenerator.generateUserFirestore(numberOfPosts);
+            FirestoreUserGenerator.generateUserFirestore(numberOfPosts);
         final postsData =
             PostDataGenerator.generatePostData(numberOfPosts).mapIndexed(
           (index, element) => PostData(
@@ -180,7 +180,7 @@ void main() {
         );
 
         final posts = postsData.map((data) {
-          return PostFirestoreGenerator.createPostAt(data, point);
+          return FirestorePostGenerator.createPostAt(data, point);
         }).toList();
 
         final expectedPosts = postsData.mapIndexed(
@@ -232,7 +232,7 @@ void main() {
       expect(postBeforeRefresh, []);
 
       // Simulate a new post being added
-      final owner = UserFirestoreGenerator.generateUserFirestore(1)[0];
+      final owner = FirestoreUserGenerator.generateUserFirestore(1)[0];
       final postData = PostDataGenerator.generatePostData(1)
           .map(
             (postData) => PostData(
@@ -244,7 +244,7 @@ void main() {
             ),
           )
           .toList()[0];
-      final post = PostFirestoreGenerator.createPostAt(postData, point);
+      final post = FirestorePostGenerator.createPostAt(postData, point);
 
       final expectedPosts = [
         PostOverview(

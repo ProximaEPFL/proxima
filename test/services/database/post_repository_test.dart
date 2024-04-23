@@ -7,9 +7,9 @@ import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
+import "../../mocks/data/mock_firestore_post.dart";
 import "../../mocks/data/mock_position.dart";
 import "../../mocks/data/mock_post_data.dart";
-import "../../mocks/data/mock_post_firestore.dart";
 
 void main() {
   group("Post Repository testing", () {
@@ -47,7 +47,7 @@ void main() {
       );
     });
 
-    final post = PostFirestoreGenerator.generatePostAt(
+    final post = FirestorePostGenerator.generatePostAt(
       userPosition2,
     );
 
@@ -78,7 +78,7 @@ void main() {
 
     test("Get single nearby post correctly", () async {
       const userPosition = userPosition1;
-      final expectedPost = PostFirestoreGenerator.generatePostAt(
+      final expectedPost = FirestorePostGenerator.generatePostAt(
         createNearbyPostPosition(userPosition),
       );
 
@@ -92,7 +92,7 @@ void main() {
     test("Post is not queried when far away", () async {
       const userPosition = userPosition1;
 
-      final expectedPost = PostFirestoreGenerator.generatePostAt(
+      final expectedPost = FirestorePostGenerator.generatePostAt(
         createFarAwayPostPosition(userPosition, kmRadius),
       );
 
@@ -105,7 +105,7 @@ void main() {
 
     test("Post on edge (inside) is queried", () async {
       const userPosition = userPosition1;
-      final expectedPost = PostFirestoreGenerator.generatePostAt(
+      final expectedPost = FirestorePostGenerator.generatePostAt(
         createPostOnEdgeInsidePosition(userPosition, kmRadius),
       );
 
@@ -118,7 +118,7 @@ void main() {
 
     test("Post on edge (outside) is not queried", () async {
       const userPosition = userPosition1;
-      final expectedPost = PostFirestoreGenerator.generatePostAt(
+      final expectedPost = FirestorePostGenerator.generatePostAt(
         createPostOnEdgeOutsidePosition(userPosition, kmRadius),
       );
 
@@ -167,7 +167,7 @@ void main() {
       final postsData = PostDataGenerator.generatePostData(nbPosts);
 
       final allPosts = List.generate(nbPosts, (i) {
-        return PostFirestoreGenerator.createPostAt(
+        return FirestorePostGenerator.createPostAt(
           postsData[i],
           pointList[i],
           id: "post_$i",
@@ -194,17 +194,17 @@ void main() {
       const userId1 = UserIdFirestore(value: "user_id_1");
 
       final postsData1 =
-          PostFirestoreGenerator.createUserPost(userId1, userPosition2);
+          FirestorePostGenerator.createUserPost(userId1, userPosition2);
       final postsData2 =
-          PostFirestoreGenerator.createUserPost(userId1, userPosition3);
+          FirestorePostGenerator.createUserPost(userId1, userPosition3);
       await setPostsFirestore([postsData1, postsData2]);
 
       const userId2 = UserIdFirestore(value: "user_id_2");
 
       final postsData3 =
-          PostFirestoreGenerator.createUserPost(userId2, userPosition2);
+          FirestorePostGenerator.createUserPost(userId2, userPosition2);
       final postsData4 =
-          PostFirestoreGenerator.createUserPost(userId2, userPosition3);
+          FirestorePostGenerator.createUserPost(userId2, userPosition3);
       await setPostsFirestore([postsData3, postsData4]);
 
       final actualPosts1 = await postRepository.getUserPosts(userId1);
