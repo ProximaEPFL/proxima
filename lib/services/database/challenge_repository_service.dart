@@ -112,7 +112,9 @@ class ChallengeRepositoryService {
           ),
         );
 
-        await challengesCollectionRef.add(newChallenge.data.toDbData());
+        await challengesCollectionRef
+            .doc(post.value)
+            .set(newChallenge.data.toDbData());
         activeChallenges.add(newChallenge);
       }
 
