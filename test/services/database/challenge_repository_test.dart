@@ -1,6 +1,11 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:proxima/models/database/challenge/challenge_data.dart";
+import "package:proxima/models/database/challenge/challenge_firestore.dart";
+import "package:proxima/models/database/post/post_firestore.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
@@ -101,6 +106,53 @@ void main() {
       );
       final postIds = challenges.map((e) => e.postId).toSet();
       expect(postIds.length, challenges.length);
+    });
+
+    test("Challenges expire", () async {
+      const pos = userPosition0;
+      final fakePosts = PostDataGenerator.generatePostData(5);
+      final fakeUsers = FirestoreUserGenerator.generateUserFirestore(6);
+      final fakeUser = fakeUsers[5];
+      for (final post in fakePosts) {
+        await postRepository.addPost(post, pos);
+      }
+
+      final now = DateTime.now();
+      final past =
+          now.subtract(ChallengeRepositoryService.maxChallengeDuration);
+
+      final postDocs =
+          await firestore.collection(PostFirestore.collectionName).get();
+      final postIds =
+          postDocs.docs.map((e) => PostIdFirestore(value: e.id)).toList();
+
+      for (int i = 0; i < 3; i++) {
+        final ChallengeFirestore challenge = ChallengeFirestore(
+          postId: postIds[i],
+          data: ChallengeData(
+            isCompleted: false,
+            expiresOn: Timestamp.fromDate(past),
+          ),
+        );
+
+        await firestore
+            .collection(UserFirestore.collectionName)
+            .doc(fakeUser.uid.value)
+            .collection(ChallengeFirestore.subCollectionName)
+            .doc(postIds[i].value)
+            .set(challenge.data.toDbData());
+      }
+
+      final updatedChallenges = await challengeRepository.getChallenges(
+        fakeUser.uid,
+        pos,
+      );
+
+      final updatedPostIds = updatedChallenges.map((e) => e.postId).toSet();
+
+      for (final pid in updatedPostIds) {
+        expect(pid, isIn(postIds.sublist(3, 5)));
+      }
     });
   });
 }

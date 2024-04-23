@@ -19,7 +19,7 @@ class ChallengeRepositoryService {
   static const int _maxActiveChallenges = 3;
   static const double _maxChallengeRadius = 3; // in km
   static const double _minChallengeRadius = 0.5;
-  static const int _challengeDuration = 1; // in days
+  static const maxChallengeDuration = Duration(days: 1);
 
   ChallengeRepositoryService({
     required FirebaseFirestore firestore,
@@ -92,11 +92,12 @@ class ChallengeRepositoryService {
       }
 
       final now = DateTime.now();
+      final sum = now.add(maxChallengeDuration);
       final expiresOn = DateTime(
-        now.year,
-        now.month,
-        now.day + _challengeDuration,
-      ); // truncates to at most challengeDuration days, ends at midnight
+        sum.year,
+        sum.month,
+        sum.day,
+      ); // truncates to the day
 
       final possiblePosts = await inRangeUnsortedPosts(pos);
       final postIt = possiblePosts.iterator;
