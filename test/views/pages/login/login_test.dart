@@ -2,10 +2,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/main.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
-import "package:proxima/services/database/user_repository_service.dart";
-import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
@@ -13,35 +10,21 @@ import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 
-import "../services/firebase/setup_firebase_mocks.dart";
-import "../services/firebase/testing_auth_providers.dart";
-import "../services/test_data/firestore_user_mock.dart";
-import "../viewmodels/mock_home_view_model.dart";
+import "../../../mocks/data/mock_firestore_user.dart";
+import "../../../mocks/providers/provider_login_page.dart";
+import "../../../mocks/services/setup_firebase_mocks.dart";
 
 void main() {
   const delayNeededForAsyncFunctionExecution = Duration(seconds: 1);
   late FakeFirebaseFirestore fakeFireStore;
   late CollectionReference<Map<String, dynamic>> userCollection;
-  late UserRepositoryService userRepo;
-  late ProviderScope mockedProxima;
+  late ProviderScope mockedLoginPage;
 
   setUp(() async {
     setupFirebaseAuthMocks();
     fakeFireStore = FakeFirebaseFirestore();
     userCollection = fakeFireStore.collection(UserFirestore.collectionName);
-    userRepo = UserRepositoryService(
-      firestore: fakeFireStore,
-    );
-    mockedProxima = ProviderScope(
-      overrides: [
-        ...firebaseAuthMocksOverrides,
-        userRepositoryProvider.overrideWithValue(userRepo),
-        postOverviewProvider.overrideWith(
-          () => MockHomeViewModel(),
-        ),
-      ],
-      child: const ProximaApp(),
-    );
+    mockedLoginPage = loginPageProvider(fakeFireStore);
   });
 
   Future<void> enterPseudoAndUsername(WidgetTester tester) async {
@@ -60,7 +43,7 @@ void main() {
 
   group("Widgets display", () {
     testWidgets("Display logo, slogan and login button", (tester) async {
-      await tester.pumpWidget(mockedProxima);
+      await tester.pumpWidget(mockedLoginPage);
       await tester.pumpAndSettle();
 
       // Check for the logo on the Login Page
@@ -95,7 +78,7 @@ void main() {
     });
 
     testWidgets("Login flow to HomePage", (tester) async {
-      await tester.pumpWidget(mockedProxima);
+      await tester.pumpWidget(mockedLoginPage);
       await tester.pumpAndSettle();
 
       final loginButton = find.byKey(LoginButton.loginButtonKey);
@@ -111,7 +94,7 @@ void main() {
 
   group("Non existing user data in repository testing", () {
     testWidgets("Login flow to CreateAccount and log out", (tester) async {
-      await tester.pumpWidget(mockedProxima);
+      await tester.pumpWidget(mockedLoginPage);
       await tester.pumpAndSettle();
 
       final loginButton = find.byKey(LoginButton.loginButtonKey);
@@ -132,7 +115,7 @@ void main() {
     });
 
     testWidgets("Login flow to HomePage and log out", (tester) async {
-      await tester.pumpWidget(mockedProxima);
+      await tester.pumpWidget(mockedLoginPage);
       await tester.pumpAndSettle();
 
       final loginButton = find.byKey(LoginButton.loginButtonKey);

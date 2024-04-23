@@ -11,9 +11,10 @@ import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:test/test.dart";
 
-import "../models/database/post/mock_post_data.dart";
-import "../models/database/user/mock_user_data.dart";
-import "../services/mock_geo_location_service.dart";
+import "../mocks/data/mock_firestore_user.dart";
+import "../mocks/data/mock_position.dart";
+import "../mocks/data/mock_post_data.dart";
+import "../mocks/services/mock_geo_location_service.dart";
 
 void main() {
   // This aims to test the [postOverviewProvider] with the real implementation
@@ -29,7 +30,7 @@ void main() {
     late ProviderContainer container;
 
     // Base point used in the tests
-    const userPosition = GeoPoint(0, 0);
+    const userPosition = userPosition0;
 
     setUp(() async {
       fakeFireStore = FakeFirebaseFirestore();
@@ -62,7 +63,7 @@ void main() {
     });
 
     test("No posts are returned when they are far way from the user", () async {
-      final postData = MockPostFirestore.generatePostData(1)[0];
+      final postData = PostDataGenerator.generatePostData(1)[0];
 
       await postRepo.addPost(
         postData,
@@ -76,13 +77,14 @@ void main() {
 
     test("Single near post returned correctly", () async {
       // Add the post owner to the database
-      final owner = MockUserFirestore.generateUserFirestore(1)[0];
+      final owner = FirestoreUserGenerator.generateUserFirestore(1)[0];
       await userRepo.setUser(owner.uid, owner.data);
 
       // Add the post to the database
-      final postData = MockPostFirestore.generatePostData(1).map((postData) {
+      final postData = PostDataGenerator.generatePostData(1).map((postData) {
         return PostData(
-          ownerId: owner.uid, // Map to the owner
+          ownerId: owner.uid,
+          // Map to the owner
           title: postData.title,
           description: postData.description,
           publicationTime: postData.publicationTime,
@@ -116,7 +118,7 @@ void main() {
 
     test("Throws an exception when the owner of a post is not found", () async {
       // Add the post to the database
-      final postData = MockPostFirestore.generatePostData(1).first;
+      final postData = PostDataGenerator.generatePostData(1).first;
 
       await postRepo.addPost(
         postData,
@@ -141,16 +143,17 @@ void main() {
       const nbPosts = 10;
 
       // Add the post owners to the database
-      final owners = MockUserFirestore.generateUserFirestore(nbOwners);
+      final owners = FirestoreUserGenerator.generateUserFirestore(nbOwners);
       for (final owner in owners) {
         await userRepo.setUser(owner.uid, owner.data);
       }
 
       // Add the posts to the database
-      final postDatas = MockPostFirestore.generatePostData(nbPosts)
+      final postDatas = PostDataGenerator.generatePostData(nbPosts)
           .mapIndexed(
             (index, element) => PostData(
-              ownerId: owners[index % nbOwners].uid, // Map to an owner
+              ownerId: owners[index % nbOwners].uid,
+              // Map to an owner
               title: element.title,
               description: element.description,
               publicationTime: element.publicationTime,
@@ -161,18 +164,11 @@ void main() {
 
       // The 6 first posts are under 100m away from the user and are the ones expected
       const nbPostsInRange = 6;
-      final postInRange = List.generate(nbPostsInRange, (i) {
-        return GeoPoint(0.0001 + i * 0.0001, 0.0001 + i * 0.0001);
-      });
-
-      // Generate post positions that are not in the range.
-      // The distance between [userPosition = GeoPoint(0, 0)] and a GetPoint at
-      // latitude 0.0006 and longitude 0.0006 is about 0.11 km.
-      final postsNotInRange = List.generate(nbPosts - nbPostsInRange, (i) {
-        i = i + nbPostsInRange;
-        return GeoPoint(0.0001 + i * 0.0001, 0.0001 + i * 0.0001);
-      });
-      final postPositions = [...postInRange, ...postsNotInRange];
+      final postPositions = GeoPointGenerator().generatePositions(
+        userPosition0,
+        nbPostsInRange,
+        nbPosts - nbPostsInRange,
+      );
 
       // Add the posts to the database
       for (var i = 0; i < postDatas.length; i++) {
