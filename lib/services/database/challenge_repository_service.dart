@@ -42,7 +42,7 @@ class ChallengeRepositoryService {
       final pastChallengesSnap = await pastChallengesCollectionRef.get();
       final pastPostIds = pastChallengesSnap.docs.map((doc) => doc.id).toSet();
 
-      final activeChallenges = List.empty();
+      final List<ChallengeFirestore> activeChallenges = List.empty();
 
       for (final challengeSnap in challengesSnap.docs) {
         final challenge = ChallengeFirestore.fromDb(challengeSnap);
@@ -81,7 +81,7 @@ class ChallengeRepositoryService {
         activeChallenges.add(newChallenge);
       }
 
-      activeChallenges;
+      return activeChallenges;
     });
   }
 }
