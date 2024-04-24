@@ -3,16 +3,16 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/views/home_content/map_feed/maps/nearby_posts_map.dart";
-import "package:proxima/views/sort_option_widgets/feed_sort_option/map_sort_option_chips.dart";
+import "package:proxima/views/sort_option_widgets/feed_sort_option/map_selection_option_chips.dart";
 
-class MapFeed extends ConsumerStatefulWidget {
-  const MapFeed({super.key});
+class MapScreen extends ConsumerStatefulWidget {
+  const MapScreen({super.key});
 
   @override
-  MapFeedState createState() => MapFeedState();
+  MapScreenState createState() => MapScreenState();
 }
 
-class MapFeedState extends ConsumerState<MapFeed> {
+class MapScreenState extends ConsumerState<MapScreen> {
   //key for testing
   static const mapScreenKey = Key("map");
   static const dividerKey = Key("Divider");
@@ -24,7 +24,7 @@ class MapFeedState extends ConsumerState<MapFeed> {
   static const double _currentZoom = 14;
 
   //radius of the circle (in km)
-  static const double _radius = 1;
+  static const double _radius = 0.1;
 
   //loading state of the map
   bool _isLoading = true;
@@ -53,7 +53,7 @@ class MapFeedState extends ConsumerState<MapFeed> {
                 key: mapScreenKey,
                 body: Column(
                   children: [
-                    const MapSortOptionChips(),
+                    const MapSelectionOptionChips(),
                     const Divider(key: dividerKey),
                     //display the map
                     Expanded(

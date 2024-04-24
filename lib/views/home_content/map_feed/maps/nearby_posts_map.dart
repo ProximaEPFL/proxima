@@ -46,9 +46,9 @@ class NearbyPostsMapState extends ConsumerState<NearbyPostsMap> {
       myLocationEnabled: true,
       //no need for this button because the user can't scroll the map
       myLocationButtonEnabled: false,
-      zoomGesturesEnabled: false,
+      zoomGesturesEnabled: true,
       //no need for these gestures because the user can't scroll the map
-      zoomControlsEnabled: false,
+      zoomControlsEnabled: true,
       //we can't scroll the map
       scrollGesturesEnabled: false,
       rotateGesturesEnabled: false,

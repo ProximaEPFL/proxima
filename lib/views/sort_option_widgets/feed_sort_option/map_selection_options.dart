@@ -1,6 +1,6 @@
 /// This enum is used to create the map sort options.
 /// It contains the name of the sort options.
-enum MapSortOption {
+enum MapSelectionOptions {
   heatMap("Heat map"),
   nearby("Nearby"),
   myPosts("My posts"),
@@ -8,5 +8,5 @@ enum MapSortOption {
 
   final String name;
 
-  const MapSortOption(this.name);
+  const MapSelectionOptions(this.name);
 }

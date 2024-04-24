@@ -25,7 +25,7 @@ void main() {
       await tester.pumpWidget(nonEmptyHomePageWidget);
       await tester.pumpAndSettle();
 
-      //Click on the middle element of the bottombar
+      //Click on the last element of the bottombar
       final bottomBar = find.byKey(NavigationBottomBar.navigationBottomBarKey);
       await tester.tap(
         find.descendant(
@@ -41,7 +41,6 @@ void main() {
         (_) => Future.value(testPoint),
       );
 
-      //wait for 10s
       await tester.pumpAndSettle();
     });
   });
