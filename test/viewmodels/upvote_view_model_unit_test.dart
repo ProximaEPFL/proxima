@@ -11,9 +11,9 @@ import "package:proxima/services/database/post_upvote_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/upvote_view_model.dart";
 
-import "../mocks/data/mock_firestore_user.dart";
-import "../mocks/data/mock_position.dart";
-import "../mocks/data/mock_post_data.dart";
+import "../mocks/data/firestore_post.dart";
+import "../mocks/data/firestore_user.dart";
+import "../mocks/data/geopoint.dart";
 import "../mocks/services/mock_post_repository_service.dart";
 import "../mocks/services/mock_post_upvote_repository_service.dart";
 
@@ -32,7 +32,8 @@ void main() {
       postRepository = MockPostRepositoryService();
       voteRepository = MockPostUpvoteRepositoryService();
       userId = testingUserFirestoreId;
-      testingPost = MockPostFirestore.createUserPost(userId, userPosition0);
+      testingPost =
+          FirestorePostGenerator.createUserPost(userId, userPosition0);
       voteViewModelProvider = postVoteProvider((postId: testingPost.id));
 
       container = ProviderContainer(

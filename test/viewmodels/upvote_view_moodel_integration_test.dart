@@ -11,9 +11,9 @@ import "package:proxima/services/database/post_upvote_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/upvote_view_model.dart";
 
-import "../mocks/data/mock_firestore_user.dart";
-import "../mocks/data/mock_position.dart";
-import "../mocks/data/mock_post_data.dart";
+import "../mocks/data/firestore_post.dart";
+import "../mocks/data/firestore_user.dart";
+import "../mocks/data/geopoint.dart";
 
 void main() {
   group("UpVote ViewModel integration testing", () {
@@ -36,7 +36,7 @@ void main() {
       postRepository = PostRepositoryService(firestore: fakeFireStore);
 
       // Add a post to the database
-      final testingPostData = MockPostFirestore.createUserPost(
+      final testingPostData = FirestorePostGenerator.createUserPost(
         testingUserFirestoreId,
         userPosition0,
       ).data;
