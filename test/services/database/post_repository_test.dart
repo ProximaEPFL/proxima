@@ -15,6 +15,7 @@ void main() {
   group("Post Repository testing", () {
     late FakeFirebaseFirestore firestore;
     late PostRepositoryService postRepository;
+    late GeoPointGenerator geoPointGenerator;
 
     const kmRadius = 0.1;
 
@@ -45,9 +46,10 @@ void main() {
       postRepository = PostRepositoryService(
         firestore: firestore,
       );
+      geoPointGenerator = GeoPointGenerator();
     });
 
-    final post = FirestorePostGenerator.generatePostAt(
+    final post = FirestorePostGenerator().generatePostAt(
       userPosition2,
     );
 
@@ -78,8 +80,8 @@ void main() {
 
     test("Get single nearby post correctly", () async {
       const userPosition = userPosition1;
-      final expectedPost = FirestorePostGenerator.generatePostAt(
-        GeoPointGenerator().createNearbyPostPosition(userPosition),
+      final expectedPost = FirestorePostGenerator().generatePostAt(
+        geoPointGenerator.createNearbyPostPosition(userPosition),
       );
 
       await setPostFirestore(expectedPost);
@@ -92,8 +94,8 @@ void main() {
     test("Post is not queried when far away", () async {
       const userPosition = userPosition1;
 
-      final expectedPost = FirestorePostGenerator.generatePostAt(
-        GeoPointGenerator().createFarAwayPostPosition(userPosition, kmRadius),
+      final expectedPost = FirestorePostGenerator().generatePostAt(
+        geoPointGenerator.createFarAwayPostPosition(userPosition, kmRadius),
       );
 
       await setPostFirestore(expectedPost);
@@ -105,9 +107,11 @@ void main() {
 
     test("Post on edge (inside) is queried", () async {
       const userPosition = userPosition1;
-      final expectedPost = FirestorePostGenerator.generatePostAt(
-        GeoPointGenerator()
-            .createPostOnEdgeInsidePosition(userPosition, kmRadius),
+      final expectedPost = FirestorePostGenerator().generatePostAt(
+        geoPointGenerator.createPostOnEdgeInsidePosition(
+          userPosition,
+          kmRadius,
+        ),
       );
 
       await setPostFirestore(expectedPost);
@@ -119,9 +123,11 @@ void main() {
 
     test("Post on edge (outside) is not queried", () async {
       const userPosition = userPosition1;
-      final expectedPost = FirestorePostGenerator.generatePostAt(
-        GeoPointGenerator()
-            .createPostOnEdgeOutsidePosition(userPosition, kmRadius),
+      final expectedPost = FirestorePostGenerator().generatePostAt(
+        geoPointGenerator.createPostOnEdgeOutsidePosition(
+          userPosition,
+          kmRadius,
+        ),
       );
 
       await setPostFirestore(expectedPost);
@@ -160,7 +166,7 @@ void main() {
       const nbPostsInRange = 7;
 
       // The 7 first posts are under 100m away from the user and are the ones expected
-      final pointList = GeoPointGenerator().generatePositions(
+      final pointList = geoPointGenerator.generatePositions(
         userPosition0,
         nbPostsInRange,
         nbPosts - nbPostsInRange,
@@ -169,7 +175,7 @@ void main() {
       final postsData = PostDataGenerator.generatePostData(nbPosts);
 
       final allPosts = List.generate(nbPosts, (i) {
-        return FirestorePostGenerator.createPostAt(
+        return FirestorePostGenerator().createPostAt(
           postsData[i],
           pointList[i],
           id: "post_$i",
@@ -193,20 +199,17 @@ void main() {
     });
 
     test("Get simple user posts correctly", () async {
+      final generator = FirestorePostGenerator();
       const userId1 = UserIdFirestore(value: "user_id_1");
 
-      final postsData1 =
-          FirestorePostGenerator.createUserPost(userId1, userPosition2);
-      final postsData2 =
-          FirestorePostGenerator.createUserPost(userId1, userPosition3);
+      final postsData1 = generator.createUserPost(userId1, userPosition2);
+      final postsData2 = generator.createUserPost(userId1, userPosition3);
       await setPostsFirestore([postsData1, postsData2]);
 
       const userId2 = UserIdFirestore(value: "user_id_2");
 
-      final postsData3 =
-          FirestorePostGenerator.createUserPost(userId2, userPosition2);
-      final postsData4 =
-          FirestorePostGenerator.createUserPost(userId2, userPosition3);
+      final postsData3 = generator.createUserPost(userId2, userPosition2);
+      final postsData4 = generator.createUserPost(userId2, userPosition3);
       await setPostsFirestore([postsData3, postsData4]);
 
       final actualPosts1 = await postRepository.getUserPosts(userId1);
