@@ -50,11 +50,15 @@ void main() {
 
   group("ChallengeRepositoryService", () {
     test("Get new challenges", () async {
-      final fakePosts = await addPosts(postRepository, inChallengeRange, 3);
+      final fakePosts = await addPosts(
+        postRepository,
+        inChallengeRange,
+        ChallengeRepositoryService.maxActiveChallenges,
+      );
 
       final challenges = await challengeRepository.getChallenges(uid, userPos);
 
-      expect(challenges.length, 3);
+      expect(challenges.length, ChallengeRepositoryService.maxActiveChallenges);
       for (final challenge in challenges) {
         expect(challenge.data.isCompleted, false);
         expect(challenge.data.expiresOn.compareTo(Timestamp.now()), isPositive);
@@ -94,7 +98,11 @@ void main() {
     });
 
     test("Challenge posts are unique", () async {
-      final fakePosts = await addPosts(postRepository, inChallengeRange, 3);
+      final fakePosts = await addPosts(
+        postRepository,
+        inChallengeRange,
+        ChallengeRepositoryService.maxActiveChallenges,
+      );
 
       final challenges = await challengeRepository.getChallenges(
         uid,
@@ -120,7 +128,16 @@ void main() {
     });
 
     test("Challenges expire", () async {
-      await addPosts(postRepository, inChallengeRange, 5);
+      const int totalChallenges =
+          2 * ChallengeRepositoryService.maxActiveChallenges - 1;
+      const int challengesToExpire =
+          ChallengeRepositoryService.maxActiveChallenges;
+
+      await addPosts(
+        postRepository,
+        inChallengeRange,
+        totalChallenges,
+      );
       final now = DateTime.now();
       final past =
           now.subtract(ChallengeRepositoryService.maxChallengeDuration);
@@ -130,7 +147,7 @@ void main() {
       final postIds =
           postDocs.docs.map((e) => PostIdFirestore(value: e.id)).toList();
 
-      for (int i = 0; i < 3; i++) {
+      for (int i = 0; i < challengesToExpire; i++) {
         final ChallengeFirestore challenge = ChallengeFirestore(
           postId: postIds[i],
           data: ChallengeData(
@@ -154,8 +171,15 @@ void main() {
 
       final updatedPostIds = updatedChallenges.map((e) => e.postId).toSet();
 
+      final expiredPostIds = postIds.sublist(0, challengesToExpire);
+      final activePostIds = postIds.sublist(
+        challengesToExpire,
+        totalChallenges,
+      );
+
       for (final pid in updatedPostIds) {
-        expect(pid, isIn(postIds.sublist(3, 5)));
+        expect(pid, isIn(activePostIds));
+        expect(pid, isNot(isIn(expiredPostIds)));
       }
     });
 

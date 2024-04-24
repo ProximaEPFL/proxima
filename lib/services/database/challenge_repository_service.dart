@@ -17,7 +17,7 @@ class ChallengeRepositoryService {
   final FirebaseFirestore _firestore;
   final PostRepositoryService _postRepositoryService;
 
-  static const int _maxActiveChallenges = 3;
+  static const int maxActiveChallenges = 3;
   static const double maxChallengeRadius = 3; // in km
   static const double minChallengeRadius = 0.5;
   static const maxChallengeDuration = Duration(days: 1);
@@ -104,8 +104,7 @@ class ChallengeRepositoryService {
     final possiblePosts = await inRangeUnsortedPosts(pos);
     final postIt = possiblePosts.iterator;
     final activePostIds = activeChallenges.map((e) => e.postId).toSet();
-    while (
-        activeChallenges.length < _maxActiveChallenges && postIt.moveNext()) {
+    while (activeChallenges.length < maxActiveChallenges && postIt.moveNext()) {
       final post = postIt.current;
 
       if (pastPostIds.contains(post) || activePostIds.contains(post)) {
