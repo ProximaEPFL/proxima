@@ -44,7 +44,9 @@ class BottomBarAddComment extends StatelessWidget {
           child: IconButton(
             key: postCommentButtonKey,
             icon: const Icon(Icons.send),
-            onPressed: () {},
+            onPressed: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
           ),
         ),
       ],
