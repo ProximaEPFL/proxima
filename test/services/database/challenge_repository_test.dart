@@ -69,8 +69,7 @@ void main() {
     });
 
     test("Complete a challenge", () async {
-      final fakePosts = await addPosts(postRepository, inChallengeRange, 1);
-
+      await addPosts(postRepository, inChallengeRange, 1);
       final challenges = await challengeRepository.getChallenges(uid, userPos);
 
       final challenge = challenges.first;
@@ -87,7 +86,7 @@ void main() {
     });
 
     test("Multiple gets with only one challenge available", () async {
-      final fakePosts = await addPosts(postRepository, inChallengeRange, 1);
+      await addPosts(postRepository, inChallengeRange, 1);
 
       for (int i = 0; i < 10; i++) {
         final challenges =
@@ -98,7 +97,7 @@ void main() {
     });
 
     test("Challenge posts are unique", () async {
-      final fakePosts = await addPosts(
+      await addPosts(
         postRepository,
         inChallengeRange,
         ChallengeRepositoryService.maxActiveChallenges,
