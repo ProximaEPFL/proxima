@@ -36,7 +36,7 @@ class VotesWidget extends HookConsumerWidget {
       style: const ButtonStyle(
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
-      onPressed: () => upvoteNotifier.triggerUpVote(),
+      onPressed: upvoteNotifier.triggerUpVote,
     );
 
     final downvote = IconButton(
@@ -52,7 +52,7 @@ class VotesWidget extends HookConsumerWidget {
       style: const ButtonStyle(
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
-      onPressed: () => upvoteNotifier.triggerDownVote(),
+      onPressed: upvoteNotifier.triggerDownVote,
     );
 
     final voteCount = Padding(
