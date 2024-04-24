@@ -27,10 +27,10 @@ class GeoPointGenerator {
 
   /// Method to create a post on the edge of the range but inside
   GeoPoint createPostOnEdgeInsidePosition(GeoPoint userPosition, double range) {
-// Convert range to degrees
+    // Convert range to degrees
     double rangeInDegreesLatitude = kmToDegreesLat(range);
 
-// Smaller reduction to ensure it's inside for very small ranges like 100 meters
+    // Smaller reduction to ensure it's inside for very small ranges like 100 meters
     double reductionOffset = 0.0001; // approx 11 meters
 
     return GeoPoint(
@@ -44,10 +44,10 @@ class GeoPointGenerator {
     GeoPoint userPosition,
     double range,
   ) {
-// Conversion of range from kilometers to degrees
+    // Conversion of range from kilometers to degrees
     double rangeInDegreesLatitude = kmToDegreesLat(range);
 
-// Slightly increase the range to ensure the position is outside
+    // Slightly increase the range to ensure the position is outside
     double additionalOffset = 0.0001; // approx 11 meters
 
     return GeoPoint(

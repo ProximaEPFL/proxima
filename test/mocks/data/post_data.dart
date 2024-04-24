@@ -2,7 +2,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 
-import "mock_firestore_user.dart";
+import "firestore_user.dart";
 
 class PostDataGenerator {
   final emptyPost = PostData(

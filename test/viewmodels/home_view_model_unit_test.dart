@@ -10,9 +10,9 @@ import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 
-import "../mocks/data/mock_firestore_post.dart";
-import "../mocks/data/mock_firestore_user.dart";
-import "../mocks/data/mock_post_data.dart";
+import "../mocks/data/firestore_post.dart";
+import "../mocks/data/firestore_user.dart";
+import "../mocks/data/post_data.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 import "../mocks/services/mock_post_repository_service.dart";
 import "../mocks/services/mock_user_repository_service.dart";
