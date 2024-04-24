@@ -66,7 +66,12 @@ class ChallengeCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  listGenerator.generate(),
+                  // This `Expanded` allows text to clip if it is too long.
+                  // This never happens on real phones (not even the small phone
+                  // emulator), but it does happen for flutter unit tests.
+                  Expanded(
+                    child: listGenerator.generate(),
+                  ),
                   icon,
                 ],
               ),
