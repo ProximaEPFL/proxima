@@ -25,6 +25,21 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final postBody = ListTile(
+      title: Text(
+        key: postCardTitleKey,
+        postOverview.title,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      ),
+      subtitle: Text(
+        key: postCardDescriptionKey,
+        postOverview.description,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 7,
+      ),
+    );
+
     final postBottomBar = Padding(
       padding: const EdgeInsets.all(8),
       child: Row(
@@ -46,21 +61,6 @@ class PostCard extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-
-    final postBody = ListTile(
-      title: Text(
-        key: postCardTitleKey,
-        postOverview.title,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-      ),
-      subtitle: Text(
-        key: postCardDescriptionKey,
-        postOverview.description,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 7,
       ),
     );
 
