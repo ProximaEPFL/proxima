@@ -53,16 +53,15 @@ void main() {
     });
 
     test("Complete a challenge", () async {
-      const pos = userPosition0;
       final fakePosts = PostDataGenerator.generatePostData(1);
       final fakeUsers = FirestoreUserGenerator.generateUserFirestore(2);
       final fakeUser = fakeUsers[1];
       for (final post in fakePosts) {
-        postRepository.addPost(post, pos);
+        postRepository.addPost(post, inChallengeRange);
       }
 
       final challenges =
-          await challengeRepository.getChallenges(fakeUser.uid, pos);
+          await challengeRepository.getChallenges(fakeUser.uid, userPos);
 
       final challenge = challenges.first;
       expect(challenge.data.isCompleted, false);
@@ -72,7 +71,7 @@ void main() {
       );
 
       final updatedChallenges =
-          await challengeRepository.getChallenges(fakeUser.uid, pos);
+          await challengeRepository.getChallenges(fakeUser.uid, userPos);
       expect(updatedChallenges.length, 1);
       expect(updatedChallenges.first.data.isCompleted, true);
     });
