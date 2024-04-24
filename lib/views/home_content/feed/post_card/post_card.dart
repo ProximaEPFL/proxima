@@ -17,11 +17,11 @@ class PostCard extends StatelessWidget {
   static const postCardCommentsKey = Key("postCardComments");
   static const postCardUserKey = Key("postCardUser");
 
-  final PostOverview post;
+  final PostOverview postOverview;
 
   const PostCard({
     super.key,
-    required this.post,
+    required this.postOverview,
   });
 
   void _onPostSelect(BuildContext context, PostOverview post) {
@@ -30,12 +30,30 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final postBody = ListTile(
+      title: Text(
+        key: postCardTitleKey,
+        postOverview.title,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      ),
+      subtitle: Text(
+        key: postCardDescriptionKey,
+        postOverview.description,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 7,
+      ),
+    );
+
     final postBottomBar = Padding(
       padding: const EdgeInsets.all(8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          VotesWidget(key: postCardVotesKey, votes: post.voteScore),
+          VotesWidget(
+            key: postCardVotesKey,
+            postId: postOverview.postId,
+          ),
           InkWell(
             customBorder: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
@@ -43,25 +61,10 @@ class PostCard extends StatelessWidget {
             onTap: () => _onPostSelect(context, post),
             child: CommentWidget(
               key: postCardCommentsKey,
-              commentNumber: post.commentNumber,
+              commentNumber: postOverview.commentNumber,
             ),
           ),
         ],
-      ),
-    );
-
-    final postBody = ListTile(
-      title: Text(
-        key: postCardTitleKey,
-        post.title,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-      ),
-      subtitle: Text(
-        key: postCardDescriptionKey,
-        post.description,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 7,
       ),
     );
 
@@ -78,7 +81,7 @@ class PostCard extends StatelessWidget {
               padding: const EdgeInsets.only(left: 16, top: 8),
               child: UserBarWidget(
                 key: postCardUserKey,
-                posterUsername: post.ownerDisplayName,
+                posterUsername: postOverview.ownerDisplayName,
               ),
             ),
             postBody,

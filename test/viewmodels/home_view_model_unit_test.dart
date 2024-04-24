@@ -87,6 +87,7 @@ void main() {
 
       final expectedPosts = [
         PostOverview(
+          postId: post.id,
           title: post.data.title,
           description: post.data.description,
           voteScore: post.data.voteScore,
@@ -136,15 +137,18 @@ void main() {
           return FirestorePostGenerator.createPostAt(data, userPosition0);
         }).toList();
 
-        final expectedPosts = postsData.map((data) {
-          return PostOverview(
-            title: data.title,
-            description: data.description,
-            voteScore: data.voteScore,
+        final expectedPosts = posts.map((post) {
+          final postOverview = PostOverview(
+            postId: post.id,
+            title: post.data.title,
+            description: post.data.description,
+            voteScore: post.data.voteScore,
             commentNumber: 0,
             ownerDisplayName: owner.data.displayName,
           );
-        }).toList();
+
+          return postOverview;
+        });
 
         // Mock the repository calls
         when(userRepository.getUser(posts[0].data.ownerId)).thenAnswer(
@@ -193,17 +197,18 @@ void main() {
           return FirestorePostGenerator.createPostAt(data, userPosition0);
         }).toList();
 
-        final expectedPosts = postsData.mapIndexed(
-          (index, data) {
-            return PostOverview(
-              title: data.title,
-              description: data.description,
-              voteScore: data.voteScore,
-              commentNumber: 0,
-              ownerDisplayName: owners[index].data.displayName,
-            );
-          },
-        );
+        final expectedPosts = posts.mapIndexed((index, post) {
+          final postOverview = PostOverview(
+            postId: post.id,
+            title: post.data.title,
+            description: post.data.description,
+            voteScore: post.data.voteScore,
+            commentNumber: 0,
+            ownerDisplayName: owners[index].data.displayName,
+          );
+
+          return postOverview;
+        });
 
         // Mock the repository calls
         for (var i = 0; i < numberOfPosts; i++) {
@@ -266,6 +271,7 @@ void main() {
 
       final expectedPosts = [
         PostOverview(
+          postId: post.id,
           title: post.data.title,
           description: post.data.description,
           voteScore: post.data.voteScore,
