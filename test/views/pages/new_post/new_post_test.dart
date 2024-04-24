@@ -7,8 +7,8 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 
-import "../../../mocks/data/mock_firestore_user.dart";
-import "../../../mocks/data/mock_position.dart";
+import "../../../mocks/data/geopoint.dart";
+import "../../../mocks/data/post_data.dart";
 import "../../../mocks/providers/provider_new_post_page.dart";
 import "../../../mocks/services/mock_geo_location_service.dart";
 import "../../../mocks/services/mock_post_repository_service.dart";
@@ -68,13 +68,7 @@ void main() {
       (_) => Future.value(testPoint),
     );
 
-    PostData postData = PostData(
-      ownerId: testingUserFirestoreId,
-      title: "I like turtles",
-      description: "Look at them go!",
-      publicationTime: Timestamp.now(),
-      voteScore: 0,
-    );
+    PostData postData = PostDataGenerator().postData;
 
     final titleFinder = find.byKey(NewPostForm.titleFieldKey);
     await widgetTester.enterText(titleFinder, postData.title);

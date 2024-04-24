@@ -18,7 +18,7 @@ import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
-import "../mocks/data/mock_position.dart";
+import "../mocks/data/geopoint.dart";
 import "../mocks/overrides/override_auth_providers.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 import "../mocks/services/setup_firebase_mocks.dart";

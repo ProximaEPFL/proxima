@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
@@ -11,19 +10,11 @@ import "package:proxima/views/pages/new_post/new_post_page.dart";
 import "../../../mocks/providers/provider_homepage.dart";
 
 void main() {
-  late ProviderScope emptyHomePageWidget;
-  late ProviderScope nonEmptyHomePageWidget;
-
-  setUp(() async {
-    emptyHomePageWidget = emptyHomePageProvider;
-    nonEmptyHomePageWidget = nonEmptyHomePageProvider;
-  });
-
   group("Post creation flow", () {
     testWidgets(
         "From non-empty feed, flow to create a post using bottom bar then go back",
         (tester) async {
-      await tester.pumpWidget(nonEmptyHomePageWidget);
+      await tester.pumpWidget(nonEmptyHomePageProvider);
       await tester.pumpAndSettle();
 
       // Check that the home page is displayed
@@ -57,7 +48,7 @@ void main() {
     testWidgets(
         "From empty feed, flow to create a post using bottom bar then go back",
         (tester) async {
-      await tester.pumpWidget(emptyHomePageWidget);
+      await tester.pumpWidget(emptyHomePageProvider);
       await tester.pumpAndSettle();
 
       // Check that the home page is displayed
@@ -95,7 +86,7 @@ void main() {
     testWidgets(
         "From empty feed, flow to create a post, clicking on 'create one!' button then go back",
         (tester) async {
-      await tester.pumpWidget(emptyHomePageWidget);
+      await tester.pumpWidget(emptyHomePageProvider);
       await tester.pumpAndSettle();
 
       // Check that the home page is displayed
