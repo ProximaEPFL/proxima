@@ -2,6 +2,8 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 
+import "../data/post_overview.dart";
+
 /// A mock implementation of the [HomeViewModel] class.
 /// This class is particularly useful for the UI tests where we want to expose
 /// particular data to the views.
@@ -26,4 +28,21 @@ class MockHomeViewModel extends AsyncNotifier<List<PostOverview>>
 
 final mockEmptyHomeViewModelOverride = [
   postOverviewProvider.overrideWith(() => MockHomeViewModel()),
+];
+
+final mockNonEmptyHomeViewModelOverride = [
+  postOverviewProvider.overrideWith(
+    () => MockHomeViewModel(
+      build: () async => testPosts,
+    ),
+  ),
+];
+
+final mockLoadingHomeViewModelOverride = [
+  postOverviewProvider.overrideWith(
+    () => MockHomeViewModel(
+      // Future.any([]) will never complete and simulate a loading state
+      build: () => Future.any([]),
+    ),
+  ),
 ];

@@ -6,7 +6,7 @@ import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 
-import "../test_data/firestore_user_mock.dart";
+import "../../mocks/data/firestore_user.dart";
 
 void main() {
   group("User repository testing", () {
