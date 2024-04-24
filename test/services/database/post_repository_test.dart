@@ -7,8 +7,9 @@ import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
-import "../../mocks/data/mock_position.dart";
-import "../../mocks/data/mock_post_data.dart";
+import "../../mocks/data/firestore_post.dart";
+import "../../mocks/data/geopoint.dart";
+import "../../mocks/data/post_data.dart";
 
 void main() {
   group("Post Repository testing", () {
@@ -46,8 +47,7 @@ void main() {
       );
     });
 
-    final post = MockPostFirestore.createPostAt(
-      MockPostFirestore.generatePostData(1).first,
+    final post = FirestorePostGenerator.generatePostAt(
       userPosition2,
     );
 
@@ -77,21 +77,24 @@ void main() {
     });
 
     test("Get single nearby post correctly", () async {
-      final postData = MockPostFirestore.generatePostData(1).first;
-      final expectedPost =
-          MockPostFirestore.createPostAt(postData, nearbyPostPosition);
+      const userPosition = userPosition1;
+      final expectedPost = FirestorePostGenerator.generatePostAt(
+        GeoPointGenerator().createNearbyPostPosition(userPosition),
+      );
 
       await setPostFirestore(expectedPost);
 
       final actualPosts =
-          await postRepository.getNearPosts(userPosition1, kmRadius);
+          await postRepository.getNearPosts(userPosition, kmRadius);
       expect(actualPosts, [expectedPost]);
     });
 
     test("Post is not queried when far away", () async {
-      final postData = MockPostFirestore.generatePostData(1).first;
-      final expectedPost =
-          MockPostFirestore.createPostAt(postData, farAwayPostPosition);
+      const userPosition = userPosition1;
+
+      final expectedPost = FirestorePostGenerator.generatePostAt(
+        GeoPointGenerator().createFarAwayPostPosition(userPosition, kmRadius),
+      );
 
       await setPostFirestore(expectedPost);
 
@@ -101,9 +104,11 @@ void main() {
     });
 
     test("Post on edge (inside) is queried", () async {
-      final postData = MockPostFirestore.generatePostData(1).first;
-      final expectedPost =
-          MockPostFirestore.createPostAt(postData, postOnEdgeInsidePosition);
+      const userPosition = userPosition1;
+      final expectedPost = FirestorePostGenerator.generatePostAt(
+        GeoPointGenerator()
+            .createPostOnEdgeInsidePosition(userPosition, kmRadius),
+      );
 
       await setPostFirestore(expectedPost);
 
@@ -113,9 +118,11 @@ void main() {
     });
 
     test("Post on edge (outside) is not queried", () async {
-      final postData = MockPostFirestore.generatePostData(1).first;
-      final expectedPost =
-          MockPostFirestore.createPostAt(postData, postOnEdgeOutsidePosition);
+      const userPosition = userPosition1;
+      final expectedPost = FirestorePostGenerator.generatePostAt(
+        GeoPointGenerator()
+            .createPostOnEdgeOutsidePosition(userPosition, kmRadius),
+      );
 
       await setPostFirestore(expectedPost);
 
@@ -127,7 +134,7 @@ void main() {
     test("Add post at location correctly", () async {
       const userGeoFirePoint = GeoFirePoint(userPosition1);
 
-      final postData = MockPostFirestore.generatePostData(1).first;
+      final postData = PostDataGenerator.generatePostData(1).first;
 
       await postRepository.addPost(postData, userPosition1);
 
@@ -153,16 +160,16 @@ void main() {
       const nbPostsInRange = 7;
 
       // The 7 first posts are under 100m away from the user and are the ones expected
-      final pointList = generatePositions(
+      final pointList = GeoPointGenerator().generatePositions(
         userPosition0,
         nbPostsInRange,
         nbPosts - nbPostsInRange,
       );
 
-      final postsData = MockPostFirestore.generatePostData(nbPosts);
+      final postsData = PostDataGenerator.generatePostData(nbPosts);
 
       final allPosts = List.generate(nbPosts, (i) {
-        return MockPostFirestore.createPostAt(
+        return FirestorePostGenerator.createPostAt(
           postsData[i],
           pointList[i],
           id: "post_$i",
@@ -189,17 +196,17 @@ void main() {
       const userId1 = UserIdFirestore(value: "user_id_1");
 
       final postsData1 =
-          MockPostFirestore.createUserPost(userId1, userPosition2);
+          FirestorePostGenerator.createUserPost(userId1, userPosition2);
       final postsData2 =
-          MockPostFirestore.createUserPost(userId1, userPosition3);
+          FirestorePostGenerator.createUserPost(userId1, userPosition3);
       await setPostsFirestore([postsData1, postsData2]);
 
       const userId2 = UserIdFirestore(value: "user_id_2");
 
       final postsData3 =
-          MockPostFirestore.createUserPost(userId2, userPosition2);
+          FirestorePostGenerator.createUserPost(userId2, userPosition2);
       final postsData4 =
-          MockPostFirestore.createUserPost(userId2, userPosition3);
+          FirestorePostGenerator.createUserPost(userId2, userPosition3);
       await setPostsFirestore([postsData3, postsData4]);
 
       final actualPosts1 = await postRepository.getUserPosts(userId1);

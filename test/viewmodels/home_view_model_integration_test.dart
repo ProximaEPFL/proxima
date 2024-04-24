@@ -1,4 +1,3 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import "package:collection/collection.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -11,9 +10,9 @@ import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:test/test.dart";
 
-import "../mocks/data/mock_firestore_user.dart";
-import "../mocks/data/mock_position.dart";
-import "../mocks/data/mock_post_data.dart";
+import "../mocks/data/firestore_user.dart";
+import "../mocks/data/geopoint.dart";
+import "../mocks/data/post_data.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 
 void main() {
@@ -30,7 +29,7 @@ void main() {
     late ProviderContainer container;
 
     // Base point used in the tests
-    const userPosition = GeoPoint(0, 0);
+    const userPosition = userPosition0;
 
     setUp(() async {
       fakeFireStore = FakeFirebaseFirestore();
@@ -63,11 +62,15 @@ void main() {
     });
 
     test("No posts are returned when they are far way from the user", () async {
-      final postData = MockPostFirestore.generatePostData(1)[0];
+      final postData = PostDataGenerator.generatePostData(1)[0];
+      const userPosition = userPosition0;
 
       await postRepo.addPost(
         postData,
-        const GeoPoint(1, 0), // This is >> 0.1 km away from the (0,0)
+        GeoPointGenerator().createFarAwayPostPosition(
+          userPosition,
+          0.1,
+        ), // This is >> 0.1 km away from the (0,0)
       );
 
       final actualPosts = await container.read(postOverviewProvider.future);
@@ -77,11 +80,11 @@ void main() {
 
     test("Single near post returned correctly", () async {
       // Add the post owner to the database
-      final owner = MockUserFirestore.generateUserFirestore(1)[0];
+      final owner = FirestoreUserGenerator.generateUserFirestore(1)[0];
       await userRepo.setUser(owner.uid, owner.data);
 
       // Add the post to the database
-      final postData = MockPostFirestore.generatePostData(1).map((postData) {
+      final postData = PostDataGenerator.generatePostData(1).map((postData) {
         return PostData(
           ownerId: owner.uid,
           // Map to the owner
@@ -92,8 +95,10 @@ void main() {
         );
       }).first;
 
-      const postPosition =
-          GeoPoint(0.0001, 0); // This is < 0.1 km away from the (0,0)
+      const userPosition = userPosition0;
+      final postPosition =
+          GeoPointGenerator().createNearbyPostPosition(userPosition);
+      // This is < 0.1 km away from the (0,0)
 
       final postId = await postRepo.addPost(
         postData,
@@ -121,7 +126,7 @@ void main() {
 
     test("Throws an exception when the owner of a post is not found", () async {
       // Add the post to the database
-      final postData = MockPostFirestore.generatePostData(1).first;
+      final postData = PostDataGenerator.generatePostData(1).first;
 
       await postRepo.addPost(
         postData,
@@ -146,13 +151,13 @@ void main() {
       const nbPosts = 10;
 
       // Add the post owners to the database
-      final owners = MockUserFirestore.generateUserFirestore(nbOwners);
+      final owners = FirestoreUserGenerator.generateUserFirestore(nbOwners);
       for (final owner in owners) {
         await userRepo.setUser(owner.uid, owner.data);
       }
 
       // Add the posts to the database
-      final postDatas = MockPostFirestore.generatePostData(nbPosts)
+      final postDatas = PostDataGenerator.generatePostData(nbPosts)
           .mapIndexed(
             (index, element) => PostData(
               ownerId: owners[index % nbOwners].uid,
@@ -167,7 +172,7 @@ void main() {
 
       // The 6 first posts are under 100m away from the user and are the ones expected
       const nbPostsInRange = 6;
-      final postPositions = generatePositions(
+      final postPositions = GeoPointGenerator().generatePositions(
         userPosition0,
         nbPostsInRange,
         nbPosts - nbPostsInRange,

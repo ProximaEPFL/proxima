@@ -19,7 +19,8 @@ import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
-import "../test/mocks/overrides/mock_auth_providers.dart";
+import "../test/mocks/data/geopoint.dart";
+import "../test/mocks/overrides/override_auth_providers.dart";
 import "../test/mocks/services/mock_geo_location_service.dart";
 import "../test/mocks/services/setup_firebase_mocks.dart";
 
@@ -31,7 +32,7 @@ void main() {
   late UserRepositoryService userRepo;
 
   MockGeoLocationService geoLocationService = MockGeoLocationService();
-  const GeoPoint testLocation = GeoPoint(0, 0);
+  const GeoPoint testLocation = userPosition0;
 
   setUpAll(() async {
     setupFirebaseAuthMocks();

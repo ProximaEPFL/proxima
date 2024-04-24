@@ -3,7 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 
-import "../overrides/mock_home_view_model.dart";
+import "../overrides/override_home_view_model.dart";
 
 const homePageApp = MaterialApp(
   onGenerateRoute: generateRoute,

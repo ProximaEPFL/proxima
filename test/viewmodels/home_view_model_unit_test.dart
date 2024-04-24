@@ -1,4 +1,3 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import "package:collection/collection.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -10,8 +9,10 @@ import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 
-import "../mocks/data/mock_firestore_user.dart";
-import "../mocks/data/mock_post_data.dart";
+import "../mocks/data/firestore_post.dart";
+import "../mocks/data/firestore_user.dart";
+import "../mocks/data/geopoint.dart";
+import "../mocks/data/post_data.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 import "../mocks/services/mock_post_repository_service.dart";
 import "../mocks/services/mock_user_repository_service.dart";
@@ -23,8 +24,6 @@ void main() {
     late UserRepositoryService userRepository;
 
     late ProviderContainer container;
-
-    const point = GeoPoint(0, 0);
 
     setUp(() {
       geoLocationService = MockGeoLocationService();
@@ -49,10 +48,14 @@ void main() {
     test("No posts are returned when no posts returned by the repository",
         () async {
       when(geoLocationService.getCurrentPosition()).thenAnswer(
-        (_) async => point,
+        (_) async => userPosition0,
       );
-      when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
-          .thenAnswer(
+      when(
+        postRepository.getNearPosts(
+          userPosition0,
+          HomeViewModel.kmPostRadius,
+        ),
+      ).thenAnswer(
         (_) async => [],
       );
 
@@ -64,8 +67,8 @@ void main() {
     test(
         "Post is returned correctly when single post is returned by the repository",
         () async {
-      final owner = MockUserFirestore.generateUserFirestore(1)[0];
-      final postData = MockPostFirestore.generatePostData(1)
+      final owner = FirestoreUserGenerator.generateUserFirestore(1)[0];
+      final postData = PostDataGenerator.generatePostData(1)
           .map(
             (postData) => PostData(
               ownerId: owner.uid,
@@ -76,7 +79,7 @@ void main() {
             ),
           )
           .toList()[0];
-      final post = MockPostFirestore.createPostAt(postData, point);
+      final post = FirestorePostGenerator.createPostAt(postData, userPosition0);
 
       when(userRepository.getUser(post.data.ownerId)).thenAnswer(
         (_) async => owner,
@@ -96,10 +99,14 @@ void main() {
       ];
 
       when(geoLocationService.getCurrentPosition()).thenAnswer(
-        (_) async => point,
+        (_) async => userPosition0,
       );
-      when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
-          .thenAnswer(
+      when(
+        postRepository.getNearPosts(
+          userPosition0,
+          HomeViewModel.kmPostRadius,
+        ),
+      ).thenAnswer(
         (_) async => [post],
       );
       when(userRepository.getUser(post.data.ownerId)).thenAnswer(
@@ -115,8 +122,8 @@ void main() {
       "Posts are returned correctly when multiple posts are returned by the repository with all posts corresponding to the same owner",
       () async {
         // Generate the data for the test
-        final owner = MockUserFirestore.generateUserFirestore(1)[0];
-        final postsData = MockPostFirestore.generatePostData(10)
+        final owner = FirestoreUserGenerator.generateUserFirestore(1)[0];
+        final postsData = PostDataGenerator.generatePostData(10)
             .map(
               (postData) => PostData(
                 ownerId: owner.uid,
@@ -129,7 +136,7 @@ void main() {
             .toList();
 
         final posts = postsData.map((data) {
-          return MockPostFirestore.createPostAt(data, point);
+          return FirestorePostGenerator.createPostAt(data, userPosition0);
         }).toList();
 
         final expectedPosts = posts.map((post) {
@@ -151,10 +158,14 @@ void main() {
         );
 
         when(geoLocationService.getCurrentPosition()).thenAnswer(
-          (_) async => point,
+          (_) async => userPosition0,
         );
-        when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
-            .thenAnswer(
+        when(
+          postRepository.getNearPosts(
+            userPosition0,
+            HomeViewModel.kmPostRadius,
+          ),
+        ).thenAnswer(
           (_) async => posts,
         );
 
@@ -171,9 +182,10 @@ void main() {
         const numberOfPosts = 10;
 
         // Generate the data for the test
-        final owners = MockUserFirestore.generateUserFirestore(numberOfPosts);
+        final owners =
+            FirestoreUserGenerator.generateUserFirestore(numberOfPosts);
         final postsData =
-            MockPostFirestore.generatePostData(numberOfPosts).mapIndexed(
+            PostDataGenerator.generatePostData(numberOfPosts).mapIndexed(
           (index, element) => PostData(
             ownerId: owners[index].uid,
             title: element.title,
@@ -184,7 +196,7 @@ void main() {
         );
 
         final posts = postsData.map((data) {
-          return MockPostFirestore.createPostAt(data, point);
+          return FirestorePostGenerator.createPostAt(data, userPosition0);
         }).toList();
 
         final expectedPosts = posts.mapIndexed((index, element) {
@@ -208,10 +220,14 @@ void main() {
         }
 
         when(geoLocationService.getCurrentPosition()).thenAnswer(
-          (_) async => point,
+          (_) async => userPosition0,
         );
-        when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
-            .thenAnswer(
+        when(
+          postRepository.getNearPosts(
+            userPosition0,
+            HomeViewModel.kmPostRadius,
+          ),
+        ).thenAnswer(
           (_) async => posts,
         );
 
@@ -224,10 +240,14 @@ void main() {
 
     test("New posts are exposed correctly on refresh", () async {
       when(geoLocationService.getCurrentPosition()).thenAnswer(
-        (_) async => point,
+        (_) async => userPosition0,
       );
-      when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
-          .thenAnswer(
+      when(
+        postRepository.getNearPosts(
+          userPosition0,
+          HomeViewModel.kmPostRadius,
+        ),
+      ).thenAnswer(
         (_) async => [],
       );
 
@@ -237,8 +257,8 @@ void main() {
       expect(postBeforeRefresh, []);
 
       // Simulate a new post being added
-      final owner = MockUserFirestore.generateUserFirestore(1)[0];
-      final postData = MockPostFirestore.generatePostData(1)
+      final owner = FirestoreUserGenerator.generateUserFirestore(1)[0];
+      final postData = PostDataGenerator.generatePostData(1)
           .map(
             (postData) => PostData(
               ownerId: owner.uid,
@@ -249,7 +269,7 @@ void main() {
             ),
           )
           .toList()[0];
-      final post = MockPostFirestore.createPostAt(postData, point);
+      final post = FirestorePostGenerator.createPostAt(postData, userPosition0);
 
       final expectedPosts = [
         (
@@ -264,8 +284,12 @@ void main() {
         ),
       ];
 
-      when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
-          .thenAnswer(
+      when(
+        postRepository.getNearPosts(
+          userPosition0,
+          HomeViewModel.kmPostRadius,
+        ),
+      ).thenAnswer(
         (_) async => [post],
       );
       when(userRepository.getUser(post.data.ownerId)).thenAnswer(
@@ -284,12 +308,16 @@ void main() {
 
     test("Error is exposed correctly on refresh", () async {
       when(geoLocationService.getCurrentPosition()).thenAnswer(
-        (_) async => point,
+        (_) async => userPosition0,
       );
 
       const expectedErrorMessage = "Error while fetching posts";
-      when(postRepository.getNearPosts(point, HomeViewModel.kmPostRadius))
-          .thenThrow(Exception(expectedErrorMessage));
+      when(
+        postRepository.getNearPosts(
+          userPosition0,
+          HomeViewModel.kmPostRadius,
+        ),
+      ).thenThrow(Exception(expectedErrorMessage));
 
       // Refresh the posts
       await container.read(postOverviewProvider.notifier).refresh();

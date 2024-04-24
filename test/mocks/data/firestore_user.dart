@@ -4,19 +4,7 @@ import "package:proxima/models/database/user/user_data.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 
-import "mock_firebase_auth_user.dart";
-
-/// Not a coherent representation of a [UserFirestore]
-/// This is just here as a placeholder value that will be overridden in the tests
-final mockEmptyFirestoreUser = UserFirestore(
-  data: UserData(
-    displayName: "",
-    username: "",
-    joinTime: Timestamp.fromMillisecondsSinceEpoch(0),
-    centauriPoints: 0,
-  ),
-  uid: const UserIdFirestore(value: ""),
-);
+import "firebase_auth_user.dart";
 
 final testingUserData = UserData(
   username: "username_8456",
@@ -33,7 +21,7 @@ final testingUserFirestore = UserFirestore(
 );
 
 /// Helper class to generate mock user data to be used in tests
-class MockUserFirestore {
+class FirestoreUserGenerator {
   static List<UserData> generateUserData(int count) {
     return List.generate(count, (i) {
       return UserData(
