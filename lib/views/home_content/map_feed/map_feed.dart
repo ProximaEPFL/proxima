@@ -14,7 +14,7 @@ class MapFeed extends ConsumerStatefulWidget {
 
 class MapFeedState extends ConsumerState<MapFeed> {
   //key for testing
-  static const mapKey = Key("map");
+  static const mapScreenKey = Key("map");
   static const dividerKey = Key("Divider");
 
   //current position of the user
@@ -50,7 +50,7 @@ class MapFeedState extends ConsumerState<MapFeed> {
                 child: CircularProgressIndicator(),
               )
             : Scaffold(
-                key: mapKey,
+                key: mapScreenKey,
                 body: Column(
                   children: [
                     const MapSortOptionChips(),

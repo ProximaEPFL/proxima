@@ -37,7 +37,7 @@ class NearbyPostsMapState extends ConsumerState<NearbyPostsMap> {
     //TODO: replace mock markers with real nearby posts
     Set<Marker> mockMarkers = MockMarkers(widget.currentPosition).mockMarkers;
     return GoogleMap(
-      key: widget.mapKey,
+      key: nearbyPostsMapKey,
       initialCameraPosition: CameraPosition(
         target: widget.currentPosition,
         zoom: widget.currentZoom,
