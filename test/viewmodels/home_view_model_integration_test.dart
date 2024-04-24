@@ -67,7 +67,7 @@ void main() {
 
       await postRepo.addPost(
         postData,
-        GeoPointGenerator().createFarAwayPostPosition(
+        GeoPointGenerator.createFarAwayPostPosition(
           userPosition,
           0.1,
         ), // This is >> 0.1 km away from the (0,0)
@@ -97,7 +97,7 @@ void main() {
 
       const userPosition = userPosition0;
       final postPosition =
-          GeoPointGenerator().createNearbyPostPosition(userPosition);
+          GeoPointGenerator.createNearbyPostPosition(userPosition);
       // This is < 0.1 km away from the (0,0)
 
       await postRepo.addPost(
@@ -169,7 +169,7 @@ void main() {
 
       // The 6 first posts are under 100m away from the user and are the ones expected
       const nbPostsInRange = 6;
-      final postPositions = GeoPointGenerator().generatePositions(
+      final postPositions = GeoPointGenerator.generatePositions(
         userPosition0,
         nbPostsInRange,
         nbPosts - nbPostsInRange,

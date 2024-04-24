@@ -79,7 +79,7 @@ void main() {
     test("Get single nearby post correctly", () async {
       const userPosition = userPosition1;
       final expectedPost = FirestorePostGenerator.generatePostAt(
-        GeoPointGenerator().createNearbyPostPosition(userPosition),
+        GeoPointGenerator.createNearbyPostPosition(userPosition),
       );
 
       await setPostFirestore(expectedPost);
@@ -93,7 +93,7 @@ void main() {
       const userPosition = userPosition1;
 
       final expectedPost = FirestorePostGenerator.generatePostAt(
-        GeoPointGenerator().createFarAwayPostPosition(userPosition, kmRadius),
+        GeoPointGenerator.createFarAwayPostPosition(userPosition, kmRadius),
       );
 
       await setPostFirestore(expectedPost);
@@ -106,8 +106,7 @@ void main() {
     test("Post on edge (inside) is queried", () async {
       const userPosition = userPosition1;
       final expectedPost = FirestorePostGenerator.generatePostAt(
-        GeoPointGenerator()
-            .createPostOnEdgeInsidePosition(userPosition, kmRadius),
+        GeoPointGenerator.createPostOnEdgeInsidePosition(userPosition, kmRadius),
       );
 
       await setPostFirestore(expectedPost);
@@ -120,8 +119,7 @@ void main() {
     test("Post on edge (outside) is not queried", () async {
       const userPosition = userPosition1;
       final expectedPost = FirestorePostGenerator.generatePostAt(
-        GeoPointGenerator()
-            .createPostOnEdgeOutsidePosition(userPosition, kmRadius),
+        GeoPointGenerator.createPostOnEdgeOutsidePosition(userPosition, kmRadius),
       );
 
       await setPostFirestore(expectedPost);
@@ -160,7 +158,7 @@ void main() {
       const nbPostsInRange = 7;
 
       // The 7 first posts are under 100m away from the user and are the ones expected
-      final pointList = GeoPointGenerator().generatePositions(
+      final pointList = GeoPointGenerator.generatePositions(
         userPosition0,
         nbPostsInRange,
         nbPosts - nbPostsInRange,
