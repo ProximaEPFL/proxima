@@ -32,5 +32,33 @@ void main() {
 
       expect(commentPost, commentPostCopy);
     });
+
+    test("inequality test on content", () {
+      const commentPost = CommentPost(
+        content: "content1",
+        ownerDisplayName: "username",
+      );
+
+      const commentPostCopy = CommentPost(
+        content: "content2",
+        ownerDisplayName: "username",
+      );
+
+      expect(commentPost != commentPostCopy, true);
+    });
+
+    test("inequality test on username", () {
+      const commentPost = CommentPost(
+        content: "content",
+        ownerDisplayName: "username1",
+      );
+
+      const commentPostCopy = CommentPost(
+        content: "content",
+        ownerDisplayName: "username2",
+      );
+
+      expect(commentPost != commentPostCopy, true);
+    });
   });
 }
