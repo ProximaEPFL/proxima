@@ -120,8 +120,7 @@ void main() {
     });
 
     test("Challenges expire", () async {
-      final fakePosts = await addPosts(postRepository, inChallengeRange, 5);
-
+      await addPosts(postRepository, inChallengeRange, 5);
       final now = DateTime.now();
       final past =
           now.subtract(ChallengeRepositoryService.maxChallengeDuration);
@@ -158,6 +157,27 @@ void main() {
       for (final pid in updatedPostIds) {
         expect(pid, isIn(postIds.sublist(3, 5)));
       }
+    });
+
+    test("Challenge range works", () async {
+      final tooFarPos = GeoPointGenerator().createPostOnEdgeOutsidePosition(
+        userPos,
+        ChallengeRepositoryService.maxChallengeRadius,
+      );
+
+      final tooClosePos = GeoPointGenerator().createPostOnEdgeInsidePosition(
+        userPos,
+        ChallengeRepositoryService.minChallengeRadius,
+      );
+
+      await addPosts(postRepository, tooFarPos, 1);
+      await addPosts(postRepository, tooClosePos, 1);
+      var challenges = await challengeRepository.getChallenges(uid, userPos);
+      expect(challenges.length, 0);
+
+      await addPosts(postRepository, inChallengeRange, 1);
+      challenges = await challengeRepository.getChallenges(uid, userPos);
+      expect(challenges.length, 1);
     });
   });
 }
