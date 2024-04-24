@@ -193,20 +193,17 @@ void main() {
     });
 
     test("Get simple user posts correctly", () async {
+      final generator = FirestorePostGenerator();
       const userId1 = UserIdFirestore(value: "user_id_1");
 
-      final postsData1 =
-          FirestorePostGenerator.createUserPost(userId1, userPosition2);
-      final postsData2 =
-          FirestorePostGenerator.createUserPost(userId1, userPosition3);
+      final postsData1 = generator.createUserPost(userId1, userPosition2);
+      final postsData2 = generator.createUserPost(userId1, userPosition3);
       await setPostsFirestore([postsData1, postsData2]);
 
       const userId2 = UserIdFirestore(value: "user_id_2");
 
-      final postsData3 =
-          FirestorePostGenerator.createUserPost(userId2, userPosition2);
-      final postsData4 =
-          FirestorePostGenerator.createUserPost(userId2, userPosition3);
+      final postsData3 = generator.createUserPost(userId2, userPosition2);
+      final postsData4 = generator.createUserPost(userId2, userPosition3);
       await setPostsFirestore([postsData3, postsData4]);
 
       final actualPosts1 = await postRepository.getUserPosts(userId1);
