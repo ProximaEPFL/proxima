@@ -4,6 +4,7 @@ import "package:mockito/mockito.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:test/test.dart";
 
+import "../mocks/data/geopoint.dart";
 import "../mocks/services/mock_geolocator_platform.dart";
 
 void main() {
@@ -87,7 +88,7 @@ void main() {
     test(
         "getCurrentPosition requests permission when permission is denied and return correct result when permission is granted",
         () async {
-      const expectedGeoPoint = GeoPoint(46.222, 41.4219983);
+      const expectedGeoPoint = userPosition1;
 
       when(mockGeolocator.isLocationServiceEnabled())
           .thenAnswer((_) async => true);

@@ -2,9 +2,9 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/post/post_data.dart";
 
-import "../../../mocks/data/mock_firestore_post.dart";
-import "../../../mocks/data/mock_position.dart";
-import "../../../mocks/data/mock_post_data.dart";
+import "../../../mocks/data/firestore_post.dart";
+import "../../../mocks/data/geopoint.dart";
+import "../../../mocks/data/post_data.dart";
 
 void main() {
   group("Post Data testing", () {

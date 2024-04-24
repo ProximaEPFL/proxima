@@ -7,9 +7,9 @@ import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
-import "../../mocks/data/mock_firestore_post.dart";
-import "../../mocks/data/mock_position.dart";
-import "../../mocks/data/mock_post_data.dart";
+import "../../mocks/data/firestore_post.dart";
+import "../../mocks/data/geopoint.dart";
+import "../../mocks/data/post_data.dart";
 
 void main() {
   group("Post Repository testing", () {
@@ -217,6 +217,9 @@ void main() {
     });
 
     test("post exists works", () async {
+      final existsBeforeCreation = await postRepository.postExists(post.id);
+      expect(existsBeforeCreation, false);
+
       await setPostFirestore(post);
 
       final exists = await postRepository.postExists(post.id);

@@ -1,4 +1,3 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import "package:collection/collection.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -11,9 +10,9 @@ import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:test/test.dart";
 
-import "../mocks/data/mock_firestore_user.dart";
-import "../mocks/data/mock_position.dart";
-import "../mocks/data/mock_post_data.dart";
+import "../mocks/data/firestore_user.dart";
+import "../mocks/data/geopoint.dart";
+import "../mocks/data/post_data.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 
 void main() {
@@ -64,10 +63,14 @@ void main() {
 
     test("No posts are returned when they are far way from the user", () async {
       final postData = PostDataGenerator.generatePostData(1)[0];
+      const userPosition = userPosition0;
 
       await postRepo.addPost(
         postData,
-        const GeoPoint(1, 0), // This is >> 0.1 km away from the (0,0)
+        GeoPointGenerator().createFarAwayPostPosition(
+          userPosition,
+          0.1,
+        ), // This is >> 0.1 km away from the (0,0)
       );
 
       final actualPosts = await container.read(postOverviewProvider.future);
@@ -92,8 +95,10 @@ void main() {
         );
       }).first;
 
-      const postPosition =
-          GeoPoint(0.0001, 0); // This is < 0.1 km away from the (0,0)
+      const userPosition = userPosition0;
+      final postPosition =
+          GeoPointGenerator().createNearbyPostPosition(userPosition);
+      // This is < 0.1 km away from the (0,0)
 
       await postRepo.addPost(
         postData,
