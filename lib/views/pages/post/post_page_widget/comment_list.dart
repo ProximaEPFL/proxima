@@ -3,6 +3,8 @@ import "package:proxima/models/ui/comment_post.dart";
 import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.dart";
 
 class CommentList extends StatelessWidget {
+  static const commentWidgetKey = Key("commentWidget");
+
   const CommentList({
     super.key,
     required this.comments,
@@ -19,6 +21,7 @@ class CommentList extends StatelessWidget {
         children: comments
             .map(
               (comment) => CommentPostWidget(
+                key: commentWidgetKey,
                 commentPost: comment,
               ),
             )

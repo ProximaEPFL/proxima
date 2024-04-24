@@ -8,6 +8,10 @@ import "package:proxima/views/pages/post/post_page_widget/comment_list.dart";
 import "package:proxima/views/pages/post/post_page_widget/entire_post_widget.dart";
 
 class PostPage extends StatelessWidget {
+  static const postDistanceKey = Key("postDistance");
+  static const entirePostWidgetKey = Key("entirePostWidget");
+  static const commentListWidgetKey = Key("commentListWidget");
+
   const PostPage({
     super.key,
     required this.postOverview,
@@ -24,6 +28,7 @@ class PostPage extends StatelessWidget {
     List<Widget> appBarContent = [
       const Text("Post"),
       Text(
+        key: postDistanceKey,
         //TODO: Add distance to post
         "50m away",
         style: themeData.textTheme.titleSmall,
@@ -31,9 +36,15 @@ class PostPage extends StatelessWidget {
     ];
 
     List<Widget> bodyChildren = [
-      EntirePostWidget(post: postOverview),
+      EntirePostWidget(
+        key: entirePostWidgetKey,
+        post: postOverview,
+      ),
       const SizedBox(height: 10),
-      CommentList(comments: comments),
+      CommentList(
+        key: commentListWidgetKey,
+        comments: comments,
+      ),
     ];
 
     return Scaffold(

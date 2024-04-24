@@ -5,6 +5,11 @@ import "package:proxima/views/home_content/feed/post_card/user_bar_widget.dart";
 import "package:proxima/views/home_content/feed/post_card/votes_widget.dart";
 
 class EntirePostWidget extends StatelessWidget {
+  static const postTitleKey = Key("postTitle");
+  static const postDescriptionKey = Key("postDescription");
+  static const postVoteWidgetKey = Key("postVoteWidget");
+  static const postUserBarKey = Key("postUserAvatar");
+
   final PostOverview post;
 
   const EntirePostWidget({
@@ -20,7 +25,10 @@ class EntirePostWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            VotesWidget(votes: post.voteScore),
+            VotesWidget(
+              key: postVoteWidgetKey,
+              votes: post.voteScore,
+            ),
           ],
         ),
       ),
@@ -28,9 +36,11 @@ class EntirePostWidget extends StatelessWidget {
 
     final postBody = ListTile(
       title: Text(
+        key: postTitleKey,
         post.title,
       ),
       subtitle: Text(
+        key: postDescriptionKey,
         post.description,
       ),
     );
@@ -41,6 +51,7 @@ class EntirePostWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 16, top: 8),
           child: UserBarWidget(
+            key: postUserBarKey,
             posterUsername: post.ownerDisplayName,
           ),
         ),
