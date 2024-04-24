@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_badge.dart";
@@ -24,11 +25,11 @@ class ProfilePage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncUserData = ref.watch(profileProvider);
 
-    var itemListBadge = <InfoCardBadge>[];
-    var itemListPosts = <InfoCardPost>[];
-    var itemListComments = <InfoCardComment>[];
+    final itemListBadge = <Widget>[];
+    final itemListPosts = <Widget>[];
+    final itemListComments = <Widget>[];
 
-    BoxShadow shadow = BoxShadow(
+    final shadow = BoxShadow(
       color: Theme.of(context).colorScheme.shadow.withOpacity(0.4),
       offset: const Offset(0, 1),
       blurRadius: 0.1,
@@ -59,8 +60,10 @@ class ProfilePage extends HookConsumerWidget {
       );
     }
 
-    return switch (asyncUserData) {
-      AsyncData(:final value) => DefaultTabController(
+    return CircularValue(
+      value: asyncUserData,
+      builder: (context, value) {
+        return DefaultTabController(
           length: 2,
           child: Scaffold(
             appBar: AppBar(
@@ -117,13 +120,8 @@ class ProfilePage extends HookConsumerWidget {
               ),
             ),
           ),
-        ),
-      AsyncError(:final error) => Text(
-          "Error: $error",
-        ),
-      _ => const Center(
-          child: CircularProgressIndicator(),
-        ),
-    };
+        );
+      },
+    );
   }
 }
