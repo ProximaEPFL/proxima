@@ -22,12 +22,10 @@ class FirestorePostGenerator {
   }) {
     final point = GeoFirePoint(location);
 
-    if (id == null) {
-      _postId += 1;
-    }
+    id ??= (_postId++).toString();
 
     return PostFirestore(
-      id: PostIdFirestore(value: id ?? _postId.toString()),
+      id: PostIdFirestore(value: id),
       location: PostLocationFirestore(
         geoPoint: location,
         geohash: point.geohash,
