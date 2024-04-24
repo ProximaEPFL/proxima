@@ -168,7 +168,7 @@ class ChallengeRepositoryService {
     Iterable<PostFirestore> possiblePosts =
         await _postRepositoryService.getNearPosts(
       pos,
-      _maxChallengeRadius,
+      maxChallengeRadius,
     );
 
     possiblePosts = possiblePosts.where(
@@ -176,7 +176,7 @@ class ChallengeRepositoryService {
           geoFirePosition.distanceBetweenInKm(
             geopoint: post.location.geoPoint,
           ) >
-          _minChallengeRadius,
+          minChallengeRadius,
     );
 
     return possiblePosts.map((e) => e.id);

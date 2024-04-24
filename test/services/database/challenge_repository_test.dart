@@ -27,19 +27,20 @@ void main() {
     );
   });
 
-  const userPos = userPosition0;
-  §
+  const userPos = userPosition1;
+  final inChallengeRange = GeoPointGenerator().createPostOnEdgeInsidePosition(
+      userPos, ChallengeRepositoryService.maxChallengeRadius);
+
   group("ChallengeRepositoryService", () {
     test("Get new challenges", () async {
-      const pos = userPosition0;
       final fakePosts = PostDataGenerator.generatePostData(3);
       final fakeUsers = FirestoreUserGenerator.generateUserFirestore(4);
       for (final post in fakePosts) {
-        await postRepository.addPost(post, pos);
+        await postRepository.addPost(post, inChallengeRange);
       }
 
       final challenges =
-          await challengeRepository.getChallenges(fakeUsers[3].uid, pos);
+          await challengeRepository.getChallenges(fakeUsers[3].uid, userPos);
 
       expect(challenges.length, 3);
       for (final challenge in challenges) {
@@ -77,62 +78,60 @@ void main() {
     });
 
     test("Multiple gets with only one challenge available", () async {
-      const pos = userPosition0;
       final fakePosts = PostDataGenerator.generatePostData(1);
       final fakeUsers = FirestoreUserGenerator.generateUserFirestore(2);
       final fakeUser = fakeUsers[1];
       for (final post in fakePosts) {
-        postRepository.addPost(post, pos);
+        postRepository.addPost(post, inChallengeRange);
       }
 
       for (int i = 0; i < 10; i++) {
         final challenges =
-            await challengeRepository.getChallenges(fakeUser.uid, pos);
+            await challengeRepository.getChallenges(fakeUser.uid, userPos);
 
         expect(challenges.length, 1);
       }
     });
 
     test("Challenge posts are unique", () async {
-      const pos = userPosition0;
       final fakePosts = PostDataGenerator.generatePostData(3);
       final fakeUsers = FirestoreUserGenerator.generateUserFirestore(4);
       final fakeUser = fakeUsers[3];
       for (final post in fakePosts) {
-        await postRepository.addPost(post, pos);
+        await postRepository.addPost(post, inChallengeRange);
       }
 
       final challenges = await challengeRepository.getChallenges(
         fakeUser.uid,
-        pos,
+        userPos,
       );
       final postIds = challenges.map((e) => e.postId).toSet();
       expect(postIds.length, challenges.length);
     });
 
     test("Deleted post disappears from challenges", () async {
-      const pos = userPosition0;
       final fakePosts = PostDataGenerator.generatePostData(1);
       final fakeUser = testingUserFirestoreId;
-      final postId = await postRepository.addPost(fakePosts.first, pos);
+      final postId =
+          await postRepository.addPost(fakePosts.first, inChallengeRange);
 
-      final challenges = await challengeRepository.getChallenges(fakeUser, pos);
+      final challenges =
+          await challengeRepository.getChallenges(fakeUser, userPos);
       expect(challenges.length, 1);
 
       await postRepository.deletePost(postId);
       final updatedChallenges =
-          await challengeRepository.getChallenges(fakeUser, pos);
+          await challengeRepository.getChallenges(fakeUser, userPos);
 
       expect(updatedChallenges.length, 0);
     });
 
     test("Challenges expire", () async {
-      const pos = userPosition0;
       final fakePosts = PostDataGenerator.generatePostData(5);
       final fakeUsers = FirestoreUserGenerator.generateUserFirestore(6);
       final fakeUser = fakeUsers[5];
       for (final post in fakePosts) {
-        await postRepository.addPost(post, pos);
+        await postRepository.addPost(post, inChallengeRange);
       }
 
       final now = DateTime.now();
@@ -163,7 +162,7 @@ void main() {
 
       final updatedChallenges = await challengeRepository.getChallenges(
         fakeUser.uid,
-        pos,
+        userPos,
       );
 
       final updatedPostIds = updatedChallenges.map((e) => e.postId).toSet();
