@@ -1,9 +1,12 @@
 import "package:flutter/material.dart";
+import "package:flutter_svg/svg.dart";
 import "package:proxima/models/ui/challenge_card_data.dart";
 import "package:proxima/utils/ui/key_value_list_generator.dart";
 
 class ChallengeCard extends StatelessWidget {
   static const opacityWhenFinished = 0.3;
+  static const _challengeGroupAsset = "assets/icons/challenge_group.svg";
+  static const _challengeSingleAsset = "assets/icons/challenge_single.svg";
 
   final ChallengeCardData challenge;
 
@@ -40,10 +43,20 @@ class ChallengeCard extends StatelessWidget {
             subtitle: SizedBox(
               height: 75,
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   listGenerator.generate(),
-                  const Icon(Icons.star),
+                  SvgPicture.asset(
+                    challenge.isGroupChallenge
+                        ? _challengeGroupAsset
+                        : _challengeSingleAsset,
+                    height: 50,
+                    colorFilter: ColorFilter.mode(
+                      IconTheme.of(context).color!,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ],
               ),
             ),
