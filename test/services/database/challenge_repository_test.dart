@@ -10,9 +10,9 @@ import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
-import "../../mocks/data/mock_firestore_user.dart";
-import "../../mocks/data/mock_position.dart";
-import "../../mocks/data/mock_post_data.dart";
+import "../../mocks/data/firestore_user.dart";
+import "../../mocks/data/geopoint.dart";
+import "../../mocks/data/post_data.dart";
 
 Future<List<PostData>> addPosts(
   PostRepositoryService postRepository,
