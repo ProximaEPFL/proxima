@@ -5,11 +5,11 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/profile/components/profile_badge.dart";
-import "package:proxima/views/pages/profile/components/profile_info_card.dart";
-import "package:proxima/views/pages/profile/components/profile_info_pop_up.dart";
-import "package:proxima/views/pages/profile/components/profile_info_row.dart";
+import "package:proxima/views/pages/profile/components/user_account.dart";
+import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
+import "package:proxima/views/pages/profile/info_cards/profile_info_pop_up.dart";
+import "package:proxima/views/pages/profile/info_cards/profile_info_row.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
-import "package:proxima/views/pages/profile/user_info/user_account.dart";
 
 import "../../../mocks/data/mock_firestore_user.dart";
 import "../../../mocks/providers/provider_homepage.dart";
@@ -43,11 +43,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // Check that badges are displayed
-      final badgeCard = find.byKey(ProfileBadge.infoCardBadgeKey);
+      final badgeCard = find.byKey(ProfileBadge.badgeKey);
       expect(badgeCard, findsWidgets);
 
       //Check that the post card is displayed
-      final postCard = find.byKey(ProfileInfoCard.infoCardPostKey);
+      final postCard = find.byKey(ProfileInfoCard.infoCardKey);
       expect(postCard, findsWidgets);
 
       // Check that the info column is displayed
@@ -78,7 +78,7 @@ void main() {
       await tester.pumpAndSettle();
 
       //Check tab on the first post
-      final infoCardPost = find.byKey(ProfileInfoCard.infoCardPostKey);
+      final infoCardPost = find.byKey(ProfileInfoCard.infoCardKey);
       expect(infoCardPost, findsWidgets);
 
       // Tap on the first post
@@ -90,17 +90,17 @@ void main() {
       expect(postPopup, findsOneWidget);
 
       //Check that the title of the pop up is displayed
-      final postPopupTitle = find.byKey(ProfileInfoPopUp.postPopUpTitleKey);
+      final postPopupTitle = find.byKey(ProfileInfoPopUp.popUpTitleKey);
       expect(postPopupTitle, findsOneWidget);
 
       //Check that the description of the pop up is displayed
       final postPopupDescription =
-          find.byKey(ProfileInfoPopUp.postPopUpDescriptionKey);
+          find.byKey(ProfileInfoPopUp.popUpDescriptionKey);
       expect(postPopupDescription, findsOneWidget);
 
       //Check that the delete button is displayed
       final postPopupDeleteButton =
-          find.byKey(ProfileInfoPopUp.postPopUpDeleteButtonKey);
+          find.byKey(ProfileInfoPopUp.popUpDeleteButtonKey);
       expect(postPopupDeleteButton, findsOneWidget);
 
       //Check clicking on the delete button come back to the profile page
@@ -122,7 +122,7 @@ void main() {
       await tester.pumpAndSettle();
 
       //Check tab on the first comment
-      final infoCardComment = find.byKey(ProfileInfoCard.infoCardPostKey);
+      final infoCardComment = find.byKey(ProfileInfoCard.infoCardKey);
       expect(infoCardComment, findsWidgets);
 
       // Tap on the first comment
@@ -135,12 +135,12 @@ void main() {
 
       //Check that the description of the pop up is displayed
       final commentPopupDescription =
-          find.byKey(ProfileInfoPopUp.postPopUpDescriptionKey);
+          find.byKey(ProfileInfoPopUp.popUpDescriptionKey);
       expect(commentPopupDescription, findsOneWidget);
 
       //Check that the delete button is displayed
       final commentPopupDeleteButton =
-          find.byKey(ProfileInfoPopUp.postPopUpDeleteButtonKey);
+          find.byKey(ProfileInfoPopUp.popUpDeleteButtonKey);
       expect(commentPopupDeleteButton, findsOneWidget);
 
       //Check clicking on the delete button come back to the profile page

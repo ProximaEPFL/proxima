@@ -3,10 +3,10 @@ import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/views/components/logout_button.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
-import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 
@@ -138,7 +138,7 @@ void main() {
       expect(homePage, findsOneWidget);
 
       //Logout and check that we are back to the login page
-      final logoutButton = find.byKey(AppTopBar.logoutButtonKey);
+      final logoutButton = find.byKey(LogoutButton.logoutButtonKey);
       await tester.tap(logoutButton);
       await tester.pumpAndSettle();
 

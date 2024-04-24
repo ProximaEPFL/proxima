@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/views/pages/profile/components/profile_info_pop_up.dart";
+import "package:proxima/views/pages/profile/info_cards/profile_info_pop_up.dart";
 
 /// Info card for the profile page (post or comment)
 class ProfileInfoCard extends StatelessWidget {

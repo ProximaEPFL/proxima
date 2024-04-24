@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/database/user/user_data.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
-import "package:proxima/views/pages/profile/user_info/user_account.dart";
+import "package:proxima/views/pages/profile/components/user_account.dart";
 
 class ProfileAppBar extends AppBar {
   static const settingsKey = Key("settings");
