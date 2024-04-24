@@ -212,5 +212,20 @@ void main() {
       expect(actualPosts1, unorderedEquals([postsData1, postsData2]));
       expect(actualPosts2, unorderedEquals([postsData3, postsData4]));
     });
+
+    test("post exists works", () async {
+      final existsBeforeCreation = await postRepository.postExists(post.id);
+      expect(existsBeforeCreation, false);
+
+      await setPostFirestore(post);
+
+      final exists = await postRepository.postExists(post.id);
+      expect(exists, true);
+
+      await postRepository.deletePost(post.id);
+
+      final existAfterDeletion = await postRepository.postExists(post.id);
+      expect(existAfterDeletion, false);
+    });
   });
 }
