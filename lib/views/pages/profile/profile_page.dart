@@ -2,13 +2,12 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
-import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_badge.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_comment.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_post.dart";
 import "package:proxima/views/pages/profile/posts_info/info_column.dart";
 import "package:proxima/views/pages/profile/posts_info/info_row.dart";
-import "package:proxima/views/pages/profile/user_info/user_account.dart";
+import "package:proxima/views/pages/profile/profile_app_bar.dart";
 
 /// This widget is used to display the profile page
 /// It contains the user info, centauri points, badges, posts and comments
@@ -19,7 +18,6 @@ class ProfilePage extends HookConsumerWidget {
   static const tabKey = Key("tab");
   static const postColumnKey = Key("postColumn");
   static const commentColumnKey = Key("commentColumn");
-  static const settingsKey = Key("settings");
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,21 +64,7 @@ class ProfilePage extends HookConsumerWidget {
         return DefaultTabController(
           length: 2,
           child: Scaffold(
-            appBar: AppBar(
-              leading: const LeadingBackButton(),
-              title: UserAccount(
-                userData: value.firestoreUser.data,
-              ),
-              actions: [
-                IconButton(
-                  key: settingsKey,
-                  icon: const Icon(Icons.settings),
-                  onPressed: () {
-                    //TODO: implement settings page
-                  },
-                ),
-              ],
-            ),
+            appBar: ProfileAppBar(userData: value.firestoreUser.data),
             body: Container(
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
               child: Column(
