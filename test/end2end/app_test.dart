@@ -3,7 +3,6 @@ import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:integration_test/integration_test.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/main.dart";
 import "package:proxima/services/database/post_repository_service.dart";
@@ -19,14 +18,12 @@ import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
-import "../test/mocks/data/geopoint.dart";
-import "../test/mocks/overrides/override_auth_providers.dart";
-import "../test/mocks/services/mock_geo_location_service.dart";
-import "../test/mocks/services/setup_firebase_mocks.dart";
+import "../mocks/data/geopoint.dart";
+import "../mocks/overrides/override_auth_providers.dart";
+import "../mocks/services/mock_geo_location_service.dart";
+import "../mocks/services/setup_firebase_mocks.dart";
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
   late FakeFirebaseFirestore fakeFireStore;
   late PostRepositoryService postRepo;
   late UserRepositoryService userRepo;
