@@ -109,7 +109,9 @@ void main() {
       const userPosition = userPosition1;
       final expectedPost = FirestorePostGenerator().generatePostAt(
         geoPointGenerator.createPostOnEdgeInsidePosition(
-            userPosition, kmRadius),
+          userPosition,
+          kmRadius,
+        ),
       );
 
       await setPostFirestore(expectedPost);
@@ -123,7 +125,9 @@ void main() {
       const userPosition = userPosition1;
       final expectedPost = FirestorePostGenerator().generatePostAt(
         geoPointGenerator.createPostOnEdgeOutsidePosition(
-            userPosition, kmRadius),
+          userPosition,
+          kmRadius,
+        ),
       );
 
       await setPostFirestore(expectedPost);
