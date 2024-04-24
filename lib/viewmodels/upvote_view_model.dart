@@ -12,7 +12,7 @@ import "package:proxima/viewmodels/login_view_model.dart";
 /// This view model is used to handle the upvoting and downvoting of a post.
 /// It exposes a [PostVote] object that contains the current vote state and the
 /// number of votes.
-/// The [postId] parameter is used to identify the post for which is responsible
+/// The [PostFirestore] parameter is used to identify the post for which is responsible
 /// this view model.
 ///
 /// To avoid unnecessary database fetches, the [PostVote] state is queried
