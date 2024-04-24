@@ -13,7 +13,7 @@ import "package:proxima/views/pages/profile/posts_info/popup/post_popup.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 import "package:proxima/views/pages/profile/user_info/user_account.dart";
 
-import "../../../mocks/data/mock_firestore_user.dart";
+import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/providers/provider_homepage.dart";
 import "../../../mocks/providers/provider_profile_page.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";

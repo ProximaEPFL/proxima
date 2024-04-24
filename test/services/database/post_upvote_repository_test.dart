@@ -7,8 +7,8 @@ import "package:proxima/models/database/vote/upvote_state.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/post_upvote_repository_service.dart";
 
-import "../../mocks/data/mock_position.dart";
-import "../../mocks/data/mock_post_data.dart";
+import "../../mocks/data/geopoint.dart";
+import "../../mocks/data/post_data.dart";
 
 void main() {
   late FakeFirebaseFirestore firestore;

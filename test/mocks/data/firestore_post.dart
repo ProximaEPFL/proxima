@@ -8,7 +8,7 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 
-import "mock_post_data.dart";
+import "post_data.dart";
 
 /// Helper class to create mock post data to be used in tests
 class FirestorePostGenerator {

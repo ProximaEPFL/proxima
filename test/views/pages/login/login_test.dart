@@ -10,7 +10,7 @@ import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 
-import "../../../mocks/data/mock_firestore_user.dart";
+import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/providers/provider_login_page.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
 
