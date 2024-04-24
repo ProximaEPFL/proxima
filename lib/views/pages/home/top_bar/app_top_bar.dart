@@ -46,12 +46,6 @@ class AppTopBar extends HookConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         title,
-        // Temporary logout button
-        IconButton(
-          key: logoutButtonKey,
-          onPressed: () => ref.read(loginServiceProvider).signOut(),
-          icon: const Icon(Icons.logout),
-        ),
         userAvatar,
       ],
     );
