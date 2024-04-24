@@ -28,6 +28,20 @@ class ChallengeCard extends StatelessWidget {
     }
     listGenerator.addPair("Reward", "${challenge.reward} Centauri");
 
+    final icon = Opacity(
+      opacity: 0.8, // to make the icon less prominent
+      child: SvgPicture.asset(
+        challenge.isGroupChallenge
+            ? _challengeGroupAsset
+            : _challengeSingleAsset,
+        height: 50,
+        colorFilter: ColorFilter.mode(
+          IconTheme.of(context).color!,
+          BlendMode.srcIn,
+        ),
+      ),
+    );
+
     return Card(
       clipBehavior: Clip.hardEdge,
       child: InkWell(
@@ -47,16 +61,7 @@ class ChallengeCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   listGenerator.generate(),
-                  SvgPicture.asset(
-                    challenge.isGroupChallenge
-                        ? _challengeGroupAsset
-                        : _challengeSingleAsset,
-                    height: 50,
-                    colorFilter: ColorFilter.mode(
-                      IconTheme.of(context).color!,
-                      BlendMode.srcIn,
-                    ),
-                  ),
+                  icon,
                 ],
               ),
             ),
