@@ -18,8 +18,8 @@ class ChallengeRepositoryService {
   final PostRepositoryService _postRepositoryService;
 
   static const int _maxActiveChallenges = 3;
-  static const double _maxChallengeRadius = 3; // in km
-  static const double _minChallengeRadius = 0.5;
+  static const double maxChallengeRadius = 3; // in km
+  static const double minChallengeRadius = 0.5;
   static const maxChallengeDuration = Duration(days: 1);
 
   /// Creates a new challenge repository service

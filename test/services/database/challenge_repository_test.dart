@@ -27,6 +27,8 @@ void main() {
     );
   });
 
+  const userPos = userPosition0;
+  §
   group("ChallengeRepositoryService", () {
     test("Get new challenges", () async {
       const pos = userPosition0;
