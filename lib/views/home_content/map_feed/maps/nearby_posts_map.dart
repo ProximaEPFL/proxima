@@ -51,6 +51,8 @@ class NearbyPostsMapState extends ConsumerState<NearbyPostsMap> {
       zoomControlsEnabled: false,
       //we can't scroll the map
       scrollGesturesEnabled: false,
+      rotateGesturesEnabled: false,
+      tiltGesturesEnabled: false,
       circles: {
         Circle(
           circleId: const CircleId("1"),

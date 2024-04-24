@@ -6,7 +6,7 @@ import "package:mockito/mockito.dart";
 import "package:proxima/views/home_content/map_feed/map_feed.dart";
 import "package:proxima/views/home_content/map_feed/maps/nearby_posts_map.dart";
 import "package:proxima/views/sort_option_widgets/feed_sort_option/map_sort_option_chips.dart";
-import "../../../mocks/data/mock_position.dart";
+import "../../../mocks/data/geopoint.dart";
 import "../../../mocks/providers/provider_map_page.dart";
 import "../../../mocks/services/mock_geo_location_service.dart";
 

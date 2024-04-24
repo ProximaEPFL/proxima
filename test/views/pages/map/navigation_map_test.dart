@@ -6,7 +6,7 @@ import "package:mockito/mockito.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 
-import "../../../mocks/data/mock_position.dart";
+import "../../../mocks/data/geopoint.dart";
 import "../../../mocks/providers/provider_homepage.dart";
 import "../../../mocks/services/mock_geo_location_service.dart";
 
