@@ -3,6 +3,8 @@ import "package:flutter/foundation.dart";
 import "package:proxima/models/database/challenge/challenge_data.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 
+/// This class represents a challenge in the Firestore database
+
 @immutable
 class ChallengeFirestore {
   static const subCollectionName = "challenges";

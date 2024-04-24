@@ -97,7 +97,7 @@ void main() {
       final fakeUsers = FirestoreUserGenerator.generateUserFirestore(4);
       final fakeUser = fakeUsers[3];
       for (final post in fakePosts) {
-        postRepository.addPost(post, pos);
+        await postRepository.addPost(post, pos);
       }
 
       final challenges = await challengeRepository.getChallenges(
@@ -106,6 +106,22 @@ void main() {
       );
       final postIds = challenges.map((e) => e.postId).toSet();
       expect(postIds.length, challenges.length);
+    });
+
+    test("Deleted post disappears from challenges", () async {
+      const pos = userPosition0;
+      final fakePosts = PostDataGenerator.generatePostData(1);
+      final fakeUser = testingUserFirestoreId;
+      final postId = await postRepository.addPost(fakePosts.first, pos);
+
+      final challenges = await challengeRepository.getChallenges(fakeUser, pos);
+      expect(challenges.length, 1);
+
+      await postRepository.deletePost(postId);
+      final updatedChallenges =
+          await challengeRepository.getChallenges(fakeUser, pos);
+
+      expect(updatedChallenges.length, 0);
     });
 
     test("Challenges expire", () async {
