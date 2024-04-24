@@ -9,6 +9,8 @@ class InfoColumn extends StatelessWidget {
     required this.columnKey,
   });
 
+  static const _separator = SizedBox(height: 10);
+
   final List<Widget> itemList;
   final Key columnKey;
 
@@ -19,11 +21,8 @@ class InfoColumn extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       scrollDirection: Axis.vertical,
       itemCount: itemList.length,
-      itemBuilder: (BuildContext context, int index) {
-        return itemList[index];
-      },
-      separatorBuilder: (BuildContext context, int index) =>
-          const SizedBox(height: 10),
+      itemBuilder: (BuildContext context, int index) => itemList[index],
+      separatorBuilder: (BuildContext context, int index) => _separator,
     );
   }
 }

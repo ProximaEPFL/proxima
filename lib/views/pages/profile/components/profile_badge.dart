@@ -4,6 +4,10 @@ import "package:flutter/material.dart";
 class ProfileBadge extends StatelessWidget {
   static const infoCardBadgeKey = Key("profileBadge");
 
+  static const _badgeWidth = 54.0;
+  static const _badgeHeight = 80.0;
+  static const _badgeIconSize = 32.0;
+
   const ProfileBadge({
     super.key,
     required this.shadow,
@@ -20,15 +24,12 @@ class ProfileBadge extends StatelessWidget {
     );
 
     //TODO: replace with real badge data
-    const badgeContent = Icon(
-      Icons.star,
-      size: 32,
-    );
+    const badgeContent = Icon(Icons.star, size: _badgeIconSize);
 
     return Container(
       key: infoCardBadgeKey,
-      width: 54,
-      height: 80,
+      width: _badgeWidth,
+      height: _badgeHeight,
       decoration: decoration,
       child: badgeContent,
     );

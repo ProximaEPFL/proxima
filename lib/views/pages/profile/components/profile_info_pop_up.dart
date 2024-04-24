@@ -36,7 +36,6 @@ class ProfileInfoPopUp extends StatelessWidget {
           padding: const EdgeInsets.only(
             top: 8.0,
             right: 8.0,
-            bottom: 0.0,
             left: 8.0,
           ),
           child: Text(
@@ -59,16 +58,14 @@ class ProfileInfoPopUp extends StatelessWidget {
     return AlertDialog(
       title: potentialTitle,
       content: dialogContent,
-      contentPadding: const EdgeInsets.fromLTRB(
-        24.0,
-        8.0,
-        24.0,
-        0.0,
+      contentPadding: const EdgeInsets.only(
+        left: 24.0,
+        top: 8.0,
+        right: 24.0,
       ),
       actionsPadding: const EdgeInsets.only(
         right: 24.0,
         bottom: 12.0,
-        top: 0.0,
         left: 24.0,
       ),
       actions: [deleteAction],

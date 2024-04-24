@@ -6,6 +6,8 @@ class ProfileInfoCard extends StatelessWidget {
   static const infoCardPostKey = Key("profileInfoCard");
 
   static const _borderRadius = BorderRadius.all(Radius.circular(10));
+  static const _cardHeight = 80.0;
+  static const _deleteIconSize = 32.0;
 
   const ProfileInfoCard({
     super.key,
@@ -40,7 +42,7 @@ class ProfileInfoCard extends StatelessWidget {
         : null;
 
     final deleteButton = IconButton(
-      icon: const Icon(Icons.delete, size: 32),
+      icon: const Icon(Icons.delete, size: _deleteIconSize),
       onPressed: onDelete,
     );
 
@@ -73,8 +75,7 @@ class ProfileInfoCard extends StatelessWidget {
 
     return Container(
       key: infoCardPostKey,
-      width: 54,
-      height: 80,
+      height: _cardHeight,
       decoration: decoration,
       child: Material(
         clipBehavior: Clip.hardEdge,
