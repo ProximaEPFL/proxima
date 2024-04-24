@@ -79,7 +79,8 @@ class ChallengeRepositoryService {
 
     for (final challengeSnap in challengesSnap.docs) {
       final challenge = ChallengeFirestore.fromDb(challengeSnap);
-      if (challenge.data.isExpired) {
+      if (challenge.data.isExpired ||
+          !await _postRepositoryService.postExists(challenge.postId)) {
         _deleteChallenge(challengeSnap, parentRef);
       } else {
         activeChallenges.add(challenge);
