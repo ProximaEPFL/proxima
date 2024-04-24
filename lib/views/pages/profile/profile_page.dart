@@ -19,6 +19,8 @@ class ProfilePage extends HookConsumerWidget {
   static const commentColumnKey = Key("commentColumn");
 
   static const _badgesTitle = "Your badges:";
+  static const _postsTab = "Posts";
+  static const _commentsTab = "Comments";
 
   const ProfilePage({super.key});
 
@@ -37,7 +39,8 @@ class ProfilePage extends HookConsumerWidget {
       spreadRadius: 0.01,
     );
 
-    //this is a MOCK list of cards
+    // This is a MOCK list of cards
+    // TODO replace by viewmodel
     for (var i = 0; i < 10; i++) {
       itemListBadge.add(
         InfoCardBadge(shadow: shadow),
@@ -65,6 +68,23 @@ class ProfilePage extends HookConsumerWidget {
       itemList: itemListBadge,
     );
 
+    const tabs = TabBar(
+      key: tabKey,
+      tabs: [
+        Tab(text: _postsTab, key: postTabKey),
+        Tab(text: _commentsTab, key: commentTabKey),
+      ],
+    );
+
+    final posts = InfoColumn(
+      itemList: itemListPosts,
+      colKey: postColumnKey,
+    );
+    final comments = InfoColumn(
+      itemList: itemListComments,
+      colKey: commentColumnKey,
+    );
+
     return CircularValue(
       value: asyncUserData,
       builder: (context, value) {
@@ -77,30 +97,12 @@ class ProfilePage extends HookConsumerWidget {
               child: Column(
                 children: [
                   badges,
-                  const TabBar(
-                    key: tabKey,
-                    tabs: [
-                      Tab(
-                        text: "Posts",
-                        key: postTabKey,
-                      ),
-                      Tab(
-                        text: "Comments",
-                        key: commentTabKey,
-                      ),
-                    ],
-                  ),
+                  tabs,
                   Expanded(
                     child: TabBarView(
                       children: [
-                        InfoColumn(
-                          itemList: itemListPosts,
-                          colKey: postColumnKey,
-                        ),
-                        InfoColumn(
-                          itemList: itemListComments,
-                          colKey: commentColumnKey,
-                        ),
+                        posts,
+                        comments,
                       ],
                     ),
                   ),
