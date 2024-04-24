@@ -93,13 +93,13 @@ class ChallengeRepositoryService {
       }
     }
 
-      final now = DateTime.now();
-      final sum = now.add(maxChallengeDuration);
-      final expiresOn = DateTime(
-        sum.year,
-        sum.month,
-        sum.day,
-      ); // truncates to the day
+    final now = DateTime.now();
+    final sum = now.add(maxChallengeDuration);
+    final expiresOn = DateTime(
+      sum.year,
+      sum.month,
+      sum.day,
+    ); // truncates to the day
 
     final possiblePosts = await inRangeUnsortedPosts(pos);
     final postIt = possiblePosts.iterator;
@@ -129,6 +129,7 @@ class ChallengeRepositoryService {
     return activeChallenges;
   }
 
+  /// moves the challenge with id [pid] from the active challenges to the past challenges
   Future<void> _deleteChallenge(
     DocumentSnapshot<Map<String, dynamic>> challengeSnap,
     DocumentReference parentRef,
