@@ -58,7 +58,7 @@ class PostCard extends StatelessWidget {
             customBorder: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            onTap: () => _onPostSelect(context, post),
+            onTap: () => _onPostSelect(context, postOverview),
             child: CommentWidget(
               key: postCardCommentsKey,
               commentNumber: postOverview.commentNumber,
@@ -73,7 +73,7 @@ class PostCard extends StatelessWidget {
       key: postCardKey,
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onTap: () => _onPostSelect(context, post),
+        onTap: () => _onPostSelect(context, postOverview),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

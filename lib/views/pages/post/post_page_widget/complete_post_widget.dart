@@ -27,7 +27,7 @@ class CompletePostWidget extends StatelessWidget {
           children: [
             VotesWidget(
               key: postVoteWidgetKey,
-              votes: post.voteScore,
+              postId: post.postId,
             ),
           ],
         ),
