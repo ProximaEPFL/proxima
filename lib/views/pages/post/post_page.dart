@@ -4,7 +4,7 @@ import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/viewmodels/post_view_model.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/post/post_page_widget/bottom_bar_add_comment.dart";
-import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.dart";
+import "package:proxima/views/pages/post/post_page_widget/comment_list.dart";
 import "package:proxima/views/pages/post/post_page_widget/entire_post_widget.dart";
 
 class PostPage extends StatelessWidget {
@@ -63,32 +63,6 @@ class PostPage extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class CommentList extends StatelessWidget {
-  const CommentList({
-    super.key,
-    required this.comments,
-  });
-
-  final List<CommentPost> comments;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Wrap(
-        runSpacing: 15,
-        children: comments
-            .map(
-              (comment) => CommentPostWidget(
-                commentPost: comment,
-              ),
-            )
-            .toList(),
-      ),
     );
   }
 }
