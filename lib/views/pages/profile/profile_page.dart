@@ -12,12 +12,15 @@ import "package:proxima/views/pages/profile/profile_app_bar.dart";
 /// This widget is used to display the profile page
 /// It contains the user info, centauri points, badges, posts and comments
 class ProfilePage extends HookConsumerWidget {
-  const ProfilePage({super.key});
   static const postTabKey = Key("postTab");
   static const commentTabKey = Key("commentTab");
   static const tabKey = Key("tab");
   static const postColumnKey = Key("postColumn");
   static const commentColumnKey = Key("commentColumn");
+
+  static const _badgesTitle = "Your badges:";
+
+  const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,6 +60,10 @@ class ProfilePage extends HookConsumerWidget {
         ),
       );
     }
+    final badges = InfoRow(
+      title: _badgesTitle,
+      itemList: itemListBadge,
+    );
 
     return CircularValue(
       value: asyncUserData,
@@ -69,10 +76,7 @@ class ProfilePage extends HookConsumerWidget {
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
               child: Column(
                 children: [
-                  InfoRow(
-                    itemList: itemListBadge,
-                    title: "Your badges:",
-                  ),
+                  badges,
                   const TabBar(
                     key: tabKey,
                     tabs: [
