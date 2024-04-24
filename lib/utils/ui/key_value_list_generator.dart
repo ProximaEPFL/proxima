@@ -45,6 +45,7 @@ class KeyValueListGenerator {
     return RichText(
       text: TextSpan(
         children: content,
+        style: style,
       ),
     );
   }
