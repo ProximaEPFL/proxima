@@ -86,15 +86,13 @@ void main() {
       );
 
       final expectedPosts = [
-        (
+        PostOverview(
           postId: post.id,
-          postOverview: PostOverview(
-            title: post.data.title,
-            description: post.data.description,
-            voteScore: post.data.voteScore,
-            commentNumber: 0,
-            ownerDisplayName: owner.data.displayName,
-          )
+          title: post.data.title,
+          description: post.data.description,
+          voteScore: post.data.voteScore,
+          commentNumber: 0,
+          ownerDisplayName: owner.data.displayName,
         ),
       ];
 
@@ -140,8 +138,8 @@ void main() {
         }).toList();
 
         final expectedPosts = posts.map((post) {
-          final postId = post.id;
           final postOverview = PostOverview(
+            postId: post.id,
             title: post.data.title,
             description: post.data.description,
             voteScore: post.data.voteScore,
@@ -149,7 +147,7 @@ void main() {
             ownerDisplayName: owner.data.displayName,
           );
 
-          return (postId: postId, postOverview: postOverview);
+          return postOverview;
         });
 
         // Mock the repository calls
@@ -199,17 +197,17 @@ void main() {
           return FirestorePostGenerator.createPostAt(data, userPosition0);
         }).toList();
 
-        final expectedPosts = posts.mapIndexed((index, element) {
-          final postId = element.id;
+        final expectedPosts = posts.mapIndexed((index, post) {
           final postOverview = PostOverview(
-            title: element.data.title,
-            description: element.data.description,
-            voteScore: element.data.voteScore,
+            postId: post.id,
+            title: post.data.title,
+            description: post.data.description,
+            voteScore: post.data.voteScore,
             commentNumber: 0,
             ownerDisplayName: owners[index].data.displayName,
           );
 
-          return (postId: postId, postOverview: postOverview);
+          return postOverview;
         });
 
         // Mock the repository calls
@@ -272,15 +270,13 @@ void main() {
       final post = FirestorePostGenerator.createPostAt(postData, userPosition0);
 
       final expectedPosts = [
-        (
+        PostOverview(
           postId: post.id,
-          postOverview: PostOverview(
-            title: post.data.title,
-            description: post.data.description,
-            voteScore: post.data.voteScore,
-            commentNumber: 0,
-            ownerDisplayName: owner.data.displayName,
-          )
+          title: post.data.title,
+          description: post.data.description,
+          voteScore: post.data.voteScore,
+          commentNumber: 0,
+          ownerDisplayName: owner.data.displayName,
         ),
       ];
 

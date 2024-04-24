@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
 
 import "package:proxima/views/home_content/feed/post_card/comment_widget.dart";
@@ -18,12 +17,10 @@ class PostCard extends StatelessWidget {
   static const postCardUserKey = Key("postCardUser");
 
   final PostOverview postOverview;
-  final PostIdFirestore postId;
 
   const PostCard({
     super.key,
     required this.postOverview,
-    required this.postId,
   });
 
   @override
@@ -35,7 +32,7 @@ class PostCard extends StatelessWidget {
         children: [
           VotesWidget(
             key: postCardVotesKey,
-            postId: postId,
+            postId: postOverview.postId,
           ),
           InkWell(
             customBorder: RoundedRectangleBorder(

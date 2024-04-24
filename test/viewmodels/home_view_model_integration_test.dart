@@ -107,15 +107,13 @@ void main() {
 
       // Get the expected post overview
       final expectedPosts = [
-        (
+        PostOverview(
           postId: postId,
-          postOverview: PostOverview(
-            title: postData.title,
-            description: postData.description,
-            voteScore: postData.voteScore,
-            ownerDisplayName: owner.data.displayName,
-            commentNumber: 0,
-          )
+          title: postData.title,
+          description: postData.description,
+          voteScore: postData.voteScore,
+          ownerDisplayName: owner.data.displayName,
+          commentNumber: 0,
         ),
       ];
 
@@ -200,6 +198,7 @@ void main() {
 
         final postId = postIds[index];
         final postOverview = PostOverview(
+          postId: postId,
           title: data.title,
           description: data.description,
           voteScore: data.voteScore,
@@ -207,7 +206,7 @@ void main() {
           commentNumber: 0,
         );
 
-        return (postId: postId, postOverview: postOverview);
+        return postOverview;
       }).toList();
 
       final actualPosts = await container.read(postOverviewProvider.future);

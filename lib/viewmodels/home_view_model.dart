@@ -9,15 +9,13 @@ import "package:proxima/services/geolocation_service.dart";
 /// It fetches the posts from the database and returns a list of
 /// (postId: [PostIdFirestore], postOverview: [PostOverview]) objects to be displayed.
 /// These represent the overview data to be displayed associated to the corresponding post id.
-class HomeViewModel extends AsyncNotifier<
-    List<({PostIdFirestore postId, PostOverview postOverview})>> {
+class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
   HomeViewModel();
 
   static const kmPostRadius = 0.1;
 
   @override
-  Future<List<({PostIdFirestore postId, PostOverview postOverview})>>
-      build() async {
+  Future<List<PostOverview>> build() async {
     final geoLocationService = ref.watch(geoLocationServiceProvider);
     final postRepository = ref.watch(postRepositoryProvider);
     final userRepository = ref.watch(userRepositoryProvider);
@@ -34,8 +32,7 @@ class HomeViewModel extends AsyncNotifier<
       postOwnersId.map((userId) => userRepository.getUser(userId)),
     );
 
-    final posts = postsFirestore
-        .map<({PostIdFirestore postId, PostOverview postOverview})>((post) {
+    final posts = postsFirestore.map((post) {
       final owner = postOwners.firstWhere(
         (user) => user.uid == post.data.ownerId,
         // This should never be executed in practice as if the owner is not found,
@@ -44,6 +41,7 @@ class HomeViewModel extends AsyncNotifier<
       );
 
       final postOverview = PostOverview(
+        postId: post.id,
         title: post.data.title,
         description: post.data.description,
         voteScore: post.data.voteScore,
@@ -52,7 +50,7 @@ class HomeViewModel extends AsyncNotifier<
             0, // TODO: Update appropriately when comments are implemented
       );
 
-      return (postId: post.id, postOverview: postOverview);
+      return postOverview;
     }).toList();
 
     return posts;
@@ -67,7 +65,7 @@ class HomeViewModel extends AsyncNotifier<
   }
 }
 
-final postOverviewProvider = AsyncNotifierProvider<HomeViewModel,
-    List<({PostIdFirestore postId, PostOverview postOverview})>>(
+final postOverviewProvider =
+    AsyncNotifierProvider<HomeViewModel, List<PostOverview>>(
   () => HomeViewModel(),
 );
