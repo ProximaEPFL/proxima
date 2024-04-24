@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
-import "package:geolocator/geolocator.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/views/home_content/map_feed/maps/nearby_posts_map.dart";
 import "package:proxima/views/sort_option_widgets/feed_sort_option/map_sort_option_chips.dart";
 
@@ -15,6 +15,7 @@ class MapFeed extends ConsumerStatefulWidget {
 class MapFeedState extends ConsumerState<MapFeed> {
   //key for testing
   static const mapKey = Key("map");
+  static const dividerKey = Key("Divider");
 
   //current position of the user
   late LatLng _currentPosition;
@@ -31,45 +32,40 @@ class MapFeedState extends ConsumerState<MapFeed> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
-  }
-
-  //get the current location of the user
-  _getCurrentLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-    double lat = position.latitude;
-    double long = position.longitude;
-
-    LatLng location = LatLng(lat, long);
-
-    setState(() {
-      _currentPosition = location;
-      _isLoading = false;
+    ref.read(geoLocationServiceProvider).getCurrentPosition().then((value) {
+      setState(() {
+        _currentPosition = LatLng(value.latitude, value.longitude);
+        _isLoading = false;
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    //get the geolocator service
     return
         //display a loading indicator while the map is loading
         _isLoading
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : Column(
-                children: [
-                  const MapSortOptionChips(),
-                  const Divider(),
-                  //display the map
-                  Expanded(
-                    child: NearbyPostsMap(
+            : Scaffold(
+                key: mapKey,
+                body: Column(
+                  children: [
+                    const MapSortOptionChips(),
+                    const Divider(key: dividerKey),
+                    //display the map
+                    Expanded(
+                      //TODO: change the type of map when selecting a sort option
+                      child: NearbyPostsMap(
                         currentPosition: _currentPosition,
                         currentZoom: _currentZoom,
-                        radius: _radius),
-                  ),
-                ],
+                        radius: _radius,
+                      ),
+                    ),
+                  ],
+                ),
               );
   }
 }

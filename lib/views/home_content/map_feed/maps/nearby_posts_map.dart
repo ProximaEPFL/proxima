@@ -12,11 +12,12 @@ class NearbyPostsMap extends ConsumerStatefulWidget {
 
   final Key mapKey = const Key("Nearby posts map");
 
-  const NearbyPostsMap(
-      {super.key,
-      required this.currentPosition,
-      required this.currentZoom,
-      required this.radius});
+  const NearbyPostsMap({
+    super.key,
+    required this.currentPosition,
+    required this.currentZoom,
+    required this.radius,
+  });
 
   @override
   NearbyPostsMapState createState() => NearbyPostsMapState();
