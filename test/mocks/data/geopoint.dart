@@ -8,17 +8,19 @@ const userPosition3 = GeoPoint(50, 100);
 class GeoPointGenerator {
   GeoPointGenerator._();
 
-  /// Method to create a nearby post position
-  static GeoPoint createNearbyPostPosition(GeoPoint userPosition) {
+  /// Method to create a nearby position
+  static GeoPoint createNearbyPosition(GeoPoint userPosition) {
     return GeoPoint(
       userPosition.latitude + 0.0001,
       userPosition.longitude + 0.0001,
     );
   }
 
-  /// Method to create a far away post position
-  static GeoPoint createFarAwayPostPosition(
-      GeoPoint userPosition, double range) {
+  /// Method to create a far away position
+  static GeoPoint createFarAwayPosition(
+    GeoPoint userPosition,
+    double range,
+  ) {
     return GeoPoint(
       userPosition.latitude + range * 2,
       userPosition.longitude + range * 2,
@@ -28,9 +30,11 @@ class GeoPointGenerator {
   /// Conversion factor from kilometers to degrees (latitude).
   static double kmToDegreesLat(double km) => km / 111.0;
 
-  /// Method to create a post on the edge of the range but inside
-  static GeoPoint createPostOnEdgeInsidePosition(
-      GeoPoint userPosition, double range) {
+  /// Method to create a position on the edge of the range but inside
+  static GeoPoint createOnEdgeInsidePosition(
+    GeoPoint userPosition,
+    double range,
+  ) {
     // Convert range to degrees
     double rangeInDegreesLatitude = kmToDegreesLat(range);
 
@@ -43,8 +47,8 @@ class GeoPointGenerator {
     );
   }
 
-  /// Method to create a post on the edge of the range but outside
-  static GeoPoint createPostOnEdgeOutsidePosition(
+  /// Method to create a position on the edge of the range but outside
+  static GeoPoint createOnEdgeOutsidePosition(
     GeoPoint userPosition,
     double range,
   ) {
@@ -72,28 +76,29 @@ class GeoPointGenerator {
 
     const maxDiagonalDistanceInRange = 0.0005;
     const minDiagonalOutRange = 0.001;
-    double distanceBetweenPosts = maxDiagonalDistanceInRange / (inRange + 1);
+    double distanceBetweenpositions =
+        maxDiagonalDistanceInRange / (inRange + 1);
 
     double userLatitude = userPosition.latitude;
     double userLongitude = userPosition.longitude;
 
-    final postInRange = List.generate(inRange, (i) {
-      double dDirection = distanceBetweenPosts * i;
+    final positionInRange = List.generate(inRange, (i) {
+      double dDirection = distanceBetweenpositions * i;
       return GeoPoint(
         userLatitude + dDirection,
         userLongitude + dDirection,
       );
     });
 
-    // Generate post positions that are not in the range.
-    final postsNotInRange = List.generate(outRange, (i) {
-      double dDirection = minDiagonalOutRange + distanceBetweenPosts * i;
+    // Generate position positions that are not in the range.
+    final positionsNotInRange = List.generate(outRange, (i) {
+      double dDirection = minDiagonalOutRange + distanceBetweenpositions * i;
       return GeoPoint(
         userLatitude + dDirection,
         userLongitude + dDirection,
       );
     });
 
-    return [...postInRange, ...postsNotInRange];
+    return [...positionInRange, ...positionsNotInRange];
   }
 }

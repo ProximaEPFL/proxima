@@ -67,7 +67,7 @@ void main() {
 
       await postRepo.addPost(
         postData,
-        GeoPointGenerator.createFarAwayPostPosition(
+        GeoPointGenerator.createFarAwayPosition(
           userPosition,
           0.1,
         ), // This is >> 0.1 km away from the (0,0)
@@ -96,8 +96,7 @@ void main() {
       }).first;
 
       const userPosition = userPosition0;
-      final postPosition =
-          GeoPointGenerator.createNearbyPostPosition(userPosition);
+      final postPosition = GeoPointGenerator.createNearbyPosition(userPosition);
       // This is < 0.1 km away from the (0,0)
 
       await postRepo.addPost(
