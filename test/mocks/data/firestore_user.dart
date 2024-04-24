@@ -4,7 +4,7 @@ import "package:proxima/models/database/user/user_data.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 
-import "mock_firebase_auth_user.dart";
+import "firebase_auth_user.dart";
 
 final testingUserData = UserData(
   username: "username_8456",

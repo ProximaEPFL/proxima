@@ -3,7 +3,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/services/geolocation_service.dart";
 
-import "../data/mock_position.dart";
+import "../data/geopoint.dart";
 
 class MockGeoLocationService extends Mock implements GeoLocationService {
   @override

@@ -8,7 +8,7 @@ import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
-import "../data/mock_position.dart";
+import "../data/geopoint.dart";
 
 /// Not a coherent representation of a [PostFirestore]
 /// This is just here as a placeholder value that will be overridden in the tests

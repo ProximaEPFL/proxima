@@ -8,7 +8,7 @@ import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 
-import "../../../mocks/data/mock_post_overview.dart";
+import "../../../mocks/data/post_overview.dart";
 import "../../../mocks/providers/provider_homepage.dart";
 
 void main() {

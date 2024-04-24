@@ -2,12 +2,22 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 
+import "firestore_user.dart";
+
 class PostDataGenerator {
   final emptyPost = PostData(
     ownerId: const UserIdFirestore(value: "owner_id"),
     title: "",
     description: "",
     publicationTime: Timestamp.fromMillisecondsSinceEpoch(0),
+    voteScore: 0,
+  );
+
+  final postData = PostData(
+    ownerId: testingUserFirestoreId,
+    title: "I like turtles",
+    description: "Look at them go!",
+    publicationTime: Timestamp.now(),
     voteScore: 0,
   );
 
