@@ -25,7 +25,7 @@ void main() {
     late UserIdFirestore userId;
 
     late AutoDisposeFamilyAsyncNotifierProvider<UpVoteViewModel, PostVote,
-        ({PostIdFirestore postId})> voteViewModelProvider;
+        PostIdFirestore> voteViewModelProvider;
 
     late ProviderContainer container;
 
@@ -55,7 +55,7 @@ void main() {
         ],
       );
 
-      voteViewModelProvider = postVoteProvider((postId: testingPost.id));
+      voteViewModelProvider = postVoteProvider(testingPost.id);
     });
 
     test("Upvote correctly updates the state and vote count on the database",

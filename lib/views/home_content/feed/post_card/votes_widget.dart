@@ -16,13 +16,12 @@ class VotesWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncPostVote = ref.watch(postVoteProvider((postId: postId)));
+    final asyncPostVote = ref.watch(postVoteProvider(postId));
     final votes = asyncPostVote.valueOrNull?.votes ?? 0;
     final upvoteState =
         asyncPostVote.valueOrNull?.upvoteState ?? UpvoteState.none;
 
-    final upvoteNotifier =
-        ref.read(postVoteProvider((postId: postId)).notifier);
+    final upvoteNotifier = ref.read(postVoteProvider(postId).notifier);
 
     final upvote = IconButton(
       //Used to reduce the padding and InkWell created by the IconButton widget

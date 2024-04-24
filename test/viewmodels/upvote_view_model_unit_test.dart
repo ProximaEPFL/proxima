@@ -24,7 +24,7 @@ void main() {
     late UserIdFirestore userId;
     late PostFirestore testingPost;
     late AutoDisposeFamilyAsyncNotifierProvider<UpVoteViewModel, PostVote,
-        ({PostIdFirestore postId})> voteViewModelProvider;
+        PostIdFirestore> voteViewModelProvider;
 
     late ProviderContainer container;
 
@@ -34,7 +34,7 @@ void main() {
       userId = testingUserFirestoreId;
       testingPost =
           FirestorePostGenerator.createUserPost(userId, userPosition0);
-      voteViewModelProvider = postVoteProvider((postId: testingPost.id));
+      voteViewModelProvider = postVoteProvider(testingPost.id);
 
       container = ProviderContainer(
         overrides: [
