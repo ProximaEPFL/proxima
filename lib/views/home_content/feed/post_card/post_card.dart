@@ -75,7 +75,7 @@ class PostCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 16, right: 0.8, top: 8),
+              padding: const EdgeInsets.only(left: 16, top: 8),
               child: UserBarWidget(
                 key: postCardUserKey,
                 posterUsername: post.ownerDisplayName,
