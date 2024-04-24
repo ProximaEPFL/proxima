@@ -93,5 +93,5 @@ class UpVoteViewModel extends AutoDisposeFamilyAsyncNotifier<PostVote,
 
 final postVoteProvider = AsyncNotifierProvider.autoDispose
     .family<UpVoteViewModel, PostVote, ({PostIdFirestore postId})>(
-  UpVoteViewModel.new,
+  () => UpVoteViewModel(),
 );
