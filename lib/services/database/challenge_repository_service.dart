@@ -78,10 +78,10 @@ class ChallengeRepositoryService {
     final pastPostIds = pastChallengesSnap.docs
         .map((doc) => PostIdFirestore(value: doc.id))
         .toSet();
+
     final List<ChallengeFirestore> activeChallenges =
         List.empty(growable: true);
 
-    // delete challenges that are no longer valid
     for (final challengeSnap in challengesSnap.docs) {
       final challenge = ChallengeFirestore.fromDb(challengeSnap);
       if (challenge.data.isExpired ||
@@ -93,48 +93,13 @@ class ChallengeRepositoryService {
       }
     }
 
-    // create new challenges if needed
-    if (activeChallenges.length < _maxActiveChallenges) {
-      _createNewChallenges(
-        activeChallenges,
-        pastPostIds,
-        pos,
-        challengesCollectionRef,
-      );
-    }
-
-    return activeChallenges;
-  }
-
-  Future<void> _deleteChallenge(
-    DocumentSnapshot<Map<String, dynamic>> challengeSnap,
-    DocumentReference parentRef,
-  ) async {
-    final batch = _firestore.batch();
-    batch.set(
-      parentRef
-          .collection(ChallengeFirestore.pastChallengesSubCollectionName)
-          .doc(challengeSnap.id),
-      challengeSnap.data()!,
-    );
-    batch.delete(challengeSnap.reference);
-    await batch.commit();
-  }
-
-  /// Creates new challenges and adds them to the database and active challenges
-  Future<void> _createNewChallenges(
-    List<ChallengeFirestore> activeChallenges,
-    Set<PostIdFirestore> pastPostIds,
-    GeoPoint pos,
-    CollectionReference challengesCollectionRef,
-  ) async {
-    final now = DateTime.now();
-    final sum = now.add(maxChallengeDuration);
-    final expiresOn = DateTime(
-      sum.year,
-      sum.month,
-      sum.day,
-    ); // truncates to the day
+      final now = DateTime.now();
+      final sum = now.add(maxChallengeDuration);
+      final expiresOn = DateTime(
+        sum.year,
+        sum.month,
+        sum.day,
+      ); // truncates to the day
 
     final possiblePosts = await inRangeUnsortedPosts(pos);
     final postIt = possiblePosts.iterator;
@@ -161,6 +126,23 @@ class ChallengeRepositoryService {
       activeChallenges.add(newChallenge);
       activePostIds.add(post);
     }
+
+    return activeChallenges;
+  }
+
+  Future<void> _deleteChallenge(
+    DocumentSnapshot<Map<String, dynamic>> challengeSnap,
+    DocumentReference parentRef,
+  ) async {
+    final batch = _firestore.batch();
+    batch.set(
+      parentRef
+          .collection(ChallengeFirestore.pastChallengesSubCollectionName)
+          .doc(challengeSnap.id),
+      challengeSnap.data()!,
+    );
+    batch.delete(challengeSnap.reference);
+    await batch.commit();
   }
 
   Future<Iterable<PostIdFirestore>> inRangeUnsortedPosts(GeoPoint pos) async {
