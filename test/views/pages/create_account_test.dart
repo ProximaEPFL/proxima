@@ -1,20 +1,13 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 
 import "../../mocks/providers/provider_create_account.dart";
 
 void main() {
-  late ProviderScope mockedPage;
-
-  setUp(() {
-    mockedPage = createAccountPageProvider;
-  });
-
   Future<(Finder, Finder, Finder)> preparePage(WidgetTester tester) async {
-    await tester.pumpWidget(mockedPage);
+    await tester.pumpWidget(createAccountPageProvider);
     await tester.pumpAndSettle();
 
     final uniqueUsernameField =

@@ -50,9 +50,12 @@ void main() {
       when(geoLocationService.getCurrentPosition()).thenAnswer(
         (_) async => userPosition0,
       );
-      when(postRepository.getNearPosts(
-              userPosition0, HomeViewModel.kmPostRadius))
-          .thenAnswer(
+      when(
+        postRepository.getNearPosts(
+          userPosition0,
+          HomeViewModel.kmPostRadius,
+        ),
+      ).thenAnswer(
         (_) async => [],
       );
 
@@ -95,9 +98,12 @@ void main() {
       when(geoLocationService.getCurrentPosition()).thenAnswer(
         (_) async => userPosition0,
       );
-      when(postRepository.getNearPosts(
-              userPosition0, HomeViewModel.kmPostRadius))
-          .thenAnswer(
+      when(
+        postRepository.getNearPosts(
+          userPosition0,
+          HomeViewModel.kmPostRadius,
+        ),
+      ).thenAnswer(
         (_) async => [post],
       );
       when(userRepository.getUser(post.data.ownerId)).thenAnswer(
@@ -148,9 +154,12 @@ void main() {
         when(geoLocationService.getCurrentPosition()).thenAnswer(
           (_) async => userPosition0,
         );
-        when(postRepository.getNearPosts(
-                userPosition0, HomeViewModel.kmPostRadius))
-            .thenAnswer(
+        when(
+          postRepository.getNearPosts(
+            userPosition0,
+            HomeViewModel.kmPostRadius,
+          ),
+        ).thenAnswer(
           (_) async => posts,
         );
 
@@ -206,9 +215,12 @@ void main() {
         when(geoLocationService.getCurrentPosition()).thenAnswer(
           (_) async => userPosition0,
         );
-        when(postRepository.getNearPosts(
-                userPosition0, HomeViewModel.kmPostRadius))
-            .thenAnswer(
+        when(
+          postRepository.getNearPosts(
+            userPosition0,
+            HomeViewModel.kmPostRadius,
+          ),
+        ).thenAnswer(
           (_) async => posts,
         );
 
@@ -223,9 +235,12 @@ void main() {
       when(geoLocationService.getCurrentPosition()).thenAnswer(
         (_) async => userPosition0,
       );
-      when(postRepository.getNearPosts(
-              userPosition0, HomeViewModel.kmPostRadius))
-          .thenAnswer(
+      when(
+        postRepository.getNearPosts(
+          userPosition0,
+          HomeViewModel.kmPostRadius,
+        ),
+      ).thenAnswer(
         (_) async => [],
       );
 
@@ -259,9 +274,12 @@ void main() {
         ),
       ];
 
-      when(postRepository.getNearPosts(
-              userPosition0, HomeViewModel.kmPostRadius))
-          .thenAnswer(
+      when(
+        postRepository.getNearPosts(
+          userPosition0,
+          HomeViewModel.kmPostRadius,
+        ),
+      ).thenAnswer(
         (_) async => [post],
       );
       when(userRepository.getUser(post.data.ownerId)).thenAnswer(
@@ -284,9 +302,12 @@ void main() {
       );
 
       const expectedErrorMessage = "Error while fetching posts";
-      when(postRepository.getNearPosts(
-              userPosition0, HomeViewModel.kmPostRadius))
-          .thenThrow(Exception(expectedErrorMessage));
+      when(
+        postRepository.getNearPosts(
+          userPosition0,
+          HomeViewModel.kmPostRadius,
+        ),
+      ).thenThrow(Exception(expectedErrorMessage));
 
       // Refresh the posts
       await container.read(postOverviewProvider.notifier).refresh();
