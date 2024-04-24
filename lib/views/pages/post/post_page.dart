@@ -5,11 +5,11 @@ import "package:proxima/viewmodels/post_view_model.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/post/post_page_widget/bottom_bar_add_comment.dart";
 import "package:proxima/views/pages/post/post_page_widget/comment_list.dart";
-import "package:proxima/views/pages/post/post_page_widget/entire_post_widget.dart";
+import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
 
 class PostPage extends StatelessWidget {
   static const postDistanceKey = Key("postDistance");
-  static const entirePostWidgetKey = Key("entirePostWidget");
+  static const completePostWidgetKey = Key("completePostWidget");
   static const commentListWidgetKey = Key("commentListWidget");
 
   const PostPage({
@@ -36,8 +36,8 @@ class PostPage extends StatelessWidget {
     ];
 
     List<Widget> bodyChildren = [
-      EntirePostWidget(
-        key: entirePostWidgetKey,
+      CompletePostWidget(
+        key: completePostWidgetKey,
         post: postOverview,
       ),
       const SizedBox(height: 10),

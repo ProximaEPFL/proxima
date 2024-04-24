@@ -4,7 +4,7 @@ import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/views/home_content/feed/post_card/user_bar_widget.dart";
 import "package:proxima/views/home_content/feed/post_card/votes_widget.dart";
 
-class EntirePostWidget extends StatelessWidget {
+class CompletePostWidget extends StatelessWidget {
   static const postTitleKey = Key("postTitle");
   static const postDescriptionKey = Key("postDescription");
   static const postVoteWidgetKey = Key("postVoteWidget");
@@ -12,7 +12,7 @@ class EntirePostWidget extends StatelessWidget {
 
   final PostOverview post;
 
-  const EntirePostWidget({
+  const CompletePostWidget({
     super.key,
     required this.post,
   });
