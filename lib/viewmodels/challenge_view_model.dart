@@ -1,6 +1,8 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/challenge_card_data.dart";
 
+// TODO: For now, this is duplicated code with the mock from the tests.
+// This will just be replaced when we implement a real view model anyway.
 class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
   @override
   Future<List<ChallengeCardData>> build() async {
