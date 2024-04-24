@@ -8,12 +8,14 @@ import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
+import "../data/geopoint.dart";
+
 /// Not a coherent representation of a [PostFirestore]
 /// This is just here as a placeholder value that will be overridden in the tests
-final _mockEmptyFirestorePost = PostFirestore(
+final _emptyFirestorePost = PostFirestore(
   id: const PostIdFirestore(value: ""),
   location: const PostLocationFirestore(
-    geoPoint: GeoPoint(0, 0),
+    geoPoint: userPosition0,
     geohash: "",
   ),
   data: PostData(
@@ -46,7 +48,7 @@ class MockPostRepositoryService extends Mock implements PostRepositoryService {
   Future<PostFirestore> getPost(PostIdFirestore? postId) {
     return super.noSuchMethod(
       Invocation.method(#getPost, [postId]),
-      returnValue: Future.value(_mockEmptyFirestorePost),
+      returnValue: Future.value(_emptyFirestorePost),
     );
   }
 
