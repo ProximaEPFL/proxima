@@ -67,65 +67,74 @@ class ChallengeRepositoryService {
     final pastChallengesCollectionRef = parentRef
         .collection(ChallengeFirestore.pastChallengesSubCollectionName);
 
-    return _firestore.runTransaction((transaction) async {
-      // TODO not sure if this is actually atomic
-      // move expired challenges to past challenges
-      final challengesSnap = await challengesCollectionRef.get();
-      final pastChallengesSnap = await pastChallengesCollectionRef.get();
-      final pastPostIds = pastChallengesSnap.docs
-          .map((doc) => PostIdFirestore(value: doc.id))
-          .toSet();
+    final challengesSnap = await challengesCollectionRef.get();
+    final pastChallengesSnap = await pastChallengesCollectionRef.get();
 
-      final List<ChallengeFirestore> activeChallenges =
-          List.empty(growable: true);
+    final pastPostIds = pastChallengesSnap.docs
+        .map((doc) => PostIdFirestore(value: doc.id))
+        .toSet();
 
-      for (final challengeSnap in challengesSnap.docs) {
-        final challenge = ChallengeFirestore.fromDb(challengeSnap);
-        if (challenge.data.isExpired) {
-          await pastChallengesCollectionRef
-              .doc(challengeSnap.id)
-              .set(challengeSnap.data());
-          await challengesCollectionRef.doc(challengeSnap.id).delete();
-        } else {
-          activeChallenges.add(challenge);
-        }
+    final List<ChallengeFirestore> activeChallenges =
+        List.empty(growable: true);
+
+    for (final challengeSnap in challengesSnap.docs) {
+      final challenge = ChallengeFirestore.fromDb(challengeSnap);
+      if (challenge.data.isExpired) {
+        _deleteChallenge(challengeSnap, parentRef);
+      } else {
+        activeChallenges.add(challenge);
+      }
+    }
+
+    final now = DateTime.now();
+    final expiresOn = DateTime(
+      now.year,
+      now.month,
+      now.day + _challengeDuration,
+    ); // truncates to at most challengeDuration days, ends at midnight
+
+    final possiblePosts = await inRangeUnsortedPosts(pos);
+    final postIt = possiblePosts.iterator;
+    final activePostIds = activeChallenges.map((e) => e.postId).toSet();
+    while (
+        activeChallenges.length < _maxActiveChallenges && postIt.moveNext()) {
+      final post = postIt.current;
+
+      if (pastPostIds.contains(post) || activePostIds.contains(post)) {
+        continue;
       }
 
-      final now = DateTime.now();
-      final expiresOn = DateTime(
-        now.year,
-        now.month,
-        now.day + _challengeDuration,
-      ); // truncates to at most challengeDuration days, ends at midnight
+      final newChallenge = ChallengeFirestore(
+        postId: post,
+        data: ChallengeData(
+          isCompleted: false,
+          expiresOn: Timestamp.fromDate(expiresOn),
+        ),
+      );
 
-      final possiblePosts = await inRangeUnsortedPosts(pos);
-      final postIt = possiblePosts.iterator;
-      final activePostIds = activeChallenges.map((e) => e.postId).toSet();
-      while (
-          activeChallenges.length < _maxActiveChallenges && postIt.moveNext()) {
-        final post = postIt.current;
+      await challengesCollectionRef
+          .doc(post.value)
+          .set(newChallenge.data.toDbData());
+      activeChallenges.add(newChallenge);
+      activePostIds.add(post);
+    }
 
-        if (pastPostIds.contains(post) || activePostIds.contains(post)) {
-          continue;
-        }
+    return activeChallenges;
+  }
 
-        final newChallenge = ChallengeFirestore(
-          postId: post,
-          data: ChallengeData(
-            isCompleted: false,
-            expiresOn: Timestamp.fromDate(expiresOn),
-          ),
-        );
-
-        await challengesCollectionRef
-            .doc(post.value)
-            .set(newChallenge.data.toDbData());
-        activeChallenges.add(newChallenge);
-        activePostIds.add(post);
-      }
-
-      return activeChallenges;
-    });
+  Future<void> _deleteChallenge(
+    DocumentSnapshot<Map<String, dynamic>> challengeSnap,
+    DocumentReference parentRef,
+  ) async {
+    final batch = _firestore.batch();
+    batch.set(
+      parentRef
+          .collection(ChallengeFirestore.pastChallengesSubCollectionName)
+          .doc(challengeSnap.id),
+      challengeSnap.data()!,
+    );
+    batch.delete(challengeSnap.reference);
+    await batch.commit();
   }
 
   Future<Iterable<PostIdFirestore>> inRangeUnsortedPosts(GeoPoint pos) async {
