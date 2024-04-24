@@ -6,16 +6,16 @@ class InfoColumn extends StatelessWidget {
   const InfoColumn({
     super.key,
     required this.itemList,
-    required this.colKey,
+    required this.columnKey,
   });
 
   final List<Widget> itemList;
-  final Key colKey;
+  final Key columnKey;
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      key: colKey,
+      key: columnKey,
       padding: const EdgeInsets.all(8),
       scrollDirection: Axis.vertical,
       itemCount: itemList.length,

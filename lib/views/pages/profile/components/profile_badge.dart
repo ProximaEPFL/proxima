@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 
 /// Info card for the badges in profile
-class InfoCardBadge extends StatelessWidget {
-  static const infoCardBadgeKey = Key("infoCardBadge");
+class ProfileBadge extends StatelessWidget {
+  static const infoCardBadgeKey = Key("profileBadge");
 
-  const InfoCardBadge({
+  const ProfileBadge({
     super.key,
     required this.shadow,
   });
@@ -13,7 +13,7 @@ class InfoCardBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var decoration = BoxDecoration(
+    final decoration = BoxDecoration(
       color: Theme.of(context).colorScheme.secondaryContainer,
       borderRadius: const BorderRadius.all(Radius.circular(10)),
       boxShadow: [shadow],

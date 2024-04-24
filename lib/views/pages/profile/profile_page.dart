@@ -2,10 +2,10 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
-import "package:proxima/views/pages/profile/posts_info/info_card_badge.dart";
-import "package:proxima/views/pages/profile/posts_info/info_column.dart";
-import "package:proxima/views/pages/profile/posts_info/info_row.dart";
-import "package:proxima/views/pages/profile/posts_info/profile_info_card.dart";
+import "package:proxima/views/pages/profile/components/profile_badge.dart";
+import "package:proxima/views/pages/profile/components/profile_info_card.dart";
+import "package:proxima/views/pages/profile/components/profile_info_column.dart";
+import "package:proxima/views/pages/profile/components/profile_info_row.dart";
 import "package:proxima/views/pages/profile/profile_app_bar.dart";
 
 /// This widget is used to display the profile page
@@ -42,7 +42,7 @@ class ProfilePage extends HookConsumerWidget {
     // TODO replace by viewmodel
     for (var i = 0; i < 10; i++) {
       itemListBadge.add(
-        InfoCardBadge(shadow: shadow),
+        ProfileBadge(shadow: shadow),
       );
 
       itemListPosts.add(
@@ -83,11 +83,11 @@ class ProfilePage extends HookConsumerWidget {
 
     final posts = InfoColumn(
       itemList: itemListPosts,
-      colKey: postColumnKey,
+      columnKey: postColumnKey,
     );
     final comments = InfoColumn(
       itemList: itemListComments,
-      colKey: commentColumnKey,
+      columnKey: commentColumnKey,
     );
 
     return CircularValue(

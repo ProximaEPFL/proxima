@@ -4,6 +4,7 @@ import "package:flutter/material.dart";
 /// such as the badges row
 class InfoRow extends StatelessWidget {
   static const infoRowKey = Key("infoRow");
+
   const InfoRow({
     super.key,
     required this.itemList,
