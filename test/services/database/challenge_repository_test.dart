@@ -3,6 +3,7 @@ import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/challenge/challenge_data.dart";
 import "package:proxima/models/database/challenge/challenge_firestore.dart";
+import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
@@ -12,6 +13,18 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "../../mocks/data/mock_firestore_user.dart";
 import "../../mocks/data/mock_position.dart";
 import "../../mocks/data/mock_post_data.dart";
+
+Future<List<PostData>> addPosts(
+  PostRepositoryService postRepository,
+  GeoPoint pos,
+  int n,
+) async {
+  final fakePosts = PostDataGenerator.generatePostData(n);
+  for (final post in fakePosts) {
+    await postRepository.addPost(post, pos);
+  }
+  return fakePosts;
+}
 
 void main() {
   late FakeFirebaseFirestore firestore;
@@ -29,18 +42,17 @@ void main() {
 
   const userPos = userPosition1;
   final inChallengeRange = GeoPointGenerator().createPostOnEdgeInsidePosition(
-      userPos, ChallengeRepositoryService.maxChallengeRadius);
+    userPos,
+    ChallengeRepositoryService.maxChallengeRadius,
+  );
+
+  final uid = testingUserFirestoreId;
 
   group("ChallengeRepositoryService", () {
     test("Get new challenges", () async {
-      final fakePosts = PostDataGenerator.generatePostData(3);
-      final fakeUsers = FirestoreUserGenerator.generateUserFirestore(4);
-      for (final post in fakePosts) {
-        await postRepository.addPost(post, inChallengeRange);
-      }
+      final fakePosts = await addPosts(postRepository, inChallengeRange, 3);
 
-      final challenges =
-          await challengeRepository.getChallenges(fakeUsers[3].uid, userPos);
+      final challenges = await challengeRepository.getChallenges(uid, userPos);
 
       expect(challenges.length, 3);
       for (final challenge in challenges) {
@@ -53,55 +65,39 @@ void main() {
     });
 
     test("Complete a challenge", () async {
-      final fakePosts = PostDataGenerator.generatePostData(1);
-      final fakeUsers = FirestoreUserGenerator.generateUserFirestore(2);
-      final fakeUser = fakeUsers[1];
-      for (final post in fakePosts) {
-        postRepository.addPost(post, inChallengeRange);
-      }
+      final fakePosts = await addPosts(postRepository, inChallengeRange, 1);
 
-      final challenges =
-          await challengeRepository.getChallenges(fakeUser.uid, userPos);
+      final challenges = await challengeRepository.getChallenges(uid, userPos);
 
       final challenge = challenges.first;
       expect(challenge.data.isCompleted, false);
       await challengeRepository.completeChallenge(
-        fakeUser.uid,
+        uid,
         challenge.postId,
       );
 
       final updatedChallenges =
-          await challengeRepository.getChallenges(fakeUser.uid, userPos);
+          await challengeRepository.getChallenges(uid, userPos);
       expect(updatedChallenges.length, 1);
       expect(updatedChallenges.first.data.isCompleted, true);
     });
 
     test("Multiple gets with only one challenge available", () async {
-      final fakePosts = PostDataGenerator.generatePostData(1);
-      final fakeUsers = FirestoreUserGenerator.generateUserFirestore(2);
-      final fakeUser = fakeUsers[1];
-      for (final post in fakePosts) {
-        postRepository.addPost(post, inChallengeRange);
-      }
+      final fakePosts = await addPosts(postRepository, inChallengeRange, 1);
 
       for (int i = 0; i < 10; i++) {
         final challenges =
-            await challengeRepository.getChallenges(fakeUser.uid, userPos);
+            await challengeRepository.getChallenges(uid, userPos);
 
         expect(challenges.length, 1);
       }
     });
 
     test("Challenge posts are unique", () async {
-      final fakePosts = PostDataGenerator.generatePostData(3);
-      final fakeUsers = FirestoreUserGenerator.generateUserFirestore(4);
-      final fakeUser = fakeUsers[3];
-      for (final post in fakePosts) {
-        await postRepository.addPost(post, inChallengeRange);
-      }
+      final fakePosts = await addPosts(postRepository, inChallengeRange, 3);
 
       final challenges = await challengeRepository.getChallenges(
-        fakeUser.uid,
+        uid,
         userPos,
       );
       final postIds = challenges.map((e) => e.postId).toSet();
@@ -110,28 +106,21 @@ void main() {
 
     test("Deleted post disappears from challenges", () async {
       final fakePosts = PostDataGenerator.generatePostData(1);
-      final fakeUser = testingUserFirestoreId;
       final postId =
           await postRepository.addPost(fakePosts.first, inChallengeRange);
 
-      final challenges =
-          await challengeRepository.getChallenges(fakeUser, userPos);
+      final challenges = await challengeRepository.getChallenges(uid, userPos);
       expect(challenges.length, 1);
 
       await postRepository.deletePost(postId);
       final updatedChallenges =
-          await challengeRepository.getChallenges(fakeUser, userPos);
+          await challengeRepository.getChallenges(uid, userPos);
 
       expect(updatedChallenges.length, 0);
     });
 
     test("Challenges expire", () async {
-      final fakePosts = PostDataGenerator.generatePostData(5);
-      final fakeUsers = FirestoreUserGenerator.generateUserFirestore(6);
-      final fakeUser = fakeUsers[5];
-      for (final post in fakePosts) {
-        await postRepository.addPost(post, inChallengeRange);
-      }
+      final fakePosts = await addPosts(postRepository, inChallengeRange, 5);
 
       final now = DateTime.now();
       final past =
@@ -153,14 +142,14 @@ void main() {
 
         await firestore
             .collection(UserFirestore.collectionName)
-            .doc(fakeUser.uid.value)
+            .doc(uid.value)
             .collection(ChallengeFirestore.subCollectionName)
             .doc(postIds[i].value)
             .set(challenge.data.toDbData());
       }
 
       final updatedChallenges = await challengeRepository.getChallenges(
-        fakeUser.uid,
+        uid,
         userPos,
       );
 
