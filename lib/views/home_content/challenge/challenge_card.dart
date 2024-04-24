@@ -4,6 +4,9 @@ import "package:proxima/models/ui/challenge_card_data.dart";
 import "package:proxima/utils/ui/key_value_list_generator.dart";
 
 class ChallengeCard extends StatelessWidget {
+  static const challengeGroupIconKey = Key("challenge_group_icon");
+  static const challengeSingleIconKey = Key("challenge_single_icon");
+
   static const _opacityWhenChallengedFinished = 0.3;
   static const _challengeGroupAsset = "assets/icons/challenge_group.svg";
   static const _challengeSingleAsset = "assets/icons/challenge_single.svg";
@@ -39,6 +42,9 @@ class ChallengeCard extends StatelessWidget {
           IconTheme.of(context).color!,
           BlendMode.srcIn,
         ),
+        key: challenge.isGroupChallenge
+            ? challengeGroupIconKey
+            : challengeSingleIconKey,
       ),
     );
 
