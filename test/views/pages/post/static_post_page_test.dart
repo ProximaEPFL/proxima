@@ -5,18 +5,22 @@ import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/post/post_page.dart";
 import "package:proxima/views/pages/post/post_page_widget/bottom_bar_add_comment.dart";
+import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.dart";
 import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
 
+import "../../../mocks/data/post_comment.dart";
 import "../../../mocks/providers/provider_homepage.dart";
 import "../../../mocks/providers/provider_post_page.dart";
 
 void main() {
   late ProviderScope nonEmptyHomePageWidget;
   late ProviderScope emptyPostPageWidget;
+  late ProviderScope nonEmptyPostPageWidget;
 
   setUp(() async {
     nonEmptyHomePageWidget = nonEmptyHomePageProvider;
     emptyPostPageWidget = emptyPostPageProvider;
+    nonEmptyPostPageWidget = nonEmptyPostPageProvider;
   });
 
   testWidgets("Check navigation to post page and comeback to feed",
@@ -96,6 +100,32 @@ void main() {
       final postCommentButton =
           find.byKey(BottomBarAddComment.postCommentButtonKey);
       expect(postCommentButton, findsOneWidget);
+    });
+
+    testWidgets("Check comments are displayed", (tester) async {
+      await tester.pumpWidget(nonEmptyPostPageWidget);
+      await tester.pumpAndSettle();
+
+      // Check if the post is displayed
+      final completePost = find.byType(PostPage);
+      expect(completePost, findsOneWidget);
+
+      //Check that comment list widget is displayed
+      final commentListWidget = find.byKey(PostPage.commentListWidgetKey);
+      expect(commentListWidget, findsOneWidget);
+
+      //Check that we have the right number of comments
+      final commentList = find.byKey(CommentPostWidget.commentWidgetKey);
+      expect(commentList, findsNWidgets(testComments.length));
+
+      //Check that the comment user widgets are displayed
+      final commentUserAvatar =
+          find.byKey(CommentPostWidget.commentUserWidgetKey);
+      expect(commentUserAvatar, findsNWidgets(testComments.length));
+
+      //Check that the comment content are displayed
+      final commentContent = find.byKey(CommentPostWidget.commentContentKey);
+      expect(commentContent, findsNWidgets(testComments.length));
     });
   });
 }
