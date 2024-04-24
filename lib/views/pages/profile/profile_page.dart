@@ -68,7 +68,7 @@ class ProfilePage extends HookConsumerWidget {
         ),
       );
     }
-    final badges = InfoRow(
+    final badges = ProfileInfoRow(
       title: _badgesTitle,
       itemList: itemListBadge,
     );
@@ -81,11 +81,11 @@ class ProfilePage extends HookConsumerWidget {
       ],
     );
 
-    final posts = InfoColumn(
+    final posts = ProfileInfoColumn(
       itemList: itemListPosts,
       columnKey: postColumnKey,
     );
-    final comments = InfoColumn(
+    final comments = ProfileInfoColumn(
       itemList: itemListComments,
       columnKey: commentColumnKey,
     );

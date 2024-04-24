@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 
 /// Info card for the badges in profile
 class ProfileBadge extends StatelessWidget {
-  static const infoCardBadgeKey = Key("profileBadge");
+  static const badgeKey = Key("profileBadge");
 
   static const _badgeWidth = 54.0;
   static const _badgeHeight = 80.0;
@@ -27,7 +27,7 @@ class ProfileBadge extends StatelessWidget {
     const badgeContent = Icon(Icons.star, size: _badgeIconSize);
 
     return Container(
-      key: infoCardBadgeKey,
+      key: badgeKey,
       width: _badgeWidth,
       height: _badgeHeight,
       decoration: decoration,

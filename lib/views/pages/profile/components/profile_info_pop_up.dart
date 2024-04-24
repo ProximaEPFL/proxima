@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 
 class ProfileInfoPopUp extends StatelessWidget {
-  static const postPopUpTitleKey = Key("profilePopUpTitle");
-  static const postPopUpDescriptionKey = Key("profilePopUpDescription");
-  static const postPopUpDeleteButtonKey = Key("profilePopUpDeleteButton");
+  static const popUpTitleKey = Key("profilePopUpTitle");
+  static const popUpDescriptionKey = Key("profilePopUpDescription");
+  static const popUpDeleteButtonKey = Key("profilePopUpDeleteButton");
 
   const ProfileInfoPopUp({
     super.key,
@@ -22,7 +22,7 @@ class ProfileInfoPopUp extends StatelessWidget {
         ? SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Text(
-              key: postPopUpTitleKey,
+              key: popUpTitleKey,
               maxLines: 1,
               title!,
             ),
@@ -39,7 +39,7 @@ class ProfileInfoPopUp extends StatelessWidget {
             left: 8.0,
           ),
           child: Text(
-            key: postPopUpDescriptionKey,
+            key: popUpDescriptionKey,
             content,
           ),
         ),
@@ -47,7 +47,7 @@ class ProfileInfoPopUp extends StatelessWidget {
     );
 
     final deleteAction = IconButton(
-      key: postPopUpDeleteButtonKey,
+      key: popUpDeleteButtonKey,
       onPressed: () {
         onDelete();
         Navigator.pop(context);

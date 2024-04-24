@@ -3,7 +3,7 @@ import "package:proxima/views/pages/profile/components/profile_info_pop_up.dart"
 
 /// Info card for the profile page (post or comment)
 class ProfileInfoCard extends StatelessWidget {
-  static const infoCardPostKey = Key("profileInfoCard");
+  static const infoCardKey = Key("profileInfoCard");
 
   static const _borderRadius = BorderRadius.all(Radius.circular(10));
   static const _cardHeight = 80.0;
@@ -74,7 +74,7 @@ class ProfileInfoCard extends StatelessWidget {
     );
 
     return Container(
-      key: infoCardPostKey,
+      key: infoCardKey,
       height: _cardHeight,
       decoration: decoration,
       child: Material(

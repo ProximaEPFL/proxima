@@ -2,13 +2,13 @@ import "package:flutter/material.dart";
 
 /// This widget defines the style of the rows in the profile page,
 /// such as the badges row
-class InfoRow extends StatelessWidget {
+class ProfileInfoRow extends StatelessWidget {
   static const infoRowKey = Key("infoRow");
 
   static const _rowHeight = 100.0;
   static const _separator = SizedBox(width: 10);
 
-  const InfoRow({
+  const ProfileInfoRow({
     super.key,
     required this.title,
     required this.itemList,
