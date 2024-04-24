@@ -165,13 +165,13 @@ class ChallengeRepositoryService {
 
   Future<Iterable<PostIdFirestore>> inRangeUnsortedPosts(GeoPoint pos) async {
     final geoFirePosition = GeoFirePoint(pos);
-    List<PostFirestore> possiblePosts =
+    Iterable<PostFirestore> possiblePosts =
         await _postRepositoryService.getNearPosts(
       pos,
       _maxChallengeRadius,
     );
 
-    possiblePosts.where(
+    possiblePosts = possiblePosts.where(
       (post) =>
           geoFirePosition.distanceBetweenInKm(
             geopoint: post.location.geoPoint,
