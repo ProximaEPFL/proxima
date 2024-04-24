@@ -235,6 +235,9 @@ void main() {
     });
 
     test("post exists works", () async {
+      final existsBeforeCreation = await postRepository.postExists(post.id);
+      expect(existsBeforeCreation, false);
+
       await setPostFirestore(post);
 
       final exists = await postRepository.postExists(post.id);
