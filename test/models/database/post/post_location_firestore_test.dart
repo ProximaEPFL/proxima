@@ -1,7 +1,7 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/post/post_location_firestore.dart";
 
-import "../../../mocks/data/mock_position.dart";
+import "../../../mocks/data/geopoint.dart";
 
 void main() {
   group("Post Location Firestore testing", () {
