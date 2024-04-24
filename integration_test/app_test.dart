@@ -19,27 +19,29 @@ import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
-import "../test/services/firebase/setup_firebase_mocks.dart";
-import "../test/services/firebase/testing_auth_providers.dart";
-import "../test/services/mock_geo_location_service.dart";
+import "../test/mocks/data/mock_position.dart";
+import "../test/mocks/overrides/override_auth_providers.dart";
+import "../test/mocks/services/mock_geo_location_service.dart";
+import "../test/mocks/services/setup_firebase_mocks.dart";
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   late FakeFirebaseFirestore fakeFireStore;
-  late UserRepositoryService userRepo;
   late PostRepositoryService postRepo;
+  late UserRepositoryService userRepo;
 
   MockGeoLocationService geoLocationService = MockGeoLocationService();
-  const GeoPoint testLocation = GeoPoint(0, 0);
+  const GeoPoint testLocation = userPosition0;
 
   setUpAll(() async {
     setupFirebaseAuthMocks();
     await Firebase.initializeApp();
     fakeFireStore = FakeFirebaseFirestore();
-    userRepo = UserRepositoryService(firestore: fakeFireStore);
     postRepo = PostRepositoryService(firestore: fakeFireStore);
-
+    userRepo = UserRepositoryService(
+      firestore: fakeFireStore,
+    );
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) => Future.value(testLocation),
     );

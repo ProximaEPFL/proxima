@@ -1,67 +1,31 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/home_content/feed/post_card/post_card.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/pages/home/home_page.dart";
-
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
-import "../../viewmodels/mock_home_view_model.dart";
-import "../utils/mock_data/mock_posts.dart";
+
+import "../../../mocks/data/mock_post_overview.dart";
+import "../../../mocks/providers/provider_homepage.dart";
 
 void main() {
-  late ProviderScope homePageWidget;
+  late ProviderScope nonEmptyHomePageWidget;
   late ProviderScope emptyHomePageWidget;
   late ProviderScope loadingHomePageWidget;
 
   setUp(() async {
-    homePageWidget = ProviderScope(
-      overrides: [
-        postOverviewProvider.overrideWith(
-          () => MockHomeViewModel(
-            build: () async => testPosts,
-          ),
-        ),
-      ],
-      child: const MaterialApp(
-        home: HomePage(),
-      ),
-    );
+    nonEmptyHomePageWidget = nonEmptyHomePageProvider;
+    emptyHomePageWidget = emptyHomePageProvider;
 
-    emptyHomePageWidget = ProviderScope(
-      overrides: [
-        postOverviewProvider.overrideWith(
-          () => MockHomeViewModel(),
-        ),
-      ],
-      child: const MaterialApp(
-        home: HomePage(),
-      ),
-    );
-
-    loadingHomePageWidget = ProviderScope(
-      overrides: [
-        postOverviewProvider.overrideWith(
-          () => MockHomeViewModel(
-            build: () {
-              // Future.any([]) will never complete and simulate a loading state
-              return Future.any([]);
-            },
-          ),
-        ),
-      ],
-      child: const MaterialApp(
-        home: HomePage(),
-      ),
-    );
+    loadingHomePageWidget = loadingHomePageProvider;
   });
 
   group("Widgets display", () {
     testWidgets("Display top bar", (tester) async {
-      await tester.pumpWidget(homePageWidget);
+      await tester.pumpWidget(nonEmptyHomePageWidget);
       await tester.pumpAndSettle();
 
       // Check that the home page is displayed
@@ -78,7 +42,7 @@ void main() {
     });
 
     testWidgets("Display feed", (tester) async {
-      await tester.pumpWidget(homePageWidget);
+      await tester.pumpWidget(nonEmptyHomePageWidget);
       await tester.pumpAndSettle();
 
       //Check sort option list is displayed

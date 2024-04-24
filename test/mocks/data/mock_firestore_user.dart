@@ -4,8 +4,24 @@ import "package:proxima/models/database/user/user_data.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 
+import "mock_firebase_auth_user.dart";
+
+final testingUserData = UserData(
+  username: "username_8456",
+  displayName: "display_name_8456",
+  joinTime: Timestamp.fromMillisecondsSinceEpoch(10054217),
+  centauriPoints: 0,
+);
+
+final testingUserFirestoreId = UserIdFirestore(value: testingLoginUser.uid);
+
+final testingUserFirestore = UserFirestore(
+  uid: testingUserFirestoreId,
+  data: testingUserData,
+);
+
 /// Helper class to generate mock user data to be used in tests
-class MockUserFirestore {
+class FirestoreUserGenerator {
   static List<UserData> generateUserData(int count) {
     return List.generate(count, (i) {
       return UserData(
