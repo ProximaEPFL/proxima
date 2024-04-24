@@ -11,6 +11,7 @@ class PostPage extends StatelessWidget {
   static const postDistanceKey = Key("postDistance");
   static const completePostWidgetKey = Key("completePostWidget");
   static const commentListWidgetKey = Key("commentListWidget");
+  static const bottomBarAddCommentKey = Key("bottomBarAddComment");
 
   const PostPage({
     super.key,
@@ -69,6 +70,7 @@ class PostPage extends StatelessWidget {
               // This is necessary to prevent the keyboard from covering the bottom bar
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: const BottomBarAddComment(
+            key: bottomBarAddCommentKey,
             //TODO: Replace with actual username
             currentDisplayName: "Username",
           ),
