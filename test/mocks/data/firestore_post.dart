@@ -15,14 +15,19 @@ class FirestorePostGenerator {
   int _postId = 0;
 
   /// Create a [PostFirestore] with given data
-  static PostFirestore createPostAt(
+  PostFirestore createPostAt(
     PostData data,
     GeoPoint location, {
-    id = "post_id",
+    String? id,
   }) {
     final point = GeoFirePoint(location);
+
+    if (id == null) {
+      _postId += 1;
+    }
+
     return PostFirestore(
-      id: PostIdFirestore(value: id),
+      id: PostIdFirestore(value: id ?? _postId.toString()),
       location: PostLocationFirestore(
         geoPoint: location,
         geohash: point.geohash,
@@ -32,7 +37,7 @@ class FirestorePostGenerator {
   }
 
   /// Generate a [PostFirestore] at position [location], generating the post data
-  static PostFirestore generatePostAt(GeoPoint location) {
+  PostFirestore generatePostAt(GeoPoint location) {
     return createPostAt(
       PostDataGenerator.generatePostData(1).first,
       location,
