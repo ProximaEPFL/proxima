@@ -34,6 +34,13 @@ class PostRepositoryService {
     await _collectionRef.doc(postId.value).delete();
   }
 
+  /// This method returns true if the post with id [postId] exists in the database
+  /// and false otherwise
+  Future<bool> postExists(PostIdFirestore postId) async {
+    final docSnap = await _collectionRef.doc(postId.value).get();
+    return docSnap.exists;
+  }
+
   /// This method returns the post with id [postId] from the database
   Future<PostFirestore> getPost(PostIdFirestore postId) async {
     final docSnap = await _collectionRef.doc(postId.value).get();
