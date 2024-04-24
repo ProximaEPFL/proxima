@@ -4,7 +4,7 @@ import "package:proxima/models/ui/challenge_card_data.dart";
 import "package:proxima/utils/ui/key_value_list_generator.dart";
 
 class ChallengeCard extends StatelessWidget {
-  static const opacityWhenFinished = 0.3;
+  static const _opacityWhenChallengedFinished = 0.3;
   static const _challengeGroupAsset = "assets/icons/challenge_group.svg";
   static const _challengeSingleAsset = "assets/icons/challenge_single.svg";
 
@@ -33,7 +33,7 @@ class ChallengeCard extends StatelessWidget {
       child: InkWell(
         onTap: () => (),
         child: Opacity(
-          opacity: challenge.isFinished ? opacityWhenFinished : 1.0,
+          opacity: challenge.isFinished ? _opacityWhenChallengedFinished : 1.0,
           child: ListTile(
             title: Text(
               challenge.title,
