@@ -1,5 +1,6 @@
 import "package:proxima/models/ui/challenge_card_data.dart";
 
+// All values are purposely different to test the UI more easily
 const mockChallengeList = [
   ChallengeCardData(
     title: "I hate UNIL, here's why",
@@ -11,7 +12,7 @@ const mockChallengeList = [
     title:
         "John fell here lmaoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
     distance: 3200,
-    timeLeft: 27,
+    timeLeft: 28,
     reward: 400,
   ),
   ChallengeCardData(
@@ -23,7 +24,7 @@ const mockChallengeList = [
   ChallengeCardData(
     title: "What a view!",
     distance: null,
-    timeLeft: 27,
+    timeLeft: 29,
     reward: 200,
   ),
 ];
