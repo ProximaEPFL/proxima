@@ -8,12 +8,12 @@ class ProfileInfoPopUp extends StatelessWidget {
   const ProfileInfoPopUp({
     super.key,
     this.title,
-    required this.description,
+    required this.content,
     required this.onDelete,
   });
 
   final String? title;
-  final String description;
+  final String content;
   final VoidCallback onDelete;
 
   @override
@@ -41,7 +41,7 @@ class ProfileInfoPopUp extends StatelessWidget {
           ),
           child: Text(
             key: postPopUpDescriptionKey,
-            description,
+            content,
           ),
         ),
       ),

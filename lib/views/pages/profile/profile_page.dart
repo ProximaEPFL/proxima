@@ -3,10 +3,9 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
 import "package:proxima/views/pages/profile/posts_info/info_card_badge.dart";
-import "package:proxima/views/pages/profile/posts_info/info_card_comment.dart";
-import "package:proxima/views/pages/profile/posts_info/info_card_post.dart";
 import "package:proxima/views/pages/profile/posts_info/info_column.dart";
 import "package:proxima/views/pages/profile/posts_info/info_row.dart";
+import "package:proxima/views/pages/profile/posts_info/profile_info_card.dart";
 import "package:proxima/views/pages/profile/profile_app_bar.dart";
 
 /// This widget is used to display the profile page
@@ -47,19 +46,25 @@ class ProfilePage extends HookConsumerWidget {
       );
 
       itemListPosts.add(
-        InfoCardPost(
+        ProfileInfoCard(
           shadow: shadow,
           title: "Post title",
-          description:
+          content:
               "My super post that talks about something that is super cool and is located in a super spot",
+          onDelete: () {
+            // TODO handle post deletion
+          },
         ),
       );
 
       itemListComments.add(
-        InfoCardComment(
+        ProfileInfoCard(
           shadow: shadow,
-          comment:
+          content:
               "Here is a super comment on a super post that talks about something that is super cool and is located in a super spot that is very cosy and nice",
+          onDelete: () {
+            // TODO handle comment deletion
+          },
         ),
       );
     }
