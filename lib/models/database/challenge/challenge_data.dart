@@ -1,6 +1,8 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/foundation.dart";
 
+/// This class represents the data of a challenge
+
 @immutable
 class ChallengeData {
   static const subCollectionName = "challenges";
@@ -16,6 +18,7 @@ class ChallengeData {
     required this.expiresOn,
   });
 
+  /// Creates a ChallengeData object from a map, that is usually from a Firestore document
   factory ChallengeData.fromDb(Map<String, dynamic> data) {
     try {
       return ChallengeData(
@@ -40,6 +43,7 @@ class ChallengeData {
     };
   }
 
+  /// Returns true if the challenge has expired
   bool get isExpired => expiresOn.compareTo(Timestamp.now()) < 0;
 
   @override

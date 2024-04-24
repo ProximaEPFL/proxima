@@ -12,6 +12,7 @@ import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
+/// This repository service is responsible for handling the challenges
 class ChallengeRepositoryService {
   final FirebaseFirestore _firestore;
   final PostRepositoryService _postRepositoryService;
@@ -21,12 +22,15 @@ class ChallengeRepositoryService {
   static const double _minChallengeRadius = 0.5;
   static const int _challengeDuration = 1; // in days
 
+  /// Creates a new challenge repository service
+  /// with the given [firestore] and [postRepositoryService]
   ChallengeRepositoryService({
     required FirebaseFirestore firestore,
     required PostRepositoryService postRepositoryService,
   })  : _firestore = firestore,
         _postRepositoryService = postRepositoryService;
 
+  /// Completes the challenge of the user with id [uid] on the post with id [pid]
   Future<void> completeChallenge(
     UserIdFirestore uid,
     PostIdFirestore pid,
@@ -48,6 +52,7 @@ class ChallengeRepositoryService {
     });
   }
 
+  /// Returns the active challenges of the user with id [uid] that is located at [pos]
   Future<List<ChallengeFirestore>> getChallenges(
     UserIdFirestore uid,
     GeoPoint pos,
