@@ -1,27 +1,16 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/utils/ui/error_alert.dart";
 
-void main() {
-  Widget testCircularValue(AsyncValue<void> value) => CircularValue(
-        value: value,
-        builder: (context, data) => const Text("Completed"),
-        fallbackBuilder: (context, error) => const Text("Strange Error"),
-      );
+import "../../mocks/providers/provider_circular_value.dart";
 
+void main() {
   testWidgets(
       "CircularValue should show CircularProgressIndicator when loading", (
     tester,
   ) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        child: MaterialApp(
-          home: testCircularValue(const AsyncValue.loading()),
-        ),
-      ),
-    );
+    await tester.pumpWidget(circularValueProvider(const AsyncValue.loading()));
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
@@ -29,13 +18,7 @@ void main() {
   testWidgets("CicularValue should build with value when finished", (
     tester,
   ) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        child: MaterialApp(
-          home: testCircularValue(const AsyncValue.data(null)),
-        ),
-      ),
-    );
+    await tester.pumpWidget(circularValueProvider(const AsyncValue.data(null)));
 
     await tester.pumpAndSettle();
     expect(find.text("Completed"), findsOneWidget);
@@ -47,12 +30,8 @@ void main() {
     final testException = Exception("Blue moon");
 
     await tester.pumpWidget(
-      ProviderScope(
-        child: MaterialApp(
-          home: testCircularValue(
-            AsyncValue.error(testException, StackTrace.empty),
-          ),
-        ),
+      circularValueProvider(
+        AsyncValue.error(testException, StackTrace.empty),
       ),
     );
 

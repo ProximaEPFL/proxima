@@ -1,47 +1,31 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/services/database/post_repository_service.dart";
-import "package:proxima/services/geolocation_service.dart";
-import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
-import "package:proxima/views/pages/new_post/new_post_page.dart";
 
-import "../services/database/mock_post_repository_service.dart";
-import "../services/firebase/setup_firebase_mocks.dart";
-import "../services/firestore/testing_firestore_provider.dart";
-import "../services/mock_geo_location_service.dart";
-import "../services/test_data/firestore_user_mock.dart";
+import "../../../mocks/data/geopoint.dart";
+import "../../../mocks/data/post_data.dart";
+import "../../../mocks/providers/provider_new_post_page.dart";
+import "../../../mocks/services/mock_geo_location_service.dart";
+import "../../../mocks/services/mock_post_repository_service.dart";
+import "../../../mocks/services/setup_firebase_mocks.dart";
 
 void main() {
+  late ProviderScope mockedNewPostPage;
   late MockPostRepositoryService postRepository;
   late MockGeoLocationService geoLocationService;
-  late ProviderScope mockedNewPostPage;
 
   const timeDeltaMils = 500;
 
   setUp(() async {
     setupFirebaseAuthMocks();
-
     postRepository = MockPostRepositoryService();
     geoLocationService = MockGeoLocationService();
-
-    mockedNewPostPage = ProviderScope(
-      overrides: [
-        ...firebaseMocksOverrides,
-        postRepositoryProvider.overrideWithValue(postRepository),
-        geoLocationServiceProvider.overrideWithValue(geoLocationService),
-        uidProvider.overrideWithValue(testingUserFirestoreId),
-      ],
-      child: const MaterialApp(
-        home: NewPostPage(),
-      ),
-    );
+    mockedNewPostPage = newPostPageProvider(postRepository, geoLocationService);
   });
 
   group("Widgets display", () {
@@ -79,18 +63,12 @@ void main() {
     await widgetTester.pumpWidget(mockedNewPostPage);
     await widgetTester.pumpAndSettle();
 
-    GeoPoint testPoint = const GeoPoint(0, 0);
+    GeoPoint testPoint = userPosition0;
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) => Future.value(testPoint),
     );
 
-    PostData postData = PostData(
-      ownerId: testingUserFirestoreId,
-      title: "I like turtles",
-      description: "Look at them go!",
-      publicationTime: Timestamp.now(),
-      voteScore: 0,
-    );
+    PostData postData = PostDataGenerator().postData;
 
     final titleFinder = find.byKey(NewPostForm.titleFieldKey);
     await widgetTester.enterText(titleFinder, postData.title);
