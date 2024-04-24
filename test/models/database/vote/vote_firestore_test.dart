@@ -7,7 +7,7 @@ void main() {
       final voteFirestore = VoteFirestore(hasUpvoted: true);
       final hashCode = voteFirestore.hashCode;
 
-      expect(hashCode, isA<int>());
+      expect(hashCode, true.hashCode);
     });
 
     test("equality overrides correctly", () {
