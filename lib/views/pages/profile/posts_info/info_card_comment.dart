@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/views/pages/profile/posts_info/popup/comment_popup.dart";
+import "package:proxima/views/pages/profile/posts_info/profile_info_pop_up.dart";
 
 //info card for the comments
 class InfoCardComment extends StatelessWidget {
@@ -35,7 +35,12 @@ class InfoCardComment extends StatelessWidget {
           onTap: () => showDialog<void>(
             context: context,
             builder: (BuildContext context) {
-              return CommentPopUp(comment: comment);
+              return ProfileInfoPopUp(
+                description: comment,
+                onDelete: () {
+                  // TODO comment deletion
+                },
+              );
             },
           ),
           child: Center(

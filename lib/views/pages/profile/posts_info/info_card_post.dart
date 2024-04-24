@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/views/pages/profile/posts_info/popup/post_popup.dart";
+import "package:proxima/views/pages/profile/posts_info/profile_info_pop_up.dart";
 
 //info card for the posts
 class InfoCardPost extends StatelessWidget {
@@ -39,7 +39,13 @@ class InfoCardPost extends StatelessWidget {
           onTap: () => showDialog<void>(
             context: context,
             builder: (BuildContext context) {
-              return PostPopUp(title: title, description: description);
+              return ProfileInfoPopUp(
+                title: title,
+                description: description,
+                onDelete: () {
+                  // TODO handle post deletion
+                },
+              );
             },
           ),
           child: Center(
