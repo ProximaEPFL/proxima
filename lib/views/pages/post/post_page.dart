@@ -21,6 +21,15 @@ class PostPage extends StatelessWidget {
 
     List<CommentPost> comments = commentList;
 
+    List<Widget> appBarContent = [
+      const Text("Post"),
+      Text(
+        //TODO: Add distance to post
+        "50m away",
+        style: themeData.textTheme.titleSmall,
+      ),
+    ];
+
     List<Widget> bodyChildren = [
       EntirePostWidget(post: postOverview),
       const SizedBox(height: 10),
@@ -32,14 +41,7 @@ class PostPage extends StatelessWidget {
         leading: const LeadingBackButton(),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("Post"),
-            //TODO: Add distance to post
-            Text(
-              "50m away",
-              style: themeData.textTheme.titleSmall,
-            ),
-          ],
+          children: appBarContent,
         ),
       ),
       body: Padding(
