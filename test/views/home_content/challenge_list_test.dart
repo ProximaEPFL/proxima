@@ -48,14 +48,23 @@ void main() {
           expect(find.text(challenge.title), findsOneWidget);
 
           if (challenge.isFinished) {
-            expectOneRichText("Challenged finished!");
+            expectRichText("Challenged finished!", findsAtLeastNWidgets(1));
           } else {
-            expectOneRichText("Distance to post: ${challenge.distance} meters");
+            expectRichText(
+              "Distance to post: ${challenge.distance} meters",
+              findsOneWidget,
+            );
           }
-          expectOneRichText("Reward: ${challenge.reward} Centauri");
+          expectRichText(
+            "Reward: ${challenge.reward} Centauri",
+            findsOneWidget,
+          );
 
           if (!challenge.isGroupChallenge) {
-            expectOneRichText("Time left: ${challenge.timeLeft} hours");
+            expectRichText(
+              "Time left: ${challenge.timeLeft} hours",
+              findsOneWidget,
+            );
           }
         }
       });
