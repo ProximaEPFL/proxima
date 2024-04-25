@@ -1,17 +1,17 @@
 import "package:flutter/material.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
-import "package:proxima/viewmodels/map/map_state.dart";
+import "package:proxima/viewmodels/map_view_model.dart";
 import "package:proxima/views/home_content/map/mock_markers.dart";
 
 class PostMap extends StatelessWidget {
-  final MapState mapState;
+  final MapInfo mapInfo;
   final Function(GoogleMapController) onMapCreated;
 
   static const postMapKey = Key("PostMap");
 
   const PostMap({
     super.key,
-    required this.mapState,
+    required this.mapInfo,
     required this.onMapCreated,
   });
 
@@ -29,19 +29,19 @@ class PostMap extends StatelessWidget {
         rotateGesturesEnabled: false,
         tiltGesturesEnabled: false,
         initialCameraPosition: CameraPosition(
-          target: mapState.currentLocation,
+          target: mapInfo.currentLocation,
           zoom: 17.5,
         ),
         circles: {
           Circle(
             circleId: const CircleId("1"),
-            center: mapState.currentLocation,
+            center: mapInfo.currentLocation,
             radius: 100,
             fillColor: Colors.black12,
             strokeWidth: 0,
           ),
         },
-        markers: MockMarkers(mapState.currentLocation).mockMarkers,
+        markers: MockMarkers(mapInfo.currentLocation).mockMarkers,
         onMapCreated: onMapCreated,
       ),
     );
