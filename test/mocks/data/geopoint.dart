@@ -90,7 +90,7 @@ class GeoPointGenerator {
       );
     });
 
-    // Generate position positions that are not in the range.
+    // Generate positions that are not in the range.
     final positionsNotInRange = List.generate(outRange, (i) {
       double dDirection = minDiagonalOutRange + distanceBetweenpositions * i;
       return GeoPoint(
