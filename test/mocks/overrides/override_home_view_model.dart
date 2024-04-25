@@ -32,9 +32,7 @@ final mockEmptyHomeViewModelOverride = [
 
 final mockNonEmptyHomeViewModelOverride = [
   postOverviewProvider.overrideWith(
-    () => MockHomeViewModel(
-      build: () async => testPosts,
-    ),
+    () => MockHomeViewModel(build: () async => testPosts),
   ),
 ];
 
