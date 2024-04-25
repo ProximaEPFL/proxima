@@ -138,12 +138,15 @@ class ChallengeRepositoryService {
       sum.day,
     ); // truncates to the day
 
-    Iterable<PostIdFirestore> possiblePosts = await _inRangeUnsortedPosts(pos);
-    possiblePosts = possiblePosts.where((post) => !justExpired.contains(post));
+    final Iterable<PostIdFirestore> possiblePosts =
+        (await _inRangeUnsortedPosts(pos))
+            .where((post) => !justExpired.contains(post));
+    final Iterable<String> possiblePostsStringIds =
+        possiblePosts.map((post) => post.value);
 
     final pastChallengesCollectionRef = _pastChallengesRef(parentRef);
     final alreadyDonePostsSnap = await pastChallengesCollectionRef
-        .where(FieldPath.documentId, whereIn: possiblePosts)
+        .where(FieldPath.documentId, whereIn: possiblePostsStringIds)
         .get();
 
     final alreadyDonePosts = alreadyDonePostsSnap.docs
