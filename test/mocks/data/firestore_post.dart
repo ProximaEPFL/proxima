@@ -12,13 +12,18 @@ import "post_data.dart";
 
 /// Helper class to create mock post data to be used in tests
 class FirestorePostGenerator {
+  int _postId = 0;
+
   /// Create a [PostFirestore] with given data
-  static PostFirestore createPostAt(
+  PostFirestore createPostAt(
     PostData data,
     GeoPoint location, {
-    id = "post_id",
+    String? id,
   }) {
     final point = GeoFirePoint(location);
+
+    id ??= (_postId++).toString();
+
     return PostFirestore(
       id: PostIdFirestore(value: id),
       location: PostLocationFirestore(
@@ -30,7 +35,7 @@ class FirestorePostGenerator {
   }
 
   /// Generate a [PostFirestore] at position [location], generating the post data
-  static PostFirestore generatePostAt(GeoPoint location) {
+  PostFirestore generatePostAt(GeoPoint location) {
     return createPostAt(
       PostDataGenerator.generatePostData(1).first,
       location,
@@ -38,15 +43,17 @@ class FirestorePostGenerator {
   }
 
   /// Create a [PostFirestore] with random data
-  static PostFirestore createUserPost(
+  PostFirestore createUserPost(
     UserIdFirestore userId,
     GeoPoint location,
   ) {
     final point = GeoPoint(location.latitude, location.longitude);
 
+    _postId += 1;
+
     return PostFirestore(
       id: PostIdFirestore(
-        value: DateTime.now().microsecondsSinceEpoch.toString(),
+        value: _postId.toString(),
       ),
       location: PostLocationFirestore(
         geoPoint: location,

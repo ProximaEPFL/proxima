@@ -6,16 +6,21 @@ const userPosition2 = GeoPoint(10, 10);
 const userPosition3 = GeoPoint(50, 100);
 
 class GeoPointGenerator {
-  /// Method to create a nearby post position
-  GeoPoint createNearbyPostPosition(GeoPoint userPosition) {
+  GeoPointGenerator._();
+
+  /// Method to create a nearby position
+  static GeoPoint createNearbyPosition(GeoPoint userPosition) {
     return GeoPoint(
       userPosition.latitude + 0.0001,
       userPosition.longitude + 0.0001,
     );
   }
 
-  /// Method to create a far away post position
-  GeoPoint createFarAwayPostPosition(GeoPoint userPosition, double range) {
+  /// Method to create a far away position
+  static GeoPoint createFarAwayPosition(
+    GeoPoint userPosition,
+    double range,
+  ) {
     return GeoPoint(
       userPosition.latitude + range * 2,
       userPosition.longitude + range * 2,
@@ -23,10 +28,13 @@ class GeoPointGenerator {
   }
 
   /// Conversion factor from kilometers to degrees (latitude).
-  double kmToDegreesLat(double km) => km / 111.0;
+  static double kmToDegreesLat(double km) => km / 111.0;
 
-  /// Method to create a post on the edge of the range but inside
-  GeoPoint createPostOnEdgeInsidePosition(GeoPoint userPosition, double range) {
+  /// Method to create a position on the edge of the range but inside
+  static GeoPoint createOnEdgeInsidePosition(
+    GeoPoint userPosition,
+    double range,
+  ) {
     // Convert range to degrees
     double rangeInDegreesLatitude = kmToDegreesLat(range);
 
@@ -39,8 +47,8 @@ class GeoPointGenerator {
     );
   }
 
-  /// Method to create a post on the edge of the range but outside
-  GeoPoint createPostOnEdgeOutsidePosition(
+  /// Method to create a position on the edge of the range but outside
+  static GeoPoint createOnEdgeOutsidePosition(
     GeoPoint userPosition,
     double range,
   ) {
@@ -59,7 +67,7 @@ class GeoPointGenerator {
   /// Generate a list of [GeoPoint] positions, [inRange] of which are in range
   /// (i.e. less than 100 m away) of the [userPosition], and [outRange] of which
   /// are out of range of this position
-  List<GeoPoint> generatePositions(
+  static List<GeoPoint> generatePositions(
     GeoPoint userPosition,
     int inRange,
     int outRange,
@@ -68,28 +76,29 @@ class GeoPointGenerator {
 
     const maxDiagonalDistanceInRange = 0.0005;
     const minDiagonalOutRange = 0.001;
-    double distanceBetweenPosts = maxDiagonalDistanceInRange / (inRange + 1);
+    double distanceBetweenpositions =
+        maxDiagonalDistanceInRange / (inRange + 1);
 
     double userLatitude = userPosition.latitude;
     double userLongitude = userPosition.longitude;
 
-    final postInRange = List.generate(inRange, (i) {
-      double dDirection = distanceBetweenPosts * i;
+    final positionInRange = List.generate(inRange, (i) {
+      double dDirection = distanceBetweenpositions * i;
       return GeoPoint(
         userLatitude + dDirection,
         userLongitude + dDirection,
       );
     });
 
-    // Generate post positions that are not in the range.
-    final postsNotInRange = List.generate(outRange, (i) {
-      double dDirection = minDiagonalOutRange + distanceBetweenPosts * i;
+    // Generate positions that are not in the range.
+    final positionsNotInRange = List.generate(outRange, (i) {
+      double dDirection = minDiagonalOutRange + distanceBetweenpositions * i;
       return GeoPoint(
         userLatitude + dDirection,
         userLongitude + dDirection,
       );
     });
 
-    return [...postInRange, ...postsNotInRange];
+    return [...positionInRange, ...positionsNotInRange];
   }
 }

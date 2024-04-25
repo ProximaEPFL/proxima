@@ -79,7 +79,8 @@ void main() {
             ),
           )
           .toList()[0];
-      final post = FirestorePostGenerator.createPostAt(postData, userPosition0);
+      final post =
+          FirestorePostGenerator().createPostAt(postData, userPosition0);
 
       when(userRepository.getUser(post.data.ownerId)).thenAnswer(
         (_) async => owner,
@@ -133,7 +134,7 @@ void main() {
             .toList();
 
         final posts = postsData.map((data) {
-          return FirestorePostGenerator.createPostAt(data, userPosition0);
+          return FirestorePostGenerator().createPostAt(data, userPosition0);
         }).toList();
 
         final expectedPosts = postsData.map((data) {
@@ -190,7 +191,7 @@ void main() {
         );
 
         final posts = postsData.map((data) {
-          return FirestorePostGenerator.createPostAt(data, userPosition0);
+          return FirestorePostGenerator().createPostAt(data, userPosition0);
         }).toList();
 
         final expectedPosts = postsData.mapIndexed(
@@ -262,7 +263,8 @@ void main() {
             ),
           )
           .toList()[0];
-      final post = FirestorePostGenerator.createPostAt(postData, userPosition0);
+      final post =
+          FirestorePostGenerator().createPostAt(postData, userPosition0);
 
       final expectedPosts = [
         PostOverview(
