@@ -114,7 +114,7 @@ class ChallengeRepositoryService {
     return activeChallenges;
   }
 
-  Future<List<ChallengeFirestore>> _generateNewChallenges(
+  Future<void> _generateNewChallenges(
     List<ChallengeFirestore> activeChallenges,
     GeoPoint pos,
     Set<PostIdFirestore> justExpired,
@@ -162,8 +162,6 @@ class ChallengeRepositoryService {
       activeChallenges.add(newChallenge);
       activePostIds.add(post);
     }
-
-    return activeChallenges;
   }
 
   Future<void> _addChallenge(
