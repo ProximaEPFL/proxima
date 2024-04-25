@@ -1,6 +1,9 @@
+import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/home_content/feed/post_card/post_card.dart";
+import "package:proxima/views/home_content/feed/post_card/user_bar_widget.dart";
+import "package:proxima/views/home_content/feed/post_card/votes_widget.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/post/post_page.dart";
@@ -9,6 +12,7 @@ import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.da
 import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
 
 import "../../../mocks/data/post_comment.dart";
+import "../../../mocks/data/post_overview.dart";
 import "../../../mocks/providers/provider_homepage.dart";
 import "../../../mocks/providers/provider_post_page.dart";
 
@@ -32,9 +36,9 @@ void main() {
     await tester.tap(find.byKey(PostCard.postCardKey).first);
     await tester.pumpAndSettle();
 
-    // Check if the post page is displayed
-    final homePage = find.byType(CompletePostWidget);
-    expect(homePage, findsOneWidget);
+    // Check if the post page is displayed, with the correct title
+    expect(find.byType(CompletePostWidget), findsOneWidget);
+    expect(find.text(testPosts.first.title), findsAtLeastNWidgets(1));
 
     // Tap on the back button
     await tester.tap(find.byKey(LeadingBackButton.leadingBackButtonKey));
@@ -46,6 +50,56 @@ void main() {
   });
 
   group("Widgets display", () {
+    testWidgets("Check displayed post information", (tester) async {
+      await tester.pumpWidget(emptyPostPageWidget);
+      await tester.pumpAndSettle();
+
+      final post = testPosts.first;
+
+      //Check that the complete post widget is displayed
+      final completePostWidget = find.byKey(PostPage.completePostWidgetKey);
+      expect(completePostWidget, findsOneWidget);
+
+      //Check that the post title is displayed
+      final postTitle = find.byKey(CompletePostWidget.postTitleKey);
+      expect(postTitle, findsOneWidget);
+      final postTitleWidget = tester.widget(postTitle);
+      expect(
+        postTitleWidget is Text && postTitleWidget.data == post.title,
+        true,
+      );
+
+      //Check that the post description is displayed
+      final postDescription = find.byKey(CompletePostWidget.postDescriptionKey);
+      expect(postDescription, findsOneWidget);
+      final postDescriptionWidget = tester.widget(postDescription);
+      expect(
+        postDescriptionWidget is Text &&
+            postDescriptionWidget.data == post.description,
+        true,
+      );
+
+      //Check that the post vote widget is displayed
+      final postVote = find.byKey(CompletePostWidget.postVoteWidgetKey);
+      expect(postVote, findsOneWidget);
+
+      //Check the userbar is displayed
+      final postUserBar = find.byKey(CompletePostWidget.postUserBarKey);
+      expect(postUserBar, findsOneWidget);
+
+      final postUserBarDisplayNameTextWidget = tester.widget(
+        find.descendant(
+          of: postUserBar,
+          matching: find.byKey(UserBarWidget.displayNameTextKey),
+        ),
+      );
+      expect(
+        postUserBarDisplayNameTextWidget is Text &&
+            postUserBarDisplayNameTextWidget.data == post.ownerDisplayName,
+        true,
+      );
+    });
+
     testWidgets("Check non-comment widgets are displayed", (tester) async {
       await tester.pumpWidget(emptyPostPageWidget);
       await tester.pumpAndSettle();
@@ -61,22 +115,6 @@ void main() {
       //Check that the complete post widget is displayed
       final completePostWidget = find.byKey(PostPage.completePostWidgetKey);
       expect(completePostWidget, findsOneWidget);
-
-      //Check that the post title is displayed
-      final postTitle = find.byKey(CompletePostWidget.postTitleKey);
-      expect(postTitle, findsOneWidget);
-
-      //Check that the post description is displayed
-      final postDescription = find.byKey(CompletePostWidget.postDescriptionKey);
-      expect(postDescription, findsOneWidget);
-
-      //Check that the post vote widget is displayed
-      final postVoteWidget = find.byKey(CompletePostWidget.postVoteWidgetKey);
-      expect(postVoteWidget, findsOneWidget);
-
-      //Check the userbar is displayed
-      final postUserBar = find.byKey(CompletePostWidget.postUserBarKey);
-      expect(postUserBar, findsOneWidget);
 
       //Check that the comment list widget is displayed
       final commentListWidget = find.byKey(PostPage.commentListWidgetKey);
