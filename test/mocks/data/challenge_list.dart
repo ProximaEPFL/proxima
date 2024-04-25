@@ -25,4 +25,8 @@ const mockChallengeList = [
     timeLeft: 29,
     reward: 200,
   ),
+  ChallengeCardData.groupFinished(
+    title: "I saw a bird here once",
+    reward: 50,
+  ),
 ];
