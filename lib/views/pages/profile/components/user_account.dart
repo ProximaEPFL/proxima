@@ -17,14 +17,12 @@ class UserAccount extends StatelessWidget {
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme.titleSmall;
 
-    //TODO: get the profile info from the viewmodel
     final displayName = Text(
       userData.displayName,
       style: textStyle,
       overflow: TextOverflow.fade,
     );
 
-    //TODO: get the user points from the viewmodel
     final points = Text(
       key: centauriPointsKey,
       style: textStyle,
