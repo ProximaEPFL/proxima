@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:proxima/views/components/delete_button.dart";
 
 class ProfileInfoPopUp extends StatelessWidget {
   static const popUpTitleKey = Key("profilePopUpTitle");
@@ -14,7 +15,7 @@ class ProfileInfoPopUp extends StatelessWidget {
 
   final String? title;
   final String content;
-  final VoidCallback onDelete;
+  final FutureVoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +47,13 @@ class ProfileInfoPopUp extends StatelessWidget {
       ),
     );
 
-    final deleteAction = IconButton(
-      key: popUpDeleteButtonKey,
-      onPressed: () {
-        onDelete();
-        Navigator.pop(context);
+    final deleteAction = DeleteButton(
+      onClick: () async {
+        await onDelete();
+        if (context.mounted) {
+          Navigator.pop(context);
+        }
       },
-      icon: const Icon(Icons.delete),
     );
 
     return AlertDialog(

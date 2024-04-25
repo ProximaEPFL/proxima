@@ -49,10 +49,7 @@ class ProfileInfoCard extends StatelessWidget {
         maxLines: title == null ? 3 : 2,
         overflow: TextOverflow.ellipsis,
       ),
-      trailing: SizedBox(
-        width: 40,
-        child: DeleteButton(onClick: onDelete),
-      ),
+      trailing: DeleteButton(onClick: onDelete),
     );
 
     final fullViewButton = InkWell(

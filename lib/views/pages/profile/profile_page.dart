@@ -51,7 +51,7 @@ class ProfilePage extends HookConsumerWidget {
           title: "Post title",
           content:
               "My super post that talks about something that is super cool and is located in a super spot",
-          onDelete: () {
+          onDelete: () async {
             // TODO handle post deletion
           },
         ),
@@ -62,7 +62,7 @@ class ProfilePage extends HookConsumerWidget {
           shadow: shadow,
           content:
               "Here is a super comment on a super post that talks about something that is super cool and is located in a super spot that is very cosy and nice",
-          onDelete: () {
+          onDelete: () async {
             // TODO handle comment deletion
           },
         ),
