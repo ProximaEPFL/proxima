@@ -2,10 +2,12 @@ import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
+typedef FutureVoidCallback = Future<void> Function();
+
 class DeleteButton extends HookConsumerWidget {
   static const _deleteIconSize = 32.0;
 
-  final Future<void> Function() onClick;
+  final FutureVoidCallback onClick;
   final double iconSize;
 
   const DeleteButton({
