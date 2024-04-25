@@ -52,7 +52,14 @@ class ChallengeRepositoryService {
     });
   }
 
-  /// Returns the active challenges of the user with id [uid] that is located at [pos]
+  /// Returns the active challenges of the user with id [uid] who is located at [pos].
+  /// If challenges are expired or missing, they are replaced by new challenges in the 
+  /// database, and then returned. This therefore always ensure this method will return
+  /// challenges, all up-to-date; trying its best to find [maxActiveChallenges] (if 
+  /// enough exist close enough).
+  /// Warning: This method is NOT atomic, and therefore not thread-safe. We suppose here
+  /// no malicious user will try to load the challenge page on two different devices at
+  /// the same time. In fact, even if this happens, this should not be a big problem.
   Future<List<ChallengeFirestore>> getChallenges(
     UserIdFirestore uid,
     GeoPoint pos,
