@@ -101,6 +101,8 @@ class ChallengeRepositoryService {
     return activeChallenges;
   }
 
+  /// Adds active challenges to [activeChallenges]. Removes expired challenges
+  /// and adds them to [justExpired]
   Future<void> _removeOldChallenges(
     DocumentReference parentRef,
     List<ChallengeFirestore> activeChallenges,
@@ -121,6 +123,7 @@ class ChallengeRepositoryService {
     }
   }
 
+  /// Generates new challenges and puts them in [activeChallenges]
   Future<void> _generateNewChallenges(
     List<ChallengeFirestore> activeChallenges,
     GeoPoint pos,
