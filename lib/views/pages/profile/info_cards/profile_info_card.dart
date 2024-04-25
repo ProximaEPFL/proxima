@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:proxima/views/components/delete_button.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_pop_up.dart";
 
 /// Info card for the profile page (post or comment)
@@ -7,7 +8,6 @@ class ProfileInfoCard extends StatelessWidget {
 
   static const _borderRadius = BorderRadius.all(Radius.circular(10));
   static const _cardHeight = 80.0;
-  static const _deleteIconSize = 32.0;
 
   const ProfileInfoCard({
     super.key,
@@ -18,7 +18,7 @@ class ProfileInfoCard extends StatelessWidget {
   });
 
   final String content;
-  final VoidCallback onDelete;
+  final FutureVoidCallback onDelete;
   final String? title;
   final BoxShadow? shadow;
 
@@ -41,11 +41,6 @@ class ProfileInfoCard extends StatelessWidget {
           )
         : null;
 
-    final deleteButton = IconButton(
-      icon: const Icon(Icons.delete, size: _deleteIconSize),
-      onPressed: onDelete,
-    );
-
     final cardContent = ListTile(
       title: potentialTitle,
       subtitle: Text(
@@ -54,7 +49,10 @@ class ProfileInfoCard extends StatelessWidget {
         maxLines: title == null ? 3 : 2,
         overflow: TextOverflow.ellipsis,
       ),
-      trailing: deleteButton,
+      trailing: SizedBox(
+        width: 40,
+        child: DeleteButton(onClick: onDelete),
+      ),
     );
 
     final fullViewButton = InkWell(

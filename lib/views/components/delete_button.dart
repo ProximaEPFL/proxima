@@ -39,9 +39,9 @@ class DeleteButton extends HookConsumerWidget {
       },
     );
 
-    const loading = IconButton(
-      icon: CircularProgressIndicator(),
-      onPressed: null,
+    const loading = Padding(
+      padding: EdgeInsets.all(2),
+      child: CircularProgressIndicator(),
     );
 
     final checkButton = IconButton(
@@ -49,10 +49,12 @@ class DeleteButton extends HookConsumerWidget {
       onPressed: null,
     );
 
-    return switch (isLoading.value) {
-      DeletionState.existing => deleteButton,
-      DeletionState.pending => loading,
-      DeletionState.deleted => checkButton,
-    };
+    return Center(
+      child: switch (isLoading.value) {
+        DeletionState.existing => deleteButton,
+        DeletionState.pending => loading,
+        DeletionState.deleted => checkButton,
+      },
+    );
   }
 }
