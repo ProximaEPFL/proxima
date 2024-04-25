@@ -1,4 +1,3 @@
-import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/views/home_content/challenge/challenge_card.dart";
 import "package:proxima/views/home_content/challenge/challenge_list.dart";
