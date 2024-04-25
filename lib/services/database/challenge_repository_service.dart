@@ -136,15 +136,23 @@ class ChallengeRepositoryService {
           ),
         );
 
-        await challengesCollectionRef
-            .doc(post.value)
-            .set(newChallenge.data.toDbData());
+        await _addChallenge(newChallenge, parentRef);
         activeChallenges.add(newChallenge);
         activePostIds.add(post);
       }
     }
 
     return activeChallenges;
+  }
+
+  Future<void> _addChallenge(
+    ChallengeFirestore challenge,
+    DocumentReference parentRef,
+  ) async {
+    await parentRef
+        .collection(ChallengeFirestore.subCollectionName)
+        .doc(challenge.postId.value)
+        .set(challenge.data.toDbData());
   }
 
   /// moves the challenge with id [pid] from the active challenges to the past challenges
