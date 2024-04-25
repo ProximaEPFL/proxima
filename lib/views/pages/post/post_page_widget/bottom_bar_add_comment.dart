@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:proxima/utils/ui/user_avatar.dart";
 
 class BottomBarAddComment extends StatelessWidget {
   static const commentUserAvatarKey = Key("commentUserAvatar");
@@ -22,10 +23,10 @@ class BottomBarAddComment extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 8),
-          child: CircleAvatar(
+          child: UserAvatar(
             key: commentUserAvatarKey,
+            displayName: currentDisplayName,
             radius: 22,
-            child: Text(currentDisplayName.substring(0, 1)),
           ),
         ),
         const Expanded(

@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:proxima/utils/ui/user_avatar.dart";
 
 /// This widget is used to display the user bar in the post card.
 /// It contains the user's profile picture and username.
@@ -15,10 +16,7 @@ class UserBarWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        CircleAvatar(
-          radius: 12,
-          child: Text(posterUsername.substring(0, 1)),
-        ),
+        UserAvatar(displayName: posterUsername, radius: 12),
         Padding(
           padding: const EdgeInsets.only(left: 8),
           child: Text(posterUsername),
