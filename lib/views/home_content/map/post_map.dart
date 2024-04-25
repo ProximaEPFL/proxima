@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:proxima/viewmodels/map_view_model.dart";
-import "package:proxima/views/home_content/map/mock_markers.dart";
 
 class PostMap extends StatelessWidget {
   final MapInfo mapInfo;
@@ -41,7 +40,6 @@ class PostMap extends StatelessWidget {
             strokeWidth: 0,
           ),
         },
-        markers: MockMarkers(mapInfo.currentLocation).mockMarkers,
         onMapCreated: onMapCreated,
       ),
     );

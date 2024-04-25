@@ -13,6 +13,7 @@ class MapScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mapInfo = ref.watch(asyncMapProvider);
+
     final mapNotifier = ref.watch(asyncMapProvider.notifier);
 
     return switch (mapInfo) {
