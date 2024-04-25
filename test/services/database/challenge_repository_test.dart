@@ -150,6 +150,7 @@ void main() {
       final challenges = await challengeRepository.getChallenges(uid, userPos);
 
       expect(challenges.length, 1);
+      expect(challenges.first.postId, availablePostId);
     });
 
     test("Challenges expire", () async {
