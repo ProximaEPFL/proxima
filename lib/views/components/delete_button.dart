@@ -4,8 +4,14 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 
 typedef FutureVoidCallback = Future<void> Function();
 
+enum DeletionState {
+  existing,
+  pending,
+  deleted,
+}
+
 class DeleteButton extends HookConsumerWidget {
-  static const _deleteIconSize = 32.0;
+  static const _deleteIconSize = 26.0;
 
   final FutureVoidCallback onClick;
   final double iconSize;
@@ -18,22 +24,30 @@ class DeleteButton extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = useState(false);
+    final isLoading = useState(DeletionState.existing);
 
-    if (isLoading.value) {
+    if (isLoading.value == DeletionState.pending) {
       return const CircularProgressIndicator();
     }
 
-    return IconButton(
+    final deleteButton = IconButton(
       icon: Icon(Icons.delete, size: iconSize),
       onPressed: () async {
-        isLoading.value = true;
+        isLoading.value = DeletionState.pending;
         await onClick();
-
-        if (context.mounted) {
-          Navigator.pop(context);
-        }
+        isLoading.value = DeletionState.deleted;
       },
     );
+
+    final checkButton = IconButton(
+      icon: Icon(Icons.check, size: iconSize),
+      onPressed: null,
+    );
+
+    return switch (isLoading.value) {
+      DeletionState.existing => deleteButton,
+      DeletionState.pending => const CircularProgressIndicator(),
+      DeletionState.deleted => checkButton,
+    };
   }
 }
