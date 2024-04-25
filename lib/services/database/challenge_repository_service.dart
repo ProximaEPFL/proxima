@@ -73,12 +73,8 @@ class ChallengeRepositoryService {
         .collection(ChallengeFirestore.pastChallengesSubCollectionName);
 
     final challengesSnap = await challengesCollectionRef.get();
-    final pastChallengesSnap = await pastChallengesCollectionRef.get();
 
-    final pastPostIds = pastChallengesSnap.docs
-        .map((doc) => PostIdFirestore(value: doc.id))
-        .toSet();
-
+    final Set<PostIdFirestore> justExpired = {};
     final List<ChallengeFirestore> activeChallenges =
         List.empty(growable: true);
 
@@ -87,44 +83,58 @@ class ChallengeRepositoryService {
       if (challenge.data.isExpired ||
           !await _postRepositoryService.postExists(challenge.postId)) {
         await _moveToPastChallenge(challengeSnap, parentRef);
-        pastPostIds.add(challenge.postId);
+        justExpired.add(challenge.postId);
       } else {
         activeChallenges.add(challenge);
       }
     }
 
-    final now = DateTime.now();
-    final sum = now.add(maxChallengeDuration);
-    final expiresOn = DateTime(
-      sum.year,
-      sum.month,
-      sum.day,
-    ); // truncates to the day
+    if (activeChallenges.length < maxActiveChallenges) {
+      final now = DateTime.now();
+      final sum = now.add(maxChallengeDuration);
+      final expiresOn = DateTime(
+        sum.year,
+        sum.month,
+        sum.day,
+      ); // truncates to the day
 
-    final possiblePosts = await inRangeUnsortedPosts(pos);
-    final postIt = possiblePosts.iterator;
-    final activePostIds =
-        activeChallenges.map((challenge) => challenge.postId).toSet();
-    while (activeChallenges.length < maxActiveChallenges && postIt.moveNext()) {
-      final post = postIt.current;
+      Iterable<PostIdFirestore> possiblePosts = await inRangeUnsortedPosts(pos);
+      possiblePosts =
+          possiblePosts.where((post) => !justExpired.contains(post));
 
-      if (pastPostIds.contains(post) || activePostIds.contains(post)) {
-        continue;
+      final alreadyDonePostsSnap = await pastChallengesCollectionRef
+          .where(FieldPath.documentId, whereIn: possiblePosts)
+          .get();
+
+      final alreadyDonePosts = alreadyDonePostsSnap.docs
+          .map((post) => PostIdFirestore(value: post.id))
+          .toSet();
+
+      final postIt = possiblePosts.iterator;
+      final activePostIds =
+          activeChallenges.map((challenge) => challenge.postId).toSet();
+      while (
+          activeChallenges.length < maxActiveChallenges && postIt.moveNext()) {
+        final post = postIt.current;
+
+        if (alreadyDonePosts.contains(post) || activePostIds.contains(post)) {
+          continue;
+        }
+
+        final newChallenge = ChallengeFirestore(
+          postId: post,
+          data: ChallengeData(
+            isCompleted: false,
+            expiresOn: Timestamp.fromDate(expiresOn),
+          ),
+        );
+
+        await challengesCollectionRef
+            .doc(post.value)
+            .set(newChallenge.data.toDbData());
+        activeChallenges.add(newChallenge);
+        activePostIds.add(post);
       }
-
-      final newChallenge = ChallengeFirestore(
-        postId: post,
-        data: ChallengeData(
-          isCompleted: false,
-          expiresOn: Timestamp.fromDate(expiresOn),
-        ),
-      );
-
-      await challengesCollectionRef
-          .doc(post.value)
-          .set(newChallenge.data.toDbData());
-      activeChallenges.add(newChallenge);
-      activePostIds.add(post);
     }
 
     return activeChallenges;
