@@ -27,7 +27,7 @@ class KeyValueListGenerator {
     content.add(
       TextSpan(
         text: value,
-        style: style?.copyWith(fontWeight: FontWeight.w700),
+        style: style?.copyWith(fontWeight: FontWeight.bold),
       ),
     );
     return this;
