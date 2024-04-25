@@ -15,7 +15,6 @@ void main() {
   group("Post Repository testing", () {
     late FakeFirebaseFirestore firestore;
     late PostRepositoryService postRepository;
-    late GeoPointGenerator geoPointGenerator;
 
     const kmRadius = 0.1;
 
@@ -46,7 +45,6 @@ void main() {
       postRepository = PostRepositoryService(
         firestore: firestore,
       );
-      geoPointGenerator = GeoPointGenerator();
     });
 
     final post = FirestorePostGenerator().generatePostAt(
@@ -81,7 +79,7 @@ void main() {
     test("Get single nearby post correctly", () async {
       const userPosition = userPosition1;
       final expectedPost = FirestorePostGenerator().generatePostAt(
-        geoPointGenerator.createNearbyPostPosition(userPosition),
+        GeoPointGenerator.createNearbyPosition(userPosition),
       );
 
       await setPostFirestore(expectedPost);
@@ -95,7 +93,7 @@ void main() {
       const userPosition = userPosition1;
 
       final expectedPost = FirestorePostGenerator().generatePostAt(
-        geoPointGenerator.createFarAwayPostPosition(userPosition, kmRadius),
+        GeoPointGenerator.createFarAwayPosition(userPosition, kmRadius),
       );
 
       await setPostFirestore(expectedPost);
@@ -108,10 +106,7 @@ void main() {
     test("Post on edge (inside) is queried", () async {
       const userPosition = userPosition1;
       final expectedPost = FirestorePostGenerator().generatePostAt(
-        geoPointGenerator.createPostOnEdgeInsidePosition(
-          userPosition,
-          kmRadius,
-        ),
+        GeoPointGenerator.createOnEdgeInsidePosition(userPosition, kmRadius),
       );
 
       await setPostFirestore(expectedPost);
@@ -124,10 +119,7 @@ void main() {
     test("Post on edge (outside) is not queried", () async {
       const userPosition = userPosition1;
       final expectedPost = FirestorePostGenerator().generatePostAt(
-        geoPointGenerator.createPostOnEdgeOutsidePosition(
-          userPosition,
-          kmRadius,
-        ),
+        GeoPointGenerator.createOnEdgeOutsidePosition(userPosition, kmRadius),
       );
 
       await setPostFirestore(expectedPost);
@@ -166,7 +158,7 @@ void main() {
       const nbPostsInRange = 7;
 
       // The 7 first posts are under 100m away from the user and are the ones expected
-      final pointList = geoPointGenerator.generatePositions(
+      final pointList = GeoPointGenerator.generatePositions(
         userPosition0,
         nbPostsInRange,
         nbPosts - nbPostsInRange,
