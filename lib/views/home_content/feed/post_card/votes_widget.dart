@@ -23,9 +23,10 @@ class VotesWidget extends HookConsumerWidget {
     final upvoteState =
         asyncPostVote.valueOrNull?.upvoteState ?? UpvoteState.none;
 
+    // For the upvote and downvote buttons, we use "padding: EdgeInsets.zero"
+    // This is to reduce the padding and InkWell created by the IconButton widget
+    // https://stackoverflow.com/questions/50381157/how-do-i-remove-flutter-iconbutton-big-padding
     final upvote = IconButton(
-      //Used to reduce the padding and InkWell created by the IconButton widget
-      //https://stackoverflow.com/questions/50381157/how-do-i-remove-flutter-iconbutton-big-padding
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints(),
       icon: Icon(
@@ -40,8 +41,6 @@ class VotesWidget extends HookConsumerWidget {
     );
 
     final downvote = IconButton(
-      //Used to reduce the padding and InkWell created by the IconButton widget
-      //https://stackoverflow.com/questions/50381157/how-do-i-remove-flutter-iconbutton-big-padding
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints(),
       icon: Icon(
