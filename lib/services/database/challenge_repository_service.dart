@@ -1,7 +1,6 @@
 import "dart:core";
 
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/challenge/challenge_data.dart";
 import "package:proxima/models/database/challenge/challenge_firestore.dart";
@@ -53,9 +52,9 @@ class ChallengeRepositoryService {
   }
 
   /// Returns the active challenges of the user with id [uid] who is located at [pos].
-  /// If challenges are expired or missing, they are replaced by new challenges in the 
+  /// If challenges are expired or missing, they are replaced by new challenges in the
   /// database, and then returned. This therefore always ensure this method will return
-  /// challenges, all up-to-date; trying its best to find [maxActiveChallenges] (if 
+  /// challenges, all up-to-date; trying its best to find [maxActiveChallenges] (if
   /// enough exist close enough).
   /// Warning: This method is NOT atomic, and therefore not thread-safe. We suppose here
   /// no malicious user will try to load the challenge page on two different devices at
@@ -105,7 +104,8 @@ class ChallengeRepositoryService {
         sum.day,
       ); // truncates to the day
 
-      Iterable<PostIdFirestore> possiblePosts = await inRangeUnsortedPosts(pos);
+      Iterable<PostIdFirestore> possiblePosts =
+          await _inRangeUnsortedPosts(pos);
       possiblePosts =
           possiblePosts.where((post) => !justExpired.contains(post));
 
@@ -163,20 +163,12 @@ class ChallengeRepositoryService {
     await batch.commit();
   }
 
-  Future<Iterable<PostIdFirestore>> inRangeUnsortedPosts(GeoPoint pos) async {
-    final geoFirePosition = GeoFirePoint(pos);
+  Future<Iterable<PostIdFirestore>> _inRangeUnsortedPosts(GeoPoint pos) async {
     Iterable<PostFirestore> possiblePosts =
         await _postRepositoryService.getNearPosts(
       pos,
       maxChallengeRadius,
-    );
-
-    possiblePosts = possiblePosts.where(
-      (post) =>
-          geoFirePosition.distanceBetweenInKm(
-            geopoint: post.location.geoPoint,
-          ) >
-          minChallengeRadius,
+      minChallengeRadius,
     );
 
     return possiblePosts.map((post) => post.id);
