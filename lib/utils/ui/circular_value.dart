@@ -12,8 +12,11 @@ class CircularValue<T> extends StatelessWidget {
   final Widget Function(BuildContext context, T data) builder;
   final Widget Function(BuildContext context, Object error) fallbackBuilder;
 
-  static Widget _defaultFallback(BuildContext context, Object error) =>
-      const SizedBox.shrink();
+  /// Tag to be placed at the start of an error message to display the
+  /// message directly instead of the widget.
+  /// Does not trigger a pop up dialog. Useful for debug error messages
+  /// that should never occur for a real user of the app (not front facing errors).
+  static const debugErrorTag = "DEBUG";
 
   /// Constructor for the [CircularValue] widget.
   /// [value] is the underlying [AsyncValue] that controls the display.
@@ -27,11 +30,20 @@ class CircularValue<T> extends StatelessWidget {
     this.fallbackBuilder = _defaultFallback,
   });
 
+  static Widget _defaultFallback(BuildContext context, Object error) =>
+      const SizedBox.shrink();
+
   @override
   Widget build(BuildContext context) {
     return value.when(
       data: (data) => builder(context, data),
       error: (error, _) {
+        final errorText = error.toString();
+
+        if (errorText.startsWith(debugErrorTag)) {
+          return Text(errorText);
+        }
+
         final dialog = ErrorAlert(error: error);
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           showDialog(context: context, builder: dialog.build);
