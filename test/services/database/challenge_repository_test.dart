@@ -129,18 +129,21 @@ void main() {
     });
 
     test("Deleted post disappears from challenges", () async {
-      final fakePosts = PostDataGenerator.generatePostData(1);
-      final postId =
-          await postRepository.addPost(fakePosts.first, inChallengeRange);
+      final fakePosts = await addPostsFull(
+        postRepository,
+        inChallengeRange,
+        2,
+      );
 
       final challenges = await challengeRepository.getChallenges(uid, userPos);
-      expect(challenges.length, 1);
+      expect(challenges.length, 2);
 
-      await postRepository.deletePost(postId);
+      await postRepository.deletePost(fakePosts[0].id);
       final updatedChallenges =
           await challengeRepository.getChallenges(uid, userPos);
 
-      expect(updatedChallenges.length, 0);
+      expect(updatedChallenges.length, 1);
+      expect(updatedChallenges.first.postId, fakePosts[1].id);
     });
 
     test("Past challenge does not reappear", () async {
