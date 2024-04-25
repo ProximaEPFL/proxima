@@ -160,9 +160,37 @@ void main() {
           find.byKey(CommentPostWidget.commentUserWidgetKey);
       expect(commentUserAvatar, findsNWidgets(testComments.length));
 
+      //Check that the username are displayed
+      final Iterable<Text> displayNameWidgetsWidgets = tester.widgetList<Text>(
+        find.descendant(
+          of: find.byKey(CommentPostWidget.commentUserWidgetKey),
+          matching: find.byKey(UserBarWidget.displayNameTextKey),
+        ),
+      );
+
+      expect(displayNameWidgetsWidgets.length, testComments.length);
+
+      //Check the displayed usernames are correct
+      final expectedUsernames =
+          testComments.map((comment) => comment.ownerDisplayName).toList();
+      final actualUsernames = displayNameWidgetsWidgets
+          .map((textWidget) => textWidget.data)
+          .toList();
+
+      expect(actualUsernames, expectedUsernames);
+
       //Check that the comment content are displayed
-      final commentContent = find.byKey(CommentPostWidget.commentContentKey);
-      expect(commentContent, findsNWidgets(testComments.length));
+      final Iterable<Text> commentWidgets = tester
+          .widgetList<Text>(find.byKey(CommentPostWidget.commentContentKey));
+      expect(commentWidgets.length, testComments.length);
+
+      //Check the comment content displayed information
+      final expectedCommentContents =
+          testComments.map((comment) => comment.content).toList();
+      final actualCommentContents =
+          commentWidgets.map((textWidget) => textWidget.data).toList();
+
+      expect(actualCommentContents, expectedCommentContents);
     });
   });
 }
