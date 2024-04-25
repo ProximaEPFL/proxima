@@ -86,7 +86,7 @@ class ChallengeRepositoryService {
       final challenge = ChallengeFirestore.fromDb(challengeSnap);
       if (challenge.data.isExpired ||
           !await _postRepositoryService.postExists(challenge.postId)) {
-        await _deleteChallenge(challengeSnap, parentRef);
+        await _moveToPastChallenge(challengeSnap, parentRef);
         pastPostIds.add(challenge.postId);
       } else {
         activeChallenges.add(challenge);
@@ -103,7 +103,8 @@ class ChallengeRepositoryService {
 
     final possiblePosts = await inRangeUnsortedPosts(pos);
     final postIt = possiblePosts.iterator;
-    final activePostIds = activeChallenges.map((e) => e.postId).toSet();
+    final activePostIds =
+        activeChallenges.map((challenge) => challenge.postId).toSet();
     while (activeChallenges.length < maxActiveChallenges && postIt.moveNext()) {
       final post = postIt.current;
 
@@ -130,7 +131,7 @@ class ChallengeRepositoryService {
   }
 
   /// moves the challenge with id [pid] from the active challenges to the past challenges
-  Future<void> _deleteChallenge(
+  Future<void> _moveToPastChallenge(
     DocumentSnapshot<Map<String, dynamic>> challengeSnap,
     DocumentReference parentRef,
   ) async {
@@ -161,7 +162,7 @@ class ChallengeRepositoryService {
           minChallengeRadius,
     );
 
-    return possiblePosts.map((e) => e.id);
+    return possiblePosts.map((post) => post.id);
   }
 }
 
