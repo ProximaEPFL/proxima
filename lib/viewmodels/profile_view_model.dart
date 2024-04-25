@@ -1,6 +1,7 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/profile_data.dart";
 import "package:proxima/services/database/user_repository_service.dart";
+import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
 /// User profile view model
@@ -15,13 +16,11 @@ class ProfileViewModel extends AsyncNotifier<ProfileData> {
 
     if (user == null) {
       return Future.error(
-        "User must be logged in before displaying the home page.",
+        "${CircularValue.debugErrorTag} User must be logged in before displaying the home page.",
       );
     }
     if (uid == null) {
-      return Future.error(
-        "User id was not found.",
-      );
+      return Future.error("User id was not found.");
     }
     final userData = await userDataBase.getUser(uid);
 
