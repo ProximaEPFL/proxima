@@ -10,21 +10,21 @@ class MockMarkers {
           Marker(
             markerId: const MarkerId("1"),
             position: LatLng(
-              currentPosition.latitude + 0.005,
-              currentPosition.longitude - 0.004,
+              currentPosition.latitude + 0.0005,
+              currentPosition.longitude - 0.0004,
             ),
           ),
           Marker(
             markerId: const MarkerId("2"),
             position: LatLng(
-              currentPosition.latitude - 0.005,
-              currentPosition.longitude + 0.003,
+              currentPosition.latitude - 0.0005,
+              currentPosition.longitude + 0.0003,
             ),
           ),
           Marker(
             markerId: const MarkerId("3"),
             position: LatLng(
-              currentPosition.latitude - 0.008,
+              currentPosition.latitude - 0.0008,
               currentPosition.longitude,
             ),
           ),

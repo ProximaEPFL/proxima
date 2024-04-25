@@ -3,9 +3,10 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
-import "package:proxima/views/home_content/map_feed/map_screen.dart";
-import "package:proxima/views/home_content/map_feed/maps/nearby_posts_map.dart";
+import "package:proxima/views/home_content/map/map_screen.dart";
+import "package:proxima/views/home_content/map/post_map.dart";
 import "package:proxima/views/sort_option_widgets/feed_sort_option/map_selection_option_chips.dart";
+import "package:proxima/views/sort_option_widgets/feed_sort_option/map_selection_options.dart";
 import "../../../mocks/data/geopoint.dart";
 import "../../../mocks/providers/provider_map_page.dart";
 import "../../../mocks/services/mock_geo_location_service.dart";
@@ -30,18 +31,27 @@ void main() {
       await tester.pumpWidget(mapWidget);
       await tester.pumpAndSettle();
 
-      expect(find.byKey(MapScreenState.mapScreenKey), findsOneWidget);
-      expect(find.byKey(MapScreenState.dividerKey), findsOneWidget);
+      expect(find.byKey(MapScreen.mapScreenKey), findsOneWidget);
+      expect(find.byKey(MapScreen.dividerKey), findsOneWidget);
 
-      expect(find.byKey(const Key("Nearby")), findsOneWidget);
-      expect(find.byKey(const Key("Heat map")), findsOneWidget);
-      expect(find.byKey(const Key("My posts")), findsOneWidget);
-      expect(find.byKey(const Key("Challenges")), findsOneWidget);
+      // Extract keys from the MapSelectionOptions enum
+      final keys =
+          MapSelectionOptions.values.map((option) => Key(option.name)).toList();
+
+      // Verify that each ChoiceChip is found by its key
+      for (final key in keys) {
+        expect(find.byKey(key), findsOneWidget);
+      }
 
       expect(
-          find.byKey(MapSelectionOptionChips.sortOptionsKey), findsOneWidget);
+        find.byKey(MapSelectionOptionChips.sortOptionsKey),
+        findsOneWidget,
+      );
 
-      expect(find.byKey(NearbyPostsMapState.nearbyPostsMapKey), findsOneWidget);
+      expect(
+        find.byKey(PostMap.postMapKey),
+        findsOneWidget,
+      );
     });
   });
 }
