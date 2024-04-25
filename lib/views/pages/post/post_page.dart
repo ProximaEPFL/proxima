@@ -13,6 +13,8 @@ class PostPage extends HookConsumerWidget {
   static const commentListWidgetKey = Key("commentListWidget");
   static const bottomBarAddCommentKey = Key("bottomBarAddComment");
 
+  static const _appBarTitle = "Post";
+
   const PostPage({
     super.key,
     required this.postOverview,
@@ -27,7 +29,7 @@ class PostPage extends HookConsumerWidget {
     final comments = ref.watch(commentListProvider);
 
     List<Widget> appBarContent = [
-      const Text("Post"),
+      const Text(_appBarTitle),
       Text(
         key: postDistanceKey,
         //TODO: Add distance to post

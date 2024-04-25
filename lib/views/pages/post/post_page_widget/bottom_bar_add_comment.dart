@@ -5,6 +5,8 @@ class BottomBarAddComment extends StatelessWidget {
   static const addCommentTextFieldKey = Key("addCommentTextField");
   static const postCommentButtonKey = Key("postCommentButton");
 
+  static const _textFieldHintAddComment = "Add a comment";
+
   final String currentDisplayName;
 
   const BottomBarAddComment({
@@ -34,7 +36,7 @@ class BottomBarAddComment extends StatelessWidget {
             decoration: InputDecoration(
               contentPadding: EdgeInsets.all(8),
               border: OutlineInputBorder(),
-              hintText: "Add a comment",
+              hintText: _textFieldHintAddComment,
             ),
           ),
         ),
