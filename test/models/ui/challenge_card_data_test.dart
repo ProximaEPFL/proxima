@@ -4,10 +4,9 @@ import "package:proxima/models/ui/challenge_card_data.dart";
 void main() {
   group("Challenge card data testing", () {
     test("hash overrides correctly", () {
-      const challengeCard = ChallengeCardData(
+      const challengeCard = ChallengeCardData.group(
         title: "title",
         distance: 50,
-        timeLeft: null,
         reward: 100,
       );
 
@@ -24,16 +23,14 @@ void main() {
     });
 
     test("equality overrides correctly", () {
-      const challengeCardData = ChallengeCardData(
+      const challengeCardData = ChallengeCardData.group(
         title: "title",
         distance: 50,
-        timeLeft: null,
         reward: 100,
       );
-      const challengeCardDataCopy = ChallengeCardData(
+      const challengeCardDataCopy = ChallengeCardData.group(
         title: "title",
         distance: 50,
-        timeLeft: null,
         reward: 100,
       );
 

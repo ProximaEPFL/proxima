@@ -7,28 +7,26 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
   @override
   Future<List<ChallengeCardData>> build() async {
     return const [
-      ChallengeCardData(
+      ChallengeCardData.solo(
         title: "I hate UNIL, here's why",
         distance: 700,
         timeLeft: 27,
         reward: 250,
       ),
-      ChallengeCardData(
+      ChallengeCardData.solo(
         title:
             "John fell here lmaoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
         distance: 3200,
         timeLeft: 27,
         reward: 400,
       ),
-      ChallengeCardData(
+      ChallengeCardData.group(
         title: "I'm moving out",
         distance: 4000,
-        timeLeft: null,
         reward: 350,
       ),
-      ChallengeCardData(
+      ChallengeCardData.soloFinished(
         title: "What a view!",
-        distance: null,
         timeLeft: 27,
         reward: 200,
       ),
