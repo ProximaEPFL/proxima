@@ -47,7 +47,7 @@ void main() {
       );
     });
 
-    final post = FirestorePostGenerator.generatePostAt(
+    final post = FirestorePostGenerator().generatePostAt(
       userPosition2,
     );
 
@@ -78,7 +78,7 @@ void main() {
 
     test("Get single nearby post correctly", () async {
       const userPosition = userPosition1;
-      final expectedPost = FirestorePostGenerator.generatePostAt(
+      final expectedPost = FirestorePostGenerator().generatePostAt(
         GeoPointGenerator.createNearbyPosition(userPosition),
       );
 
@@ -92,7 +92,7 @@ void main() {
     test("Post is not queried when far away", () async {
       const userPosition = userPosition1;
 
-      final expectedPost = FirestorePostGenerator.generatePostAt(
+      final expectedPost = FirestorePostGenerator().generatePostAt(
         GeoPointGenerator.createFarAwayPosition(userPosition, kmRadius),
       );
 
@@ -105,7 +105,7 @@ void main() {
 
     test("Post on edge (inside) is queried", () async {
       const userPosition = userPosition1;
-      final expectedPost = FirestorePostGenerator.generatePostAt(
+      final expectedPost = FirestorePostGenerator().generatePostAt(
         GeoPointGenerator.createOnEdgeInsidePosition(userPosition, kmRadius),
       );
 
@@ -118,7 +118,7 @@ void main() {
 
     test("Post on edge (outside) is not queried", () async {
       const userPosition = userPosition1;
-      final expectedPost = FirestorePostGenerator.generatePostAt(
+      final expectedPost = FirestorePostGenerator().generatePostAt(
         GeoPointGenerator.createOnEdgeOutsidePosition(userPosition, kmRadius),
       );
 
@@ -167,7 +167,7 @@ void main() {
       final postsData = PostDataGenerator.generatePostData(nbPosts);
 
       final allPosts = List.generate(nbPosts, (i) {
-        return FirestorePostGenerator.createPostAt(
+        return FirestorePostGenerator().createPostAt(
           postsData[i],
           pointList[i],
           id: "post_$i",
@@ -191,20 +191,17 @@ void main() {
     });
 
     test("Get simple user posts correctly", () async {
+      final generator = FirestorePostGenerator();
       const userId1 = UserIdFirestore(value: "user_id_1");
 
-      final postsData1 =
-          FirestorePostGenerator.createUserPost(userId1, userPosition2);
-      final postsData2 =
-          FirestorePostGenerator.createUserPost(userId1, userPosition3);
+      final postsData1 = generator.createUserPost(userId1, userPosition2);
+      final postsData2 = generator.createUserPost(userId1, userPosition3);
       await setPostsFirestore([postsData1, postsData2]);
 
       const userId2 = UserIdFirestore(value: "user_id_2");
 
-      final postsData3 =
-          FirestorePostGenerator.createUserPost(userId2, userPosition2);
-      final postsData4 =
-          FirestorePostGenerator.createUserPost(userId2, userPosition3);
+      final postsData3 = generator.createUserPost(userId2, userPosition2);
+      final postsData4 = generator.createUserPost(userId2, userPosition3);
       await setPostsFirestore([postsData3, postsData4]);
 
       final actualPosts1 = await postRepository.getUserPosts(userId1);
