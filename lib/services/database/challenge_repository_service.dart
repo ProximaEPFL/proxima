@@ -29,6 +29,19 @@ class ChallengeRepositoryService {
   })  : _firestore = firestore,
         _postRepositoryService = postRepositoryService;
 
+  CollectionReference<Map<String, dynamic>> _activeChallengesRef(
+    DocumentReference parentRef,
+  ) {
+    return parentRef.collection(ChallengeFirestore.subCollectionName);
+  }
+
+  CollectionReference<Map<String, dynamic>> _pastChallengesRef(
+    DocumentReference parentRef,
+  ) {
+    return parentRef
+        .collection(ChallengeFirestore.pastChallengesSubCollectionName);
+  }
+
   /// Completes the challenge of the user with id [uid] on the post with id [pid]
   Future<void> completeChallenge(
     UserIdFirestore uid,
@@ -43,10 +56,7 @@ class ChallengeRepositoryService {
     DocumentReference parentRef,
     PostIdFirestore pid,
   ) async {
-    await parentRef
-        .collection(ChallengeFirestore.subCollectionName)
-        .doc(pid.value)
-        .update({
+    await _activeChallengesRef(parentRef).doc(pid.value).update({
       ChallengeData.isCompletedField: true,
     });
   }
@@ -73,10 +83,7 @@ class ChallengeRepositoryService {
     DocumentReference parentRef,
     GeoPoint pos,
   ) async {
-    final challengesCollectionRef =
-        parentRef.collection(ChallengeFirestore.subCollectionName);
-    final pastChallengesCollectionRef = parentRef
-        .collection(ChallengeFirestore.pastChallengesSubCollectionName);
+    final challengesCollectionRef = _activeChallengesRef(parentRef);
 
     final challengesSnap = await challengesCollectionRef.get();
 
@@ -100,7 +107,6 @@ class ChallengeRepositoryService {
         activeChallenges,
         pos,
         justExpired,
-        pastChallengesCollectionRef,
         parentRef,
       );
     }
@@ -112,7 +118,6 @@ class ChallengeRepositoryService {
     List<ChallengeFirestore> activeChallenges,
     GeoPoint pos,
     Set<PostIdFirestore> justExpired,
-    CollectionReference pastChallengesCollectionRef,
     DocumentReference parentRef,
   ) async {
     final now = DateTime.now();
@@ -126,6 +131,7 @@ class ChallengeRepositoryService {
     Iterable<PostIdFirestore> possiblePosts = await _inRangeUnsortedPosts(pos);
     possiblePosts = possiblePosts.where((post) => !justExpired.contains(post));
 
+    final pastChallengesCollectionRef = _pastChallengesRef(parentRef);
     final alreadyDonePostsSnap = await pastChallengesCollectionRef
         .where(FieldPath.documentId, whereIn: possiblePosts)
         .get();
@@ -164,8 +170,7 @@ class ChallengeRepositoryService {
     ChallengeFirestore challenge,
     DocumentReference parentRef,
   ) async {
-    await parentRef
-        .collection(ChallengeFirestore.subCollectionName)
+    await _activeChallengesRef(parentRef)
         .doc(challenge.postId.value)
         .set(challenge.data.toDbData());
   }
@@ -177,9 +182,7 @@ class ChallengeRepositoryService {
   ) async {
     final batch = _firestore.batch();
     batch.set(
-      parentRef
-          .collection(ChallengeFirestore.pastChallengesSubCollectionName)
-          .doc(challengeSnap.id),
+      _pastChallengesRef(parentRef).doc(challengeSnap.id),
       challengeSnap.data()!,
     );
     batch.delete(challengeSnap.reference);
