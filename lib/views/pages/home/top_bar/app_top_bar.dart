@@ -19,6 +19,7 @@ class AppTopBar extends HookConsumerWidget {
       style: Theme.of(context).textTheme.headlineMedium,
     );
 
+    // TODO use the avatar/profile picture component once it exists
     final userAvatar = CircleAvatar(
       child: Stack(
         children: [
