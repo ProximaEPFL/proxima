@@ -113,7 +113,13 @@ class PostList extends StatelessWidget {
       onRefresh: onRefresh,
       child: ListView(
         key: homeFeedKey,
-        children: posts.map((post) => PostCard(post: post)).toList(),
+        children: posts
+            .map(
+              (post) => PostCard(
+                postOverview: post,
+              ),
+            )
+            .toList(),
       ),
     );
   }
