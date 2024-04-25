@@ -41,7 +41,7 @@ void main() {
   });
 
   const userPos = userPosition1;
-  final inChallengeRange = GeoPointGenerator().createPostOnEdgeInsidePosition(
+  final inChallengeRange = GeoPointGenerator.createOnEdgeInsidePosition(
     userPos,
     ChallengeRepositoryService.maxChallengeRadius,
   );
@@ -183,12 +183,12 @@ void main() {
     });
 
     test("Challenge range works", () async {
-      final tooFarPos = GeoPointGenerator().createPostOnEdgeOutsidePosition(
+      final tooFarPos = GeoPointGenerator.createOnEdgeOutsidePosition(
         userPos,
         ChallengeRepositoryService.maxChallengeRadius,
       );
 
-      final tooClosePos = GeoPointGenerator().createPostOnEdgeInsidePosition(
+      final tooClosePos = GeoPointGenerator.createOnEdgeInsidePosition(
         userPos,
         ChallengeRepositoryService.minChallengeRadius,
       );
