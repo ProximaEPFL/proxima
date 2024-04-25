@@ -15,16 +15,32 @@ import "../../mocks/data/firestore_user.dart";
 import "../../mocks/data/geopoint.dart";
 import "../../mocks/data/post_data.dart";
 
+/// Add [n] posts at position [pos] and return their data and the [PostFirestore] objects
+Future<List<PostFirestore>> addPostsFull(
+  PostRepositoryService postRepository,
+  GeoPoint pos,
+  int n,
+) async {
+  final List<PostFirestore> fakePosts = List.empty(growable: true);
+  final fakePostsData = PostDataGenerator.generatePostData(n);
+  for (final data in fakePostsData) {
+    final id = await postRepository.addPost(data, pos);
+    final fakePost = await postRepository.getPost(
+        id); // I don't wanna look into how the position works, this is easier
+    fakePosts.add(fakePost);
+  }
+  return fakePosts;
+}
+
+/// Add [n] posts at position [pos] and return their data
 Future<List<PostData>> addPosts(
   PostRepositoryService postRepository,
   GeoPoint pos,
   int n,
 ) async {
-  final fakePosts = PostDataGenerator.generatePostData(n);
-  for (final post in fakePosts) {
-    await postRepository.addPost(post, pos);
-  }
-  return fakePosts;
+  return (await addPostsFull(postRepository, pos, n))
+      .map((e) => e.data)
+      .toList();
 }
 
 void main() {
