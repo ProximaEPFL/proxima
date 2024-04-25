@@ -5,8 +5,6 @@ import "package:flutter/foundation.dart";
 
 @immutable
 class ChallengeData {
-  static const subCollectionName = "challenges";
-
   final bool isCompleted;
   static const String isCompletedField = "isCompleted";
 
