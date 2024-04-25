@@ -83,24 +83,11 @@ class ChallengeRepositoryService {
     DocumentReference parentRef,
     GeoPoint pos,
   ) async {
-    final challengesCollectionRef = _activeChallengesRef(parentRef);
-
-    final challengesSnap = await challengesCollectionRef.get();
-
     final Set<PostIdFirestore> justExpired = {};
     final List<ChallengeFirestore> activeChallenges =
         List.empty(growable: true);
 
-    for (final challengeSnap in challengesSnap.docs) {
-      final challenge = ChallengeFirestore.fromDb(challengeSnap);
-      if (challenge.data.isExpired ||
-          !await _postRepositoryService.postExists(challenge.postId)) {
-        await _moveToPastChallenge(challengeSnap, parentRef);
-        justExpired.add(challenge.postId);
-      } else {
-        activeChallenges.add(challenge);
-      }
-    }
+    await _removeOldChallenges(parentRef, activeChallenges, justExpired);
 
     if (activeChallenges.length < maxActiveChallenges) {
       await _generateNewChallenges(
@@ -112,6 +99,26 @@ class ChallengeRepositoryService {
     }
 
     return activeChallenges;
+  }
+
+  Future<void> _removeOldChallenges(
+    DocumentReference parentRef,
+    List<ChallengeFirestore> activeChallenges,
+    Set<PostIdFirestore> justExpired,
+  ) async {
+    final challengesCollectionRef = _activeChallengesRef(parentRef);
+    final challengesSnap = await challengesCollectionRef.get();
+
+    for (final challengeSnap in challengesSnap.docs) {
+      final challenge = ChallengeFirestore.fromDb(challengeSnap);
+      if (challenge.data.isExpired ||
+          !await _postRepositoryService.postExists(challenge.postId)) {
+        await _moveToPastChallenge(challengeSnap, parentRef);
+        justExpired.add(challenge.postId);
+      } else {
+        activeChallenges.add(challenge);
+      }
+    }
   }
 
   Future<void> _generateNewChallenges(
