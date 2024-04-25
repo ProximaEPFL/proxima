@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/views/components/delete_button.dart";
+import "package:proxima/views/components/loading_icon_button.dart";
 
 class ProfileInfoPopUp extends StatelessWidget {
   static const popUpTitleKey = Key("profilePopUpTitle");
