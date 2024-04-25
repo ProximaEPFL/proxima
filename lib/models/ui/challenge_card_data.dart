@@ -25,8 +25,6 @@ class ChallengeCardData {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
     return other is ChallengeCardData &&
         other.title == title &&
         other.distance == distance &&
