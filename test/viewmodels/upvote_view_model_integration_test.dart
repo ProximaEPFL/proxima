@@ -36,7 +36,7 @@ void main() {
       postRepository = PostRepositoryService(firestore: fakeFireStore);
 
       // Add a post to the database
-      final testingPostData = FirestorePostGenerator.createUserPost(
+      final testingPostData = FirestorePostGenerator().createUserPost(
         testingUserFirestoreId,
         userPosition0,
       ).data;

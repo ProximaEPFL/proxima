@@ -33,7 +33,7 @@ void main() {
       voteRepository = MockPostUpvoteRepositoryService();
       userId = testingUserFirestoreId;
       testingPost =
-          FirestorePostGenerator.createUserPost(userId, userPosition0);
+          FirestorePostGenerator().createUserPost(userId, userPosition0);
       voteViewModelProvider = postVoteProvider(testingPost.id);
 
       container = ProviderContainer(

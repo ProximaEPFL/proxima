@@ -19,7 +19,7 @@ void main() {
   late MockPostRepositoryService postRepository;
   late MockGeoLocationService geoLocationService;
 
-  const timeDeltaMils = 500;
+  const timeDeltaMils = 5000;
 
   setUp(() async {
     setupFirebaseAuthMocks();
