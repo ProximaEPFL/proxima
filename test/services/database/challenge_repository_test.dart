@@ -26,7 +26,8 @@ Future<List<PostFirestore>> addPostsFull(
   for (final data in fakePostsData) {
     final id = await postRepository.addPost(data, pos);
     final fakePost = await postRepository.getPost(
-        id); // I don't wanna look into how the position works, this is easier
+      id,
+    ); // I don't wanna look into how the position works, this is easier
     fakePosts.add(fakePost);
   }
   return fakePosts;
