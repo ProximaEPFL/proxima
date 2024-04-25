@@ -185,8 +185,7 @@ void main() {
         totalChallenges,
       );
       final now = DateTime.now();
-      final past =
-          now.subtract(ChallengeRepositoryService.maxChallengeDuration);
+      final past = now.subtract(const Duration(seconds: 1));
 
       final postDocs =
           await firestore.collection(PostFirestore.collectionName).get();
