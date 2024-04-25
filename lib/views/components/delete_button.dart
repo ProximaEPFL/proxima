@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
@@ -12,6 +13,7 @@ enum DeletionState {
 
 class DeleteButton extends HookConsumerWidget {
   static const _deleteIconSize = 26.0;
+  static const _containerSide = 35.0;
 
   final FutureVoidCallback onClick;
   final double iconSize;
@@ -26,10 +28,6 @@ class DeleteButton extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = useState(DeletionState.existing);
 
-    if (isLoading.value == DeletionState.pending) {
-      return const CircularProgressIndicator();
-    }
-
     final deleteButton = IconButton(
       icon: Icon(Icons.delete, size: iconSize),
       onPressed: () async {
@@ -39,9 +37,12 @@ class DeleteButton extends HookConsumerWidget {
       },
     );
 
-    const loading = Padding(
-      padding: EdgeInsets.all(2),
-      child: CircularProgressIndicator(),
+    final loading = Center(
+      child: SizedBox(
+        width: iconSize,
+        height: iconSize,
+        child: const CircularProgressIndicator(),
+      ),
     );
 
     final checkButton = IconButton(
@@ -49,7 +50,9 @@ class DeleteButton extends HookConsumerWidget {
       onPressed: null,
     );
 
-    return Center(
+    return SizedBox(
+      width: _containerSide,
+      height: _containerSide,
       child: switch (isLoading.value) {
         DeletionState.existing => deleteButton,
         DeletionState.pending => loading,
