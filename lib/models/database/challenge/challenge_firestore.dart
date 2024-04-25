@@ -10,6 +10,7 @@ class ChallengeFirestore {
   static const subCollectionName = "challenges";
   static const pastChallengesSubCollectionName = "pastChallenges";
 
+  /// The id of the challenge is the id of its corresponding post
   final PostIdFirestore postId;
   final ChallengeData data;
 
