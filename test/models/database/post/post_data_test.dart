@@ -23,7 +23,7 @@ void main() {
       expect(actualHash, expectedHash);
 
       const geoPoint = userPosition1;
-      final post = FirestorePostGenerator.createPostAt(data, geoPoint);
+      final post = FirestorePostGenerator().createPostAt(data, geoPoint);
       final expectedHash2 = Object.hash(post.id, post.location, post.data);
       final actualHash2 = post.hashCode;
       expect(actualHash2, expectedHash2);
