@@ -4,14 +4,12 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
-import "package:proxima/views/pages/profile/posts_info/info_card_badge.dart";
-import "package:proxima/views/pages/profile/posts_info/info_card_comment.dart";
-import "package:proxima/views/pages/profile/posts_info/info_card_post.dart";
-import "package:proxima/views/pages/profile/posts_info/info_row.dart";
-import "package:proxima/views/pages/profile/posts_info/popup/comment_popup.dart";
-import "package:proxima/views/pages/profile/posts_info/popup/post_popup.dart";
+import "package:proxima/views/pages/profile/components/profile_badge.dart";
+import "package:proxima/views/pages/profile/components/user_account.dart";
+import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
+import "package:proxima/views/pages/profile/info_cards/profile_info_pop_up.dart";
+import "package:proxima/views/pages/profile/info_cards/profile_info_row.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
-import "package:proxima/views/pages/profile/user_info/user_account.dart";
 
 import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/providers/provider_homepage.dart";
@@ -19,6 +17,8 @@ import "../../../mocks/providers/provider_profile_page.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
 
 void main() {
+  const delayNeededForAsyncFunctionExecution = Duration(seconds: 1);
+
   late FakeFirebaseFirestore fakeFireStore;
   late CollectionReference<Map<String, dynamic>> userCollection;
   late ProviderScope mockedProfilePage;
@@ -45,11 +45,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // Check that badges are displayed
-      final badgeCard = find.byKey(InfoCardBadge.infoCardBadgeKey);
+      final badgeCard = find.byKey(ProfileBadge.badgeKey);
       expect(badgeCard, findsWidgets);
 
       //Check that the post card is displayed
-      final postCard = find.byKey(InfoCardPost.infoCardPostKey);
+      final postCard = find.byKey(ProfileInfoCard.infoCardKey);
       expect(postCard, findsWidgets);
 
       // Check that the info column is displayed
@@ -57,7 +57,7 @@ void main() {
       expect(infoColumn, findsOneWidget);
 
       // Check that the info row is displayed
-      final infoRowWidget = find.byKey(InfoRow.infoRowKey);
+      final infoRowWidget = find.byKey(ProfileInfoRow.infoRowKey);
       expect(infoRowWidget, findsOneWidget);
 
       //Check that centauri points are displayed
@@ -80,7 +80,7 @@ void main() {
       await tester.pumpAndSettle();
 
       //Check tab on the first post
-      final infoCardPost = find.byKey(InfoCardPost.infoCardPostKey);
+      final infoCardPost = find.byKey(ProfileInfoCard.infoCardKey);
       expect(infoCardPost, findsWidgets);
 
       // Tap on the first post
@@ -88,21 +88,21 @@ void main() {
       await tester.pumpAndSettle();
 
       // Check that the post popup is displayed
-      final postPopup = find.byType(PostPopUp);
+      final postPopup = find.byType(ProfileInfoPopUp);
       expect(postPopup, findsOneWidget);
 
       //Check that the title of the pop up is displayed
-      final postPopupTitle = find.byKey(PostPopUp.postPopUpTitleKey);
+      final postPopupTitle = find.byKey(ProfileInfoPopUp.popUpTitleKey);
       expect(postPopupTitle, findsOneWidget);
 
       //Check that the description of the pop up is displayed
       final postPopupDescription =
-          find.byKey(PostPopUp.postPopUpDescriptionKey);
+          find.byKey(ProfileInfoPopUp.popUpDescriptionKey);
       expect(postPopupDescription, findsOneWidget);
 
       //Check that the delete button is displayed
       final postPopupDeleteButton =
-          find.byKey(PostPopUp.postPopUpDeleteButtonKey);
+          find.byKey(ProfileInfoPopUp.popUpDeleteButtonKey);
       expect(postPopupDeleteButton, findsOneWidget);
 
       //Check clicking on the delete button come back to the profile page
@@ -124,7 +124,7 @@ void main() {
       await tester.pumpAndSettle();
 
       //Check tab on the first comment
-      final infoCardComment = find.byKey(InfoCardComment.infoCardCommentKey);
+      final infoCardComment = find.byKey(ProfileInfoCard.infoCardKey);
       expect(infoCardComment, findsWidgets);
 
       // Tap on the first comment
@@ -132,22 +132,22 @@ void main() {
       await tester.pumpAndSettle();
 
       // Check that the comment popup is displayed
-      final commentPopup = find.byType(CommentPopUp);
+      final commentPopup = find.byType(ProfileInfoPopUp);
       expect(commentPopup, findsOneWidget);
 
       //Check that the description of the pop up is displayed
       final commentPopupDescription =
-          find.byKey(CommentPopUp.commentPopUpDescriptionKey);
+          find.byKey(ProfileInfoPopUp.popUpDescriptionKey);
       expect(commentPopupDescription, findsOneWidget);
 
       //Check that the delete button is displayed
       final commentPopupDeleteButton =
-          find.byKey(CommentPopUp.commentPopUpDeleteButtonKey);
+          find.byKey(ProfileInfoPopUp.popUpDeleteButtonKey);
       expect(commentPopupDeleteButton, findsOneWidget);
 
       //Check clicking on the delete button come back to the profile page
       await tester.tap(commentPopupDeleteButton);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
       //Check that the profile page is displayed
       final profilePage = find.byType(ProfilePage);
