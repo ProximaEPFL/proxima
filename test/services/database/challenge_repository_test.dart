@@ -10,6 +10,7 @@ import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
+import "../../mocks/data/challenge_data.dart";
 import "../../mocks/data/firestore_user.dart";
 import "../../mocks/data/geopoint.dart";
 import "../../mocks/data/post_data.dart";
@@ -124,6 +125,31 @@ void main() {
           await challengeRepository.getChallenges(uid, userPos);
 
       expect(updatedChallenges.length, 0);
+    });
+
+    test("Past challenge does not reappear", () async {
+      final posts = PostDataGenerator.generatePostData(2);
+      final pastPost = posts[0];
+      final availablePost = posts[1];
+
+      final pastPostId =
+          await postRepository.addPost(pastPost, inChallengeRange);
+      final availablePostId =
+          await postRepository.addPost(availablePost, inChallengeRange);
+
+      // does not matter
+      final data = ChallengeGenerator.generate();
+
+      await firestore
+          .collection(UserFirestore.collectionName)
+          .doc(uid.value)
+          .collection(ChallengeFirestore.pastChallengesSubCollectionName)
+          .doc(pastPostId.value)
+          .set(data.toDbData());
+
+      final challenges = await challengeRepository.getChallenges(uid, userPos);
+
+      expect(challenges.length, 1);
     });
 
     test("Challenges expire", () async {
