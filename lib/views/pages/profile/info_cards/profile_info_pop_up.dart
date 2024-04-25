@@ -48,6 +48,7 @@ class ProfileInfoPopUp extends StatelessWidget {
     );
 
     final deleteAction = DeleteButton(
+      key: popUpDeleteButtonKey,
       onClick: () async {
         await onDelete();
         if (context.mounted) {

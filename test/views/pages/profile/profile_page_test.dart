@@ -17,6 +17,8 @@ import "../../../mocks/providers/provider_profile_page.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
 
 void main() {
+  const delayNeededForAsyncFunctionExecution = Duration(seconds: 1);
+
   late FakeFirebaseFirestore fakeFireStore;
   late CollectionReference<Map<String, dynamic>> userCollection;
   late ProviderScope mockedProfilePage;
@@ -145,7 +147,7 @@ void main() {
 
       //Check clicking on the delete button come back to the profile page
       await tester.tap(commentPopupDeleteButton);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
       //Check that the profile page is displayed
       final profilePage = find.byType(ProfilePage);
