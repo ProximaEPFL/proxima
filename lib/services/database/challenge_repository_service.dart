@@ -44,7 +44,7 @@ class ChallengeRepositoryService {
     DocumentReference parentRef,
     PostIdFirestore pid,
   ) async {
-    parentRef
+    await parentRef
         .collection(ChallengeFirestore.subCollectionName)
         .doc(pid.value)
         .update({
@@ -86,7 +86,7 @@ class ChallengeRepositoryService {
       final challenge = ChallengeFirestore.fromDb(challengeSnap);
       if (challenge.data.isExpired ||
           !await _postRepositoryService.postExists(challenge.postId)) {
-        _deleteChallenge(challengeSnap, parentRef);
+        await _deleteChallenge(challengeSnap, parentRef);
         pastPostIds.add(challenge.postId);
       } else {
         activeChallenges.add(challenge);
