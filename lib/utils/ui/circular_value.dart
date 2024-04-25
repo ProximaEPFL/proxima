@@ -14,7 +14,7 @@ class CircularValue<T> extends StatelessWidget {
 
   /// Tag to be placed at the start of an error message to display the
   /// message directly instead of the widget.
-  /// Does not trigger a pop up dialog. Usefull for debug error messages
+  /// Does not trigger a pop up dialog. Useful for debug error messages
   /// that should never occur for a real user of the app (not front facing errors).
   static const debugErrorTag = "DEBUG";
 
