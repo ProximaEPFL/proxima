@@ -16,7 +16,7 @@ import "../../mocks/data/geopoint.dart";
 import "../../mocks/data/post_data.dart";
 
 /// Add [n] posts at position [pos] and return their data and the [PostFirestore] objects
-Future<List<PostFirestore>> addPostsFull(
+Future<List<PostFirestore>> addPosts(
   PostRepositoryService postRepository,
   GeoPoint pos,
   int n,
@@ -34,13 +34,12 @@ Future<List<PostFirestore>> addPostsFull(
 }
 
 /// Add [n] posts at position [pos] and return their data
-Future<List<PostData>> addPosts(
+Future<List<PostData>> addPostsReturnDataOnly(
   PostRepositoryService postRepository,
   GeoPoint pos,
   int n,
 ) async {
-  return (await addPostsFull(postRepository, pos, n))
-      .map((e) => e.data)
+  return (await addPosts(postRepository, pos, n)).map((e) => e.data)
       .toList();
 }
 
@@ -68,7 +67,7 @@ void main() {
 
   group("Challenge repository getter", () {
     test("Get new challenges", () async {
-      final fakePosts = await addPosts(
+      final fakePosts = await addPostsReturnDataOnly(
         postRepository,
         inChallengeRange,
         ChallengeRepositoryService.maxActiveChallenges,
@@ -87,7 +86,7 @@ void main() {
     });
 
     test("Multiple gets with only one challenge available", () async {
-      await addPosts(postRepository, inChallengeRange, 1);
+      await addPostsReturnDataOnly(postRepository, inChallengeRange, 1);
 
       for (int i = 0; i < 10; i++) {
         final challenges =
@@ -98,7 +97,7 @@ void main() {
     });
 
     test("Challenge posts are unique", () async {
-      await addPosts(
+      await addPostsReturnDataOnly(
         postRepository,
         inChallengeRange,
         ChallengeRepositoryService.maxActiveChallenges,
@@ -123,12 +122,12 @@ void main() {
         ChallengeRepositoryService.minChallengeRadius,
       );
 
-      await addPosts(postRepository, tooFarPos, 1);
-      await addPosts(postRepository, tooClosePos, 1);
+      await addPostsReturnDataOnly(postRepository, tooFarPos, 1);
+      await addPostsReturnDataOnly(postRepository, tooClosePos, 1);
       var challenges = await challengeRepository.getChallenges(uid, userPos);
       expect(challenges.length, 0);
 
-      await addPosts(postRepository, inChallengeRange, 1);
+      await addPostsReturnDataOnly(postRepository, inChallengeRange, 1);
       challenges = await challengeRepository.getChallenges(uid, userPos);
       expect(challenges.length, 1);
     });
@@ -136,7 +135,7 @@ void main() {
 
   group("Challenges update correctly", () {
     test("Deleted post disappears from challenges", () async {
-      final fakePosts = await addPostsFull(
+      final fakePosts = await addPosts(
         postRepository,
         inChallengeRange,
         2,
@@ -185,7 +184,7 @@ void main() {
       const int challengesToExpire =
           ChallengeRepositoryService.maxActiveChallenges;
 
-      await addPosts(
+      await addPostsReturnDataOnly(
         postRepository,
         inChallengeRange,
         totalChallenges,
@@ -237,7 +236,7 @@ void main() {
 
   group("Challenge completion", () {
     test("Complete a challenge", () async {
-      await addPosts(postRepository, inChallengeRange, 1);
+      await addPostsReturnDataOnly(postRepository, inChallengeRange, 1);
       final challenges = await challengeRepository.getChallenges(uid, userPos);
       expect(challenges.length, 1);
 
