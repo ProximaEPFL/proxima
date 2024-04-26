@@ -66,7 +66,7 @@ void main() {
 
   final uid = testingUserFirestoreId;
 
-  group("ChallengeRepositoryService", () {
+  group("Challenge repository getter", () {
     test("Get new challenges", () async {
       final fakePosts = await addPosts(
         postRepository,
@@ -84,24 +84,6 @@ void main() {
         final actualPost = await postRepository.getPost(challenge.postId);
         expect(fakePosts.contains(actualPost.data), true);
       }
-    });
-
-    test("Complete a challenge", () async {
-      await addPosts(postRepository, inChallengeRange, 1);
-      final challenges = await challengeRepository.getChallenges(uid, userPos);
-  expect(challenges.length, 1);
-
-      final challenge = challenges.first;
-      expect(challenge.data.isCompleted, false);
-      await challengeRepository.completeChallenge(
-        uid,
-        challenge.postId,
-      );
-
-      final updatedChallenges =
-          await challengeRepository.getChallenges(uid, userPos);
-      expect(updatedChallenges.length, 1);
-      expect(updatedChallenges.first.data.isCompleted, true);
     });
 
     test("Multiple gets with only one challenge available", () async {
@@ -130,6 +112,29 @@ void main() {
       expect(postIds.length, challenges.length);
     });
 
+    test("Challenge range works", () async {
+      final tooFarPos = GeoPointGenerator.createOnEdgeOutsidePosition(
+        userPos,
+        ChallengeRepositoryService.maxChallengeRadius,
+      );
+
+      final tooClosePos = GeoPointGenerator.createOnEdgeInsidePosition(
+        userPos,
+        ChallengeRepositoryService.minChallengeRadius,
+      );
+
+      await addPosts(postRepository, tooFarPos, 1);
+      await addPosts(postRepository, tooClosePos, 1);
+      var challenges = await challengeRepository.getChallenges(uid, userPos);
+      expect(challenges.length, 0);
+
+      await addPosts(postRepository, inChallengeRange, 1);
+      challenges = await challengeRepository.getChallenges(uid, userPos);
+      expect(challenges.length, 1);
+    });
+  });
+
+  group("Challenges update correctly", () {
     test("Deleted post disappears from challenges", () async {
       final fakePosts = await addPostsFull(
         postRepository,
@@ -228,26 +233,25 @@ void main() {
         expect(pid, isNot(isIn(expiredPostIds)));
       }
     });
+  });
 
-    test("Challenge range works", () async {
-      final tooFarPos = GeoPointGenerator.createOnEdgeOutsidePosition(
-        userPos,
-        ChallengeRepositoryService.maxChallengeRadius,
-      );
-
-      final tooClosePos = GeoPointGenerator.createOnEdgeInsidePosition(
-        userPos,
-        ChallengeRepositoryService.minChallengeRadius,
-      );
-
-      await addPosts(postRepository, tooFarPos, 1);
-      await addPosts(postRepository, tooClosePos, 1);
-      var challenges = await challengeRepository.getChallenges(uid, userPos);
-      expect(challenges.length, 0);
-
+  group("Challenge completion", () {
+    test("Complete a challenge", () async {
       await addPosts(postRepository, inChallengeRange, 1);
-      challenges = await challengeRepository.getChallenges(uid, userPos);
+      final challenges = await challengeRepository.getChallenges(uid, userPos);
       expect(challenges.length, 1);
+
+      final challenge = challenges.first;
+      expect(challenge.data.isCompleted, false);
+      await challengeRepository.completeChallenge(
+        uid,
+        challenge.postId,
+      );
+
+      final updatedChallenges =
+          await challengeRepository.getChallenges(uid, userPos);
+      expect(updatedChallenges.length, 1);
+      expect(updatedChallenges.first.data.isCompleted, true);
     });
   });
 }
