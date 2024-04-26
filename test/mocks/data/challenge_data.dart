@@ -4,10 +4,9 @@ import "package:proxima/models/database/challenge/challenge_data.dart";
 class ChallengeGenerator {
   ChallengeGenerator._();
 
-  /// Generates a challenge
-  /// by default, the challenge is not completed and expires now
-  /// [isCompleted] whether the challenge is completed
-  /// [expirationDelay] the delay until the challenge expires. The challenge will expire at DateTime.now() + expirationDelay
+  /// Generates a challenge (using mock data).
+  /// It expires in [expirationDelay] (i.e., it expires at `DateTime.now() + expirationDelay`), 
+  /// and the generated challenge may be completed or not, depending on [isCompleted].
   static ChallengeData generate([
     bool isCompleted = false,
     Duration expirationDelay = Duration.zero,
