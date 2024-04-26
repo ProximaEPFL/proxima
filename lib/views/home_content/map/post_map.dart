@@ -40,6 +40,7 @@ class PostMap extends StatelessWidget {
             strokeWidth: 0,
           ),
         },
+        markers: mapInfo.markers,
         onMapCreated: onMapCreated,
       ),
     );

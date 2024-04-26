@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/map_view_model.dart";
 import "package:proxima/views/home_content/map/post_map.dart";
-import "package:proxima/views/sort_option_widgets/feed_sort_option/map_selection_option_chips.dart";
+import "package:proxima/views/select_option_widgets/map_selection_option_chips.dart";
 
 class MapScreen extends HookConsumerWidget {
   const MapScreen({super.key});

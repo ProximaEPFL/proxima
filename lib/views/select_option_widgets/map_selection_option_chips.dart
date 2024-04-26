@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/views/sort_option_widgets/feed_sort_option/map_selection_options.dart";
+import "package:proxima/views/select_option_widgets/map_selection_options.dart";
 
 class MapSelectionOptionChips extends StatelessWidget {
   const MapSelectionOptionChips({
@@ -9,12 +9,12 @@ class MapSelectionOptionChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sortOptions = MapSelectionOptions.values.map((sortOption) {
+    final selectOptions = MapSelectionOptions.values.map((selectOption) {
       return ChoiceChip(
         //TODO: Handle the selection of the options
-        key: Key(sortOption.name),
-        selected: sortOption == MapSelectionOptions.values[1],
-        label: Text(sortOption.name),
+        key: Key(selectOption.name),
+        selected: selectOption == MapSelectionOptions.values[1],
+        label: Text(selectOption.name),
       );
     }).toList();
 
@@ -22,7 +22,7 @@ class MapSelectionOptionChips extends StatelessWidget {
       key: selectOptionsKey,
       alignment: WrapAlignment.center,
       spacing: 4,
-      children: sortOptions,
+      children: selectOptions,
     );
   }
 }
