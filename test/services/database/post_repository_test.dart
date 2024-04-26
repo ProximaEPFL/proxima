@@ -129,6 +129,29 @@ void main() {
       expect(actualPosts, isEmpty);
     });
 
+    test("Near posts with min radius works", () async {
+      const userPosition = userPosition1;
+      const double minRadius = 1;
+      const double maxRadius = 5;
+
+      final generator = FirestorePostGenerator();
+      final tooClose = generator.generatePostAt(
+        GeoPointGenerator.createOnEdgeInsidePosition(userPosition, minRadius),
+      );
+      final good = generator.generatePostAt(
+        GeoPointGenerator.createOnEdgeInsidePosition(userPosition, maxRadius),
+      );
+      final tooFar = generator.generatePostAt(
+        GeoPointGenerator.createOnEdgeOutsidePosition(userPosition, maxRadius),
+      );
+
+      await setPostsFirestore([tooClose, good, tooFar]);
+      final actualPosts =
+          await postRepository.getNearPosts(userPosition, maxRadius, minRadius);
+
+      expect(actualPosts, [good]);
+    });
+
     test("Add post at location correctly", () async {
       const userGeoFirePoint = GeoFirePoint(userPosition1);
 
