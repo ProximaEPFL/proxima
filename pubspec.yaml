@@ -28,7 +28,7 @@ dependencies:
   mockito: ^5.4.4
   google_fonts: ^6.2.1
   google_maps_flutter: ^2.6.1
-  
+  flutter_svg: ^2.0.10+1
 
 
 dev_dependencies:
@@ -43,3 +43,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/icons/
