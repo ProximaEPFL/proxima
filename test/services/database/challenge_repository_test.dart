@@ -89,6 +89,7 @@ void main() {
     test("Complete a challenge", () async {
       await addPosts(postRepository, inChallengeRange, 1);
       final challenges = await challengeRepository.getChallenges(uid, userPos);
+  expect(challenges.length, 1);
 
       final challenge = challenges.first;
       expect(challenge.data.isCompleted, false);
@@ -125,7 +126,7 @@ void main() {
         uid,
         userPos,
       );
-      final postIds = challenges.map((e) => e.postId).toSet();
+      final postIds = challenges.map((challenge) => challenge.postId).toSet();
       expect(postIds.length, challenges.length);
     });
 
