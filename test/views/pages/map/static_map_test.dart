@@ -10,15 +10,18 @@ import "package:proxima/views/select_option_widgets/map_selection_options.dart";
 import "../../../mocks/data/geopoint.dart";
 import "../../../mocks/providers/provider_map_page.dart";
 import "../../../mocks/services/mock_geo_location_service.dart";
+import "../../../mocks/services/mock_post_repository_service.dart";
 
 void main() {
   late ProviderScope mapWidget;
   late MockGeoLocationService geoLocationService;
+  late MockPostRepositoryService postRepositoryProvider;
 
   setUp(() async {
     geoLocationService = MockGeoLocationService();
+    postRepositoryProvider = MockPostRepositoryService();
 
-    mapWidget = newMapPageProvider(geoLocationService);
+    mapWidget = newMapPageProvider(geoLocationService, postRepositoryProvider);
   });
 
   group("Widgets display", () {
@@ -26,6 +29,10 @@ void main() {
       GeoPoint testPoint = userPosition0;
       when(geoLocationService.getCurrentPosition()).thenAnswer(
         (_) => Future.value(testPoint),
+      );
+
+      when(postRepositoryProvider.getNearPosts(testPoint, 0.1)).thenAnswer(
+        (_) => Future.value([]),
       );
 
       await tester.pumpWidget(mapWidget);
