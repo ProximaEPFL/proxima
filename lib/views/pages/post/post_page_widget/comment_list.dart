@@ -17,11 +17,7 @@ class CommentList extends StatelessWidget {
       child: Wrap(
         runSpacing: 15,
         children: comments
-            .map(
-              (comment) => CommentPostWidget(
-                commentPost: comment,
-              ),
-            )
+            .map((comment) => CommentPostWidget(commentPost: comment))
             .toList(),
       ),
     );

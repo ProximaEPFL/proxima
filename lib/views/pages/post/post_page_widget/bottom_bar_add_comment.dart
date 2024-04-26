@@ -18,8 +18,8 @@ class BottomBarAddComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment
-          .start, // Align items to the start of the cross axis
+      // Align items to the start of the cross axis
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 8),
@@ -42,8 +42,8 @@ class BottomBarAddComment extends StatelessWidget {
           ),
         ),
         Align(
-          alignment: Alignment
-              .center, // Keeps the IconButton centered in the cross axis
+          // Keeps the IconButton centered in the cross axis
+          alignment: Alignment.center,
           child: IconButton(
             key: postCommentButtonKey,
             icon: const Icon(Icons.send),

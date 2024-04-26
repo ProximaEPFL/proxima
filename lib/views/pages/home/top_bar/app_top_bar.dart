@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/utils/ui/user_avatar.dart";
-import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 /// This widget is the top bar of the home page
@@ -9,7 +8,6 @@ import "package:proxima/views/navigation/routes.dart";
 class AppTopBar extends HookConsumerWidget {
   static const homeTopBarKey = Key("homeTopBar");
   static const profilePictureKey = Key("profilePicture");
-  static const logoutButtonKey = Key("logoutButton");
 
   final String labelText;
 
@@ -37,12 +35,6 @@ class AppTopBar extends HookConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         title,
-        // Temporary logout button
-        IconButton(
-          key: logoutButtonKey,
-          onPressed: () => ref.read(loginServiceProvider).signOut(),
-          icon: const Icon(Icons.logout),
-        ),
         userAvatar,
       ],
     );

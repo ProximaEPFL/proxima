@@ -4,6 +4,8 @@ import "package:proxima/utils/ui/user_avatar.dart";
 /// This widget is used to display the user bar in the post card.
 /// It contains the user's profile picture and username.
 class UserBarWidget extends StatelessWidget {
+  static const displayNameTextKey = Key("displayNameText");
+
   const UserBarWidget({
     super.key,
     required this.posterUsername,
@@ -19,7 +21,10 @@ class UserBarWidget extends StatelessWidget {
         UserAvatar(displayName: posterUsername, radius: 12),
         Padding(
           padding: const EdgeInsets.only(left: 8),
-          child: Text(posterUsername),
+          child: Text(
+            key: displayNameTextKey,
+            posterUsername,
+          ),
         ),
       ],
     );

@@ -67,7 +67,7 @@ class VotesWidget extends HookConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.all(3),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             upvote,
             downvote,
