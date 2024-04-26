@@ -161,21 +161,20 @@ void main() {
       expect(commentUserAvatar, findsNWidgets(testComments.length));
 
       //Check that the username are displayed
-      final Iterable<Text> displayNameWidgetsWidgets = tester.widgetList<Text>(
+      final Iterable<Text> displayNameWidgets = tester.widgetList<Text>(
         find.descendant(
           of: find.byKey(CommentPostWidget.commentUserWidgetKey),
           matching: find.byKey(UserBarWidget.displayNameTextKey),
         ),
       );
 
-      expect(displayNameWidgetsWidgets.length, testComments.length);
+      expect(displayNameWidgets.length, testComments.length);
 
       //Check the displayed usernames are correct
       final expectedUsernames =
           testComments.map((comment) => comment.ownerDisplayName).toList();
-      final actualUsernames = displayNameWidgetsWidgets
-          .map((textWidget) => textWidget.data)
-          .toList();
+      final actualUsernames =
+          displayNameWidgets.map((textWidget) => textWidget.data).toList();
 
       expect(actualUsernames, expectedUsernames);
 
