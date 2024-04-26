@@ -39,8 +39,7 @@ Future<List<PostData>> addPostsReturnDataOnly(
   GeoPoint pos,
   int n,
 ) async {
-  return (await addPosts(postRepository, pos, n)).map((e) => e.data)
-      .toList();
+  return (await addPosts(postRepository, pos, n)).map((e) => e.data).toList();
 }
 
 void main() {

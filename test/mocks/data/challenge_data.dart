@@ -5,7 +5,7 @@ class ChallengeGenerator {
   ChallengeGenerator._();
 
   /// Generates a challenge (using mock data).
-  /// It expires in [expirationDelay] (i.e., it expires at `DateTime.now() + expirationDelay`), 
+  /// It expires in [expirationDelay] (i.e., it expires at `DateTime.now() + expirationDelay`),
   /// and the generated challenge may be completed or not, depending on [isCompleted].
   static ChallengeData generate([
     bool isCompleted = false,
