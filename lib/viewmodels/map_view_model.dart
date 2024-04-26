@@ -32,15 +32,19 @@ class MapNotifier extends AsyncNotifier<MapInfo> {
         await ref.watch(postRepositoryProvider).getNearPosts(position, 0.1);
     //add the markers to the map
     for (var post in newposts) {
-      markers.add(Marker(
-        markerId: MarkerId(post.id.value),
-        position: LatLng(
-            post.location.geoPoint.latitude, post.location.geoPoint.longitude),
-        infoWindow: InfoWindow(
-          title: post.data.title,
-          snippet: post.data.description,
+      markers.add(
+        Marker(
+          markerId: MarkerId(post.id.value),
+          position: LatLng(
+            post.location.geoPoint.latitude,
+            post.location.geoPoint.longitude,
+          ),
+          infoWindow: InfoWindow(
+            title: post.data.title,
+            snippet: post.data.description,
+          ),
         ),
-      ));
+      );
     }
 
     return MapInfo(
