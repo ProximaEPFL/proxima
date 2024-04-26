@@ -83,17 +83,15 @@ class ChallengeRepositoryService {
     DocumentReference parentRef,
     GeoPoint pos,
   ) async {
-    final Set<PostIdFirestore> justExpired = {};
     final List<ChallengeFirestore> activeChallenges =
         List.empty(growable: true);
 
-    await _removeOldChallenges(parentRef, activeChallenges, justExpired);
+    await _removeOldChallenges(parentRef, activeChallenges);
 
     if (activeChallenges.length < maxActiveChallenges) {
       await _generateNewChallenges(
         activeChallenges,
         pos,
-        justExpired,
         parentRef,
       );
     }
@@ -102,11 +100,10 @@ class ChallengeRepositoryService {
   }
 
   /// Adds active challenges to [activeChallenges]. Removes expired challenges
-  /// and adds them to [justExpired]
+  /// from the database.
   Future<void> _removeOldChallenges(
     DocumentReference parentRef,
     List<ChallengeFirestore> activeChallenges,
-    Set<PostIdFirestore> justExpired,
   ) async {
     final challengesCollectionRef = _activeChallengesRef(parentRef);
     final challengesSnap = await challengesCollectionRef.get();
@@ -116,7 +113,6 @@ class ChallengeRepositoryService {
       if (challenge.data.isExpired ||
           !await _postRepositoryService.postExists(challenge.postId)) {
         await _moveToPastChallenge(challengeSnap, parentRef);
-        justExpired.add(challenge.postId);
       } else {
         activeChallenges.add(challenge);
       }
@@ -127,7 +123,6 @@ class ChallengeRepositoryService {
   Future<void> _generateNewChallenges(
     List<ChallengeFirestore> activeChallenges,
     GeoPoint pos,
-    Set<PostIdFirestore> justExpired,
     DocumentReference parentRef,
   ) async {
     final now = DateTime.now();
@@ -139,8 +134,7 @@ class ChallengeRepositoryService {
     ); // truncates to the day
 
     final Iterable<PostIdFirestore> possiblePosts =
-        (await _inRangeUnsortedPosts(pos))
-            .where((post) => !justExpired.contains(post));
+        await _inRangeUnsortedPosts(pos);
     final Iterable<String> possiblePostsStringIds =
         possiblePosts.map((post) => post.value);
 
