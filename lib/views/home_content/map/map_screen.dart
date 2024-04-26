@@ -23,7 +23,7 @@ class MapScreen extends HookConsumerWidget {
             children: [
               const MapSelectionOptionChips(),
               const Divider(key: dividerKey),
-              //TODO: change the map when selecting a sort option
+              //TODO: change the map when clicking on a selection option
               PostMap(
                 mapInfo: value,
                 onMapCreated: mapNotifier.onMapCreated,

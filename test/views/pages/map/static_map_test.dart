@@ -44,7 +44,7 @@ void main() {
       }
 
       expect(
-        find.byKey(MapSelectionOptionChips.sortOptionsKey),
+        find.byKey(MapSelectionOptionChips.selectOptionsKey),
         findsOneWidget,
       );
 
