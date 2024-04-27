@@ -7,12 +7,12 @@ class UserAvatar extends StatelessWidget {
   const UserAvatar({
     super.key,
     required this.displayName,
-    this.radius,
+    required this.radius,
     this.onTap,
   });
 
   final String displayName;
-  final double? radius;
+  final double radius;
   final void Function()? onTap;
 
   //TODO: Add a parameter to display the user's profile picture.
