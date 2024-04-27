@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 
 /// A widget that displays the user's avatar.
-/// It provide a [onTap] parameter to handle the user's tap which
-/// additionally add a InkWell response.
+/// It provides a [onTap] parameter to handle the user's tap,
+/// which adds an InkWell response.
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
     super.key,
