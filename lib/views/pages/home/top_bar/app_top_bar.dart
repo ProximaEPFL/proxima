@@ -21,7 +21,7 @@ class AppTopBar extends HookConsumerWidget {
     );
 
     //TODO: add user display name to UserAvatar
-    Widget userAvatar = UserAvatar(
+    final userAvatar = UserAvatar(
       key: profilePictureKey,
       radius: 20,
       displayName: "Proxima",
