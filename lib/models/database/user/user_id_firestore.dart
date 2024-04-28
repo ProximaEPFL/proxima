@@ -1,8 +1,10 @@
 import "package:flutter/foundation.dart";
+import "package:proxima/models/database/firestore/id_firestore.dart";
 
 /// The id are strong typed to avoid misuse
 @immutable
-class UserIdFirestore {
+class UserIdFirestore extends IdFirestore {
+  @override
   final String value;
 
   const UserIdFirestore({required this.value});
