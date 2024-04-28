@@ -82,6 +82,32 @@ class CommentRepositoryService {
     PostIdFirestore parentPostId,
     CommentIdFirestore commentId,
   ) async {
-    return;
+    await _firestore.runTransaction((transaction) async {
+      await _deleteComment(parentPostId, commentId, transaction);
+    });
+  }
+
+  // Concrete implementation of the deletion of a comment
+  Future<void> _deleteComment(
+    PostIdFirestore parentPostId,
+    CommentIdFirestore commentId,
+    Transaction transaction,
+  ) async {
+    final commentRef =
+        _commentsSubCollection(parentPostId).doc(commentId.value);
+
+    final commentDoc = await transaction.get(commentRef);
+
+    if (!commentDoc.exists) {
+      return;
+    }
+
+    transaction.delete(commentRef);
+
+    final postDocRef = _postDocument(parentPostId);
+    transaction.update(
+      postDocRef,
+      {PostData.commentCountField: FieldValue.increment(-1)},
+    );
   }
 }
