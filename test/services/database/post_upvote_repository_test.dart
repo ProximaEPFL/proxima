@@ -1,11 +1,14 @@
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/database/vote/upvote_state.dart";
+import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/post_upvote_repository_service.dart";
+import "package:proxima/services/database/upvote_repository_service.dart";
 
 import "../../mocks/data/geopoint.dart";
 import "../../mocks/data/post_data.dart";
@@ -13,7 +16,7 @@ import "../../mocks/data/post_data.dart";
 void main() {
   late FakeFirebaseFirestore firestore;
   late PostRepositoryService postRepository;
-  late PostUpvoteRepositoryService postUpvoteRepository;
+  late UpvoteRepositoryService<PostIdFirestore> postUpvoteRepository;
 
   Future<int> getUpvoteCount(PostIdFirestore postId) async {
     final post = await postRepository.getPost(postId);
@@ -26,7 +29,15 @@ void main() {
   setUp(() async {
     firestore = FakeFirebaseFirestore();
     postRepository = PostRepositoryService(firestore: firestore);
-    postUpvoteRepository = PostUpvoteRepositoryService(firestore: firestore);
+
+    final container = ProviderContainer(
+      overrides: [
+        firestoreProvider.overrideWithValue(firestore),
+        postRepositoryProvider.overrideWithValue(postRepository),
+      ],
+    );
+
+    postUpvoteRepository = container.read(postUpvoteRepositoryProvider);
   });
 
   Future<void> assertPostUpvoteState(
