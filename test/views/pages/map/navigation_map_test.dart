@@ -1,5 +1,3 @@
-import "dart:math";
-
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -64,8 +62,10 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(AlertDialog), findsOneWidget);
-      expect(find.textContaining("Location services are disabled."),
-          findsOneWidget);
+      expect(
+        find.textContaining("Location services are disabled."),
+        findsOneWidget,
+      );
       // find ok button
       final okButton = find.byKey(ErrorAlert.okButtonKey);
       expect(okButton, findsOneWidget);
