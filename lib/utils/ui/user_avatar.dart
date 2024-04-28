@@ -13,7 +13,7 @@ class UserAvatar extends StatelessWidget {
 
   final String displayName;
   final double radius;
-  final void Function()? onTap;
+  final VoidCallback? onTap;
 
   //TODO: Add a parameter to display the user's profile picture.
   //Note that the [backgroundImage] parameter on the [CircleAvatar] widget is
