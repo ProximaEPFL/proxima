@@ -18,8 +18,8 @@ class PostMap extends StatelessWidget {
       child: GoogleMap(
         key: postMapKey,
         mapType: MapType.normal,
-        myLocationButtonEnabled: true,
-        myLocationEnabled: true,
+        myLocationButtonEnabled: false,
+        myLocationEnabled: false,
         zoomGesturesEnabled: true,
         zoomControlsEnabled: true,
         scrollGesturesEnabled: true,
