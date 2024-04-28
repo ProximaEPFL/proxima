@@ -11,6 +11,7 @@ class PostDataGenerator {
     description: "",
     publicationTime: Timestamp.fromMillisecondsSinceEpoch(0),
     voteScore: 0,
+    commentCount: 0,
   );
 
   final postData = PostData(
@@ -19,6 +20,7 @@ class PostDataGenerator {
     description: "Look at them go!",
     publicationTime: Timestamp.now(),
     voteScore: 0,
+    commentCount: 0,
   );
 
   /// Generate a list of [PostData]
@@ -30,6 +32,7 @@ class PostDataGenerator {
         ownerId: UserIdFirestore(value: "owner_id_$i"),
         publicationTime: Timestamp.fromMillisecondsSinceEpoch(1000 * i),
         voteScore: i,
+        commentCount: i,
       );
     });
   }
