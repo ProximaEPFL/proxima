@@ -10,12 +10,16 @@ class CommentData {
   final Timestamp publicationTime;
   static const publicationTimeField = "publicationTime";
 
+  final int voteScore;
+  static const voteScoreField = "voteScore";
+
   final String content;
   static const contentField = "content";
 
   const CommentData({
     required this.ownerId,
     required this.publicationTime,
+    required this.voteScore,
     required this.content,
   });
 
@@ -26,6 +30,7 @@ class CommentData {
       return CommentData(
         ownerId: UserIdFirestore(value: data[ownerIdField]),
         publicationTime: data[publicationTimeField],
+        voteScore: data[voteScoreField],
         content: data[contentField],
       );
     } catch (e) {
@@ -54,11 +59,12 @@ class CommentData {
     return other is CommentData &&
         other.ownerId == ownerId &&
         other.publicationTime == publicationTime &&
+        other.voteScore == voteScore &&
         other.content == content;
   }
 
   @override
   int get hashCode {
-    return Object.hash(ownerId, publicationTime, content);
+    return Object.hash(ownerId, publicationTime, voteScore, content);
   }
 }
