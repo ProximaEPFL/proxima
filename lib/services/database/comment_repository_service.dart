@@ -44,27 +44,25 @@ class CommentRepositoryService {
   /// This method will add the comment with data [commentData] to the
   /// post with id [parentPostId].
   /// It will also update the number of comments of the post.
-  /// This is done atomically, possibly as part of the transaction [transaction].
+  /// This is done atomically.
   ///
   /// The method returns the id of the comment that was added.
   Future<CommentIdFirestore> addComment(
     PostIdFirestore parentPostId,
-    CommentData commentData, {
-    Transaction? transaction,
-  }) async {
+    CommentData commentData,
+  ) async {
     return const CommentIdFirestore(value: "");
   }
 
   /// This method will delete the comment with id [commentId] from the
   /// post with id [parentPostId].
   /// It will also update the number of comments of the post.
-  /// This is done atomically, possibly as part of the transaction [transaction].
+  /// This is done atomically.
   /// If the comment does not exist, the method will do nothing.
   Future<void> deleteComment(
     PostIdFirestore parentPostId,
-    CommentIdFirestore commentId, {
-    Transaction? transaction,
-  }) async {
+    CommentIdFirestore commentId,
+  ) async {
     return;
   }
 }
