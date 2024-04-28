@@ -89,6 +89,17 @@ void main() {
 
         expect(actualComments, unorderedEquals(comments));
       });
+
+      test("should return an error if the comment has missing field", () async {
+        commentsSubCollection.doc("comment_id").set({
+          "missing_field": "missing_field",
+        });
+
+        expect(
+          () async => await commentRepository.getComments(postId),
+          throwsA(isA<FormatException>()),
+        );
+      });
     });
 
     group("adding comments", () {
