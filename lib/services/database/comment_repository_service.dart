@@ -1,10 +1,12 @@
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/comment/comment_firestore.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/services/database/firestore_service.dart";
 
 /// This class is a service that allows to interact with the comments
 /// of the posts in the firestore database.
@@ -111,3 +113,9 @@ class CommentRepositoryService {
     );
   }
 }
+
+final commentRepositoryProvider = Provider<CommentRepositoryService>(
+  (ref) => CommentRepositoryService(
+    firestore: ref.watch(firestoreProvider),
+  ),
+);
