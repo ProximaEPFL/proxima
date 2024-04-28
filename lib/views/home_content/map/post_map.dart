@@ -4,14 +4,12 @@ import "package:proxima/viewmodels/map_view_model.dart";
 
 class PostMap extends StatelessWidget {
   final MapInfo mapInfo;
-  final Function(GoogleMapController) onMapCreated;
 
   static const postMapKey = Key("PostMap");
 
   const PostMap({
     super.key,
     required this.mapInfo,
-    required this.onMapCreated,
   });
 
   @override
@@ -36,12 +34,10 @@ class PostMap extends StatelessWidget {
             circleId: const CircleId("1"),
             center: mapInfo.currentLocation,
             radius: 100,
-            fillColor: Colors.black12,
+            fillColor: Colors.black26,
             strokeWidth: 0,
           ),
         },
-        markers: mapInfo.markers,
-        onMapCreated: onMapCreated,
       ),
     );
   }
