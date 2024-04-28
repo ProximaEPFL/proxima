@@ -41,7 +41,7 @@ class PostData {
         description: data[descriptionField],
         publicationTime: data[publicationTimeField],
         voteScore: data[voteScoreField],
-        commentCount: data[commentCountField],
+        commentCount: data[commentCountField] ?? 0,
       );
     } catch (e) {
       if (e is TypeError) {
