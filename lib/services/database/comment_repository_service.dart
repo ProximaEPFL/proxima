@@ -26,16 +26,19 @@ class CommentRepositoryService {
   }
 
   /// Returns the collection reference of the subcollection of comments of
-  /// the post with id [postId]
+  /// the post with id [parentPostId]
   CollectionReference<Map<String, dynamic>> _commentsSubCollection(
-    PostIdFirestore postId,
+    PostIdFirestore parentPostId,
   ) {
-    return _postDocument(postId).collection(CommentFirestore.subCollectionName);
+    return _postDocument(parentPostId)
+        .collection(CommentFirestore.subCollectionName);
   }
 
-  /// This method returns the comments of the post with id [postId]
-  Future<List<CommentFirestore>> getComments(PostIdFirestore postId) async {
-    final commentsQuery = await _commentsSubCollection(postId).get();
+  /// This method returns the comments of the post with id [parentPostId]
+  Future<List<CommentFirestore>> getComments(
+    PostIdFirestore parentPostId,
+  ) async {
+    final commentsQuery = await _commentsSubCollection(parentPostId).get();
 
     final comments = commentsQuery.docs
         .map((docSnap) => CommentFirestore.fromDb(docSnap))
