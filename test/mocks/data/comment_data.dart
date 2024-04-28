@@ -16,13 +16,19 @@ class CommentDataGenerator {
     });
   }
 
-  static CommentData createRandomCommentData() {
+  static CommentData createRandomCommentData({
+    String? content,
+    UserIdFirestore? ownerId,
+    Timestamp? publicationTime,
+    int? voteScore,
+  }) {
     return CommentData(
-      content: "content_${Random().nextInt(100)}",
-      ownerId: UserIdFirestore(value: "owner_id_${Random().nextInt(100)}"),
-      publicationTime:
+      content: content ?? "content_${Random().nextInt(100)}",
+      ownerId: ownerId ??
+          UserIdFirestore(value: "owner_id_${Random().nextInt(100)}"),
+      publicationTime: publicationTime ??
           Timestamp.fromMicrosecondsSinceEpoch(Random().nextInt(1000000)),
-      voteScore: Random().nextInt(100),
+      voteScore: voteScore ?? Random().nextInt(100),
     );
   }
 }
