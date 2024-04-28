@@ -2,6 +2,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/comment/comment_firestore.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
+import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 
@@ -51,7 +52,25 @@ class CommentRepositoryService {
     PostIdFirestore parentPostId,
     CommentData commentData,
   ) async {
-    return const CommentIdFirestore(value: "");
+    // Generate a new reference for the comment
+    // Although generated locally, the new id can be considered unique
+    // https://stackoverflow.com/questions/54268257/what-are-the-chances-for-firestore-to-generate-two-identical-random-keys
+    final newCommentRef = _commentsCollection(parentPostId).doc();
+
+    // Create a batch write to perform the operations atomically
+    final batch = _firestore.batch();
+
+    batch.set(newCommentRef, commentData.toDbData());
+
+    final postDocRef = _postDocument(parentPostId);
+    batch.update(
+      postDocRef,
+      {PostData.commentCountField: FieldValue.increment(1)},
+    );
+
+    await batch.commit();
+
+    return CommentIdFirestore(value: newCommentRef.id);
   }
 
   /// This method will delete the comment with id [commentId] from the
