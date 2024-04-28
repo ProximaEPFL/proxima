@@ -48,6 +48,7 @@ class CommentData {
     return {
       ownerIdField: ownerId.value,
       publicationTimeField: publicationTime,
+      voteScoreField: voteScore,
       contentField: content,
     };
   }
