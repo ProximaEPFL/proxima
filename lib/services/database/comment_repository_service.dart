@@ -32,7 +32,13 @@ class CommentRepositoryService {
 
   /// This method returns the comments of the post with id [postId]
   Future<List<CommentFirestore>> getComments(PostIdFirestore postId) async {
-    return [];
+    final commentsQuery = await _commentsCollection(postId).get();
+
+    final comments = commentsQuery.docs
+        .map((docSnap) => CommentFirestore.fromDb(docSnap))
+        .toList();
+
+    return comments;
   }
 
   /// This method will add the comment with data [commentData] to the
