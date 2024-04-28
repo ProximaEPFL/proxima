@@ -25,7 +25,7 @@ class CommentRepositoryService {
 
   /// Returns the collection reference of the subcollection of comments of
   /// the post with id [postId]
-  CollectionReference<Map<String, dynamic>> _commentsCollection(
+  CollectionReference<Map<String, dynamic>> _commentsSubCollection(
     PostIdFirestore postId,
   ) {
     return _postDocument(postId).collection(CommentFirestore.subCollectionName);
@@ -33,7 +33,7 @@ class CommentRepositoryService {
 
   /// This method returns the comments of the post with id [postId]
   Future<List<CommentFirestore>> getComments(PostIdFirestore postId) async {
-    final commentsQuery = await _commentsCollection(postId).get();
+    final commentsQuery = await _commentsSubCollection(postId).get();
 
     final comments = commentsQuery.docs
         .map((docSnap) => CommentFirestore.fromDb(docSnap))
@@ -55,7 +55,7 @@ class CommentRepositoryService {
     // Generate a new reference for the comment
     // Although generated locally, the new id can be considered unique
     // https://stackoverflow.com/questions/54268257/what-are-the-chances-for-firestore-to-generate-two-identical-random-keys
-    final newCommentRef = _commentsCollection(parentPostId).doc();
+    final newCommentRef = _commentsSubCollection(parentPostId).doc();
 
     // Create a batch write to perform the operations atomically
     final batch = _firestore.batch();
