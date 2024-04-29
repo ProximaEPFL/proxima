@@ -3,7 +3,6 @@ import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/challenge/challenge_data.dart";
 import "package:proxima/models/database/challenge/challenge_firestore.dart";
-import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
@@ -11,36 +10,11 @@ import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
 import "../../mocks/data/challenge_data.dart";
+import "../../mocks/data/firestore_post.dart";
 import "../../mocks/data/firestore_user.dart";
 import "../../mocks/data/geopoint.dart";
 import "../../mocks/data/post_data.dart";
 
-/// Add [n] posts at position [pos] and return their data and the [PostFirestore] objects
-Future<List<PostFirestore>> addPosts(
-  PostRepositoryService postRepository,
-  GeoPoint pos,
-  int n,
-) async {
-  final List<PostFirestore> fakePosts = List.empty(growable: true);
-  final fakePostsData = PostDataGenerator.generatePostData(n);
-  for (final data in fakePostsData) {
-    final id = await postRepository.addPost(data, pos);
-    final fakePost = await postRepository.getPost(
-      id,
-    ); // I don't wanna look into how the position works, this is easier
-    fakePosts.add(fakePost);
-  }
-  return fakePosts;
-}
-
-/// Add [n] posts at position [pos] and return their data
-Future<List<PostData>> addPostsReturnDataOnly(
-  PostRepositoryService postRepository,
-  GeoPoint pos,
-  int n,
-) async {
-  return (await addPosts(postRepository, pos, n)).map((e) => e.data).toList();
-}
 
 void main() {
   late FakeFirebaseFirestore firestore;
@@ -66,8 +40,9 @@ void main() {
 
   group("Challenge repository getter", () {
     test("Get new challenges", () async {
-      final fakePosts = await addPostsReturnDataOnly(
-        postRepository,
+      FirestorePostGenerator generator = FirestorePostGenerator();
+      final fakePosts = await generator.addPostsReturnDataOnly(
+        firestore,
         inChallengeRange,
         ChallengeRepositoryService.maxActiveChallenges,
       );
@@ -85,7 +60,8 @@ void main() {
     });
 
     test("Multiple gets with only one challenge available", () async {
-      await addPostsReturnDataOnly(postRepository, inChallengeRange, 1);
+      FirestorePostGenerator generator = FirestorePostGenerator();
+      await generator.addPostsReturnDataOnly(firestore, inChallengeRange, 1);
 
       for (int i = 0; i < 10; i++) {
         final challenges =
@@ -96,8 +72,9 @@ void main() {
     });
 
     test("Challenge posts are unique", () async {
-      await addPostsReturnDataOnly(
-        postRepository,
+      FirestorePostGenerator generator = FirestorePostGenerator();
+      await generator.addPostsReturnDataOnly(
+        firestore,
         inChallengeRange,
         ChallengeRepositoryService.maxActiveChallenges,
       );
@@ -121,12 +98,13 @@ void main() {
         ChallengeRepositoryService.minChallengeRadius,
       );
 
-      await addPostsReturnDataOnly(postRepository, tooFarPos, 1);
-      await addPostsReturnDataOnly(postRepository, tooClosePos, 1);
+      FirestorePostGenerator generator = FirestorePostGenerator();
+      await generator.addPostsReturnDataOnly(firestore, tooFarPos, 1);
+      await generator.addPostsReturnDataOnly(firestore, tooClosePos, 1);
       var challenges = await challengeRepository.getChallenges(uid, userPos);
       expect(challenges.length, 0);
 
-      await addPostsReturnDataOnly(postRepository, inChallengeRange, 1);
+      await generator.addPostsReturnDataOnly(firestore, inChallengeRange, 1);
       challenges = await challengeRepository.getChallenges(uid, userPos);
       expect(challenges.length, 1);
     });
@@ -134,8 +112,9 @@ void main() {
 
   group("Challenges update correctly", () {
     test("Deleted post disappears from challenges", () async {
-      final fakePosts = await addPosts(
-        postRepository,
+      FirestorePostGenerator generator = FirestorePostGenerator();
+      final fakePosts = await generator.addPosts(
+        firestore,
         inChallengeRange,
         2,
       );
@@ -183,8 +162,9 @@ void main() {
       const int challengesToExpire =
           ChallengeRepositoryService.maxActiveChallenges;
 
-      await addPostsReturnDataOnly(
-        postRepository,
+      FirestorePostGenerator generator = FirestorePostGenerator();
+      await generator.addPostsReturnDataOnly(
+        firestore,
         inChallengeRange,
         totalChallenges,
       );
@@ -235,7 +215,8 @@ void main() {
 
   group("Challenge completion", () {
     test("Complete a challenge", () async {
-      await addPostsReturnDataOnly(postRepository, inChallengeRange, 1);
+      FirestorePostGenerator generator = FirestorePostGenerator();
+      await generator.addPostsReturnDataOnly(firestore, inChallengeRange, 1);
       final challenges = await challengeRepository.getChallenges(uid, userPos);
       expect(challenges.length, 1);
 
