@@ -19,8 +19,8 @@ class MapViewModel extends AsyncNotifier<MapInfo> {
     );
   }
 
-  /// Refresh the list of posts
-  /// This will put the state of the viewmodel to loading, fetch the posts
+  /// Refresh the mapInfo.
+  /// This will put the state of the viewmodel to loading
   /// and update the state accordingly
   Future<void> refresh() async {
     state = const AsyncValue.loading();
