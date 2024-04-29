@@ -15,7 +15,6 @@ import "../../mocks/data/firestore_user.dart";
 import "../../mocks/data/geopoint.dart";
 import "../../mocks/data/post_data.dart";
 
-
 void main() {
   late FakeFirebaseFirestore firestore;
   late PostRepositoryService postRepository;
