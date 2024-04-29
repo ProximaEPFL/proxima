@@ -8,8 +8,8 @@ import "package:proxima/views/select_option_widgets/map_selection_option_chips.d
 class MapScreen extends ConsumerWidget {
   const MapScreen({super.key});
 
-  static const mapScreenKey = Key("map");
-  static const dividerKey = Key("Divider");
+  static const mapScreenKey = Key("mapScreen");
+  static const dividerKey = Key("divider");
   static const refreshButtonKey = Key("refreshButton");
 
   @override

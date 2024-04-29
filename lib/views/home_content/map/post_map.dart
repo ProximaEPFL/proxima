@@ -5,7 +5,7 @@ import "package:proxima/viewmodels/map_view_model.dart";
 class PostMap extends StatelessWidget {
   final MapInfo mapInfo;
 
-  static const postMapKey = Key("PostMap");
+  static const postMapKey = Key("postMap");
 
   const PostMap({
     super.key,
@@ -33,7 +33,7 @@ class PostMap extends StatelessWidget {
           Circle(
             circleId: const CircleId("1"),
             center: mapInfo.currentLocation,
-            radius: 100,
+            radius: HomeViewModel.kmPostRadius * 1000,
             fillColor: Colors.black26,
             strokeWidth: 0,
           ),
