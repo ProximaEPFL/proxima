@@ -49,14 +49,7 @@ class ChallengeRepositoryService {
   ) async {
     final userDocRef =
         _firestore.collection(UserFirestore.collectionName).doc(uid.value);
-    await _completeChallenge(userDocRef, pid);
-  }
-
-  Future<void> _completeChallenge(
-    DocumentReference parentRef,
-    PostIdFirestore pid,
-  ) async {
-    await _activeChallengesRef(parentRef).doc(pid.value).update({
+    await _activeChallengesRef(userDocRef).doc(pid.value).update({
       ChallengeData.isCompletedField: true,
     });
   }
@@ -75,24 +68,16 @@ class ChallengeRepositoryService {
   ) async {
     final userDocRef =
         _firestore.collection(UserFirestore.collectionName).doc(uid.value);
-
-    return _getChallenges(userDocRef, pos);
-  }
-
-  Future<List<ChallengeFirestore>> _getChallenges(
-    DocumentReference parentRef,
-    GeoPoint pos,
-  ) async {
     final List<ChallengeFirestore> activeChallenges =
         List.empty(growable: true);
 
-    await _removeOldChallenges(parentRef, activeChallenges);
+    await _removeOldChallenges(userDocRef, activeChallenges);
 
     if (activeChallenges.length < maxActiveChallenges) {
       await _generateNewChallenges(
         activeChallenges,
         pos,
-        parentRef,
+        userDocRef,
       );
     }
 
