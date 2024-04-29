@@ -69,3 +69,31 @@ class FirestorePostGenerator {
     );
   }
 }
+
+/// Helper function to set a post in the firestore db
+Future<void> setPostFirestore(
+  PostFirestore post,
+  FirebaseFirestore firestore,
+) async {
+  final Map<String, dynamic> locationData = {
+    PostLocationFirestore.geoPointField: post.location.geoPoint,
+    PostLocationFirestore.geohashField: post.location.geohash,
+  };
+
+  await firestore
+      .collection(PostFirestore.collectionName)
+      .doc(post.id.value)
+      .set({
+    PostFirestore.locationField: locationData,
+    ...post.data.toDbData(),
+  });
+}
+
+Future<void> setPostsFirestore(
+  List<PostFirestore> posts,
+  FirebaseFirestore firestore,
+) async {
+  for (final post in posts) {
+    await setPostFirestore(post, firestore);
+  }
+}
