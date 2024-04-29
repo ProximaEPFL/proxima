@@ -18,28 +18,6 @@ void main() {
 
     const kmRadius = 0.1;
 
-    /// Helper function to set a post in the firestore db
-    Future<void> setPostFirestore(PostFirestore post) async {
-      final Map<String, dynamic> locationData = {
-        PostLocationFirestore.geoPointField: post.location.geoPoint,
-        PostLocationFirestore.geohashField: post.location.geohash,
-      };
-
-      await firestore
-          .collection(PostFirestore.collectionName)
-          .doc(post.id.value)
-          .set({
-        PostFirestore.locationField: locationData,
-        ...post.data.toDbData(),
-      });
-    }
-
-    Future<void> setPostsFirestore(List<PostFirestore> posts) async {
-      for (final post in posts) {
-        await setPostFirestore(post);
-      }
-    }
-
     setUp(() {
       firestore = FakeFirebaseFirestore();
       postRepository = PostRepositoryService(
@@ -52,7 +30,7 @@ void main() {
     );
 
     test("Delete post correctly", () async {
-      await setPostFirestore(post);
+      await setPostFirestore(post, firestore);
 
       // Check that the post is in the db
       final dbPost = await firestore
@@ -70,7 +48,7 @@ void main() {
     });
 
     test("Get post correctly", () async {
-      await setPostFirestore(post);
+      await setPostFirestore(post, firestore);
 
       final actualPost = await postRepository.getPost(post.id);
       expect(actualPost, post);
@@ -82,7 +60,7 @@ void main() {
         GeoPointGenerator.createNearbyPosition(userPosition),
       );
 
-      await setPostFirestore(expectedPost);
+      await setPostFirestore(expectedPost, firestore);
 
       final actualPosts =
           await postRepository.getNearPosts(userPosition, kmRadius);
@@ -96,7 +74,7 @@ void main() {
         GeoPointGenerator.createFarAwayPosition(userPosition, kmRadius),
       );
 
-      await setPostFirestore(expectedPost);
+      await setPostFirestore(expectedPost, firestore);
 
       final actualPosts =
           await postRepository.getNearPosts(userPosition1, kmRadius);
@@ -109,7 +87,7 @@ void main() {
         GeoPointGenerator.createOnEdgeInsidePosition(userPosition, kmRadius),
       );
 
-      await setPostFirestore(expectedPost);
+      await setPostFirestore(expectedPost, firestore);
 
       final actualPosts =
           await postRepository.getNearPosts(userPosition1, kmRadius);
@@ -122,11 +100,34 @@ void main() {
         GeoPointGenerator.createOnEdgeOutsidePosition(userPosition, kmRadius),
       );
 
-      await setPostFirestore(expectedPost);
+      await setPostFirestore(expectedPost, firestore);
 
       final actualPosts =
           await postRepository.getNearPosts(userPosition1, kmRadius);
       expect(actualPosts, isEmpty);
+    });
+
+    test("Near posts with min radius works", () async {
+      const userPosition = userPosition1;
+      const double minRadius = 1;
+      const double maxRadius = 5;
+
+      final generator = FirestorePostGenerator();
+      final tooClose = generator.generatePostAt(
+        GeoPointGenerator.createOnEdgeInsidePosition(userPosition, minRadius),
+      );
+      final good = generator.generatePostAt(
+        GeoPointGenerator.createOnEdgeInsidePosition(userPosition, maxRadius),
+      );
+      final tooFar = generator.generatePostAt(
+        GeoPointGenerator.createOnEdgeOutsidePosition(userPosition, maxRadius),
+      );
+
+      await setPostsFirestore([tooClose, good, tooFar], firestore);
+      final actualPosts =
+          await postRepository.getNearPosts(userPosition, maxRadius, minRadius);
+
+      expect(actualPosts, [good]);
     });
 
     test("Add post at location correctly", () async {
@@ -174,7 +175,7 @@ void main() {
         );
       });
 
-      await setPostsFirestore(allPosts);
+      await setPostsFirestore(allPosts, firestore);
 
       final actualPosts =
           await postRepository.getNearPosts(userPosition1, kmRadius);
@@ -196,13 +197,13 @@ void main() {
 
       final postsData1 = generator.createUserPost(userId1, userPosition2);
       final postsData2 = generator.createUserPost(userId1, userPosition3);
-      await setPostsFirestore([postsData1, postsData2]);
+      await setPostsFirestore([postsData1, postsData2], firestore);
 
       const userId2 = UserIdFirestore(value: "user_id_2");
 
       final postsData3 = generator.createUserPost(userId2, userPosition2);
       final postsData4 = generator.createUserPost(userId2, userPosition3);
-      await setPostsFirestore([postsData3, postsData4]);
+      await setPostsFirestore([postsData3, postsData4], firestore);
 
       final actualPosts1 = await postRepository.getUserPosts(userId1);
       final actualPosts2 = await postRepository.getUserPosts(userId2);
@@ -215,7 +216,7 @@ void main() {
       final existsBeforeCreation = await postRepository.postExists(post.id);
       expect(existsBeforeCreation, false);
 
-      await setPostFirestore(post);
+      await setPostFirestore(post, firestore);
 
       final exists = await postRepository.postExists(post.id);
       expect(exists, true);
