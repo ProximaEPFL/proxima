@@ -95,7 +95,8 @@ class FirestorePostGenerator {
     GeoPoint location,
     int n,
   ) async {
-    return (await addPosts(firestore, location, n)).map((e) => e.data).toList();
+    final posts = await addPosts(firestore, location, n);
+    return posts.map((post) => post.data).toList();
   }
 }
 
