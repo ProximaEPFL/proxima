@@ -1,6 +1,7 @@
 import "dart:async";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/services/geolocation_service.dart";
 
 class MapInfo {
   MapInfo({
@@ -14,13 +15,14 @@ class MapInfo {
 class MapViewModel extends AsyncNotifier<MapInfo> {
   @override
   Future<MapInfo> build() async {
+    final location =
+        await ref.read(geoLocationServiceProvider).getCurrentPosition();
     return MapInfo(
-      currentLocation: const LatLng(46.519653, 6.632273),
-    );
+        currentLocation: LatLng(location.latitude, location.longitude));
   }
 
-  /// Refresh the list of posts
-  /// This will put the state of the viewmodel to loading, fetch the posts
+  /// Refresh the widget
+  /// This will put the state of the viewmodel to loading, fetch the location
   /// and update the state accordingly
   Future<void> refresh() async {
     state = const AsyncValue.loading();
