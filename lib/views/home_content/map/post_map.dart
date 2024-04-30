@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
+import "package:proxima/models/ui/map_info.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
-import "package:proxima/viewmodels/map_view_model.dart";
 
 class PostMap extends StatelessWidget {
   final MapInfo mapInfo;

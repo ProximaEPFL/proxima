@@ -1,5 +1,6 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/ui/map_info.dart";
 import "package:proxima/viewmodels/map_view_model.dart";
 
 class MockMapViewModel extends AsyncNotifier<MapInfo> implements MapViewModel {
@@ -19,3 +20,7 @@ class MockMapViewModel extends AsyncNotifier<MapInfo> implements MapViewModel {
   @override
   Future<void> refresh() => _onRefresh();
 }
+
+final mockNoGPSMapViewModelOverride = [
+  mapProvider.overrideWith(() => MockMapViewModel()),
+];

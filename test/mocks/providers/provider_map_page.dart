@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/viewmodels/map_view_model.dart";
 import "package:proxima/views/home_content/map/map_screen.dart";
 import "package:proxima/views/navigation/routes.dart";
 
@@ -18,9 +17,7 @@ ProviderScope newMapPageProvider() {
 
 ProviderScope newMapPageNoGPS() {
   return ProviderScope(
-    overrides: [
-      mapProvider.overrideWith(() => MockMapViewModel()),
-    ],
+    overrides: mockNoGPSMapViewModelOverride,
     child: const MaterialApp(
       onGenerateRoute: generateRoute,
       title: "Map page",

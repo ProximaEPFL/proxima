@@ -1,32 +1,17 @@
 import "dart:async";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-
-@immutable
-class MapInfo {
-  const MapInfo({
-    required this.currentLocation,
-  });
-  final LatLng currentLocation;
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is MapInfo && other.currentLocation == currentLocation;
-  }
-
-  @override
-  int get hashCode => currentLocation.hashCode;
-}
+import "package:proxima/models/ui/map_info.dart";
+import "package:proxima/views/option_widgets/map/map_selection_option.dart";
 
 // TODO: For now, this is code with mock data.
 // This will just be replaced when we implement a real view model anyway.
 class MapViewModel extends AsyncNotifier<MapInfo> {
   @override
   Future<MapInfo> build() async {
-    return MapInfo(
-      currentLocation: const LatLng(46.519653, 6.632273),
+    return const MapInfo(
+      currentLocation: LatLng(46.519653, 6.632273),
+      selectOption: MapSelectionOptions.nearby,
     );
   }
 

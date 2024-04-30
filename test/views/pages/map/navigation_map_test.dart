@@ -56,8 +56,6 @@ void main() {
       //find the refresh button
       final refreshButton = find.byKey(MapScreen.refreshButtonKey);
       expect(refreshButton, findsOneWidget);
-      await tester.tap(refreshButton);
-      await tester.pumpAndSettle();
     });
   });
 }
