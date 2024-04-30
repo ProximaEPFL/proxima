@@ -37,10 +37,7 @@ class FirestorePostGenerator {
 
   /// Generate a [PostFirestore] at position [location], generating the post data
   PostFirestore generatePostAt(GeoPoint location) {
-    return createPostAt(
-      PostDataGenerator.generatePostData(1).first,
-      location,
-    );
+    return generatePostsAt(location, 1).first;
   }
 
   /// Generate [n] [PostFirestore] at position [location]
