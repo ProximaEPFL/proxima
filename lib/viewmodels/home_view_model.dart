@@ -1,9 +1,12 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/services/sorting/post_sorting_service.dart";
+import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
 
 /// This viewmodel is used to fetch the list of posts that are displayed in the home feed.
 /// It fetches the posts from the database and returns a list of
@@ -20,10 +23,20 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
     final postRepository = ref.watch(postRepositoryProvider);
     final userRepository = ref.watch(userRepositoryProvider);
 
+    final postSortingService = ref.watch(postSortingProvider);
+    final sortOption = ref.watch(feedSortOptionsProvider);
+
     final position = await geoLocationService.getCurrentPosition();
 
-    final postsFirestore =
-        await postRepository.getNearPosts(position, kmPostRadius);
+    List<PostFirestore> postsFirestore = await postRepository.getNearPosts(
+      position,
+      kmPostRadius,
+    );
+    postsFirestore = postSortingService.sort(
+      postsFirestore,
+      sortOption,
+      position,
+    );
 
     final postOwnersId =
         postsFirestore.map((post) => post.data.ownerId).toSet();
