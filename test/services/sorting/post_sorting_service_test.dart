@@ -130,8 +130,12 @@ void main() {
   group("Nonempty onTop attribute", () {
     final positionsToPutOnTop =
         GeoPointGenerator.generatePositions(userPosition0, 5, 0);
+
+    /// The posts that we will ask to put on top, if in the list
     final postsToPutOnTop =
         postGenerator.generatePostsAtDifferentLocations(positionsToPutOnTop);
+
+    /// The posts that will actually be in the list to be sorted
     final existingPostsToPutOnTop = postsToPutOnTop.take(3).toList();
 
     for (final option in PostSortOption.values) {
