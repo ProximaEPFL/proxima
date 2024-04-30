@@ -9,7 +9,7 @@ typedef UserPostsState = List<UserPost>;
 /// Provides a refreshable async list of posts for the currently logged in user.
 /// Built for the profile page to display all posts a user made and potentially
 /// delete them as requested.
-class UserPostsViewModel extends AsyncNotifier<UserPostsState> {
+class UserPostsViewModel extends AutoDisposeAsyncNotifier<UserPostsState> {
   UserPostsViewModel();
 
   @override
@@ -47,6 +47,6 @@ class UserPostsViewModel extends AsyncNotifier<UserPostsState> {
 }
 
 final userPostsProvider =
-    AsyncNotifierProvider<UserPostsViewModel, UserPostsState>(
+    AutoDisposeAsyncNotifierProvider<UserPostsViewModel, UserPostsState>(
   () => UserPostsViewModel(),
 );

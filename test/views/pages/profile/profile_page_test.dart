@@ -202,6 +202,46 @@ void main() {
       final centauriText = find.text("username_8456 · 0 Centauri");
       expect(centauriText, findsOneWidget);
     });
+
+    testWidgets("Posts refreshing works correctly", (tester) async {
+      // TODO
+      await tester.pumpWidget(mockedProfilePage);
+      await tester.pumpAndSettle();
+
+      //Check tab on the first post
+      final infoCardPost = find.byKey(ProfileInfoCard.infoCardKey);
+      expect(infoCardPost, findsWidgets);
+
+      // Tap on the first post
+      await tester.tap(infoCardPost.first);
+      await tester.pumpAndSettle();
+
+      // Check that the post popup is displayed
+      final postPopup = find.byType(ProfileInfoPopUp);
+      expect(postPopup, findsOneWidget);
+
+      //Check that the title of the pop up is displayed
+      final postPopupTitle = find.byKey(ProfileInfoPopUp.popUpTitleKey);
+      expect(postPopupTitle, findsOneWidget);
+
+      //Check that the description of the pop up is displayed
+      final postPopupDescription =
+          find.byKey(ProfileInfoPopUp.popUpDescriptionKey);
+      expect(postPopupDescription, findsOneWidget);
+
+      //Check that the delete button is displayed
+      final postPopupDeleteButton =
+          find.byKey(ProfileInfoPopUp.popUpDeleteButtonKey);
+      expect(postPopupDeleteButton, findsOneWidget);
+
+      //Check clicking on the delete button come back to the profile page
+      await tester.tap(postPopupDeleteButton);
+      await tester.pumpAndSettle();
+
+      //Check that the profile page is displayed
+      final profilePage = find.byType(ProfilePage);
+      expect(profilePage, findsOneWidget);
+    });
   });
 
   group("Navigation", () {
