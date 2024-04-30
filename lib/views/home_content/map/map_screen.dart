@@ -40,7 +40,7 @@ class MapScreen extends ConsumerWidget {
           key: mapScreenKey,
           body: Column(
             children: [
-              const MapSelectionOptionChips(),
+              MapSelectionOptionChips(mapInfo: value),
               const Divider(key: dividerKey),
               //TODO: change the map when clicking on a selection option
               PostMap(
