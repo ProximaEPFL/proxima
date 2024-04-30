@@ -37,5 +37,21 @@ void main() {
 
       expect(userPost, userPostCopy);
     });
+
+    test("inequality test on content", () {
+      const userPost1 = UserPost(
+        postId: PostIdFirestore(value: "post_1"),
+        title: "title",
+        description: "description 1",
+      );
+
+      const userPost2 = UserPost(
+        postId: PostIdFirestore(value: "post_1"),
+        title: "title",
+        description: "description 2",
+      );
+
+      expect(userPost1 != userPost2, true);
+    });
   });
 }
