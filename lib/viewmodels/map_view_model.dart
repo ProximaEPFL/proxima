@@ -1,28 +1,22 @@
 import "dart:async";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/services/geolocation_service.dart";
-
-class MapInfo {
-  MapInfo({
-    required this.currentLocation,
-  });
-  final LatLng currentLocation;
-}
+import "package:proxima/models/ui/map_info.dart";
+import "package:proxima/views/option_widgets/map/map_selection_option.dart";
 
 // TODO: For now, this is code with mock data.
 // This will just be replaced when we implement a real view model anyway.
 class MapViewModel extends AsyncNotifier<MapInfo> {
   @override
   Future<MapInfo> build() async {
-    final location =
-        await ref.read(geoLocationServiceProvider).getCurrentPosition();
-    return MapInfo(
-        currentLocation: LatLng(location.latitude, location.longitude));
+    return const MapInfo(
+      currentLocation: LatLng(46.519653, 6.632273),
+      selectOption: MapSelectionOptions.nearby,
+    );
   }
 
-  /// Refresh the widget
-  /// This will put the state of the viewmodel to loading, fetch the location
+  /// Refresh the mapInfo.
+  /// This will put the state of the viewmodel to loading
   /// and update the state accordingly
   Future<void> refresh() async {
     state = const AsyncValue.loading();

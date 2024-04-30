@@ -2,13 +2,14 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/ui/map_info.dart";
 import "package:proxima/services/geolocation_service.dart";
-import "package:proxima/viewmodels/map_view_model.dart";
+import "package:proxima/viewmodels/home_view_model.dart";
 
 class PostMap extends ConsumerWidget {
   final MapInfo mapInfo;
 
-  static const postMapKey = Key("PostMap");
+  static const postMapKey = Key("postMap");
 
   const PostMap({
     super.key,
@@ -59,7 +60,7 @@ class PostMap extends ConsumerWidget {
           Circle(
             circleId: const CircleId("1"),
             center: mapInfo.currentLocation,
-            radius: 100,
+            radius: HomeViewModel.kmPostRadius * 1000,
             fillColor: Colors.black26,
             strokeWidth: 0,
           ),

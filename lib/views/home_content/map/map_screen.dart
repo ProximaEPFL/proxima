@@ -3,13 +3,13 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/map_view_model.dart";
 import "package:proxima/views/home_content/map/post_map.dart";
-import "package:proxima/views/select_option_widgets/map_selection_option_chips.dart";
+import "package:proxima/views/option_widgets/map/map_selection_option_chips.dart";
 
 class MapScreen extends ConsumerWidget {
   const MapScreen({super.key});
 
-  static const mapScreenKey = Key("map");
-  static const dividerKey = Key("Divider");
+  static const mapScreenKey = Key("mapScreen");
+  static const dividerKey = Key("divider");
   static const refreshButtonKey = Key("refreshButton");
 
   @override
