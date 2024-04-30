@@ -2,8 +2,6 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/database/post/post_data.dart";
-import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/profile/components/profile_badge.dart";
@@ -204,43 +202,23 @@ void main() {
     });
 
     testWidgets("Posts refreshing works correctly", (tester) async {
-      // TODO
       await tester.pumpWidget(mockedProfilePage);
       await tester.pumpAndSettle();
 
-      //Check tab on the first post
-      final infoCardPost = find.byKey(ProfileInfoCard.infoCardKey);
-      expect(infoCardPost, findsWidgets);
-
-      // Tap on the first post
-      await tester.tap(infoCardPost.first);
-      await tester.pumpAndSettle();
-
-      // Check that the post popup is displayed
-      final postPopup = find.byType(ProfileInfoPopUp);
-      expect(postPopup, findsOneWidget);
-
-      //Check that the title of the pop up is displayed
-      final postPopupTitle = find.byKey(ProfileInfoPopUp.popUpTitleKey);
-      expect(postPopupTitle, findsOneWidget);
-
-      //Check that the description of the pop up is displayed
-      final postPopupDescription =
-          find.byKey(ProfileInfoPopUp.popUpDescriptionKey);
-      expect(postPopupDescription, findsOneWidget);
-
-      //Check that the delete button is displayed
-      final postPopupDeleteButton =
-          find.byKey(ProfileInfoPopUp.popUpDeleteButtonKey);
-      expect(postPopupDeleteButton, findsOneWidget);
-
-      //Check clicking on the delete button come back to the profile page
-      await tester.tap(postPopupDeleteButton);
-      await tester.pumpAndSettle();
-
-      //Check that the profile page is displayed
+      // Check that the profile page is displayed
       final profilePage = find.byType(ProfilePage);
       expect(profilePage, findsOneWidget);
+
+      // Check that the post info column is displayed
+      final postColumn = find.byKey(ProfileUserPosts.postColumnKey);
+      expect(postColumn, findsOneWidget);
+
+      // Refresh the user posts
+      await tester.fling(postColumn, const Offset(100, 400.0), 1000.0);
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
+
+      // Check that refreshing washandled correctly
+      expect(find.byKey(ProfileUserPosts.postColumnKey), findsOneWidget);
     });
   });
 
