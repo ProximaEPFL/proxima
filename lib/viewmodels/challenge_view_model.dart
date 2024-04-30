@@ -6,8 +6,6 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
-// TODO: For now, this is duplicated code with the mock from the tests.
-// This will just be replaced when we implement a real view model anyway.
 class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
   @override
   Future<List<ChallengeCardData>> build() async {
