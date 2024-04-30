@@ -6,6 +6,9 @@ import "package:proxima/viewmodels/login_view_model.dart";
 
 typedef UserPostsState = List<UserPost>;
 
+/// Provides a refreshable async list of posts for the currently logged in user.
+/// Built for the profile page to display all posts a user made and potentially
+/// delete them as requested.
 class UserPostsViewModel extends AsyncNotifier<UserPostsState> {
   UserPostsViewModel();
 
