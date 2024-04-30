@@ -7,6 +7,7 @@ import "package:proxima/viewmodels/map_view_model.dart";
 
 class PostMap extends ConsumerWidget {
   final MapInfo mapInfo;
+  final initialZoomLevel = 17.5;
 
   static const postMapKey = Key("postMap");
 
@@ -45,7 +46,7 @@ class PostMap extends ConsumerWidget {
         tiltGesturesEnabled: false,
         initialCameraPosition: CameraPosition(
           target: mapInfo.currentLocation,
-          zoom: 17.5,
+          zoom: initialZoomLevel,
         ),
         circles: positionNotifier.circles,
         onMapCreated: positionNotifier.onMapCreated,
