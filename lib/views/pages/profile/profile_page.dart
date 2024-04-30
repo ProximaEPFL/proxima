@@ -7,7 +7,7 @@ import "package:proxima/views/pages/profile/components/profile_badge.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_column.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_row.dart";
-import "package:proxima/views/pages/profile/profile_data/user_posts.dart";
+import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
 
 /// This widget is used to display the profile page
 /// It contains the user info, centauri points, badges, user posts and user comments

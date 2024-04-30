@@ -9,7 +9,7 @@ import "package:proxima/views/pages/profile/components/user_account.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_pop_up.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_row.dart";
-import "package:proxima/views/pages/profile/profile_data/user_posts.dart";
+import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
 import "../../../mocks/data/firestore_user.dart";
