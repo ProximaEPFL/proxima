@@ -35,9 +35,9 @@ class ProfileUserPosts extends HookConsumerWidget {
             )
             .toList();
 
-        // TODO provide refreshing using pull down
         return ProfileInfoColumn(
           key: postColumnKey,
+          onRefresh: () => ref.read(userPostsProvider.notifier).refresh(),
           itemList: posts,
         );
       },
