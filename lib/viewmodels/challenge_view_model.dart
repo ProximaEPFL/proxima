@@ -1,5 +1,6 @@
 import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/challenge_card_data.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
@@ -25,18 +26,26 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
     Iterable<Future<ChallengeCardData>> uiChallenges =
         firestoreChallenges.map((challenge) async {
       final post = await postRepository.getPost(challenge.postId);
-      final double distanceKm = GeoFirePoint(currentPosition)
-          .distanceBetweenInKm(geopoint: post.location.geoPoint);
-      final int distanceM = (distanceKm * 1000).toInt();
-
       final timeLeft = challenge.data.expiresOn.toDate().difference(now);
 
-      return ChallengeCardData.solo(
-        title: post.data.title,
-        distance: distanceM,
-        timeLeft: timeLeft.inHours,
-        reward: ChallengeRepositoryService.soloChallengeReward,
-      );
+      if (!challenge.data.isCompleted) {
+        final double distanceKm = GeoFirePoint(currentPosition)
+            .distanceBetweenInKm(geopoint: post.location.geoPoint);
+        final int distanceM = (distanceKm * 1000).toInt();
+
+        return ChallengeCardData.solo(
+          title: post.data.title,
+          distance: distanceM,
+          timeLeft: timeLeft.inHours,
+          reward: ChallengeRepositoryService.soloChallengeReward,
+        );
+      } else {
+        return ChallengeCardData.soloFinished(
+          title: post.data.title,
+          timeLeft: timeLeft.inHours,
+          reward: ChallengeRepositoryService.soloChallengeReward,
+        );
+      }
     });
 
     return Future.wait(uiChallenges);
