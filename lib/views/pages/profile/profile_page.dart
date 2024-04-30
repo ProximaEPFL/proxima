@@ -49,7 +49,7 @@ class ProfilePage extends HookConsumerWidget {
         ProfileInfoCard(
           shadow: shadow,
           content:
-              "Here is a super comment on a super post that talks about something that is super cool and is located in a super spot that is very cosy and nice",
+              "Here is a FAKE data comment on a super post that talks about something that is super cool and is located in a super spot that is very cosy and nice",
           onDelete: () async {
             // TODO handle comment deletion
           },
