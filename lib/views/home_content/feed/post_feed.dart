@@ -3,9 +3,9 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
+import "package:proxima/views/home_content/feed/feed_sort_option_chips.dart";
 import "package:proxima/views/home_content/feed/post_card/post_card.dart";
 import "package:proxima/views/navigation/routes.dart";
-import "package:proxima/views/home_content/feed/feed_sort_option_chips.dart";
 
 /// This widget is the feed of the home page
 /// It contains the posts
