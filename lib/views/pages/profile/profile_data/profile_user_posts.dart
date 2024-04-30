@@ -28,9 +28,8 @@ class ProfileUserPosts extends HookConsumerWidget {
                 title: p.title,
                 content: p.description,
                 shadow: shadow,
-                onDelete: () async {
-                  // TODO handle post deletion
-                },
+                onDelete: () =>
+                    ref.read(userPostsProvider.notifier).deletePost(p.postId),
               ),
             )
             .toList();
