@@ -126,4 +126,49 @@ void main() {
       });
     }
   });
+
+  group("Nonempty onTop attribute", () {
+    final positionsToPutOnTop =
+        GeoPointGenerator.generatePositions(userPosition0, 5, 0);
+    final postsToPutOnTop =
+        postGenerator.generatePostsAtDifferentLocations(positionsToPutOnTop);
+    final existingPostsToPutOnTop = postsToPutOnTop.take(3).toList();
+
+    for (final option in PostSortOption.values) {
+      test("Correct sort on option ${option.name}", () {
+        final allPosts = posts + existingPostsToPutOnTop;
+        allPosts.shuffle();
+
+        final sorted = sortingService.sort(
+          allPosts,
+          option,
+          userPosition0,
+          putOnTop: postsToPutOnTop.toSet(),
+        );
+
+        // Test for the global structure
+        expect(sorted, unorderedEquals(allPosts));
+        final top = sorted.take(existingPostsToPutOnTop.length);
+        expect(
+          top,
+          unorderedEquals(existingPostsToPutOnTop),
+        );
+        final bottom = sorted.skip(existingPostsToPutOnTop.length);
+        expect(
+          bottom,
+          unorderedEquals(posts),
+        );
+
+        // Also verify the substructure
+        final scoresTop = top.map(
+          (post) => option.scoreFunction(post, userPosition0),
+        );
+        expectSorted(scoresTop, option.sortIncreasing);
+        final scoresBottom = bottom.map(
+          (post) => option.scoreFunction(post, userPosition0),
+        );
+        expectSorted(scoresBottom, option.sortIncreasing);
+      });
+    }
+  });
 }
