@@ -1,4 +1,5 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/user_post.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/utils/ui/circular_value.dart";
@@ -35,6 +36,12 @@ class UserPostsViewModel extends AutoDisposeAsyncNotifier<UserPostsState> {
     }).toList();
 
     return posts;
+  }
+
+  Future<void> deletePost(PostIdFirestore postId) async {
+    final postRepository = ref.watch(postRepositoryProvider);
+    await postRepository.deletePost(postId);
+    await refresh();
   }
 
   /// Refresh the list of posts
