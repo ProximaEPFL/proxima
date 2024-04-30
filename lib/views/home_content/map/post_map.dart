@@ -5,7 +5,8 @@ import "package:proxima/viewmodels/home_view_model.dart";
 
 class PostMap extends StatelessWidget {
   final MapInfo mapInfo;
-  final initialZoomLevel = 17.5;
+  static const initialZoomLevel = 17.5;
+``
 
   static const postMapKey = Key("postMap");
 

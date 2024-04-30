@@ -19,5 +19,8 @@ class MapInfo {
   }
 
   @override
-  int get hashCode => currentLocation.hashCode;
+  int get hashCode => Object.hash(
+        currentLocation,
+        selectOption,
+      );
 }
