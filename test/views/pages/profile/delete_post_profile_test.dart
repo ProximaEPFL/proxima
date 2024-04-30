@@ -7,6 +7,7 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
+import "package:proxima/views/pages/profile/info_cards/profile_info_pop_up.dart";
 import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
 
 import "../../../mocks/data/firestore_post.dart";
@@ -55,6 +56,42 @@ void main() {
 
       // Find the delete button on card
       final deleteButton = find.byKey(ProfileInfoCard.deleteButtonCardKey);
+      expect(deleteButton, findsOneWidget);
+
+      await tester.tap(deleteButton);
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
+
+      // Find the empty user posts text
+      final noPostHelper = find.text(ProfileUserPosts.noPostsInfoText);
+      expect(noPostHelper, findsOneWidget);
+
+      // Check no posts left in fake database
+      final userPosts =
+          await fakeFireStore.collection(PostFirestore.collectionName).get();
+      final posts =
+          userPosts.docs.map((data) => PostFirestore.fromDb(data)).toList();
+
+      expect(posts.isEmpty, true);
+    });
+
+    testWidgets("Delete post using pop up", (tester) async {
+      await tester.pumpWidget(mockedProfilePage);
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
+
+      // Check that the post card is displayed
+      final postCard = find.byKey(ProfileInfoCard.infoCardKey);
+      expect(postCard, findsOneWidget);
+
+      // Tap on card and show pop up
+      await tester.tap(postCard);
+      await tester.pumpAndSettle();
+
+      // Pop up is displayed
+      final postPopUp = find.byType(ProfileInfoPopUp);
+      expect(postPopUp, findsOneWidget);
+
+      // Find the delete button on pop up
+      final deleteButton = find.byKey(ProfileInfoPopUp.popUpDeleteButtonKey);
       expect(deleteButton, findsOneWidget);
 
       await tester.tap(deleteButton);
