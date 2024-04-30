@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
-
+import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/views/home_content/feed/post_card/comment_widget.dart";
 import "package:proxima/views/home_content/feed/post_card/user_bar_widget.dart";
 import "package:proxima/views/home_content/feed/post_card/votes_widget.dart";
@@ -9,7 +10,7 @@ import "package:proxima/views/navigation/routes.dart";
 /// This widget is used to display the post card in the home feed.
 /// It contains the post title, description, votes, comments
 /// and the user (profile picture and username).
-class PostCard extends StatelessWidget {
+class PostCard extends ConsumerWidget {
   static const postCardKey = Key("postCard");
   static const postCardTitleKey = Key("postCardTitle");
   static const postCardDescriptionKey = Key("postCardDescription");
@@ -24,12 +25,13 @@ class PostCard extends StatelessWidget {
     required this.postOverview,
   });
 
-  void _onPostSelect(BuildContext context, PostOverview post) {
+  void _onPostSelect(BuildContext context, PostOverview post, WidgetRef ref) {
     Navigator.pushNamed(context, Routes.post.name, arguments: post);
+    ref.read(challengeProvider.notifier).completeChallenge(post.postId);
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final postBody = ListTile(
       title: Text(
         key: postCardTitleKey,
@@ -58,7 +60,7 @@ class PostCard extends StatelessWidget {
             customBorder: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            onTap: () => _onPostSelect(context, postOverview),
+            onTap: () => _onPostSelect(context, postOverview, ref),
             child: CommentWidget(
               key: postCardCommentsKey,
               commentNumber: postOverview.commentNumber,
@@ -73,7 +75,7 @@ class PostCard extends StatelessWidget {
       key: postCardKey,
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onTap: () => _onPostSelect(context, postOverview),
+        onTap: () => _onPostSelect(context, postOverview, ref),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

@@ -47,18 +47,26 @@ class ChallengeRepositoryService {
         .collection(ChallengeFirestore.pastChallengesSubCollectionName);
   }
 
-  /// Completes the challenge of the user with id [uid] on the post with id [pid]
-  Future<void> completeChallenge(
+  /// Completes the challenge of the user with id [uid] on the post with id [pid].
+  /// Returns true if the challenge is valid and was completed, and false otherwise.
+  Future<bool> completeChallenge(
     UserIdFirestore uid,
     PostIdFirestore pid,
   ) async {
     final userDocRef =
         _firestore.collection(UserFirestore.collectionName).doc(uid.value);
+    final challengeSnap =
+        await _activeChallengesRef(userDocRef).doc(pid.value).get();
+
+    if (!challengeSnap.exists) {
+      return false;
+    }
+
     await _activeChallengesRef(userDocRef).doc(pid.value).update({
       ChallengeData.isCompletedField: true,
     });
-
     await _userRepositoryService.addPoints(uid, soloChallengeReward);
+    return true;
   }
 
   /// Returns the active challenges of the user with id [uid] who is located at [pos].
