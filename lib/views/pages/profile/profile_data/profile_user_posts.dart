@@ -5,12 +5,12 @@ import "package:proxima/viewmodels/user_posts_view_model.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_column.dart";
 
-class UserPosts extends HookConsumerWidget {
+class ProfileUserPosts extends HookConsumerWidget {
   static const postColumnKey = Key("postColumn");
 
   final BoxShadow? shadow;
 
-  const UserPosts({
+  const ProfileUserPosts({
     super.key,
     this.shadow,
   });
@@ -35,6 +35,7 @@ class UserPosts extends HookConsumerWidget {
             )
             .toList();
 
+        // TODO provide refreshing using pull down
         return ProfileInfoColumn(
           key: postColumnKey,
           itemList: posts,

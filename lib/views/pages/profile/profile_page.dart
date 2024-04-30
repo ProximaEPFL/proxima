@@ -77,7 +77,7 @@ class ProfilePage extends HookConsumerWidget {
     final tabsContent = Expanded(
       child: TabBarView(
         children: [
-          UserPosts(shadow: shadow),
+          ProfileUserPosts(shadow: shadow),
           comments,
         ],
       ),

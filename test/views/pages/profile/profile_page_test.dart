@@ -9,6 +9,7 @@ import "package:proxima/views/pages/profile/components/user_account.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_pop_up.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_row.dart";
+import "package:proxima/views/pages/profile/profile_data/user_posts.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
 import "../../../mocks/data/firestore_user.dart";
@@ -53,7 +54,7 @@ void main() {
       expect(postCard, findsWidgets);
 
       // Check that the info column is displayed
-      final infoColumn = find.byKey(ProfilePage.postColumnKey);
+      final infoColumn = find.byKey(ProfileUserPosts.postColumnKey);
       expect(infoColumn, findsOneWidget);
 
       // Check that the info row is displayed
@@ -167,7 +168,7 @@ void main() {
       expect(commentTab, findsOneWidget);
 
       //Check that post column is displayed
-      final postColumn = find.byKey(ProfilePage.postColumnKey);
+      final postColumn = find.byKey(ProfileUserPosts.postColumnKey);
       expect(postColumn, findsOneWidget);
 
       // Tap on the comment tab
