@@ -62,6 +62,11 @@ class ChallengeRepositoryService {
       return false;
     }
 
+    final challengeData = ChallengeData.fromDb(challengeSnap.data()!);
+    if (challengeData.isCompleted || challengeData.isExpired) {
+      return false;
+    }
+
     await _activeChallengesRef(userDocRef).doc(pid.value).update({
       ChallengeData.isCompletedField: true,
     });
