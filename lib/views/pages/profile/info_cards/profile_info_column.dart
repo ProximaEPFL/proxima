@@ -6,18 +6,15 @@ class ProfileInfoColumn extends StatelessWidget {
   const ProfileInfoColumn({
     super.key,
     required this.itemList,
-    required this.columnKey,
   });
 
   static const _separator = SizedBox(height: 10);
 
   final List<Widget> itemList;
-  final Key columnKey;
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      key: columnKey,
       padding: const EdgeInsets.all(8),
       scrollDirection: Axis.vertical,
       itemCount: itemList.length,

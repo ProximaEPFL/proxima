@@ -8,7 +8,6 @@ import "package:proxima/views/pages/profile/info_cards/profile_info_column.dart"
 class UserPosts extends HookConsumerWidget {
   static const postColumnKey = Key("postColumn");
 
-  // TODO replace by Shadow
   final BoxShadow? shadow;
 
   const UserPosts({
@@ -37,8 +36,8 @@ class UserPosts extends HookConsumerWidget {
             .toList();
 
         return ProfileInfoColumn(
+          key: postColumnKey,
           itemList: posts,
-          columnKey: postColumnKey,
         );
       },
     );
