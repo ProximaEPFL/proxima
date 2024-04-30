@@ -8,6 +8,7 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
+import "package:proxima/services/database/user_repository_service.dart";
 
 import "../../mocks/data/challenge_data.dart";
 import "../../mocks/data/firestore_post.dart";
@@ -19,13 +20,16 @@ void main() {
   late FakeFirebaseFirestore firestore;
   late PostRepositoryService postRepository;
   late ChallengeRepositoryService challengeRepository;
+  late UserRepositoryService userRepository;
 
   setUp(() async {
     firestore = FakeFirebaseFirestore();
     postRepository = PostRepositoryService(firestore: firestore);
+    userRepository = UserRepositoryService(firestore: firestore);
     challengeRepository = ChallengeRepositoryService(
       firestore: firestore,
       postRepositoryService: postRepository,
+      userRepositoryService: userRepository,
     );
   });
 
@@ -219,6 +223,7 @@ void main() {
       final challenges = await challengeRepository.getChallenges(uid, userPos);
       expect(challenges.length, 1);
 
+      setUserFirestore(firestore, testingUserFirestore);
       final challenge = challenges.first;
       expect(challenge.data.isCompleted, false);
       await challengeRepository.completeChallenge(

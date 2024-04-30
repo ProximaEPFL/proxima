@@ -42,3 +42,11 @@ class FirestoreUserGenerator {
     }).toList();
   }
 }
+
+Future<void> setUserFirestore(
+    FirebaseFirestore firestore, UserFirestore user) async {
+  await firestore
+      .collection(UserFirestore.collectionName)
+      .doc(user.uid.value)
+      .set(user.data.toDbData());
+}
