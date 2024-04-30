@@ -1,12 +1,21 @@
+import "package:collection/collection.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:geolocator/geolocator.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/services/sorting/post_sort_option.dart";
+import "package:proxima/services/sorting/post_sorting_service.dart";
 
 import "../../mocks/data/firestore_post.dart";
 import "../../mocks/data/geopoint.dart";
 
+void expectSorted(Iterable<double> iterable, bool ascending) {
+  final factor = ascending ? 1 : -1;
+  expect(iterable.isSorted((a, b) => factor * a.compareTo(b)), true);
+}
+
 void main() {
+  final sortingService = PostSortingService();
+
   final postGenerator = FirestorePostGenerator();
   final positions = GeoPointGenerator.generatePositions(userPosition0, 10, 0);
   final posts = postGenerator.generatePostsAtDifferentLocations(positions);
@@ -97,5 +106,24 @@ void main() {
       "increases by 1 every upvote",
       upvoteDifference,
     );
+  });
+
+  group("Empty onTop attribute", () {
+    for (final option in PostSortOption.values) {
+      test("Correct sort on option ${option.name}", () {
+        final sorted = sortingService.sort(
+          posts,
+          option,
+          userPosition0,
+        );
+
+        expect(sorted, unorderedEquals(posts));
+
+        final scores = sorted.map(
+          (post) => option.scoreFunction(post, userPosition0),
+        );
+        expectSorted(scores, option.sortIncreasing);
+      });
+    }
   });
 }
