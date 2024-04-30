@@ -44,7 +44,6 @@ class MapViewModel extends AsyncNotifier<MapInfo> {
   }
 
   Future<void> animateCamera(LatLng target) async {
-    //avoid .future getter on a completed future
     final controller = await _mapController.future;
     controller.animateCamera(
       CameraUpdate.newCameraPosition(
