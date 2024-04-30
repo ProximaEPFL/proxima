@@ -2,11 +2,22 @@ import "dart:async";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
+@immutable
 class MapInfo {
-  MapInfo({
+  const MapInfo({
     required this.currentLocation,
   });
   final LatLng currentLocation;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is MapInfo && other.currentLocation == currentLocation;
+  }
+
+  @override
+  int get hashCode => currentLocation.hashCode;
 }
 
 // TODO: For now, this is code with mock data.
