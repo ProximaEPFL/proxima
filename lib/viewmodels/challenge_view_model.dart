@@ -35,11 +35,16 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
         title: post.data.title,
         distance: distanceM,
         timeLeft: timeLeft.inHours,
-        reward: 500,
+        reward: ChallengeRepositoryService.soloChallengeReward,
       );
     });
 
     return Future.wait(uiChallenges);
+  }
+
+  Future<void> refresh() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => build());
   }
 }
 
