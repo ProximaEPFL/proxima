@@ -38,7 +38,7 @@ class ProfileUserPosts extends HookConsumerWidget {
 
         return ProfileInfoColumn(
           key: postColumnKey,
-          onRefresh: () => ref.read(userPostsProvider.notifier).refresh(),
+          onRefresh: ref.read(userPostsProvider.notifier).refresh,
           itemList: posts,
           emptyInfoText: noPostsInfoText,
         );
