@@ -3,6 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 
+import "../overrides/override_challenges_view_model.dart";
 import "../overrides/override_home_view_model.dart";
 
 const homePageApp = MaterialApp(
@@ -16,7 +17,7 @@ final emptyHomePageProvider = ProviderScope(
 );
 
 final nonEmptyHomePageProvider = ProviderScope(
-  overrides: mockNonEmptyHomeViewModelOverride,
+  overrides: [...mockNonEmptyHomeViewModelOverride, ...mockChallengeOverride],
   child: homePageApp,
 );
 
