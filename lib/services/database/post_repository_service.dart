@@ -48,13 +48,17 @@ class PostRepositoryService {
     return PostFirestore.fromDb(docSnap);
   }
 
-  /// This method will retrieve all the posts that are within a radius of [radius]
+  /// This method will retrieve all the posts that
+  /// are within a maximum radius of [maxRadius]
+  /// and a minimum radius of [minRadius]
   /// from the geo point [point] in the database
   /// And then those posts are returned
+  /// [minRadius] is optional and 0 by default
   Future<List<PostFirestore>> getNearPosts(
     GeoPoint point,
-    double radius,
-  ) async {
+    double maxRadius, [
+    double minRadius = 0,
+  ]) async {
     final geoFirePoint = GeoFirePoint(point);
 
     // Function to get the GeoPoint from the data
@@ -67,7 +71,7 @@ class PostRepositoryService {
     final posts =
         await GeoCollectionReference(_collectionRef).fetchWithinWithDistance(
       center: geoFirePoint,
-      radiusInKm: radius,
+      radiusInKm: maxRadius,
       field: PostFirestore.locationField,
       geohashField: PostLocationFirestore.geohashField,
       geopointFrom: geopointFrom,
@@ -79,7 +83,8 @@ class PostRepositoryService {
       // We need to filter the posts because the query is not exact
       final postPoint = post.location.geoPoint;
 
-      return geoFirePoint.distanceBetweenInKm(geopoint: postPoint) <= radius;
+      double distance = geoFirePoint.distanceBetweenInKm(geopoint: postPoint);
+      return minRadius <= distance && distance <= maxRadius;
     }).toList();
   }
 
