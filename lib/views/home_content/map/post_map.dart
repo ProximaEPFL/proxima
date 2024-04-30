@@ -4,6 +4,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_info.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
+import "package:proxima/viewmodels/map_view_model.dart";
 
 class PostMap extends ConsumerWidget {
   final MapInfo mapInfo;
@@ -18,21 +19,13 @@ class PostMap extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentPosition = ref.watch(liveLocationServiceProvider);
-
-    GoogleMapController? mapController;
+    final positionNotifier = ref.watch(mapProvider.notifier);
 
     currentPosition.when(
       data: (data) {
         debugPrint("Live location: ${data!.latitude}, ${data.longitude}");
-        if (mapController == null) return;
-        mapController!.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-              target: LatLng(data.latitude, data.longitude),
-              zoom: 17.5,
-            ),
-          ),
-        );
+        positionNotifier.animateCamera(LatLng(data.latitude, data.longitude));
+        positionNotifier.redrawCircle(LatLng(data.latitude, data.longitude));
       },
       error: (error, _) {
         throw Exception("Live location error: $error");
@@ -55,18 +48,8 @@ class PostMap extends ConsumerWidget {
           target: mapInfo.currentLocation,
           zoom: 17.5,
         ),
-        circles: {
-          Circle(
-            circleId: const CircleId("1"),
-            center: mapInfo.currentLocation,
-            radius: HomeViewModel.kmPostRadius * 1000,
-            fillColor: Colors.black26,
-            strokeWidth: 0,
-          ),
-        },
-        onMapCreated: (GoogleMapController controller) {
-          mapController = controller;
-        },
+        circles: positionNotifier.circles,
+        onMapCreated: positionNotifier.onMapCreated,
       ),
     );
   }
