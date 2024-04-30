@@ -2,6 +2,8 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/post/post_data.dart";
+import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/profile/components/profile_badge.dart";
@@ -12,7 +14,9 @@ import "package:proxima/views/pages/profile/info_cards/profile_info_row.dart";
 import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
+import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
+import "../../../mocks/data/geopoint.dart";
 import "../../../mocks/providers/provider_homepage.dart";
 import "../../../mocks/providers/provider_profile_page.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
@@ -35,6 +39,12 @@ void main() {
         .doc(expectedUser.uid.value)
         .set(expectedUser.data.toDbData());
 
+    final postsGenerator = FirestorePostGenerator();
+    setPostFirestore(
+      postsGenerator.createUserPost(testingUserFirestoreId, userPosition1),
+      fakeFireStore,
+    );
+
     mockedProfilePage = profilePageProvider(
       fakeFireStore,
     );
@@ -43,35 +53,35 @@ void main() {
   group("Widgets display", () {
     testWidgets("Display badges, posts comments and centauri", (tester) async {
       await tester.pumpWidget(mockedProfilePage);
-      await tester.pumpAndSettle();
-
-      // Check that badges are displayed
-      final badgeCard = find.byKey(ProfileBadge.badgeKey);
-      expect(badgeCard, findsWidgets);
-
-      //Check that the post card is displayed
-      final postCard = find.byKey(ProfileInfoCard.infoCardKey);
-      expect(postCard, findsWidgets);
-
-      // Check that the info column is displayed
-      final infoColumn = find.byKey(ProfileUserPosts.postColumnKey);
-      expect(infoColumn, findsOneWidget);
-
-      // Check that the info row is displayed
-      final infoRowWidget = find.byKey(ProfileInfoRow.infoRowKey);
-      expect(infoRowWidget, findsOneWidget);
-
-      //Check that centauri points are displayed
-      final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
-      expect(centauriPoints, findsOneWidget);
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
       //Check that the user account is displayed
       final userAccount = find.byKey(UserAccount.userInfoKey);
       expect(userAccount, findsOneWidget);
 
+      //Check that centauri points are displayed
+      final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
+      expect(centauriPoints, findsOneWidget);
+
+      // Check that the info row is displayed
+      final infoRowWidget = find.byKey(ProfileInfoRow.infoRowKey);
+      expect(infoRowWidget, findsOneWidget);
+
+      // Check that badges are displayed
+      final badgeCard = find.byKey(ProfileBadge.badgeKey);
+      expect(badgeCard, findsWidgets);
+
       //Check that the tab is displayed
       final tab = find.byKey(ProfilePage.tabKey);
       expect(tab, findsOneWidget);
+
+      // Check that the post info column is displayed
+      final infoColumn = find.byKey(ProfileUserPosts.postColumnKey);
+      expect(infoColumn, findsOneWidget);
+
+      //Check that the post card is displayed
+      final postCard = find.byKey(ProfileInfoCard.infoCardKey);
+      expect(postCard, findsWidgets);
     });
   });
 
