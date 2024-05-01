@@ -18,6 +18,10 @@ class UserBarWidget extends StatelessWidget {
   final String posterUsername;
   final Timestamp postTimestamp;
 
+  String _formattedTimestamp(Timestamp timestamp) {
+    return format(timestamp.toDate());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -41,7 +45,7 @@ class UserBarWidget extends StatelessWidget {
         ),
         Text(
           key: timestampTextKey,
-          format(postTimestamp.toDate()),
+          _formattedTimestamp(postTimestamp),
         ),
       ],
     );
