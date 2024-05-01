@@ -114,4 +114,41 @@ void main() {
     expect(uiChallenge.reward, ChallengeRepositoryService.soloChallengeReward);
     expect(uiChallenge.title, post.data.title);
   });
+
+  test("Challenge can be completed", () async {
+    const extraTime = Duration(hours: 3);
+    final challengeGenerator = FirestoreChallengeGenerator();
+    final postGenerator = FirestorePostGenerator();
+
+    await setUserFirestore(fakeFireStore, testingUserFirestore);
+
+    final post = postGenerator.generatePostAt(
+      userPosition1,
+    ); // the challenge is added by hand, so we can use the user position
+    await setPostFirestore(post, fakeFireStore);
+
+    final challenge = challengeGenerator.generate(false, extraTime);
+    await setChallenge(fakeFireStore, challenge, testingUserFirestoreId);
+
+    await container
+        .read(challengeProvider.notifier)
+        .completeChallenge(challenge.postId);
+    final challenges = await container.read(challengeProvider.future);
+    expect(challenges.length, 1);
+
+    final uiChallenge = challenges.first;
+    expect(uiChallenge.distance, null);
+    expect(
+      uiChallenge.timeLeft,
+      anyOf(2, 3),
+    ); // 3 hours - 1 second or 3 hours - 0 seconds (we can't bet on the time of the above execution)
+    expect(uiChallenge.isFinished, true);
+    expect(uiChallenge.reward, ChallengeRepositoryService.soloChallengeReward);
+    expect(uiChallenge.title, post.data.title);
+
+    // tests that points are added
+    final updatedUser = await userRepo.getUser(testingUserFirestoreId);
+    final points = updatedUser.data.centauriPoints;
+    expect(points, ChallengeRepositoryService.soloChallengeReward);
+  });
 }
