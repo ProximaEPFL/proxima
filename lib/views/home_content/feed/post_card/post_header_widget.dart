@@ -4,13 +4,14 @@ import "package:intl/intl.dart";
 import "package:proxima/utils/ui/user_avatar.dart";
 import "package:timeago/timeago.dart";
 
-/// This widget is used to display the user bar in the post card.
-/// It contains the user's profile picture and username.
-class UserBarWidget extends StatelessWidget {
+/// This widget is used to display the info bar in the post card.
+/// It contains the user's profile picture and username
+/// and the publication time of the post.
+class PostHeaderWidget extends StatelessWidget {
   static const displayNameTextKey = Key("displayNameText");
   static const timestampTextKey = Key("timestampText");
 
-  const UserBarWidget({
+  const PostHeaderWidget({
     super.key,
     required this.posterUsername,
     required this.postTimestamp,
