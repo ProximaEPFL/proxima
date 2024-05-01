@@ -21,7 +21,7 @@ class UserBarWidget extends StatelessWidget {
 
   /// Converts a timestamp to a time ago string.
   String _timestampToTimeAgo(Timestamp timestamp) {
-    return "${format(timestamp.toDate(), locale: "en_short")} ago";
+    return format(timestamp.toDate(), locale: "en_short");
   }
 
   /// Converts a timestamp to a user readable date string.
