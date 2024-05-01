@@ -10,6 +10,7 @@ import "package:proxima/views/navigation/routes.dart";
 /// This widget is used to display the post card in the home feed.
 /// It contains the post title, description, votes, comments
 /// and the user (profile picture and username).
+/// On click, the corresponding challenge (if it exists), is marked as completed.
 class PostCard extends ConsumerWidget {
   static const postCardKey = Key("postCard");
   static const postCardTitleKey = Key("postCardTitle");
