@@ -6,7 +6,6 @@ import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/home_content/feed/feed_sort_option_chips.dart";
 import "package:proxima/views/home_content/feed/post_card/post_card.dart";
 import "package:proxima/views/navigation/routes.dart";
-import "package:proxima/views/option_widgets/feed/feed_sort_option_chips.dart";
 
 /// This widget is the feed of the home page
 /// It contains the posts
