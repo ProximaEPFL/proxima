@@ -29,4 +29,4 @@ Link to the [Penpot Project](https://design.penpot.app/#/workspace/43442e9d-d45f
 Here is the first architecture diagram of the application for MS1.
 This should give a quick reference/overview on the overall architecture and the relations between the different screens, data sources, and internal state of the application.
 
-<img src="https://github.com/ProximaEPFL/proxima/assets/53620532/6fbd6667-f2b8-426d-83d8-08447239ceca" alt="Proxima Arichtecture Diagram" width="600">
+<img src="https://github.com/ProximaEPFL/proxima/assets/53620532/d90eba05-3b6e-443e-8157-28f755ca5d61" alt="Proxima Arichtecture Diagram" width="600">
