@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:intl/intl.dart";
 import "package:proxima/views/home_content/feed/post_card/post_card.dart";
 import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
@@ -10,7 +9,6 @@ import "package:proxima/views/pages/post/post_page.dart";
 import "package:proxima/views/pages/post/post_page_widget/bottom_bar_add_comment.dart";
 import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.dart";
 import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
-import "package:timeago/timeago.dart";
 
 import "../../../mocks/data/post_comment.dart";
 import "../../../mocks/data/post_overview.dart";
@@ -113,7 +111,7 @@ void main() {
       expect(
         postUserBarTimestampTextWidget is Text &&
             postUserBarTimestampTextWidget.data ==
-                format(post.publicationTime.toDate(), locale: "en_short"),
+                timestampToTimeAgo(post.publicationTime),
         true,
       );
 
@@ -127,8 +125,7 @@ void main() {
       final tooltipMessage = (tooltipWidget as Tooltip).message;
       expect(
         tooltipMessage,
-        DateFormat("EEEE, MMMM d, yyyy HH:mm 'UTC'z")
-            .format(post.publicationTime.toDate().toUtc()),
+        timestampToDate(post.publicationTime),
       );
     });
 

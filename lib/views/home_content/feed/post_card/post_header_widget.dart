@@ -4,6 +4,18 @@ import "package:intl/intl.dart";
 import "package:proxima/utils/ui/user_avatar.dart";
 import "package:timeago/timeago.dart";
 
+/// Converts a timestamp to a time ago string.
+String timestampToTimeAgo(Timestamp timestamp) {
+  return format(timestamp.toDate(), locale: "en_short");
+}
+
+/// Converts a timestamp to a user readable date string.
+String timestampToDate(Timestamp timestamp) {
+  DateTime dateTime = timestamp.toDate();
+  DateFormat formatter = DateFormat("EEEE, MMMM d, yyyy HH:mm 'UTC'z");
+  return formatter.format(dateTime.toUtc());
+}
+
 /// This widget is used to display the info bar in the post card.
 /// It contains the user's profile picture and username
 /// and the publication time of the post.
@@ -19,18 +31,6 @@ class PostHeaderWidget extends StatelessWidget {
 
   final String posterUsername;
   final Timestamp postTimestamp;
-
-  /// Converts a timestamp to a time ago string.
-  String _timestampToTimeAgo(Timestamp timestamp) {
-    return format(timestamp.toDate(), locale: "en_short");
-  }
-
-  /// Converts a timestamp to a user readable date string.
-  String _timestampToDate(Timestamp timestamp) {
-    DateTime dateTime = timestamp.toDate();
-    DateFormat formatter = DateFormat("EEEE, MMMM d, yyyy HH:mm 'UTC'z");
-    return formatter.format(dateTime.toUtc());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +51,10 @@ class PostHeaderWidget extends StatelessWidget {
     );
 
     final publicationTime = Tooltip(
-      message: _timestampToDate(postTimestamp),
+      message: timestampToDate(postTimestamp),
       child: Text(
         key: timestampTextKey,
-        _timestampToTimeAgo(postTimestamp),
+        timestampToTimeAgo(postTimestamp),
       ),
     );
 
