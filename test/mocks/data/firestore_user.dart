@@ -33,12 +33,20 @@ class FirestoreUserGenerator {
     });
   }
 
-  static List<UserFirestore> generateUserFirestore(int count) {
-    return generateUserData(count).mapIndexed((i, data) {
+  static List<UserFirestore> generateUserFirestoreWithId(
+    List<UserIdFirestore> ids,
+  ) {
+    return generateUserData(ids.length).mapIndexed((i, data) {
       return UserFirestore(
-        uid: UserIdFirestore(value: "user_id_$i"),
+        uid: ids[i],
         data: data,
       );
     }).toList();
+  }
+
+  static List<UserFirestore> generateUserFirestore(int count) {
+    return generateUserFirestoreWithId(
+      List.generate(count, (i) => UserIdFirestore(value: "user_id_$i")),
+    );
   }
 }
