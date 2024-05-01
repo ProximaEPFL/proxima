@@ -13,7 +13,7 @@ class PostCard extends StatelessWidget {
   static const postCardTitleKey = Key("postCardTitle");
   static const postCardDescriptionKey = Key("postCardDescription");
   static const postCardVotesKey = Key("postCardVotes");
-  static const postCardCommentsKey = Key("postCardComments");
+  static const postCardCommentsNumberKey = Key("postCardComments");
   static const postCardUserKey = Key("postCardUser");
 
   final PostOverview postOverview;
@@ -59,7 +59,7 @@ class PostCard extends StatelessWidget {
             ),
             onTap: () => _onPostSelect(context, postOverview),
             child: CommentWidget(
-              key: postCardCommentsKey,
+              key: postCardCommentsNumberKey,
               commentNumber: postOverview.commentNumber,
             ),
           ),
