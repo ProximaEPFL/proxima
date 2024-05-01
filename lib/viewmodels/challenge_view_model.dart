@@ -56,12 +56,14 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
     state = await AsyncValue.guard(() => build());
   }
 
-  Future<void> completeChallenge(PostIdFirestore pid) async {
+  Future<bool> completeChallenge(PostIdFirestore pid) async {
     final currentUser = ref.read(uidProvider);
     final challengeRepository = ref.read(challengeRepositoryServiceProvider);
 
-    await challengeRepository.completeChallenge(currentUser!, pid);
+    final challengeCompleted =
+        await challengeRepository.completeChallenge(currentUser!, pid);
     await refresh();
+    return challengeCompleted;
   }
 }
 
