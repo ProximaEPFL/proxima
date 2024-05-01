@@ -2,6 +2,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/profile/components/profile_badge.dart";
@@ -25,13 +26,17 @@ void main() {
   late FakeFirebaseFirestore fakeFireStore;
   late CollectionReference<Map<String, dynamic>> userCollection;
   late ProviderScope mockedProfilePage;
+  late PostFirestore fakePost;
 
   final expectedUser = testingUserFirestore;
 
   setUp(() async {
     setupFirebaseAuthMocks();
+    final postsGenerator = FirestorePostGenerator();
     fakeFireStore = FakeFirebaseFirestore();
     userCollection = fakeFireStore.collection(UserFirestore.collectionName);
+    fakePost =
+        postsGenerator.createUserPost(testingUserFirestoreId, userPosition1);
 
     await userCollection
         .doc(expectedUser.uid.value)
@@ -80,13 +85,17 @@ void main() {
       //Check that the post card is displayed
       final postCard = find.byKey(ProfileInfoCard.infoCardKey);
       expect(postCard, findsWidgets);
+
+      // Check that post data is displayed
+      expect(find.textContaining(fakePost.data.title), findsOneWidget);
+      expect(find.textContaining(fakePost.data.description), findsOneWidget);
     });
   });
 
   group("Functionality", () {
     testWidgets("Post popup working as expected", (tester) async {
       await tester.pumpWidget(mockedProfilePage);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
       //Check tab on the first post
       final infoCardPost = find.byKey(ProfileInfoCard.infoCardKey);
@@ -108,6 +117,18 @@ void main() {
       final postPopupDescription =
           find.byKey(ProfileInfoPopUp.popUpDescriptionKey);
       expect(postPopupDescription, findsOneWidget);
+
+      // Check that post content is displayed on popup
+      final titleContent = find.descendant(
+        of: postPopup,
+        matching: find.textContaining(fakePost.data.title),
+      );
+      final descriptionContent = find.descendant(
+        of: postPopup,
+        matching: find.textContaining(fakePost.data.description),
+      );
+      expect(titleContent, findsOneWidget);
+      expect(descriptionContent, findsOneWidget);
 
       //Check that the delete button is displayed
       final postPopupDeleteButton =
@@ -217,8 +238,12 @@ void main() {
       await tester.fling(postColumn, const Offset(100, 400.0), 1000.0);
       await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
-      // Check that refreshing washandled correctly
+      // Check that refreshing was handled correctly
       expect(find.byKey(ProfileUserPosts.postColumnKey), findsOneWidget);
+
+      // Check that the post card is displayed
+      final postCard = find.byKey(ProfileInfoCard.infoCardKey);
+      expect(postCard, findsOneWidget);
     });
   });
 
