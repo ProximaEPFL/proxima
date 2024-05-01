@@ -9,6 +9,8 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
+import "package:proxima/views/home_content/map/map_screen.dart";
+import "package:proxima/views/home_content/map/post_map.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
@@ -159,7 +161,8 @@ Future<void> bottomNavigation(WidgetTester tester) async {
   // Map
   await tester.tap(find.text("Map"));
   await tester.pumpAndSettle();
-  expect(find.text("Proxima"), findsOneWidget);
+  expect(find.byType(MapScreen), findsOneWidget);
+  expect(find.byType(PostMap), findsOneWidget);
 
   // New Post
   await tester.tap(find.text("New post"));
