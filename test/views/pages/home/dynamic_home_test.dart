@@ -33,7 +33,7 @@ void main() {
     );
 
     when(geoLocationService.getCurrentPosition()).thenAnswer(
-      (_) => Future.value(userPosition0),
+      (_) => Future.value(position),
     );
 
     final locations = GeoPointGenerator.generatePositions(position, 20, 0);
