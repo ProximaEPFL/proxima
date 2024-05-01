@@ -1,5 +1,6 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
+import 'package:intl/intl.dart';
 import "package:proxima/utils/ui/user_avatar.dart";
 import "package:timeago/timeago.dart";
 
@@ -18,35 +19,52 @@ class UserBarWidget extends StatelessWidget {
   final String posterUsername;
   final Timestamp postTimestamp;
 
-  String _formattedTimestamp(Timestamp timestamp) {
+  /// Converts a timestamp to a time ago string.
+  String _timestampToTimeAgo(Timestamp timestamp) {
     return format(timestamp.toDate());
+  }
+
+  /// Converts a timestamp to a user readable date string.
+  String _timestampToDate(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
+    DateFormat formatter = DateFormat("EEEE, MMMM d, yyyy HH:mm 'UTC'z");
+    return formatter.format(dateTime.toUtc());
   }
 
   @override
   Widget build(BuildContext context) {
+    final posterName = Flexible(
+      child: Text(
+        posterUsername,
+        key: displayNameTextKey,
+        softWrap: false,
+        overflow: TextOverflow.fade,
+      ),
+    );
+
+    const divider = Padding(
+      padding: EdgeInsets.symmetric(horizontal: 4),
+      child: Text(
+        "•",
+      ),
+    );
+
+    final publicationTime = Tooltip(
+      message: _timestampToDate(postTimestamp),
+      child: Text(
+        key: timestampTextKey,
+        _timestampToTimeAgo(postTimestamp),
+      ),
+    );
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         UserAvatar(displayName: posterUsername, radius: 12),
         const SizedBox(width: 8),
-        Flexible(
-          child: Text(
-            posterUsername,
-            key: displayNameTextKey,
-            softWrap: false,
-            overflow: TextOverflow.fade,
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4),
-          child: Text(
-            "•",
-          ),
-        ),
-        Text(
-          key: timestampTextKey,
-          _formattedTimestamp(postTimestamp),
-        ),
+        posterName,
+        divider,
+        publicationTime,
       ],
     );
   }
