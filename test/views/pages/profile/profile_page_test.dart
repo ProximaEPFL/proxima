@@ -42,7 +42,6 @@ void main() {
         .doc(expectedUser.uid.value)
         .set(expectedUser.data.toDbData());
 
-    final postsGenerator = FirestorePostGenerator();
     setPostFirestore(
       postsGenerator.createUserPost(testingUserFirestoreId, userPosition1),
       fakeFireStore,
