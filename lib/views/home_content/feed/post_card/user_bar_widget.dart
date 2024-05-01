@@ -1,6 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:proxima/utils/ui/user_avatar.dart";
+import "package:timeago/timeago.dart";
 
 /// This widget is used to display the user bar in the post card.
 /// It contains the user's profile picture and username.
@@ -23,6 +24,7 @@ class UserBarWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         UserAvatar(displayName: posterUsername, radius: 12),
+        const SizedBox(width: 8),
         Flexible(
           child: Text(
             posterUsername,
@@ -39,7 +41,7 @@ class UserBarWidget extends StatelessWidget {
         ),
         Text(
           key: timestampTextKey,
-          postTimestamp.toDate().toString(),
+          format(postTimestamp.toDate()),
         ),
       ],
     );

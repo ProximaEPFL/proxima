@@ -29,6 +29,7 @@ dependencies:
   google_fonts: ^6.2.1
   google_maps_flutter: ^2.6.1
   flutter_svg: ^2.0.10+1
+  timeago: ^3.6.1
 
 
 dev_dependencies:
