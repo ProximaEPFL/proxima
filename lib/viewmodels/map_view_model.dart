@@ -3,16 +3,20 @@ import "package:flutter/material.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_info.dart";
+import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/option_widgets/map/map_selection_option.dart";
 
 // TODO: For now, this is code with mock data.
 // This will just be replaced when we implement a real view model anyway.
-class MapViewModel extends AsyncNotifier<MapInfo> {
+class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
   @override
   Future<MapInfo> build() async {
-    return const MapInfo(
-      currentLocation: LatLng(46.519653, 6.632273),
+    final actualLocation =
+        await ref.read(geoLocationServiceProvider).getCurrentPosition();
+    return MapInfo(
+      currentLocation:
+          LatLng(actualLocation.latitude, actualLocation.longitude),
       selectOption: MapSelectionOptions.nearby,
     );
   }
@@ -36,16 +40,19 @@ class MapViewModel extends AsyncNotifier<MapInfo> {
     );
   }
 
-  final Completer<GoogleMapController> _mapController = Completer();
+  Completer<GoogleMapController> _mapController = Completer();
 
-  void onMapCreated(GoogleMapController controller) {
-    if (_mapController.isCompleted) return;
+  // Getter for the map controller
+  Completer<GoogleMapController> get mapController => _mapController;
+
+  void onMapCreated(GoogleMapController controller) async {
+    _mapController = Completer();
     _mapController.complete(controller);
   }
 
-  Future<void> animateCamera(LatLng target) async {
-    final controller = await _mapController.future;
-    controller.animateCamera(
+  Future<void> animateCam(LatLng target) async {
+    final mapCtrl = await _mapController.future;
+    await mapCtrl.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: target,
@@ -64,6 +71,6 @@ class MapViewModel extends AsyncNotifier<MapInfo> {
   }
 }
 
-final mapProvider = AsyncNotifierProvider<MapViewModel, MapInfo>(
+final mapProvider = AsyncNotifierProvider.autoDispose<MapViewModel, MapInfo>(
   () => MapViewModel(),
 );

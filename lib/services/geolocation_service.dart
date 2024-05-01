@@ -70,64 +70,76 @@ final geoLocationServiceProvider = Provider<GeoLocationService>(
   ),
 );
 
-void _determinePosition(StreamController<GeoPoint?> streamController) async {
-  bool serviceEnabled;
-  LocationPermission permission;
+class LiveGeoLocationService {
+  final GeolocatorPlatform _geoLocator;
 
-  // Test if location services are enabled.
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
-    // Location services are not enabled don't continue
-    // accessing the position and request users of the
-    // App to enable the location services.
-    streamController.addError("Location services are disabled.");
-    return;
-  }
+  LiveGeoLocationService({
+    required GeolocatorPlatform geoLocator,
+  }) : _geoLocator = geoLocator;
 
-  permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      // Permissions are denied, next time you could try
-      // requesting permissions again (this is also where
-      // Android's shouldShowRequestPermissionRationale
-      // returned true. According to Android guidelines
-      // your App should show an explanatory UI now.
-      streamController.addError("Location permissions are denied");
+  Future<void> determinePosition(
+    StreamController<GeoPoint?> streamController,
+  ) async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await _geoLocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      streamController.addError("Location services are disabled.");
       return;
     }
-  }
 
-  if (permission == LocationPermission.deniedForever) {
-    // Permissions are denied forever, handle appropriately.
-    streamController.addError(
-      "Location permissions are permanently denied, we cannot request permissions.",
+    permission = await _geoLocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await _geoLocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        streamController.addError("Location permissions are denied");
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      streamController.addError(
+        "Location permissions are permanently denied, we cannot request permissions.",
+      );
+      return;
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    const LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.bestForNavigation,
     );
-    return;
+
+    _geoLocator
+        .getPositionStream(locationSettings: locationSettings)
+        .listen((Position position) {
+      streamController.add(GeoPoint(position.latitude, position.longitude));
+    });
+
+    Position initialPosition = await _geoLocator.getCurrentPosition(
+      locationSettings: locationSettings,
+    );
+    streamController
+        .add(GeoPoint(initialPosition.latitude, initialPosition.longitude));
   }
-
-  // When we reach here, permissions are granted and we can
-  // continue accessing the position of the device.
-  const LocationSettings locationSettings = LocationSettings(
-    accuracy: LocationAccuracy.bestForNavigation,
-  );
-
-  Geolocator.getPositionStream(locationSettings: locationSettings)
-      .listen((Position position) {
-    streamController.add(GeoPoint(position.latitude, position.longitude));
-  });
-
-  Position initialPosition = await Geolocator.getCurrentPosition(
-    desiredAccuracy: LocationAccuracy.high,
-  );
-  streamController
-      .add(GeoPoint(initialPosition.latitude, initialPosition.longitude));
 }
 
 final liveLocationServiceProvider = StreamProvider<GeoPoint?>((ref) {
   final streamController = StreamController<GeoPoint?>();
 
-  _determinePosition(streamController);
+  LiveGeoLocationService(geoLocator: GeolocatorPlatform.instance)
+      .determinePosition(streamController);
 
   return streamController.stream;
 });
