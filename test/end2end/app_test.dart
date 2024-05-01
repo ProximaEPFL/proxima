@@ -5,6 +5,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/main.dart";
+import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
@@ -29,6 +30,7 @@ void main() {
   late FakeFirebaseFirestore fakeFireStore;
   late PostRepositoryService postRepo;
   late UserRepositoryService userRepo;
+  late ChallengeRepositoryService challengeRepo;
 
   MockGeoLocationService geoLocationService = MockGeoLocationService();
   const GeoPoint testLocation = userPosition0;
@@ -40,6 +42,11 @@ void main() {
     postRepo = PostRepositoryService(firestore: fakeFireStore);
     userRepo = UserRepositoryService(
       firestore: fakeFireStore,
+    );
+    challengeRepo = ChallengeRepositoryService(
+      firestore: fakeFireStore,
+      postRepositoryService: postRepo,
+      userRepositoryService: userRepo,
     );
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) => Future.value(testLocation),
@@ -56,6 +63,7 @@ void main() {
           userRepositoryProvider.overrideWithValue(userRepo),
           geoLocationServiceProvider.overrideWithValue(geoLocationService),
           postRepositoryProvider.overrideWithValue(postRepo),
+          challengeRepositoryServiceProvider.overrideWithValue(challengeRepo),
         ],
         child: const ProximaApp(),
       ),
