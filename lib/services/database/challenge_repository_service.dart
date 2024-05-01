@@ -49,6 +49,8 @@ class ChallengeRepositoryService {
 
   /// Completes the challenge of the user with id [uid] on the post with id [pid].
   /// Returns true if the challenge is valid and was completed, and false otherwise.
+  /// The challenge could be invalid if the post does not correspond to a current
+  /// challenge, if the challenge was already completed or if the challenge expired.
   Future<bool> completeChallenge(
     UserIdFirestore uid,
     PostIdFirestore pid,

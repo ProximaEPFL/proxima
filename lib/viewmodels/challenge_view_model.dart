@@ -7,6 +7,12 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
+/// This viewmodel is used to fetch the list of challenges that are displayed in
+/// the challenge feed. It fetches the challenges from the database and sorts
+/// them by putting the finished challenges at the end of the list. It transforms
+/// the challenges into [ChallengeCardData] objects to be displayed, by getting
+/// the posts from the post repository and calculating the distances as well as
+/// remaining time.
 class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
   @override
   Future<List<ChallengeCardData>> build() async {
@@ -60,11 +66,17 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
     return uiChallenges;
   }
 
+  /// Refresh the list of challenges
   Future<void> refresh() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => build());
   }
 
+  /// Complete a challenge associated with post of id [pid]. Returns true if the
+  /// challenge was indeed completed and points were awarded.
+  /// Returns false if the challenge could not be
+  /// completed. This could be because the post given was not a challenge, was
+  /// expired, or was already completed.
   Future<bool> completeChallenge(PostIdFirestore pid) async {
     final currentUser = ref.read(uidProvider);
     final challengeRepository = ref.read(challengeRepositoryServiceProvider);
