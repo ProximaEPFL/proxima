@@ -7,7 +7,7 @@ import "package:proxima/viewmodels/map_view_model.dart";
 
 class PostMap extends ConsumerWidget {
   final MapInfo mapInfo;
-  final initialZoomLevel = 17.5;
+  static const initialZoomLevel = 17.5;
 
   static const postMapKey = Key("postMap");
 
