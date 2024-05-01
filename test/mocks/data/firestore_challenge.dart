@@ -9,10 +9,16 @@ import "challenge_data.dart";
 class FirestoreChallengeGenerator {
   int _id = 0;
 
-  ChallengeFirestore generate(bool done, Duration extra) {
+  ChallengeFirestore generateChallenge(bool done, Duration extra) {
     final data = ChallengeGenerator.generate(done, extra);
     final id = PostIdFirestore(value: (_id++).toString());
     return ChallengeFirestore(postId: id, data: data);
+  }
+
+  List<ChallengeFirestore> generateChallenges(int count,
+      bool done,
+      Duration extra,) {
+    return List.generate(count, (_) => generateChallenge(done, extra));
   }
 }
 
@@ -28,4 +34,14 @@ Future<void> setChallenge(
       .doc(challenge.postId.value);
 
   await challengeRef.set(challenge.data.toDbData());
+}
+
+Future<void> setChallenges(
+  FirebaseFirestore firestore,
+  List<ChallengeFirestore> challenges,
+  UserIdFirestore uid,
+) async {
+  for (final challenge in challenges) {
+    await setChallenge(firestore, challenge, uid);
+  }
 }

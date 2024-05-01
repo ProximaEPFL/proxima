@@ -71,7 +71,7 @@ void main() {
     ); // the challenge is added by hand, so we can use the user position
     await setPostFirestore(post, fakeFireStore);
 
-    final challenge = challengeGenerator.generate(false, extraTime);
+    final challenge = challengeGenerator.generateChallenge(false, extraTime);
     await setChallenge(fakeFireStore, challenge, testingUserFirestoreId);
 
     final challenges = await container.read(challengeProvider.future);
@@ -98,7 +98,7 @@ void main() {
     ); // the challenge is added by hand, so we can use the user position
     await setPostFirestore(post, fakeFireStore);
 
-    final challenge = challengeGenerator.generate(true, extraTime);
+    final challenge = challengeGenerator.generateChallenge(true, extraTime);
     await setChallenge(fakeFireStore, challenge, testingUserFirestoreId);
 
     final challenges = await container.read(challengeProvider.future);
@@ -115,6 +115,36 @@ void main() {
     expect(uiChallenge.title, post.data.title);
   });
 
+  test("Challenges are sorted correctly", () async {
+    const extraTime = Duration(hours: 3);
+    final challengeGenerator = FirestoreChallengeGenerator();
+    final postGenerator = FirestorePostGenerator();
+
+    final posts = postGenerator.generatePostsAt(userPosition1, 3);
+    setPostsFirestore(posts, fakeFireStore);
+
+    final finishedChallenges =
+        challengeGenerator.generateChallenges(2, true, extraTime);
+    final activeChallenges =
+        challengeGenerator.generateChallenges(1, false, extraTime);
+
+    await setChallenges(
+      fakeFireStore,
+      finishedChallenges,
+      testingUserFirestoreId,
+    );
+    await setChallenges(
+      fakeFireStore,
+      activeChallenges,
+      testingUserFirestoreId,
+    );
+
+    final challenges = await container.read(challengeProvider.future);
+    final areChallengesFinished = challenges.map((c) => c.isFinished).toList();
+
+    expect(areChallengesFinished, [false, true, true]);
+  });
+
   test("Challenge can be completed", () async {
     const extraTime = Duration(hours: 3);
     final challengeGenerator = FirestoreChallengeGenerator();
@@ -127,7 +157,7 @@ void main() {
     ); // the challenge is added by hand, so we can use the user position
     await setPostFirestore(post, fakeFireStore);
 
-    final challenge = challengeGenerator.generate(false, extraTime);
+    final challenge = challengeGenerator.generateChallenge(false, extraTime);
     await setChallenge(fakeFireStore, challenge, testingUserFirestoreId);
 
     await container

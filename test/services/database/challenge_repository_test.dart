@@ -260,7 +260,7 @@ void main() {
       final postGenerator = FirestorePostGenerator();
       final post = postGenerator.generatePostAt(inChallengeRange);
       final challengeGenerator = FirestoreChallengeGenerator();
-      final challenge = challengeGenerator.generate(
+      final challenge = challengeGenerator.generateChallenge(
         true,
         const Duration(hours: 1),
       );
@@ -285,7 +285,7 @@ void main() {
       final postGenerator = FirestorePostGenerator();
       final post = postGenerator.generatePostAt(inChallengeRange);
       final challengeGenerator = FirestoreChallengeGenerator();
-      final challenge = challengeGenerator.generate(
+      final challenge = challengeGenerator.generateChallenge(
         false,
         const Duration(hours: -1),
       );
