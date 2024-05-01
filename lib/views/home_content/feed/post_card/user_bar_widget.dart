@@ -30,12 +30,15 @@ class UserBarWidget extends StatelessWidget {
             posterUsername,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 8),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 4),
           child: Text(
-            key: timestampTextKey,
-            postTimestamp.toDate().toString(),
+            "•",
           ),
+        ),
+        Text(
+          key: timestampTextKey,
+          postTimestamp.toDate().toString(),
         ),
       ],
     );
