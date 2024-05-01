@@ -1,3 +1,4 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/foundation.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 
@@ -9,6 +10,9 @@ class PostOverview {
   final int voteScore;
   final int commentNumber;
   final String ownerDisplayName;
+  final Timestamp date; //TODO: Give correct type
+
+  // final int distance; //TODO: Add distance
 
   const PostOverview({
     required this.postId,
@@ -17,6 +21,7 @@ class PostOverview {
     required this.voteScore,
     required this.commentNumber,
     required this.ownerDisplayName,
+    required this.date,
   });
 
   @override
@@ -29,7 +34,8 @@ class PostOverview {
         other.description == description &&
         other.voteScore == voteScore &&
         other.commentNumber == commentNumber &&
-        other.ownerDisplayName == ownerDisplayName;
+        other.ownerDisplayName == ownerDisplayName &&
+        other.date == date;
   }
 
   @override
@@ -41,6 +47,7 @@ class PostOverview {
       voteScore,
       commentNumber,
       ownerDisplayName,
+      date,
     );
   }
 }

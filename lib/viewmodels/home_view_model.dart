@@ -9,8 +9,13 @@ import "package:proxima/services/geolocation_service.dart";
 /// It fetches the posts from the database and returns a list of
 /// (postId: [PostIdFirestore], postOverview: [PostOverview]) objects to be displayed.
 /// These represent the overview data to be displayed associated to the corresponding post id.
+/// Note: this is also the viewmodel for our post page
 class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
   HomeViewModel();
+
+  // TODO: compute distance from user
+  // TODO: then update methods hashcode and ==
+  //TODO: update the tests too
 
   static const kmPostRadius = 0.1;
 
@@ -46,8 +51,9 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
         description: post.data.description,
         voteScore: post.data.voteScore,
         ownerDisplayName: owner.data.displayName,
-        commentNumber:
-            0, // TODO: Update appropriately when comments are implemented
+        commentNumber: 0,
+        // TODO: Update appropriately when comments are implemented
+        date: post.data.publicationTime,
       );
 
       return postOverview;

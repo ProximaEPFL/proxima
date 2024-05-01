@@ -27,7 +27,9 @@ class PostPage extends HookConsumerWidget {
     ThemeData themeData = Theme.of(context);
 
     final comments = ref.watch(commentListProvider);
+    // TODO: add date to post
 
+    // Top app bar content = Title + Distance
     List<Widget> appBarContent = [
       const Text(_appBarTitle),
       Text(
@@ -38,6 +40,7 @@ class PostPage extends HookConsumerWidget {
       ),
     ];
 
+    // Body = Complete post + Comments
     List<Widget> bodyChildren = [
       CompletePostWidget(
         key: completePostWidgetKey,
