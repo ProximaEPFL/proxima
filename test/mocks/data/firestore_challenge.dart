@@ -15,9 +15,11 @@ class FirestoreChallengeGenerator {
     return ChallengeFirestore(postId: id, data: data);
   }
 
-  List<ChallengeFirestore> generateChallenges(int count,
-      bool done,
-      Duration extra,) {
+  List<ChallengeFirestore> generateChallenges(
+    int count,
+    bool done,
+    Duration extra,
+  ) {
     return List.generate(count, (_) => generateChallenge(done, extra));
   }
 }
