@@ -14,10 +14,6 @@ import "package:proxima/services/geolocation_service.dart";
 class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
   HomeViewModel();
 
-  // TODO: compute distance from user
-  // TODO: then update methods hashcode and ==
-  //TODO: update the tests too
-
   static const kmPostRadius = 0.1;
 
   @override
