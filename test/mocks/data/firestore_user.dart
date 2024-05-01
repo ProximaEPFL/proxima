@@ -50,3 +50,23 @@ class FirestoreUserGenerator {
     );
   }
 }
+
+/// Helper function to set a user in the firestore db
+Future<void> setUserFirestore(
+  UserFirestore user,
+  FirebaseFirestore firestore,
+) async {
+  await firestore
+      .collection(UserFirestore.collectionName)
+      .doc(user.uid.value)
+      .set({...user.data.toDbData()});
+}
+
+Future<void> setUsersFirestore(
+  List<UserFirestore> users,
+  FirebaseFirestore firestore,
+) async {
+  for (final user in users) {
+    await setUserFirestore(user, firestore);
+  }
+}
