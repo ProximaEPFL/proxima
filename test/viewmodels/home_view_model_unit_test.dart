@@ -95,6 +95,7 @@ void main() {
           commentNumber: 0,
           ownerDisplayName: owner.data.displayName,
           publicationTime: post.data.publicationTime,
+          distance: 0,
         ),
       ];
 
@@ -148,6 +149,7 @@ void main() {
             commentNumber: 0,
             ownerDisplayName: owner.data.displayName,
             publicationTime: post.data.publicationTime,
+            distance: 0,
           );
 
           return postOverview;
@@ -209,6 +211,7 @@ void main() {
             commentNumber: 0,
             ownerDisplayName: owners[index].data.displayName,
             publicationTime: post.data.publicationTime,
+            distance: 0,
           );
 
           return postOverview;
@@ -283,6 +286,7 @@ void main() {
           commentNumber: 0,
           ownerDisplayName: owner.data.displayName,
           publicationTime: post.data.publicationTime,
+          distance: 0,
         ),
       ];
 

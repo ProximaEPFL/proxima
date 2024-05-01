@@ -12,6 +12,7 @@ final List<PostOverview> testPosts = [
     commentNumber: 5,
     ownerDisplayName: "Proxima",
     publicationTime: fakeTimestamp,
+    distance: 20,
   ),
   PostOverview(
     postId: const PostIdFirestore(value: "post_2"),
@@ -22,6 +23,7 @@ final List<PostOverview> testPosts = [
     commentNumber: 5,
     ownerDisplayName: "Proxima",
     publicationTime: fakeTimestamp,
+    distance: 20,
   ),
   PostOverview(
     postId: const PostIdFirestore(value: "post_3"),
@@ -31,5 +33,6 @@ final List<PostOverview> testPosts = [
     commentNumber: 829,
     ownerDisplayName: "Proxima",
     publicationTime: fakeTimestamp,
+    distance: 20,
   ),
 ];

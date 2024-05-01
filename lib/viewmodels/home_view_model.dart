@@ -45,9 +45,10 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
         // the user repository would have already thrown an exception.
         orElse: () => throw Exception("Owner not found"),
       );
-      final distance = GeoFirePoint(currentPosition)
-              .distanceBetweenInKm(geopoint: post.location.geoPoint) *
-          1000;
+      final distance = (GeoFirePoint(currentPosition)
+                  .distanceBetweenInKm(geopoint: post.location.geoPoint) *
+              1000)
+          .round(); //TODO: create method because used here and in challenges (+tests)
 
       final postOverview = PostOverview(
         postId: post.id,
@@ -58,7 +59,7 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
         commentNumber: 0,
         // TODO: Update appropriately when comments are implemented
         publicationTime: post.data.publicationTime,
-        distance: distance.round(),
+        distance: distance,
       );
 
       return postOverview;

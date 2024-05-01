@@ -15,6 +15,7 @@ void main() {
         postOverview.commentNumber,
         postOverview.ownerDisplayName,
         postOverview.publicationTime,
+        postOverview.distance,
       );
 
       final actualHash = postOverview.hashCode;
