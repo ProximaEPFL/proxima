@@ -53,7 +53,7 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
         ownerDisplayName: owner.data.displayName,
         commentNumber: 0,
         // TODO: Update appropriately when comments are implemented
-        date: post.data.publicationTime,
+        publicationTime: post.data.publicationTime,
       );
 
       return postOverview;

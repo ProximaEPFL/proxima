@@ -1,3 +1,4 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:proxima/utils/ui/user_avatar.dart";
 
@@ -5,13 +6,16 @@ import "package:proxima/utils/ui/user_avatar.dart";
 /// It contains the user's profile picture and username.
 class UserBarWidget extends StatelessWidget {
   static const displayNameTextKey = Key("displayNameText");
+  static const timestampTextKey = Key("timestampText");
 
   const UserBarWidget({
     super.key,
     required this.posterUsername,
+    required this.postTimestamp, //TODO: make optional for comments?
   });
 
   final String posterUsername;
+  final Timestamp postTimestamp;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +28,13 @@ class UserBarWidget extends StatelessWidget {
           child: Text(
             key: displayNameTextKey,
             posterUsername,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Text(
+            key: timestampTextKey,
+            postTimestamp.toDate().toString(),
           ),
         ),
       ],

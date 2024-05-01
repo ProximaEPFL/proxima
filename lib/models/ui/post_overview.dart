@@ -10,7 +10,7 @@ class PostOverview {
   final int voteScore;
   final int commentNumber;
   final String ownerDisplayName;
-  final Timestamp date; //TODO: Give correct type
+  final Timestamp publicationTime; //TODO: Give correct type
 
   // final int distance; //TODO: Add distance
 
@@ -21,7 +21,7 @@ class PostOverview {
     required this.voteScore,
     required this.commentNumber,
     required this.ownerDisplayName,
-    required this.date,
+    required this.publicationTime,
   });
 
   @override
@@ -35,7 +35,7 @@ class PostOverview {
         other.voteScore == voteScore &&
         other.commentNumber == commentNumber &&
         other.ownerDisplayName == ownerDisplayName &&
-        other.date == date;
+        other.publicationTime == publicationTime;
   }
 
   @override
@@ -47,7 +47,7 @@ class PostOverview {
       voteScore,
       commentNumber,
       ownerDisplayName,
-      date,
+      publicationTime,
     );
   }
 }
