@@ -43,8 +43,10 @@ class FirestoreUserGenerator {
   }
 }
 
-Future<void> setUserFirestore(FirebaseFirestore firestore,
-    UserFirestore user,) async {
+Future<void> setUserFirestore(
+  FirebaseFirestore firestore,
+  UserFirestore user,
+) async {
   await firestore
       .collection(UserFirestore.collectionName)
       .doc(user.uid.value)
