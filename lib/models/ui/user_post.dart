@@ -1,7 +1,7 @@
 import "package:flutter/foundation.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 
-/// A post that bellongs to the current logged in user.
+/// A post that belongs to the current logged in user.
 /// Used in their profile page.
 @immutable
 class UserPost {
