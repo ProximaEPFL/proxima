@@ -94,6 +94,7 @@ void main() {
           voteScore: post.data.voteScore,
           commentNumber: 0,
           ownerDisplayName: owner.data.displayName,
+          publicationTime: post.data.publicationTime,
         ),
       ];
 
@@ -146,6 +147,7 @@ void main() {
             voteScore: post.data.voteScore,
             commentNumber: 0,
             ownerDisplayName: owner.data.displayName,
+            publicationTime: post.data.publicationTime,
           );
 
           return postOverview;
@@ -206,6 +208,7 @@ void main() {
             voteScore: post.data.voteScore,
             commentNumber: 0,
             ownerDisplayName: owners[index].data.displayName,
+            publicationTime: post.data.publicationTime,
           );
 
           return postOverview;
@@ -279,6 +282,7 @@ void main() {
           voteScore: post.data.voteScore,
           commentNumber: 0,
           ownerDisplayName: owner.data.displayName,
+          publicationTime: post.data.publicationTime,
         ),
       ];
 

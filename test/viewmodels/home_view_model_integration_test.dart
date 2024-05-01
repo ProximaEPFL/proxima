@@ -113,6 +113,7 @@ void main() {
           voteScore: postData.voteScore,
           ownerDisplayName: owner.data.displayName,
           commentNumber: 0,
+          publicationTime: postData.publicationTime,
         ),
       ];
 
@@ -203,6 +204,7 @@ void main() {
           voteScore: data.voteScore,
           ownerDisplayName: owner.data.displayName,
           commentNumber: 0,
+          publicationTime: data.publicationTime,
         );
 
         return postOverview;
