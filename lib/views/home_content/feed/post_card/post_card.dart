@@ -25,9 +25,11 @@ class PostCard extends ConsumerWidget {
     required this.postOverview,
   });
 
-  void _onPostSelect(BuildContext context,
-      PostOverview post,
-      WidgetRef ref,) async {
+  void _onPostSelect(
+    BuildContext context,
+    PostOverview post,
+    WidgetRef ref,
+  ) async {
     Navigator.pushNamed(context, Routes.post.name, arguments: post);
     bool challengeCompleted = await ref
         .read(challengeProvider.notifier)
