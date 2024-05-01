@@ -1,3 +1,4 @@
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
@@ -25,10 +26,10 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
     final postRepository = ref.watch(postRepositoryProvider);
     final userRepository = ref.watch(userRepositoryProvider);
 
-    final position = await geoLocationService.getCurrentPosition();
+    final currentPosition = await geoLocationService.getCurrentPosition();
 
     final postsFirestore =
-        await postRepository.getNearPosts(position, kmPostRadius);
+        await postRepository.getNearPosts(currentPosition, kmPostRadius);
 
     final postOwnersId =
         postsFirestore.map((post) => post.data.ownerId).toSet();
@@ -44,6 +45,9 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
         // the user repository would have already thrown an exception.
         orElse: () => throw Exception("Owner not found"),
       );
+      final distance = GeoFirePoint(currentPosition)
+              .distanceBetweenInKm(geopoint: post.location.geoPoint) *
+          1000;
 
       final postOverview = PostOverview(
         postId: post.id,
@@ -54,6 +58,7 @@ class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
         commentNumber: 0,
         // TODO: Update appropriately when comments are implemented
         publicationTime: post.data.publicationTime,
+        distance: distance.round(),
       );
 
       return postOverview;

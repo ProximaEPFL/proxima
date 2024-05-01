@@ -33,9 +33,8 @@ class PostPage extends HookConsumerWidget {
     List<Widget> appBarContent = [
       const Text(_appBarTitle),
       Text(
+        "${postOverview.distance} m",
         key: postDistanceKey,
-        //TODO: Add distance to post
-        "50m away",
         style: themeData.textTheme.titleSmall,
       ),
     ];
