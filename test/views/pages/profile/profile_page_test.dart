@@ -217,8 +217,12 @@ void main() {
       await tester.fling(postColumn, const Offset(100, 400.0), 1000.0);
       await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
-      // Check that refreshing washandled correctly
+      // Check that refreshing was handled correctly
       expect(find.byKey(ProfileUserPosts.postColumnKey), findsOneWidget);
+
+      // Check that the post card is displayed
+      final postCard = find.byKey(ProfileInfoCard.infoCardKey);
+      expect(postCard, findsOneWidget);
     });
   });
 
