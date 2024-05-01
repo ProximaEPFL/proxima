@@ -11,7 +11,7 @@ class UserBarWidget extends StatelessWidget {
   const UserBarWidget({
     super.key,
     required this.posterUsername,
-    required this.postTimestamp, //TODO: make optional for comments?
+    required this.postTimestamp,
   });
 
   final String posterUsername;
@@ -23,11 +23,12 @@ class UserBarWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         UserAvatar(displayName: posterUsername, radius: 12),
-        Padding(
-          padding: const EdgeInsets.only(left: 8),
+        Flexible(
           child: Text(
-            key: displayNameTextKey,
             posterUsername,
+            key: displayNameTextKey,
+            softWrap: false,
+            overflow: TextOverflow.fade,
           ),
         ),
         const Padding(
