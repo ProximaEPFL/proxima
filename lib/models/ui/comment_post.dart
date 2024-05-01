@@ -5,7 +5,7 @@ import "package:flutter/foundation.dart";
 class CommentPost {
   final String content;
   final String ownerDisplayName;
-  final Timestamp publicationTime; //TODO: Give correct type
+  final Timestamp publicationTime;
 
   const CommentPost({
     required this.content,

@@ -10,7 +10,7 @@ class PostOverview {
   final int voteScore;
   final int commentNumber;
   final String ownerDisplayName;
-  final Timestamp publicationTime; //TODO: Give correct type
+  final Timestamp publicationTime;
 
   // final int distance; //TODO: Add distance
 
