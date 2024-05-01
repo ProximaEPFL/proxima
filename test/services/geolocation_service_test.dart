@@ -135,9 +135,11 @@ void main() {
       ).thenAnswer(
         (_) async => getSimplePosition(latitude, longitude),
       );
-      when(mockGeolocator.getPositionStream(
-        locationSettings: geoLocationService.locationSettings,
-      )).thenAnswer(
+      when(
+        mockGeolocator.getPositionStream(
+          locationSettings: geoLocationService.locationSettings,
+        ),
+      ).thenAnswer(
         (_) => Stream.fromIterable([getSimplePosition(latitude, longitude)]),
       );
 
@@ -160,8 +162,10 @@ void main() {
       final streamController = StreamController<GeoPoint?>();
       await liveGeoLocationService.determinePosition(streamController);
 
-      expect(streamController.stream.first,
-          throwsA("Location services are disabled."));
+      expect(
+        streamController.stream.first,
+        throwsA("Location services are disabled."),
+      );
     });
 
     test(
@@ -201,7 +205,8 @@ void main() {
       expect(
         streamController.stream.first,
         throwsA(
-            "Location permissions are permanently denied, we cannot request permissions."),
+          "Location permissions are permanently denied, we cannot request permissions.",
+        ),
       );
     });
   });

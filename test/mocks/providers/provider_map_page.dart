@@ -8,7 +8,9 @@ import "package:proxima/views/navigation/routes.dart";
 import "../overrides/override_map_view_model.dart";
 
 ProviderScope newMapPageProvider(
-    GeoLocationService geoLocationService, Set<GeoPoint?> geoPoints) {
+  GeoLocationService geoLocationService,
+  Set<GeoPoint?> geoPoints,
+) {
   return ProviderScope(
     overrides: [
       geoLocationServiceProvider.overrideWithValue(geoLocationService),
