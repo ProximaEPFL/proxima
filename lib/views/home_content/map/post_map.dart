@@ -5,6 +5,7 @@ import "package:proxima/models/ui/map_info.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/map_view_model.dart";
 
+/// This widget displays the Google Map
 class PostMap extends ConsumerWidget {
   final MapInfo mapInfo;
   static const initialZoomLevel = 17.5;
