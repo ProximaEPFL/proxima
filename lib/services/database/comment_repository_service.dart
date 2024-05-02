@@ -83,7 +83,8 @@ class CommentRepositoryService {
   /// post with id [parentPostId].
   /// It will also update the number of comments of the post.
   /// This is done atomically.
-  /// If the comment does not exist, the method will do nothing.
+  /// If the comment does not exist, the method will do nothing and
+  /// throw an error.
   Future<void> deleteComment(
     PostIdFirestore parentPostId,
     CommentIdFirestore commentId,
