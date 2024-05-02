@@ -3,7 +3,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
-import "package:proxima/services/database/post_repository_service.dart";
+import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
@@ -17,39 +17,23 @@ import "../mocks/services/mock_geo_location_service.dart";
 
 void main() {
   late MockGeoLocationService geoLocationService;
-  late FakeFirebaseFirestore fakeFireStore;
-
   late UserRepositoryService userRepo;
-  late PostRepositoryService postRepo;
-  late ChallengeRepositoryService challengeRepo;
-
+  late FakeFirebaseFirestore fakeFireStore;
   late ProviderContainer container;
 
   setUp(() async {
-    fakeFireStore = FakeFirebaseFirestore();
     geoLocationService = MockGeoLocationService();
-
-    userRepo = UserRepositoryService(
-      firestore: fakeFireStore,
-    );
-    postRepo = PostRepositoryService(
-      firestore: fakeFireStore,
-    );
-    challengeRepo = ChallengeRepositoryService(
-      firestore: fakeFireStore,
-      userRepositoryService: userRepo,
-      postRepositoryService: postRepo,
-    );
+    fakeFireStore = FakeFirebaseFirestore();
 
     container = ProviderContainer(
       overrides: [
         geoLocationServiceProvider.overrideWithValue(geoLocationService),
-        userRepositoryProvider.overrideWithValue(userRepo),
-        postRepositoryProvider.overrideWithValue(postRepo),
-        challengeRepositoryServiceProvider.overrideWithValue(challengeRepo),
         uidProvider.overrideWithValue(testingUserFirestoreId),
+        firestoreProvider.overrideWithValue(fakeFireStore),
       ],
     );
+
+    userRepo = container.read(userRepositoryProvider);
 
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) async => userPosition1,
