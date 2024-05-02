@@ -114,7 +114,7 @@ void main() {
         await postDocument
             .update({PostData.commentCountField: FieldValue.delete()});
 
-        final commentData = commentGenerator.createRandomComment().data;
+        final commentData = commentDataGenerator.createRandomCommentData();
 
         await commentRepository.addComment(
           postId,
@@ -142,11 +142,9 @@ void main() {
         );
 
         // Check that the comment was added correctly
-        final commentDoc =
-            await commentsSubCollection.doc(commentId.value).get();
-        final actualComment = CommentFirestore.fromDb(commentDoc);
+        final actualComments = await commentRepository.getComments(postId);
 
-        expect(actualComment, equals(expectedComment));
+        expect(actualComments, equals([expectedComment]));
 
         // Check that the comment count was updated correctly
         final postDoc = await postDocument.get();
@@ -161,7 +159,7 @@ void main() {
         final alreadyPresentComments =
             await addComments(alreadyPresentCommentsCount);
 
-        final commentData = commentGenerator.createRandomComment().data;
+        final commentData = commentDataGenerator.createRandomCommentData();
 
         final commentId = await commentRepository.addComment(
           postId,
@@ -174,10 +172,7 @@ void main() {
         );
 
         // Check that the comment was added correctly
-        final actualCommentQuery = await commentsSubCollection.get();
-        final actualComments = actualCommentQuery.docs
-            .map((doc) => CommentFirestore.fromDb(doc))
-            .toList();
+        final actualComments = await commentRepository.getComments(postId);
 
         expect(
           actualComments,
@@ -201,8 +196,8 @@ void main() {
         await commentRepository.deleteComment(postId, commentId);
 
         // Check that the comment was deleted
-        final actualCommentsQuerySnap = await commentsSubCollection.get();
-        expect(actualCommentsQuerySnap.docs, isEmpty);
+        final actualComments = await commentRepository.getComments(postId);
+        expect(actualComments, isEmpty);
 
         // Check that the comment count was updated correctly
         final postDoc = await postDocument.get();
@@ -225,10 +220,7 @@ void main() {
             comments.where((c) => c.id != commentToDeleteId);
 
         // Check that the comment was deleted
-        final actualCommentsQuerySnap = await commentsSubCollection.get();
-        final actualComments = actualCommentsQuerySnap.docs
-            .map((doc) => CommentFirestore.fromDb(doc))
-            .toList();
+        final actualComments = await commentRepository.getComments(postId);
 
         expect(
           actualComments,
@@ -245,7 +237,7 @@ void main() {
       test(
           "should thrown an error and do nothing if the comment does not exist",
           () async {
-        await addComments(5);
+        final expectedComments = await addComments(5);
 
         const commentId = CommentIdFirestore(value: "non_existent_comment_id");
 
@@ -255,8 +247,8 @@ void main() {
         );
 
         // Check that no comments were not deleted
-        final actualCommentsQuerySnap = await commentsSubCollection.get();
-        expect(actualCommentsQuerySnap.docs.length, equals(5));
+        final actualComments = await commentRepository.getComments(postId);
+        expect(actualComments, expectedComments);
 
         // Check that the comment count was not updated
         final postDoc = await postDocument.get();
