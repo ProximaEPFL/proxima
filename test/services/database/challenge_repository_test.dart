@@ -112,6 +112,22 @@ void main() {
       challenges = await challengeRepository.getChallenges(uid, userPos);
       expect(challenges.length, 1);
     });
+
+    test("A user cannot have his own post as challenge", () async {
+      final postGenerator = FirestorePostGenerator();
+      final posts = await postGenerator.addPosts(
+        firestore,
+        inChallengeRange,
+        2,
+      );
+      final postOwner = posts.first.data.ownerId;
+
+      final challenges =
+          await challengeRepository.getChallenges(postOwner, userPos);
+
+      expect(challenges.length, 1);
+      expect(challenges.first.postId, posts[1].id); // the other post
+    });
   });
 
   group("Challenges update correctly", () {
