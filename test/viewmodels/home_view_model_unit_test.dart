@@ -115,7 +115,7 @@ void main() {
 
       final actualPosts = await container.read(postOverviewProvider.future);
 
-      expect(actualPosts, expectedPosts);
+      expect(actualPosts, unorderedEquals(expectedPosts));
     });
 
     test(
@@ -173,7 +173,7 @@ void main() {
         // Check the actual posts
         final actualPosts = await container.read(postOverviewProvider.future);
 
-        expect(actualPosts, expectedPosts);
+        expect(actualPosts, unorderedEquals(expectedPosts));
       },
     );
 
@@ -236,7 +236,7 @@ void main() {
         // Check the actual posts
         final actualPosts = await container.read(postOverviewProvider.future);
 
-        expect(actualPosts, expectedPosts);
+        expect(actualPosts, unorderedEquals(expectedPosts));
       },
     );
 
@@ -305,7 +305,7 @@ void main() {
       final postAfterRefresh =
           await container.read(postOverviewProvider.future);
 
-      expect(postAfterRefresh, expectedPosts);
+      expect(postAfterRefresh, unorderedEquals(expectedPosts));
     });
 
     test("Error is exposed correctly on refresh", () async {

@@ -43,7 +43,10 @@ void main() {
         .doc(expectedUser.uid.value)
         .set(expectedUser.data.toDbData());
 
-    setPostFirestore(fakePost, fakeFireStore);
+    setPostFirestore(
+      postsGenerator.createUserPost(testingUserFirestoreId, userPosition1),
+      fakeFireStore,
+    );
 
     mockedProfilePage = profileProviderScope(fakeFireStore, profilePageApp);
   });

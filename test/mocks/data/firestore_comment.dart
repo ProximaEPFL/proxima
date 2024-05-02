@@ -1,6 +1,8 @@
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/comment/comment_firestore.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/services/database/comment_repository_service.dart";
 
 import "comment_data.dart";
 
@@ -11,7 +13,23 @@ class CommentFirestoreGenerator {
   CommentFirestoreGenerator({int seed = 0})
       : _commentDataGenerator = CommentDataGenerator(seed: seed);
 
-  CommentFirestore createRandomComment({
+  Future<List<CommentFirestore>> addComments(
+    int number,
+    PostIdFirestore postId,
+    CommentRepositoryService commentRepository,
+  ) async {
+    final comments = <CommentFirestore>[];
+
+    for (var i = 0; i < number; i++) {
+      final commentData = _commentDataGenerator.createMockCommentData();
+      final commentId = await commentRepository.addComment(postId, commentData);
+      comments.add(CommentFirestore(id: commentId, data: commentData));
+    }
+
+    return comments;
+  }
+
+  CommentFirestore createMockComment({
     CommentIdFirestore? commentId,
     CommentData? data,
   }) {
@@ -19,7 +37,7 @@ class CommentFirestoreGenerator {
 
     return CommentFirestore(
       id: commentId ?? CommentIdFirestore(value: "commentId_$_commentId"),
-      data: data ?? _commentDataGenerator.createRandomCommentData(),
+      data: data ?? _commentDataGenerator.createMockCommentData(),
     );
   }
 }

@@ -1,6 +1,7 @@
 import "dart:math";
 
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:collection/collection.dart";
 import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
@@ -36,19 +37,25 @@ class FirestorePostGenerator {
 
   /// Generate a [PostFirestore] at position [location], generating the post data
   PostFirestore generatePostAt(GeoPoint location) {
-    return createPostAt(
-      PostDataGenerator.generatePostData(1).first,
-      location,
-    );
+    return generatePostsAt(location, 1).first;
   }
 
+  /// Generate [n] [PostFirestore] at position [location]
   List<PostFirestore> generatePostsAt(GeoPoint location, int n) {
-    final List<PostData> data = PostDataGenerator.generatePostData(n);
-    final List<PostFirestore> posts = [];
-    for (int i = 0; i < n; i++) {
-      posts.add(createPostAt(data[i], location));
-    }
-    return posts;
+    return generatePostsAtDifferentLocations(List.filled(n, location));
+  }
+
+  /// Generate [locations.length] [PostFirestore], at the positions given by [locations]
+  List<PostFirestore> generatePostsAtDifferentLocations(
+    List<GeoPoint> locations,
+  ) {
+    final List<PostData> data = PostDataGenerator.generatePostData(
+      locations.length,
+    );
+    final posts = locations.mapIndexed(
+      (i, location) => createPostAt(data[i], location),
+    );
+    return posts.toList();
   }
 
   /// Create a [PostFirestore] with random data

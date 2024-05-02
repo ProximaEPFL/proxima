@@ -8,8 +8,10 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
+import "package:proxima/services/database/user_repository_service.dart";
 
 import "../../mocks/data/challenge_data.dart";
+import "../../mocks/data/firestore_challenge.dart";
 import "../../mocks/data/firestore_post.dart";
 import "../../mocks/data/firestore_user.dart";
 import "../../mocks/data/geopoint.dart";
@@ -19,13 +21,16 @@ void main() {
   late FakeFirebaseFirestore firestore;
   late PostRepositoryService postRepository;
   late ChallengeRepositoryService challengeRepository;
+  late UserRepositoryService userRepository;
 
   setUp(() async {
     firestore = FakeFirebaseFirestore();
     postRepository = PostRepositoryService(firestore: firestore);
+    userRepository = UserRepositoryService(firestore: firestore);
     challengeRepository = ChallengeRepositoryService(
       firestore: firestore,
       postRepositoryService: postRepository,
+      userRepositoryService: userRepository,
     );
   });
 
@@ -106,6 +111,22 @@ void main() {
       await generator.addPostsReturnDataOnly(firestore, inChallengeRange, 1);
       challenges = await challengeRepository.getChallenges(uid, userPos);
       expect(challenges.length, 1);
+    });
+
+    test("A user cannot have his own post as challenge", () async {
+      final postGenerator = FirestorePostGenerator();
+      final posts = await postGenerator.addPosts(
+        firestore,
+        inChallengeRange,
+        2,
+      );
+      final postOwner = posts.first.data.ownerId;
+
+      final challenges =
+          await challengeRepository.getChallenges(postOwner, userPos);
+
+      expect(challenges.length, 1);
+      expect(challenges.first.postId, posts[1].id); // the other post
     });
   });
 
@@ -213,23 +234,92 @@ void main() {
   });
 
   group("Challenge completion", () {
-    test("Complete a challenge", () async {
+    test("Can complete a valid challenge", () async {
       FirestorePostGenerator generator = FirestorePostGenerator();
       await generator.addPostsReturnDataOnly(firestore, inChallengeRange, 1);
       final challenges = await challengeRepository.getChallenges(uid, userPos);
       expect(challenges.length, 1);
 
+      await setUserFirestore(firestore, testingUserFirestore);
       final challenge = challenges.first;
       expect(challenge.data.isCompleted, false);
-      await challengeRepository.completeChallenge(
+      bool isComplete = await challengeRepository.completeChallenge(
         uid,
         challenge.postId,
       );
+
+      expect(isComplete, true);
 
       final updatedChallenges =
           await challengeRepository.getChallenges(uid, userPos);
       expect(updatedChallenges.length, 1);
       expect(updatedChallenges.first.data.isCompleted, true);
+
+      final updatedUser = await userRepository.getUser(uid);
+      expect(
+        updatedUser.data.centauriPoints,
+        ChallengeRepositoryService.soloChallengeReward,
+      );
+    });
+
+    test("Can't complete a challenge that does not exist", () async {
+      final generator = FirestorePostGenerator();
+      final post = generator.generatePostAt(inChallengeRange);
+
+      final isCompleted =
+          await challengeRepository.completeChallenge(uid, post.id);
+
+      expect(isCompleted, false);
+    });
+
+    test("Can't complete a challenge that is already completed", () async {
+      final postGenerator = FirestorePostGenerator();
+      final post = postGenerator.generatePostAt(inChallengeRange);
+      final challengeGenerator = FirestoreChallengeGenerator();
+      final challenge = challengeGenerator.generateChallenge(
+        true,
+        const Duration(hours: 1),
+      );
+
+      await setUserFirestore(firestore, testingUserFirestore);
+      await setPostFirestore(post, firestore);
+      await setChallenge(firestore, challenge, uid);
+
+      final isCompleted =
+          await challengeRepository.completeChallenge(uid, post.id);
+
+      expect(isCompleted, false);
+
+      final updatedUser = await userRepository.getUser(uid);
+      expect(
+        updatedUser.data.centauriPoints,
+        0,
+      );
+    });
+
+    test("Can't complete an expired challenge", () async {
+      final postGenerator = FirestorePostGenerator();
+      final post = postGenerator.generatePostAt(inChallengeRange);
+      final challengeGenerator = FirestoreChallengeGenerator();
+      final challenge = challengeGenerator.generateChallenge(
+        false,
+        const Duration(hours: -1),
+      );
+
+      await setUserFirestore(firestore, testingUserFirestore);
+      await setPostFirestore(post, firestore);
+      await setChallenge(firestore, challenge, uid);
+
+      final isCompleted =
+          await challengeRepository.completeChallenge(uid, post.id);
+
+      expect(isCompleted, false);
+
+      final updatedUser = await userRepository.getUser(uid);
+      expect(
+        updatedUser.data.centauriPoints,
+        0,
+      );
     });
   });
 }

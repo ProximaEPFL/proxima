@@ -30,8 +30,11 @@ class PostDataGenerator {
         description: "description_$i",
         title: "title_$i",
         ownerId: UserIdFirestore(value: "owner_id_$i"),
-        publicationTime: Timestamp.fromMillisecondsSinceEpoch(1000 * i),
-        voteScore: i,
+        // one every 5 days
+        publicationTime:
+            Timestamp.fromMillisecondsSinceEpoch(i * 1000 * 60 * 60 * 24 * 5),
+        // to have some increasing/decreasing parts
+        voteScore: i * (i - 5) * (i - 10) * (i - 15),
         commentCount: i,
       );
     });

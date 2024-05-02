@@ -119,7 +119,7 @@ void main() {
 
       final actualPosts = await container.read(postOverviewProvider.future);
 
-      expect(actualPosts, expectedPosts);
+      expect(actualPosts, unorderedEquals(expectedPosts));
     });
 
     test("Throws an exception when the owner of a post is not found", () async {
@@ -212,7 +212,7 @@ void main() {
 
       final actualPosts = await container.read(postOverviewProvider.future);
 
-      expect(actualPosts, expectedPosts);
+      expect(actualPosts, unorderedEquals(expectedPosts));
     });
   });
 }

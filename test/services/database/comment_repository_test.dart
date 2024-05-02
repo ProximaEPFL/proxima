@@ -9,51 +9,26 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
-import "package:proxima/services/database/post_repository_service.dart";
 
+import "../../mocks/data/comment_data.dart";
 import "../../mocks/data/firestore_comment.dart";
+import "../../mocks/data/firestore_post.dart";
 import "../../mocks/data/geopoint.dart";
-import "../../mocks/data/post_data.dart";
 
 void main() {
   group("Testing comment repository", () {
     late FakeFirebaseFirestore fakeFirestore;
-    late PostRepositoryService postRepository;
     late CommentRepositoryService commentRepository;
 
     late PostIdFirestore postId;
     late CollectionReference<Map<String, dynamic>> commentsSubCollection;
     late DocumentReference<Map<String, dynamic>> postDocument;
     late CommentFirestoreGenerator commentGenerator;
-
-    Future<void> addComment(CommentFirestore comment) async {
-      await commentsSubCollection
-          .doc(comment.id.value)
-          .set(comment.data.toDbData());
-
-      await postDocument.update({
-        PostData.commentCountField: FieldValue.increment(1),
-      });
-    }
-
-    Future<List<CommentFirestore>> addComments(int number) async {
-      final comments = <CommentFirestore>[];
-
-      for (var i = 0; i < number; i++) {
-        final comment = commentGenerator.createRandomComment();
-        await addComment(comment);
-        comments.add(comment);
-      }
-
-      return comments;
-    }
+    late CommentDataGenerator commentDataGenerator;
 
     /// The setup add a single post with no comments
     setUp(() async {
       fakeFirestore = FakeFirebaseFirestore();
-      postRepository = PostRepositoryService(
-        firestore: fakeFirestore,
-      );
 
       // We get the comment repository from the provider container
       // because it allows to check that the provider constructs
@@ -61,14 +36,14 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           firestoreProvider.overrideWithValue(fakeFirestore),
-          postRepositoryProvider.overrideWithValue(postRepository),
         ],
       );
 
       commentRepository = container.read(commentRepositoryProvider);
 
-      final postData = PostDataGenerator().postData;
-      postId = await postRepository.addPost(postData, userPosition0);
+      final post = FirestorePostGenerator().generatePostAt(userPosition0);
+      postId = post.id;
+      await setPostFirestore(post, fakeFirestore);
 
       postDocument = fakeFirestore
           .collection(
@@ -81,6 +56,7 @@ void main() {
       );
 
       commentGenerator = CommentFirestoreGenerator();
+      commentDataGenerator = CommentDataGenerator();
     });
 
     group("getting comments", () {
@@ -93,14 +69,15 @@ void main() {
       test(
           "should return the comments of a post when there are multiple comments",
           () async {
-        final comments = await addComments(5);
+        final comments =
+            await commentGenerator.addComments(5, postId, commentRepository);
 
         final actualComments = await commentRepository.getComments(postId);
 
         expect(actualComments, unorderedEquals(comments));
       });
 
-      test("should return an error if the comment has missing field", () async {
+      test("should throw an error if the comment has missing field", () async {
         await commentsSubCollection.doc("comment_id").set({
           "missing_field": "missing_field",
         });
@@ -114,13 +91,13 @@ void main() {
 
     group("adding comments", () {
       test(
-          "should initialize the comment count of a post to 1 when the commentCount field doesn't exist",
+          "should initialize the comment count of a post to 1 when the commentCount field doesn't exist and a post is added",
           () async {
         // Remove the comment count field
         await postDocument
             .update({PostData.commentCountField: FieldValue.delete()});
 
-        final commentData = commentGenerator.createRandomComment().data;
+        final commentData = commentDataGenerator.createMockCommentData();
 
         await commentRepository.addComment(
           postId,
@@ -135,7 +112,7 @@ void main() {
       });
 
       test("should add a single comment to a post", () async {
-        final commentData = commentGenerator.createRandomComment().data;
+        final commentData = commentGenerator.createMockComment().data;
 
         final commentId = await commentRepository.addComment(
           postId,
@@ -148,11 +125,9 @@ void main() {
         );
 
         // Check that the comment was added correctly
-        final commentDoc =
-            await commentsSubCollection.doc(commentId.value).get();
-        final actualComment = CommentFirestore.fromDb(commentDoc);
+        final actualComments = await commentRepository.getComments(postId);
 
-        expect(actualComment, equals(expectedComment));
+        expect(actualComments, equals([expectedComment]));
 
         // Check that the comment count was updated correctly
         final postDoc = await postDocument.get();
@@ -164,10 +139,13 @@ void main() {
       test("should add comment to a post when there are already comments",
           () async {
         const alreadyPresentCommentsCount = 5;
-        final alreadyPresentComments =
-            await addComments(alreadyPresentCommentsCount);
+        final alreadyPresentComments = await commentGenerator.addComments(
+          alreadyPresentCommentsCount,
+          postId,
+          commentRepository,
+        );
 
-        final commentData = commentGenerator.createRandomComment().data;
+        final commentData = commentDataGenerator.createMockCommentData();
 
         final commentId = await commentRepository.addComment(
           postId,
@@ -180,10 +158,7 @@ void main() {
         );
 
         // Check that the comment was added correctly
-        final actualCommentQuery = await commentsSubCollection.get();
-        final actualComments = actualCommentQuery.docs
-            .map((doc) => CommentFirestore.fromDb(doc))
-            .toList();
+        final actualComments = await commentRepository.getComments(postId);
 
         expect(
           actualComments,
@@ -200,15 +175,16 @@ void main() {
 
     group("deleting comments", () {
       test("should delete a comment from a post with single comment", () async {
-        final comment = await addComments(1);
+        final comment =
+            await commentGenerator.addComments(1, postId, commentRepository);
 
         final commentId = comment.first.id;
 
         await commentRepository.deleteComment(postId, commentId);
 
         // Check that the comment was deleted
-        final actualCommentsQuerySnap = await commentsSubCollection.get();
-        expect(actualCommentsQuerySnap.docs, isEmpty);
+        final actualComments = await commentRepository.getComments(postId);
+        expect(actualComments, isEmpty);
 
         // Check that the comment count was updated correctly
         final postDoc = await postDocument.get();
@@ -221,7 +197,11 @@ void main() {
           () async {
         const alreadyPresentCommentsCount = 5;
 
-        final comments = await addComments(alreadyPresentCommentsCount);
+        final comments = await commentGenerator.addComments(
+          alreadyPresentCommentsCount,
+          postId,
+          commentRepository,
+        );
 
         // Delete the third comment
         final commentToDeleteId = comments[2].id;
@@ -231,10 +211,7 @@ void main() {
             comments.where((c) => c.id != commentToDeleteId);
 
         // Check that the comment was deleted
-        final actualCommentsQuerySnap = await commentsSubCollection.get();
-        final actualComments = actualCommentsQuerySnap.docs
-            .map((doc) => CommentFirestore.fromDb(doc))
-            .toList();
+        final actualComments = await commentRepository.getComments(postId);
 
         expect(
           actualComments,
@@ -251,7 +228,8 @@ void main() {
       test(
           "should thrown an error and do nothing if the comment does not exist",
           () async {
-        await addComments(5);
+        final expectedComments =
+            await commentGenerator.addComments(5, postId, commentRepository);
 
         const commentId = CommentIdFirestore(value: "non_existent_comment_id");
 
@@ -260,9 +238,9 @@ void main() {
           throwsA(isA<Exception>()),
         );
 
-        // Check that no comments were not deleted
-        final actualCommentsQuerySnap = await commentsSubCollection.get();
-        expect(actualCommentsQuerySnap.docs.length, equals(5));
+        // Check that no comments were deleted
+        final actualComments = await commentRepository.getComments(postId);
+        expect(actualComments, expectedComments);
 
         // Check that the comment count was not updated
         final postDoc = await postDocument.get();
