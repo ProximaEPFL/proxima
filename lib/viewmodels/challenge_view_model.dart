@@ -29,7 +29,7 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
 
     final postRepository = ref.watch(postRepositoryProvider);
     final now = DateTime.now();
-    Iterable<Future<ChallengeCardData>> futureUiChallenges =
+    final Iterable<Future<ChallengeCardData>> futureUiChallenges =
         firestoreChallenges.map((challenge) async {
       final post = await postRepository.getPost(challenge.postId);
       final timeLeft = challenge.data.expiresOn.toDate().difference(now);
@@ -56,7 +56,7 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
 
     final uiChallenges = await Future.wait(futureUiChallenges);
     uiChallenges.sort((a, b) {
-      if(a.isFinished == b.isFished) {
+      if (a.isFinished == b.isFinished) {
         return 0;
       }
       return b.isFinished ? -1 : 1;
