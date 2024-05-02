@@ -56,11 +56,10 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
 
     final uiChallenges = await Future.wait(futureUiChallenges);
     uiChallenges.sort((a, b) {
-      if (b.isFinished) {
-        return -1;
-      } else {
-        return 1;
+      if(a.isFinished == b.isFished) {
+        return 0;
       }
+      return b.isFinished ? -1 : 1;
     }); // sort the list so that finished challenges appear last
 
     return uiChallenges;
