@@ -18,19 +18,17 @@ class PostMap extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentPosition = ref.watch(liveLocationServiceProvider);
     final positionNotifier = ref.watch(mapProvider.notifier);
 
-    currentPosition.when(
-      data: (data) {
-        debugPrint("Live location: ${data!.latitude}, ${data.longitude}");
-        positionNotifier.redrawCircle(LatLng(data.latitude, data.longitude));
-      },
-      error: (error, _) {
-        throw Exception("Live location error: $error");
-      },
-      loading: () => (),
-    );
+    final location = ref.watch(geoLocationServiceProvider);
+
+    final stream = location.getPositionStream();
+
+    stream.listen((position) {
+      debugPrint("new position in view: $position");
+      positionNotifier
+          .redrawCircle(LatLng(position.latitude, position.longitude));
+    });
 
     return Expanded(
       child: GoogleMap(

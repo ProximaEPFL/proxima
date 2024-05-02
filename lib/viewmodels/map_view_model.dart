@@ -10,6 +10,19 @@ import "package:proxima/views/option_widgets/map/map_selection_option.dart";
 class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
   @override
   Future<MapInfo> build() async {
+    final positionStream = ref.watch(liveLocationServiceProvider);
+
+    positionStream.when(
+      data: (data) {
+        debugPrint("Live location: ${data!.latitude}, ${data.longitude}");
+        redrawCircle(LatLng(data.latitude, data.longitude));
+      },
+      error: (error, _) {
+        throw Exception("Live location error: $error");
+      },
+      loading: () => (),
+    );
+
     final actualLocation =
         await ref.read(geoLocationServiceProvider).getCurrentPosition();
     return MapInfo(
@@ -60,3 +73,20 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
 final mapProvider = AsyncNotifierProvider.autoDispose<MapViewModel, MapInfo>(
   () => MapViewModel(),
 );
+
+
+
+// final currentPosition = ref.watch(liveLocationServiceProvider);
+// location.when(
+//       data: (data) {
+//         debugPrint("Live location: ${data!.latitude}, ${data.longitude}");
+//         redrawCircle(LatLng(data.latitude, data.longitude));
+//       },
+//       error: (error, _) {
+//         throw Exception("Live location error: $error");
+//       },
+//       loading: () => (),
+//     );
+ 
+
+   
