@@ -10,7 +10,7 @@ class PostSortingService {
   /// posts on top with the [putOnTop] set.
   /// For instance, let's say that we have a list [A, b, c, D, e]
   /// randomly shuffled that we sort by alphabetical order. If
-  /// putOnTop contains [A, D, K], then the reuslt will be
+  /// putOnTop contains [A, D, K], then the result will be
   /// [A, D, b, c, e].
   List<PostFirestore> sort(
     List<PostFirestore> posts,
