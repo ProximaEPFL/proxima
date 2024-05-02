@@ -9,6 +9,8 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
+import "package:proxima/views/home_content/map/map_screen.dart";
+import "package:proxima/views/home_content/map/post_map.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
@@ -16,6 +18,7 @@ import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
+import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
 import "../mocks/data/geopoint.dart";
@@ -122,7 +125,7 @@ Future<void> homeToProfilePage(WidgetTester tester) async {
   expect(commentTab, findsOneWidget);
 
   //Check that post column is displayed
-  final postColumn = find.byKey(ProfilePage.postColumnKey);
+  final postColumn = find.byKey(ProfileUserPosts.postColumnKey);
   expect(postColumn, findsOneWidget);
 
   // Tap on the comment tab
@@ -158,7 +161,8 @@ Future<void> bottomNavigation(WidgetTester tester) async {
   // Map
   await tester.tap(find.text("Map"));
   await tester.pumpAndSettle();
-  expect(find.text("Proxima"), findsOneWidget);
+  expect(find.byType(MapScreen), findsOneWidget);
+  expect(find.byType(PostMap), findsOneWidget);
 
   // New Post
   await tester.tap(find.text("New post"));
@@ -206,10 +210,6 @@ Future<void> createPost(WidgetTester tester) async {
 
   // refresh the page by pulling down
   await tester.drag(find.byType(PostFeed), const Offset(0, 500));
-  await tester.pumpAndSettle();
-
-  final refreshButton = find.byKey(PostFeed.refreshButtonKey);
-  await tester.tap(refreshButton);
   await tester.pumpAndSettle();
 
   // Check that the post is displayed
