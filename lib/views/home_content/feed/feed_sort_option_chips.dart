@@ -5,7 +5,7 @@ import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
 
 /// This widget is the list of sort options for the timeline.
 class FeedSortOptionChips extends ConsumerWidget {
-  static final optionChipKey = Map.fromIterables(
+  static final optionChipKeys = Map.fromIterables(
     PostSortOption.values,
     PostSortOption.values.map((option) => Key("optionChip${option.name}")),
   );
@@ -20,7 +20,7 @@ class FeedSortOptionChips extends ConsumerWidget {
 
     final sortOptions = PostSortOption.values.map((sortOption) {
       return ChoiceChip(
-        key: optionChipKey[sortOption],
+        key: optionChipKeys[sortOption],
         selected: sortOption == selectedOption,
         label: Text(sortOption.name),
         onSelected: (bool selected) {

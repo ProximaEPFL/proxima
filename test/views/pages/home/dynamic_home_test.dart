@@ -67,7 +67,7 @@ void main() {
         for (int i = 0; i < 2; ++i) {
           for (final sortOption in PostSortOption.values) {
             final sortOptionChip =
-                find.byKey(FeedSortOptionChips.optionChipKey[sortOption]!);
+                find.byKey(FeedSortOptionChips.optionChipKeys[sortOption]!);
             expect(sortOptionChip, findsOneWidget);
 
             await tester.tap(sortOptionChip);
