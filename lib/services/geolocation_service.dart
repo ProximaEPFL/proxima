@@ -93,7 +93,6 @@ final geoLocationServiceProvider = Provider<GeoLocationService>(
 );
 
 final liveLocationServiceProvider = StreamProvider<GeoPoint?>((ref) {
-  final locationService =
-      GeoLocationService(geoLocator: GeolocatorPlatform.instance);
+  final locationService = ref.watch(geoLocationServiceProvider);
   return locationService.getPositionStream();
 });
