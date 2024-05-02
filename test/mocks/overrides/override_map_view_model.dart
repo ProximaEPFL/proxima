@@ -9,7 +9,6 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapInfo>
     implements MapViewModel {
   final Future<MapInfo> Function() _build;
   final Future<void> Function() _onRefresh;
-  final Future<void> Function(LatLng) _animateCamera;
   final void Function(GoogleMapController) _onMapCreated;
   final Set<Circle> _circles;
   final Future<void> Function(LatLng) _redrawCircle;
@@ -26,7 +25,6 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapInfo>
   })  : _build = build ??
             (() async => throw Exception("Location services are disabled.")),
         _onRefresh = onRefresh ?? (() async {}),
-        _animateCamera = animateCamera ?? ((_) async {}),
         _onMapCreated = onMapCreated ?? ((_) {}),
         _circles = circles ?? {},
         _redrawCircle = redrawCircle ?? ((_) async {}),
@@ -37,9 +35,6 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapInfo>
 
   @override
   Future<void> refresh() => _onRefresh();
-
-  @override
-  Future<void> animateCam(LatLng target) => _animateCamera(target);
 
   @override
   void onMapCreated(GoogleMapController controller) =>

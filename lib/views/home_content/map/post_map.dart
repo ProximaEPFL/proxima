@@ -24,7 +24,6 @@ class PostMap extends ConsumerWidget {
     currentPosition.when(
       data: (data) {
         debugPrint("Live location: ${data!.latitude}, ${data.longitude}");
-        positionNotifier.animateCam(LatLng(data.latitude, data.longitude));
         positionNotifier.redrawCircle(LatLng(data.latitude, data.longitude));
       },
       error: (error, _) {

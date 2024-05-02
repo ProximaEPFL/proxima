@@ -50,18 +50,6 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
     _mapController.complete(controller);
   }
 
-  Future<void> animateCam(LatLng target) async {
-    final mapCtrl = await _mapController.future;
-    await mapCtrl.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: target,
-          zoom: 17.5,
-        ),
-      ),
-    );
-  }
-
   /// Refresh the mapInfo.
   /// This will put the state of the viewmodel to loading
   /// and update the state accordingly
