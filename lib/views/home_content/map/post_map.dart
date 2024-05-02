@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_info.dart";
+import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/map_view_model.dart";
 
 class PostMap extends ConsumerWidget {
@@ -19,6 +20,18 @@ class PostMap extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final positionNotifier = ref.watch(mapProvider.notifier);
 
+    final positionStream = ref.watch(liveLocationServiceProvider);
+
+    positionStream.when(
+      data: (data) {
+        positionNotifier.redrawCircle(LatLng(data!.latitude, data.longitude));
+      },
+      error: (error, _) {
+        throw Exception("Live location error: $error");
+      },
+      loading: () => (),
+    );
+
     return Expanded(
       child: GoogleMap(
         key: postMapKey,
@@ -34,7 +47,7 @@ class PostMap extends ConsumerWidget {
           target: mapInfo.currentLocation,
           zoom: initialZoomLevel,
         ),
-        circles: mapInfo.circles,
+        circles: positionNotifier.circles,
         onMapCreated: positionNotifier.onMapCreated,
       ),
     );

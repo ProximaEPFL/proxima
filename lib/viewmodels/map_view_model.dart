@@ -10,18 +10,6 @@ import "package:proxima/views/option_widgets/map/map_selection_option.dart";
 class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
   @override
   Future<MapInfo> build() async {
-    final positionStream = ref.watch(liveLocationServiceProvider);
-
-    positionStream.when(
-      data: (data) {
-        redrawCircle(LatLng(data!.latitude, data.longitude));
-      },
-      error: (error, _) {
-        throw Exception("Live location error: $error");
-      },
-      loading: () => (),
-    );
-
     final actualLocation =
         await ref.read(geoLocationServiceProvider).getCurrentPosition();
     return MapInfo(
@@ -33,7 +21,6 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
   }
 
   final Set<Circle> _circles = {};
-
   // Getter for the circles
   Set<Circle> get circles => _circles;
 
