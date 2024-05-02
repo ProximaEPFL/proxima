@@ -40,13 +40,13 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
     );
   }
 
-  Completer<GoogleMapController> _mapController = Completer();
+  final Completer<GoogleMapController> _mapController = Completer();
 
   // Getter for the map controller
   Completer<GoogleMapController> get mapController => _mapController;
 
   void onMapCreated(GoogleMapController controller) async {
-    _mapController = Completer();
+    if (_mapController.isCompleted) return;
     _mapController.complete(controller);
   }
 
