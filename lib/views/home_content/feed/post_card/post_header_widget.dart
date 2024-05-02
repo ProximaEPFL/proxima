@@ -12,8 +12,8 @@ String timestampToTimeAgo(Timestamp timestamp) {
 /// Converts a timestamp to a user readable date string.
 String timestampToDate(Timestamp timestamp) {
   DateTime dateTime = timestamp.toDate();
-  DateFormat formatter = DateFormat("EEEE, MMMM d, yyyy HH:mm 'UTC'z");
-  return formatter.format(dateTime.toUtc());
+  DateFormat formatter = DateFormat("EEEE, MMMM d, yyyy HH:mm");
+  return formatter.format(dateTime);
 }
 
 /// This widget is used to display the info bar in the post card.
