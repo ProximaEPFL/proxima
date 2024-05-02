@@ -11,6 +11,7 @@ import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 
+import "../../mocks/data/comment_data.dart";
 import "../../mocks/data/firestore_comment.dart";
 import "../../mocks/data/geopoint.dart";
 import "../../mocks/data/post_data.dart";
@@ -25,24 +26,16 @@ void main() {
     late CollectionReference<Map<String, dynamic>> commentsSubCollection;
     late DocumentReference<Map<String, dynamic>> postDocument;
     late CommentFirestoreGenerator commentGenerator;
-
-    Future<void> addComment(CommentFirestore comment) async {
-      await commentsSubCollection
-          .doc(comment.id.value)
-          .set(comment.data.toDbData());
-
-      await postDocument.update({
-        PostData.commentCountField: FieldValue.increment(1),
-      });
-    }
+    late CommentDataGenerator commentDataGenerator;
 
     Future<List<CommentFirestore>> addComments(int number) async {
       final comments = <CommentFirestore>[];
 
       for (var i = 0; i < number; i++) {
-        final comment = commentGenerator.createRandomComment();
-        await addComment(comment);
-        comments.add(comment);
+        final commentData = commentDataGenerator.createRandomCommentData();
+        final commentId =
+            await commentRepository.addComment(postId, commentData);
+        comments.add(CommentFirestore(id: commentId, data: commentData));
       }
 
       return comments;
@@ -81,6 +74,7 @@ void main() {
       );
 
       commentGenerator = CommentFirestoreGenerator();
+      commentDataGenerator = CommentDataGenerator();
     });
 
     group("getting comments", () {
