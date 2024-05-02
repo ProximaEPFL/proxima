@@ -1,4 +1,3 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/foundation.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 
@@ -10,7 +9,7 @@ class PostOverview {
   final int voteScore;
   final int commentNumber;
   final String ownerDisplayName;
-  final Timestamp publicationTime;
+  final DateTime publicationDate;
   final int distance; // in meters
 
   const PostOverview({
@@ -20,7 +19,7 @@ class PostOverview {
     required this.voteScore,
     required this.commentNumber,
     required this.ownerDisplayName,
-    required this.publicationTime,
+    required this.publicationDate,
     required this.distance,
   });
 
@@ -35,7 +34,7 @@ class PostOverview {
         other.voteScore == voteScore &&
         other.commentNumber == commentNumber &&
         other.ownerDisplayName == ownerDisplayName &&
-        other.publicationTime == publicationTime &&
+        other.publicationDate == publicationDate &&
         other.distance == distance;
   }
 
@@ -48,7 +47,7 @@ class PostOverview {
       voteScore,
       commentNumber,
       ownerDisplayName,
-      publicationTime,
+      publicationDate,
       distance,
     );
   }

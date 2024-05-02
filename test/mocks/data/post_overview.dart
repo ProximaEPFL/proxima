@@ -1,7 +1,7 @@
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
 
-import "timestamp.dart";
+import "datetime.dart";
 
 final List<PostOverview> testPosts = [
   PostOverview(
@@ -11,7 +11,7 @@ final List<PostOverview> testPosts = [
     voteScore: 100,
     commentNumber: 5,
     ownerDisplayName: "Proxima",
-    publicationTime: fakeTimestamp,
+    publicationDate: publicationDate1,
     distance: 20,
   ),
   PostOverview(
@@ -22,7 +22,7 @@ final List<PostOverview> testPosts = [
     voteScore: -10,
     commentNumber: 5,
     ownerDisplayName: "Proxima",
-    publicationTime: fakeTimestamp,
+    publicationDate: publicationDate1,
     distance: 20,
   ),
   PostOverview(
@@ -32,7 +32,7 @@ final List<PostOverview> testPosts = [
     voteScore: 93213,
     commentNumber: 829,
     ownerDisplayName: "Proxima",
-    publicationTime: fakeTimestamp,
+    publicationDate: publicationDate1,
     distance: 20,
   ),
 ];

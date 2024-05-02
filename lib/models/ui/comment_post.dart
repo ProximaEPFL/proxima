@@ -1,16 +1,15 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/foundation.dart";
 
 @immutable
 class CommentPost {
   final String content;
   final String ownerDisplayName;
-  final Timestamp publicationTime;
+  final DateTime publicationDate;
 
   const CommentPost({
     required this.content,
     required this.ownerDisplayName,
-    required this.publicationTime,
+    required this.publicationDate,
   });
 
   @override
@@ -20,7 +19,7 @@ class CommentPost {
     return other is CommentPost &&
         other.content == content &&
         other.ownerDisplayName == ownerDisplayName &&
-        other.publicationTime == publicationTime;
+        other.publicationDate == publicationDate;
   }
 
   @override
@@ -28,7 +27,7 @@ class CommentPost {
     return Object.hash(
       content,
       ownerDisplayName,
-      publicationTime,
+      publicationDate,
     );
   }
 }

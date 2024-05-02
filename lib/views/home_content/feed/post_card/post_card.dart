@@ -81,7 +81,7 @@ class PostCard extends StatelessWidget {
               child: PostHeaderWidget(
                 key: postCardUserKey,
                 posterUsername: postOverview.ownerDisplayName,
-                postTimestamp: postOverview.publicationTime,
+                publicationDate: postOverview.publicationDate,
               ),
             ),
             postBody,

@@ -45,7 +45,7 @@ class CompletePostWidget extends StatelessWidget {
           child: PostHeaderWidget(
             key: postUserBarKey,
             posterUsername: post.ownerDisplayName,
-            postTimestamp: post.publicationTime,
+            publicationDate: post.publicationDate,
           ),
         ),
         postBody,

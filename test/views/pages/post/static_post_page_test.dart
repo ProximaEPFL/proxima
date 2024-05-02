@@ -104,14 +104,14 @@ void main() {
       final postUserBarTimestampTextWidget = tester.widget(
         find.descendant(
           of: postUserBar,
-          matching: find.byKey(PostHeaderWidget.timestampTextKey),
+          matching: find.byKey(PostHeaderWidget.publicationDateTextKey),
         ),
       );
 
       expect(
         postUserBarTimestampTextWidget is Text &&
             postUserBarTimestampTextWidget.data ==
-                timestampToTimeAgo(post.publicationTime),
+                dateTimeToTimeAgo(post.publicationDate),
         true,
       );
 
@@ -125,7 +125,7 @@ void main() {
       final tooltipMessage = (tooltipWidget as Tooltip).message;
       expect(
         tooltipMessage,
-        timestampToDate(post.publicationTime),
+        dateFormat(post.publicationDate),
       );
     });
 

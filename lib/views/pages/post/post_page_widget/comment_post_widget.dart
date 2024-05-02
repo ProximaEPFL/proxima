@@ -23,7 +23,7 @@ class CommentPostWidget extends StatelessWidget {
         PostHeaderWidget(
           key: commentUserWidgetKey,
           posterUsername: commentPost.ownerDisplayName,
-          postTimestamp: commentPost.publicationTime,
+          publicationDate: commentPost.publicationDate,
         ),
         Padding(
           padding: const EdgeInsets.only(left: 32, top: 8),

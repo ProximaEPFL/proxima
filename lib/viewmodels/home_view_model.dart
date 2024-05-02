@@ -54,7 +54,7 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
         ownerDisplayName: owner.data.displayName,
         commentNumber: 0,
         // TODO: Update appropriately when comments are implemented
-        publicationTime: post.data.publicationTime,
+        publicationDate: post.data.publicationTime.toDate(),
         distance: distance,
       );
 

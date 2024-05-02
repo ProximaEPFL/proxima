@@ -10,7 +10,7 @@ void main() {
       final expectedHash = Object.hash(
         commentPost.content,
         commentPost.ownerDisplayName,
-        commentPost.publicationTime,
+        commentPost.publicationDate,
       );
 
       final actualHash = commentPost.hashCode;
@@ -35,6 +35,13 @@ void main() {
     test("inequality test on username", () {
       final commentPost = unequalComments[0];
       final commentPostOther = unequalComments[2];
+
+      expect(commentPost != commentPostOther, true);
+    });
+
+    test("inequality test on publication time", () {
+      final commentPost = unequalComments[0];
+      final commentPostOther = unequalComments[3];
 
       expect(commentPost != commentPostOther, true);
     });

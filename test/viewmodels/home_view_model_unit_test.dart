@@ -94,7 +94,7 @@ void main() {
           voteScore: post.data.voteScore,
           commentNumber: 0,
           ownerDisplayName: owner.data.displayName,
-          publicationTime: post.data.publicationTime,
+          publicationDate: post.data.publicationTime.toDate(),
           distance: 0,
         ),
       ];
@@ -148,7 +148,7 @@ void main() {
             voteScore: post.data.voteScore,
             commentNumber: 0,
             ownerDisplayName: owner.data.displayName,
-            publicationTime: post.data.publicationTime,
+            publicationDate: post.data.publicationTime.toDate(),
             distance: 0,
           );
 
@@ -210,7 +210,7 @@ void main() {
             voteScore: post.data.voteScore,
             commentNumber: 0,
             ownerDisplayName: owners[index].data.displayName,
-            publicationTime: post.data.publicationTime,
+            publicationDate: post.data.publicationTime.toDate(),
             distance: 0,
           );
 
@@ -285,7 +285,7 @@ void main() {
           voteScore: post.data.voteScore,
           commentNumber: 0,
           ownerDisplayName: owner.data.displayName,
-          publicationTime: post.data.publicationTime,
+          publicationDate: post.data.publicationTime.toDate(),
           distance: 0,
         ),
       ];

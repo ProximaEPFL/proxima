@@ -14,7 +14,7 @@ void main() {
         postOverview.voteScore,
         postOverview.commentNumber,
         postOverview.ownerDisplayName,
-        postOverview.publicationTime,
+        postOverview.publicationDate,
         postOverview.distance,
       );
 

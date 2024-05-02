@@ -1,17 +1,15 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 import "package:proxima/utils/ui/user_avatar.dart";
 import "package:timeago/timeago.dart" as timeago;
 
 /// Converts a timestamp to a time ago string.
-String timestampToTimeAgo(Timestamp timestamp) {
-  return "${timeago.format(timestamp.toDate(), locale: "en_short")} ago";
+String dateTimeToTimeAgo(DateTime dateTime) {
+  return "${timeago.format(dateTime, locale: "en_short")} ago";
 }
 
 /// Converts a timestamp to a user readable date string.
-String timestampToDate(Timestamp timestamp) {
-  DateTime dateTime = timestamp.toDate();
+String dateFormat(DateTime dateTime) {
   DateFormat formatter = DateFormat("EEEE, MMMM d, yyyy HH:mm");
   return formatter.format(dateTime);
 }
@@ -21,16 +19,16 @@ String timestampToDate(Timestamp timestamp) {
 /// and the publication time of the post.
 class PostHeaderWidget extends StatelessWidget {
   static const displayNameTextKey = Key("displayNameText");
-  static const timestampTextKey = Key("timestampText");
+  static const publicationDateTextKey = Key("publicationTimeTextKey");
 
   const PostHeaderWidget({
     super.key,
     required this.posterUsername,
-    required this.postTimestamp,
+    required this.publicationDate,
   });
 
   final String posterUsername;
-  final Timestamp postTimestamp;
+  final DateTime publicationDate;
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +49,10 @@ class PostHeaderWidget extends StatelessWidget {
     );
 
     final publicationTime = Tooltip(
-      message: timestampToDate(postTimestamp),
+      message: dateFormat(publicationDate),
       child: Text(
-        key: timestampTextKey,
-        timestampToTimeAgo(postTimestamp),
+        key: publicationDateTextKey,
+        dateTimeToTimeAgo(publicationDate),
       ),
     );
 
