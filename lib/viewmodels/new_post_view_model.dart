@@ -4,6 +4,7 @@ import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/ui/new_post_state.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
 class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
@@ -69,6 +70,9 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
     );
 
     await postRepository.addPost(post, currPosition);
+
+    // Refresh the home feed after post creation
+    ref.read(postOverviewProvider.notifier).refresh();
 
     return NewPostState(
       titleError: null,

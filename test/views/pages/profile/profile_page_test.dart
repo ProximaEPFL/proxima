@@ -4,6 +4,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/profile/components/profile_badge.dart";
 import "package:proxima/views/pages/profile/components/user_account.dart";
@@ -44,9 +45,7 @@ void main() {
 
     setPostFirestore(fakePost, fakeFireStore);
 
-    mockedProfilePage = profilePageProvider(
-      fakeFireStore,
-    );
+    mockedProfilePage = profileProviderScope(fakeFireStore, profilePageApp);
   });
 
   group("Widgets display", () {
@@ -264,6 +263,40 @@ void main() {
       // Check that the profile page is displayed
       final profilePage = find.byType(ProfilePage);
       expect(profilePage, findsOneWidget);
+    });
+
+    testWidgets("Check that user centauri points count updates correctly.",
+        (tester) async {
+      await tester.pumpWidget(profileProviderScope(fakeFireStore, homePageApp));
+      await tester.pumpAndSettle();
+
+      final userPoints = expectedUser.data.centauriPoints.toString();
+      const increment = 10;
+
+      // Navigate to profile
+      await tester.tap(find.byKey(AppTopBar.profilePictureKey));
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
+
+      // Check correct centauri points
+      expect(find.textContaining(userPoints), findsOneWidget);
+
+      // Navigate back to home page
+      await tester.tap(find.byType(LeadingBackButton));
+      await tester.pumpAndSettle();
+
+      // Change the user points
+      await userCollection
+          .doc(expectedUser.uid.value)
+          .set(expectedUser.data.withPointsAddition(increment).toDbData());
+
+      // Navigate back to profile page
+      await tester.tap(find.byKey(AppTopBar.profilePictureKey));
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
+
+      // Check update centauri points
+      final updatedUserPoints =
+          (expectedUser.data.centauriPoints + increment).toString();
+      expect(find.textContaining(updatedUserPoints), findsOneWidget);
     });
   });
 }
