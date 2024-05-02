@@ -20,9 +20,9 @@ class PostMap extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final positionNotifier = ref.watch(mapProvider.notifier);
 
-    final positionStream = ref.watch(liveLocationServiceProvider);
+    final positionValue = ref.watch(liveLocationServiceProvider);
 
-    positionStream.when(
+    positionValue.when(
       data: (data) {
         positionNotifier.redrawCircle(LatLng(data!.latitude, data.longitude));
       },

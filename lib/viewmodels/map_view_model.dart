@@ -3,21 +3,13 @@ import "package:flutter/material.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_info.dart";
-import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/option_widgets/map/map_selection_option.dart";
 
-class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
+class MapViewModel extends AutoDisposeAsyncNotifier<MapSelectionOptions> {
   @override
-  Future<MapInfo> build() async {
-    final actualLocation =
-        await ref.read(geoLocationServiceProvider).getCurrentPosition();
-    return MapInfo(
-      currentLocation:
-          LatLng(actualLocation.latitude, actualLocation.longitude),
-      selectOption: MapSelectionOptions.nearby,
-      circles: _circles,
-    );
+  Future<MapSelectionOptions> build() async {
+    return MapSelectionOptions.nearby;
   }
 
   final Set<Circle> _circles = {};
