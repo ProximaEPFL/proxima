@@ -46,7 +46,8 @@ ProviderScope homePageFakeFirestoreProvider(
 }
 
 ProviderScope emptyHomePageProviderGPS(
-    MockGeoLocationService geoLocationService) {
+  MockGeoLocationService geoLocationService,
+) {
   return ProviderScope(
     overrides: [
       ...mockEmptyHomeViewModelOverride,
