@@ -49,7 +49,7 @@ void main() {
 
       // Add a comment to the post
       final commentData =
-          commentDataGenerator.createRandomCommentData(voteScore: 0);
+          commentDataGenerator.createMockCommentData(voteScore: 0);
 
       commentId = await commentRepository.addComment(
         postId,
