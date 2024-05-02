@@ -27,7 +27,7 @@ class GeoLocationService {
   // This code is adapted from the geolocator package documentation
   // Source : https://pub.dev/packages/geolocator
 
-  Future<Object?> checkLocationServices() async {
+  Future<Exception?> checkLocationServices() async {
     LocationPermission permission;
     bool serviceEnabled;
 
