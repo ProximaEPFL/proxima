@@ -22,6 +22,7 @@ void main() {
     late PostRepositoryService postRepository;
     late CommentRepositoryService commentRepository;
     late UpvoteRepositoryService<CommentIdFirestore> commentUpvoteRepository;
+    late CommentDataGenerator commentDataGenerator;
 
     late PostIdFirestore postId;
     late CommentIdFirestore commentId;
@@ -30,6 +31,7 @@ void main() {
       firestore = FakeFirebaseFirestore();
       postRepository = PostRepositoryService(firestore: firestore);
       commentRepository = CommentRepositoryService(firestore: firestore);
+      commentDataGenerator = CommentDataGenerator();
 
       final container = ProviderContainer(
         overrides: [
@@ -49,7 +51,7 @@ void main() {
 
       // Add a comment to the post
       final commentData =
-          CommentDataGenerator.createRandomCommentData(voteScore: 0);
+          commentDataGenerator.createRandomCommentData(voteScore: 0);
 
       commentId = await commentRepository.addComment(
         postId,
