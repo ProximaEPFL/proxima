@@ -14,11 +14,18 @@ void expectSorted(Iterable<double> iterable, bool ascending) {
 }
 
 void main() {
-  final sortingService = PostSortingService();
+  late PostSortingService sortingService;
 
-  final postGenerator = FirestorePostGenerator();
-  final positions = GeoPointGenerator.generatePositions(userPosition0, 10, 0);
-  final posts = postGenerator.generatePostsAtDifferentLocations(positions);
+  late FirestorePostGenerator postGenerator;
+  late List<PostFirestore> posts;
+
+  setUp(() {
+    sortingService = PostSortingService();
+
+    postGenerator = FirestorePostGenerator();
+    final positions = GeoPointGenerator.generatePositions(userPosition0, 10, 0);
+    posts = postGenerator.generatePostsAtDifferentLocations(positions);
+  });
 
   group("Score functions are meaningful", () {
     /// Compute the difference between the number of days since creation
@@ -153,15 +160,19 @@ void main() {
   });
 
   group("Nonempty onTop attribute", () {
-    final positionsToPutOnTop =
-        GeoPointGenerator.generatePositions(userPosition0, 5, 0);
-
     /// The posts that we will ask to put on top, if in the list
-    final postsToPutOnTop =
-        postGenerator.generatePostsAtDifferentLocations(positionsToPutOnTop);
+    late List<PostFirestore> postsToPutOnTop;
 
     /// The posts that will actually be in the list to be sorted
-    final existingPostsToPutOnTop = postsToPutOnTop.take(3).toList();
+    late List<PostFirestore> existingPostsToPutOnTop;
+
+    setUp(() {
+      final positionsToPutOnTop =
+          GeoPointGenerator.generatePositions(userPosition0, 5, 0);
+      postsToPutOnTop =
+          postGenerator.generatePostsAtDifferentLocations(positionsToPutOnTop);
+      existingPostsToPutOnTop = postsToPutOnTop.take(3).toList();
+    });
 
     /// Those tests sort a list of post using the [option] and checks
     /// that the first posts are the one that were asked to be put on top,
