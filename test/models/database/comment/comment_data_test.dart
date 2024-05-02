@@ -6,8 +6,14 @@ import "../../../mocks/data/comment_data.dart";
 
 void main() {
   group("Testing comment data", () {
+    late CommentDataGenerator commentDataGenerator;
+
+    setUp(() {
+      commentDataGenerator = CommentDataGenerator();
+    });
+
     test("hash overrides correctly", () {
-      final commentData = CommentDataGenerator.createRandomCommentData();
+      final commentData = commentDataGenerator.createRandomCommentData();
 
       final expectedHash = Object.hash(
         commentData.ownerId,
@@ -22,7 +28,7 @@ void main() {
     });
 
     test("equality overrides correctly", () {
-      final commentData = CommentDataGenerator.createRandomCommentData();
+      final commentData = commentDataGenerator.createRandomCommentData();
 
       final otherCommentData = CommentData(
         content: commentData.content,

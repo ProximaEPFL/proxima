@@ -6,6 +6,10 @@ import "comment_data.dart";
 
 class CommentFirestoreGenerator {
   int _commentId = 0;
+  final CommentDataGenerator _commentDataGenerator;
+
+  CommentFirestoreGenerator({int seed = 0})
+      : _commentDataGenerator = CommentDataGenerator(seed: seed);
 
   CommentFirestore createRandomComment({
     CommentIdFirestore? commentId,
@@ -15,7 +19,7 @@ class CommentFirestoreGenerator {
 
     return CommentFirestore(
       id: commentId ?? CommentIdFirestore(value: "commentId_$_commentId"),
-      data: data ?? CommentDataGenerator.createRandomCommentData(),
+      data: data ?? _commentDataGenerator.createRandomCommentData(),
     );
   }
 }

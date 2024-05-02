@@ -2,6 +2,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/foundation.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 
+/// This class represents the data of a comment in the firestore database
 @immutable
 class CommentData {
   final UserIdFirestore ownerId;

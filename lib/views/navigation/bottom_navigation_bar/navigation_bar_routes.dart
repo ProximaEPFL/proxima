@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:proxima/utils/ui/not_implemented.dart";
 import "package:proxima/views/home_content/challenge/challenge_list.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
+import "package:proxima/views/home_content/map/map_screen.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 /// This enum is used to create the navigation bar routes.
@@ -42,6 +43,8 @@ enum NavigationbarRoutes {
     switch (this) {
       case feed:
         return const PostFeed();
+      case map:
+        return const MapScreen();
       case challenge:
         return const ChallengeList();
       case _:
@@ -53,6 +56,8 @@ enum NavigationbarRoutes {
     switch (this) {
       case challenge:
         return "Challenges";
+      case map:
+        return "Map";
       case _:
         return defaultLabelText;
     }

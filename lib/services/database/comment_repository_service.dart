@@ -13,8 +13,9 @@ import "package:proxima/services/database/firestore_service.dart";
 class CommentRepositoryService {
   final FirebaseFirestore _firestore;
 
-  CommentRepositoryService({required FirebaseFirestore firestore})
-      : _firestore = firestore;
+  CommentRepositoryService({
+    required FirebaseFirestore firestore,
+  }) : _firestore = firestore;
 
   /// Returns the document reference of the post with id [postId]
   DocumentReference<Map<String, dynamic>> _postDocument(
@@ -86,11 +87,10 @@ class CommentRepositoryService {
   Future<void> deleteComment(
     PostIdFirestore parentPostId,
     CommentIdFirestore commentId,
-  ) async {
-    await _firestore.runTransaction((transaction) async {
-      await _deleteComment(parentPostId, commentId, transaction);
-    });
-  }
+  ) =>
+      _firestore.runTransaction(
+        (transaction) => _deleteComment(parentPostId, commentId, transaction),
+      );
 
   // Concrete implementation of the deletion of a comment
   Future<void> _deleteComment(
@@ -104,7 +104,7 @@ class CommentRepositoryService {
     final commentDoc = await transaction.get(commentRef);
 
     if (!commentDoc.exists) {
-      return;
+      throw Exception("Comment does not exist");
     }
 
     transaction.delete(commentRef);

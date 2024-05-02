@@ -3,6 +3,7 @@ import "package:flutter/foundation.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
 
+/// This class represents a comment in the firestore database
 @immutable
 class CommentFirestore {
   // This is thhe subcollection in which the comments are stored whithin

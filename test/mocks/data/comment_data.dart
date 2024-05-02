@@ -5,7 +5,11 @@ import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 
 class CommentDataGenerator {
-  static List<CommentData> generateCommentData(int count) {
+  final Random _random;
+
+  CommentDataGenerator({int seed = 0}) : _random = Random(seed);
+
+  List<CommentData> generateCommentData(int count) {
     return List.generate(count, (i) {
       return CommentData(
         content: "content_$i",
@@ -16,19 +20,19 @@ class CommentDataGenerator {
     });
   }
 
-  static CommentData createRandomCommentData({
+  CommentData createRandomCommentData({
     String? content,
     UserIdFirestore? ownerId,
     Timestamp? publicationTime,
     int? voteScore,
   }) {
     return CommentData(
-      content: content ?? "content_${Random().nextInt(100)}",
-      ownerId: ownerId ??
-          UserIdFirestore(value: "owner_id_${Random().nextInt(100)}"),
+      content: content ?? "content_${_random.nextInt(100)}",
+      ownerId:
+          ownerId ?? UserIdFirestore(value: "owner_id_${_random.nextInt(100)}"),
       publicationTime: publicationTime ??
-          Timestamp.fromMicrosecondsSinceEpoch(Random().nextInt(1000000)),
-      voteScore: voteScore ?? Random().nextInt(100),
+          Timestamp.fromMicrosecondsSinceEpoch(_random.nextInt(1000000)),
+      voteScore: voteScore ?? _random.nextInt(100),
     );
   }
 }

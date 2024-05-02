@@ -101,7 +101,7 @@ void main() {
       });
 
       test("should return an error if the comment has missing field", () async {
-        commentsSubCollection.doc("comment_id").set({
+        await commentsSubCollection.doc("comment_id").set({
           "missing_field": "missing_field",
         });
 
@@ -113,6 +113,27 @@ void main() {
     });
 
     group("adding comments", () {
+      test(
+          "should initialize the comment count of a post to 1 when the commentCount field doesn't exist",
+          () async {
+        // Remove the comment count field
+        await postDocument
+            .update({PostData.commentCountField: FieldValue.delete()});
+
+        final commentData = commentGenerator.createRandomComment().data;
+
+        await commentRepository.addComment(
+          postId,
+          commentData,
+        );
+
+        // Check that the comment count was updated correctly
+        final postDoc = await postDocument.get();
+        final post = PostFirestore.fromDb(postDoc);
+
+        expect(post.data.commentCount, equals(1));
+      });
+
       test("should add a single comment to a post", () async {
         final commentData = commentGenerator.createRandomComment().data;
 
@@ -227,14 +248,19 @@ void main() {
         expect(post.data.commentCount, equals(alreadyPresentCommentsCount - 1));
       });
 
-      test("should do nothing if the comment does not exist", () async {
+      test(
+          "should thrown an error and do nothing if the comment does not exist",
+          () async {
         await addComments(5);
 
         const commentId = CommentIdFirestore(value: "non_existent_comment_id");
 
-        await commentRepository.deleteComment(postId, commentId);
+        expect(
+          () async => await commentRepository.deleteComment(postId, commentId),
+          throwsA(isA<Exception>()),
+        );
 
-        // Check that the comments were not deleted
+        // Check that no comments were not deleted
         final actualCommentsQuerySnap = await commentsSubCollection.get();
         expect(actualCommentsQuerySnap.docs.length, equals(5));
 

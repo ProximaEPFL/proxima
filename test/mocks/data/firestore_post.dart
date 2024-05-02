@@ -42,6 +42,15 @@ class FirestorePostGenerator {
     );
   }
 
+  List<PostFirestore> generatePostsAt(GeoPoint location, int n) {
+    final List<PostData> data = PostDataGenerator.generatePostData(n);
+    final List<PostFirestore> posts = [];
+    for (int i = 0; i < n; i++) {
+      posts.add(createPostAt(data[i], location));
+    }
+    return posts;
+  }
+
   /// Create a [PostFirestore] with random data
   PostFirestore createUserPost(
     UserIdFirestore userId,
@@ -68,5 +77,54 @@ class FirestorePostGenerator {
         commentCount: Random().nextInt(100),
       ),
     );
+  }
+
+  /// Add [n] posts at position [location] and return their data and the [PostFirestore] objects
+  Future<List<PostFirestore>> addPosts(
+    FirebaseFirestore firestore,
+    GeoPoint location,
+    int n,
+  ) async {
+    final List<PostFirestore> fakePosts = generatePostsAt(location, n);
+    await setPostsFirestore(fakePosts, firestore);
+    return fakePosts;
+  }
+
+  /// Add [n] posts at position [location] and return their data
+  Future<List<PostData>> addPostsReturnDataOnly(
+    FirebaseFirestore firestore,
+    GeoPoint location,
+    int n,
+  ) async {
+    final posts = await addPosts(firestore, location, n);
+    return posts.map((post) => post.data).toList();
+  }
+}
+
+/// Helper function to set a post in the firestore db
+Future<void> setPostFirestore(
+  PostFirestore post,
+  FirebaseFirestore firestore,
+) async {
+  final Map<String, dynamic> locationData = {
+    PostLocationFirestore.geoPointField: post.location.geoPoint,
+    PostLocationFirestore.geohashField: post.location.geohash,
+  };
+
+  await firestore
+      .collection(PostFirestore.collectionName)
+      .doc(post.id.value)
+      .set({
+    PostFirestore.locationField: locationData,
+    ...post.data.toDbData(),
+  });
+}
+
+Future<void> setPostsFirestore(
+  List<PostFirestore> posts,
+  FirebaseFirestore firestore,
+) async {
+  for (final post in posts) {
+    await setPostFirestore(post, firestore);
   }
 }
