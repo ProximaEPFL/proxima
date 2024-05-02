@@ -1,6 +1,6 @@
-// The comment id is strong typed to avoid misuse
 import "package:flutter/foundation.dart";
 
+/// The comment id is strong typed to avoid misuse
 @immutable
 class CommentIdFirestore {
   final String value;
