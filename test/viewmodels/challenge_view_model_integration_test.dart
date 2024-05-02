@@ -126,7 +126,11 @@ void main() {
     final challenges = await container.read(challengeProvider.future);
     final areChallengesFinished = challenges.map((c) => c.isFinished).toList();
 
-    expect(areChallengesFinished, [false, true, true]);
+    expect(
+      areChallengesFinished,
+      List.filled(activeChallenges.length, false) +
+          List.filled(finishedChallenges.length, true),
+    );
   });
 
   test("Challenge can be completed", () async {
