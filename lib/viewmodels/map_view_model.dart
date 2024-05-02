@@ -73,8 +73,6 @@ final mapProvider = AsyncNotifierProvider.autoDispose<MapViewModel, MapInfo>(
   () => MapViewModel(),
 );
 
-
-
 // final currentPosition = ref.watch(liveLocationServiceProvider);
 // location.when(
 //       data: (data) {
@@ -86,6 +84,3 @@ final mapProvider = AsyncNotifierProvider.autoDispose<MapViewModel, MapInfo>(
 //       },
 //       loading: () => (),
 //     );
- 
-
-   
