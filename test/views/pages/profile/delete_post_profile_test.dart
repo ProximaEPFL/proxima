@@ -69,7 +69,7 @@ void main() {
       final posts =
           userPosts.docs.map((data) => PostFirestore.fromDb(data)).toList();
 
-      expect(posts.isEmpty, true);
+      expect(posts, isEmpty);
     });
 
     testWidgets("Delete post using pop up", (tester) async {
@@ -105,7 +105,7 @@ void main() {
       final posts =
           userPosts.docs.map((data) => PostFirestore.fromDb(data)).toList();
 
-      expect(posts.isEmpty, true);
+      expect(posts, isEmpty);
     });
   });
 }
