@@ -144,7 +144,10 @@ void main() {
           () async {
         const alreadyPresentCommentsCount = 5;
         final alreadyPresentComments = await commentGenerator.addComments(
-            alreadyPresentCommentsCount, postId, commentRepository);
+          alreadyPresentCommentsCount,
+          postId,
+          commentRepository,
+        );
 
         final commentData = commentDataGenerator.createMockCommentData();
 
@@ -199,7 +202,10 @@ void main() {
         const alreadyPresentCommentsCount = 5;
 
         final comments = await commentGenerator.addComments(
-            alreadyPresentCommentsCount, postId, commentRepository);
+          alreadyPresentCommentsCount,
+          postId,
+          commentRepository,
+        );
 
         // Delete the third comment
         final commentToDeleteId = comments[2].id;
