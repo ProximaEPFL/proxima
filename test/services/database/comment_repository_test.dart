@@ -129,7 +129,7 @@ void main() {
       });
 
       test("should add a single comment to a post", () async {
-        final commentData = commentGenerator.createRandomComment().data;
+        final commentData = commentGenerator.createMockComment().data;
 
         final commentId = await commentRepository.addComment(
           postId,

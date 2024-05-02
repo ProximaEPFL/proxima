@@ -7,7 +7,7 @@ void main() {
   group("Testing comment firestore", () {
     test("hash overrides correctly", () {
       final commentFirestore =
-          CommentFirestoreGenerator().createRandomComment();
+          CommentFirestoreGenerator().createMockComment();
 
       final expectedHash =
           Object.hash(commentFirestore.id, commentFirestore.data);
@@ -19,7 +19,7 @@ void main() {
 
     test("equality overrides correctly", () {
       final commentFirestore =
-          CommentFirestoreGenerator().createRandomComment();
+          CommentFirestoreGenerator().createMockComment();
 
       final otherCommentFirestore = CommentFirestore(
         id: commentFirestore.id,

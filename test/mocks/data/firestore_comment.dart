@@ -11,7 +11,7 @@ class CommentFirestoreGenerator {
   CommentFirestoreGenerator({int seed = 0})
       : _commentDataGenerator = CommentDataGenerator(seed: seed);
 
-  CommentFirestore createRandomComment({
+  CommentFirestore createMockComment({
     CommentIdFirestore? commentId,
     CommentData? data,
   }) {
