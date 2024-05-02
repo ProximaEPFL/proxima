@@ -20,6 +20,8 @@ class FirestoreChallengeGenerator {
     bool done,
     Duration extra,
   ) {
+    // The index is ignored since, anyway, `_id` will be increased every
+    // time, yielding different challenges.
     return List.generate(count, (_) => generateChallenge(done, extra));
   }
 }

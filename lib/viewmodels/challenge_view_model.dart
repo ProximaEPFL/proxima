@@ -29,7 +29,7 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
 
     final postRepository = ref.watch(postRepositoryProvider);
     final now = DateTime.now();
-    Iterable<Future<ChallengeCardData>> futureUiChallenges =
+    final Iterable<Future<ChallengeCardData>> futureUiChallenges =
         firestoreChallenges.map((challenge) async {
       final post = await postRepository.getPost(challenge.postId);
       final timeLeft = challenge.data.expiresOn.toDate().difference(now);
@@ -56,11 +56,10 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
 
     final uiChallenges = await Future.wait(futureUiChallenges);
     uiChallenges.sort((a, b) {
-      if (b.isFinished) {
-        return -1;
-      } else {
-        return 1;
+      if (a.isFinished == b.isFinished) {
+        return 0;
       }
+      return b.isFinished ? -1 : 1;
     }); // sort the list so that finished challenges appear last
 
     return uiChallenges;
@@ -83,7 +82,14 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
 
     final challengeCompleted =
         await challengeRepository.completeChallenge(currentUser!, pid);
-    await refresh();
+    if (challengeCompleted) {
+      // we only need to refresh the view model if something actually changed
+      // we do not need to wait for this refresh, as most likely we will not
+      // actually call this method from inside the challenge UI
+      // if we do we might have a weird double loading, but probably not
+      // can change if we have a problem
+      refresh();
+    }
     return challengeCompleted;
   }
 }
