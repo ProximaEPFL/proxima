@@ -8,6 +8,8 @@ import "package:proxima/views/pages/profile/info_cards/profile_info_column.dart"
 class ProfileUserPosts extends HookConsumerWidget {
   static const postColumnKey = Key("postColumn");
 
+  static const noPostsInfoText = "You don't have any post yet.";
+
   final BoxShadow? shadow;
 
   const ProfileUserPosts({
@@ -28,9 +30,8 @@ class ProfileUserPosts extends HookConsumerWidget {
                 title: p.title,
                 content: p.description,
                 shadow: shadow,
-                onDelete: () async {
-                  // TODO handle post deletion
-                },
+                onDelete: () =>
+                    ref.read(userPostsProvider.notifier).deletePost(p.postId),
               ),
             )
             .toList();
@@ -39,6 +40,7 @@ class ProfileUserPosts extends HookConsumerWidget {
           key: postColumnKey,
           onRefresh: ref.read(userPostsProvider.notifier).refresh,
           itemList: posts,
+          emptyInfoText: noPostsInfoText,
         );
       },
     );
