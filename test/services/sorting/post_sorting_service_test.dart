@@ -21,6 +21,8 @@ void main() {
   final posts = postGenerator.generatePostsAtDifferentLocations(positions);
 
   group("Score functions are meaningful", () {
+    /// Compute the difference between the creation date of the [referencePost]
+    /// and the one of the [post].
     double dayDifference(PostFirestore referencePost, PostFirestore post) {
       final referenceDate = referencePost.data.publicationTime.toDate();
       final date = post.data.publicationTime.toDate();
@@ -30,6 +32,8 @@ void main() {
           (1000.0 * 60.0 * 60.0 * 24.0);
     }
 
+    /// Compute the difference between the vote score of the [referencePost]
+    /// and the one of the [post].
     double upvoteDifference(PostFirestore referencePost, PostFirestore post) {
       final referenceScore = referencePost.data.voteScore;
       final score = post.data.voteScore;
@@ -37,6 +41,7 @@ void main() {
       return (referenceScore - score).toDouble();
     }
 
+    /// Compute the (always positive) distance between the [referencePost] and the [post].
     double positionDifference(PostFirestore referencePost, PostFirestore post) {
       final referencePosition = referencePost.location.geoPoint;
       final position = post.location.geoPoint;
@@ -49,6 +54,15 @@ void main() {
       );
     }
 
+    /// Test the behaviour for [option] with a given [expectedBehaviour].
+    /// The expected behaviour can for instance be that a post with 3 more
+    /// upvotes should have a score 3 greater. See examples below for more
+    /// clarity.
+    /// The [expectedBehaviourStr] is used to describe the expected behaviour
+    /// in the test name. If [forcePositiveScore] is true, the score difference
+    /// will be forced to be positive. This is used for distances for instance
+    /// (it matters which post has 3 more upvotes, the order in which the posts
+    /// are given matters; it however does not matter for distances).
     void testOption(
       PostSortOption option,
       String expectedBehaviourStr,
@@ -80,6 +94,12 @@ void main() {
       );
     }
 
+    /// For the option `hottest`, we want that the score increases by 1
+    /// every upvote and decreases by 1 every day. Therefore, the expected
+    /// behaviour is that the score difference between two posts is the
+    /// difference in upvotes (it increases by 1 every times the first post
+    /// has 1 more upvote) minus the difference in their creation date (it decreases
+    /// by 1 if the first post is published 1 day later).
     testOption(
       PostSortOption.hottest,
       "increases by 1 every upvote, decreases by 1 every day",
@@ -110,6 +130,8 @@ void main() {
 
   group("Empty onTop attribute", () {
     for (final option in PostSortOption.values) {
+      /// Those tests sort a list of post using the [option] and checks
+      /// that the scores are sorted in the correct order.
       test("Correct sort on option ${option.name}", () {
         final sorted = sortingService.sort(
           posts,
@@ -138,6 +160,10 @@ void main() {
     /// The posts that will actually be in the list to be sorted
     final existingPostsToPutOnTop = postsToPutOnTop.take(3).toList();
 
+    /// Those tests sort a list of post using the [option] and checks
+    /// that the first posts are the one that were asked to be put on top,
+    /// that their scores are sorted in the correct order, and that the
+    /// other posts are also sorted in correct order.
     for (final option in PostSortOption.values) {
       test("Correct sort on option ${option.name}", () {
         final allPosts = posts + existingPostsToPutOnTop;
