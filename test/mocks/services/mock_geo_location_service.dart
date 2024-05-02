@@ -13,4 +13,12 @@ class MockGeoLocationService extends Mock implements GeoLocationService {
       returnValue: Future.value(userPosition0),
     );
   }
+
+  @override
+  Stream<GeoPoint> getPositionStream() {
+    return super.noSuchMethod(
+      Invocation.method(#requestPermission, []),
+      returnValue: Stream.value(userPosition0),
+    );
+  }
 }

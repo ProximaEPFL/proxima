@@ -52,6 +52,9 @@ void main() {
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) => Future.value(testLocation),
     );
+    when(geoLocationService.getPositionStream()).thenAnswer(
+      (_) => Stream.value(testLocation),
+    );
   });
 
   testWidgets("End-to-end test of the app navigation flow",

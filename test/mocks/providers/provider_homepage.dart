@@ -44,3 +44,15 @@ ProviderScope homePageFakeFirestoreProvider(
     child: homePageApp,
   );
 }
+
+ProviderScope emptyHomePageProviderGPS(
+  MockGeoLocationService geoLocationService,
+) {
+  return ProviderScope(
+    overrides: [
+      ...mockEmptyHomeViewModelOverride,
+      geoLocationServiceProvider.overrideWithValue(geoLocationService),
+    ],
+    child: homePageApp,
+  );
+}

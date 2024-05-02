@@ -1,13 +1,17 @@
+import "dart:async";
+
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:flutter_test/flutter_test.dart";
 import "package:geolocator/geolocator.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/services/geolocation_service.dart";
-import "package:test/test.dart";
 
 import "../mocks/data/geopoint.dart";
 import "../mocks/services/mock_geolocator_platform.dart";
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group("GeoLocationService", () {
     late GeoLocationService geoLocationService;
     late MockGeolocatorPlatform mockGeolocator;
@@ -111,6 +115,43 @@ void main() {
 
       verify(mockGeolocator.requestPermission()).called(1);
       expect(actualGeoPoint, equals(expectedGeoPoint));
+    });
+
+    test("determinePosition returns a stream", () async {
+      const latitude = 37.4219983;
+      const longitude = -122.084;
+
+      when(mockGeolocator.isLocationServiceEnabled())
+          .thenAnswer((_) async => true);
+      when(mockGeolocator.checkPermission())
+          .thenAnswer((_) async => LocationPermission.always);
+      when(
+        mockGeolocator.getCurrentPosition(
+          locationSettings: geoLocationService.locationSettings,
+        ),
+      ).thenAnswer(
+        (_) async => getSimplePosition(latitude, longitude),
+      );
+      when(
+        mockGeolocator.getPositionStream(
+          locationSettings: geoLocationService.locationSettings,
+        ),
+      ).thenAnswer(
+        (_) => Stream.fromIterable([
+          getSimplePosition(latitude, longitude),
+          getSimplePosition(latitude + 1, longitude + 1),
+        ]),
+      );
+
+      final stream = geoLocationService.getPositionStream();
+
+      expect(
+        stream,
+        emitsInOrder([
+          const GeoPoint(latitude, longitude),
+          const GeoPoint(latitude + 1, longitude + 1),
+        ]),
+      );
     });
   });
 }
