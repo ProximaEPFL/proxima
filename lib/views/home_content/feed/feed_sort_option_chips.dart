@@ -23,8 +23,8 @@ class FeedSortOptionChips extends ConsumerWidget {
         key: optionChipKey[sortOption],
         selected: sortOption == selectedOption,
         label: Text(sortOption.name),
-        onSelected: (value) {
-          if (value) {
+        onSelected: (bool selected) {
+          if (selected) {
             ref
                 .read(feedSortOptionsProvider.notifier)
                 .setSortOption(sortOption);
