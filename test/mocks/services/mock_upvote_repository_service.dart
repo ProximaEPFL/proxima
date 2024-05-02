@@ -20,7 +20,6 @@ class MockUpvoteRepositoryService<ParentIdFirestore extends IdFirestore>
         {#transaction: transaction},
       ),
       returnValue: Future.value(UpvoteState.none),
-      returnValueForMissingStub: Future.value(UpvoteState.none),
     );
   }
 
@@ -36,7 +35,6 @@ class MockUpvoteRepositoryService<ParentIdFirestore extends IdFirestore>
         [userId, parentId, newState],
       ),
       returnValue: Future.value(),
-      returnValueForMissingStub: Future.value(),
     );
   }
 }
