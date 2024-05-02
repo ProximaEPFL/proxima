@@ -101,7 +101,7 @@ void main() {
       });
 
       test("should return an error if the comment has missing field", () async {
-        commentsSubCollection.doc("comment_id").set({
+        await commentsSubCollection.doc("comment_id").set({
           "missing_field": "missing_field",
         });
 
