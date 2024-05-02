@@ -5,9 +5,11 @@ class MapInfo {
   const MapInfo({
     required this.currentLocation,
     required this.selectOption,
+    required this.circles,
   });
   final LatLng currentLocation;
   final MapSelectionOptions selectOption;
+  final Set<Circle> circles;
 
   @override
   bool operator ==(Object other) {

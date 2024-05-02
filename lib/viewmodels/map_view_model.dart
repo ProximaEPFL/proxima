@@ -18,13 +18,13 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
       currentLocation:
           LatLng(actualLocation.latitude, actualLocation.longitude),
       selectOption: MapSelectionOptions.nearby,
+      circles: _circles,
     );
   }
 
-  //set of circles drawn on the map
   final Set<Circle> _circles = {};
 
-  //getter for the circles
+  // Getter for the circles
   Set<Circle> get circles => _circles;
 
   Future<void> redrawCircle(LatLng target) async {

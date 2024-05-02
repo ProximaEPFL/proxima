@@ -47,7 +47,7 @@ class PostMap extends ConsumerWidget {
           target: mapInfo.currentLocation,
           zoom: initialZoomLevel,
         ),
-        circles: positionNotifier.circles,
+        circles: mapInfo.circles,
         onMapCreated: positionNotifier.onMapCreated,
       ),
     );
