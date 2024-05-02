@@ -6,7 +6,7 @@ import "package:timeago/timeago.dart" as timeago;
 
 /// Converts a timestamp to a time ago string.
 String timestampToTimeAgo(Timestamp timestamp) {
-  return "${timeago.format(timestamp.toDate(), locale: "en_short")}ago";
+  return "${timeago.format(timestamp.toDate(), locale: "en_short")} ago";
 }
 
 /// Converts a timestamp to a user readable date string.
