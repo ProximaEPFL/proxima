@@ -143,7 +143,7 @@ void main() {
         ]),
       );
 
-      final stream = geoLocationService.getPositionStream();
+      final stream = await geoLocationService.getPositionStream();
 
       final actualGeoPoint1 = await stream.first;
 

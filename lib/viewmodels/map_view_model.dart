@@ -14,8 +14,7 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
 
     positionStream.when(
       data: (data) {
-        debugPrint("Live location: ${data!.latitude}, ${data.longitude}");
-        redrawCircle(LatLng(data.latitude, data.longitude));
+        redrawCircle(LatLng(data!.latitude, data.longitude));
       },
       error: (error, _) {
         throw Exception("Live location error: $error");
