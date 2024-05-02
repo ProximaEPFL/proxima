@@ -1,7 +1,9 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:collection/collection.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:geolocator/geolocator.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
+import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/services/sorting/post_sort_option.dart";
 import "package:proxima/services/sorting/post_sorting_service.dart";
 
@@ -147,6 +149,57 @@ void main() {
       "increases by 1 every upvote",
       upvoteDifference,
     );
+
+    test("Sort by latest sorts by increasing time since creation", () {
+      final sorted = sortingService.sort(
+        posts,
+        PostSortOption.latest,
+        userPosition0,
+      );
+
+      final currentTime = Timestamp.now();
+      final timesSinceCreation = sorted
+          .map(
+            (post) =>
+                currentTime.millisecondsSinceEpoch -
+                post.data.publicationTime.millisecondsSinceEpoch,
+          )
+          .map((value) => value.toDouble());
+      expectSorted(timesSinceCreation, true);
+    });
+
+    test("Sort by nearest sorts by increasing distance", () {
+      final sorted = sortingService.sort(
+        posts,
+        PostSortOption.nearest,
+        userPosition0,
+      );
+
+      final distances = sorted.map((post) {
+        final postPos = post.location.geoPoint;
+        return Geolocator.distanceBetween(
+          postPos.latitude,
+          postPos.longitude,
+          userPosition0.latitude,
+          userPosition0.longitude,
+        );
+      });
+      expectSorted(distances, true);
+    });
+
+    test("Sort by top sorts by decreasing upvotes", () {
+      final sorted = sortingService.sort(
+        posts,
+        PostSortOption.top,
+        userPosition0,
+      );
+
+      final upvotes = sorted.map((post) => post.data.voteScore.toDouble());
+      expectSorted(upvotes, false);
+    });
+
+    // Sorting by hottest has a less easy to understand behaviour, so there
+    // is no such test for it.
   });
 
   group("Empty onTop attribute", () {
