@@ -7,13 +7,12 @@ void main() {
   group("hash and == works", () {
     test("hash", () {
       const mapInfo1 = MapInfo(
-        currentLocation: LatLng(0, 0),
+        initialLocation: LatLng(0, 0),
         selectOption: MapSelectionOptions.nearby,
-        circles: {},
       );
 
       final expectedHash = Object.hash(
-        mapInfo1.currentLocation,
+        mapInfo1.initialLocation,
         mapInfo1.selectOption,
       );
 
@@ -24,19 +23,16 @@ void main() {
 
     test("==", () {
       const mapInfo1 = MapInfo(
-        currentLocation: LatLng(0, 0),
+        initialLocation: LatLng(0, 0),
         selectOption: MapSelectionOptions.nearby,
-        circles: {},
       );
       const mapInfo2 = MapInfo(
-        currentLocation: LatLng(1, 1),
+        initialLocation: LatLng(1, 1),
         selectOption: MapSelectionOptions.nearby,
-        circles: {},
       );
       const mapInfo3 = MapInfo(
-        currentLocation: LatLng(0, 0),
+        initialLocation: LatLng(0, 0),
         selectOption: MapSelectionOptions.nearby,
-        circles: {},
       );
 
       expect(mapInfo1 == mapInfo2, isFalse);

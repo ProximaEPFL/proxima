@@ -3,13 +3,20 @@ import "package:flutter/material.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_info.dart";
+import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/option_widgets/map/map_selection_option.dart";
 
-class MapViewModel extends AutoDisposeAsyncNotifier<MapSelectionOptions> {
+class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
   @override
-  Future<MapSelectionOptions> build() async {
-    return MapSelectionOptions.nearby;
+  Future<MapInfo> build() async {
+    final actualLocation =
+        await ref.read(geoLocationServiceProvider).getCurrentPosition();
+    return MapInfo(
+      initialLocation:
+          LatLng(actualLocation.latitude, actualLocation.longitude),
+      selectOption: MapSelectionOptions.nearby,
+    );
   }
 
   final Set<Circle> _circles = {};
@@ -51,15 +58,3 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapSelectionOptions> {
 final mapProvider = AsyncNotifierProvider.autoDispose<MapViewModel, MapInfo>(
   () => MapViewModel(),
 );
-
-// final currentPosition = ref.watch(liveLocationServiceProvider);
-// location.when(
-//       data: (data) {
-//         debugPrint("Live location: ${data!.latitude}, ${data.longitude}");
-//         redrawCircle(LatLng(data.latitude, data.longitude));
-//       },
-//       error: (error, _) {
-//         throw Exception("Live location error: $error");
-//       },
-//       loading: () => (),
-//     );

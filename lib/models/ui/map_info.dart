@@ -3,26 +3,24 @@ import "package:proxima/views/option_widgets/map/map_selection_option.dart";
 
 class MapInfo {
   const MapInfo({
-    required this.currentLocation,
+    required this.initialLocation,
     required this.selectOption,
-    required this.circles,
   });
-  final LatLng currentLocation;
+  final LatLng initialLocation;
   final MapSelectionOptions selectOption;
-  final Set<Circle> circles;
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
     return other is MapInfo &&
-        other.currentLocation == currentLocation &&
+        other.initialLocation == initialLocation &&
         other.selectOption == selectOption;
   }
 
   @override
   int get hashCode => Object.hash(
-        currentLocation,
+        initialLocation,
         selectOption,
       );
 }

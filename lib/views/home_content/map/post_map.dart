@@ -44,7 +44,7 @@ class PostMap extends ConsumerWidget {
         rotateGesturesEnabled: false,
         tiltGesturesEnabled: false,
         initialCameraPosition: CameraPosition(
-          target: mapInfo.currentLocation,
+          target: mapInfo.initialLocation,
           zoom: initialZoomLevel,
         ),
         circles: positionNotifier.circles,
