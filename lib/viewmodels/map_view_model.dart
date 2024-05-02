@@ -7,8 +7,6 @@ import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/option_widgets/map/map_selection_option.dart";
 
-// TODO: For now, this is code with mock data.
-// This will just be replaced when we implement a real view model anyway.
 class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
   @override
   Future<MapInfo> build() async {
