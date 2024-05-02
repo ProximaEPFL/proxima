@@ -13,8 +13,9 @@ import "package:proxima/services/database/firestore_service.dart";
 class CommentRepositoryService {
   final FirebaseFirestore _firestore;
 
-  CommentRepositoryService({required FirebaseFirestore firestore})
-      : _firestore = firestore;
+  CommentRepositoryService({
+    required FirebaseFirestore firestore,
+  }) : _firestore = firestore;
 
   /// Returns the document reference of the post with id [postId]
   DocumentReference<Map<String, dynamic>> _postDocument(
