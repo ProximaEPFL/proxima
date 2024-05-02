@@ -104,7 +104,7 @@ class CommentRepositoryService {
     final commentDoc = await transaction.get(commentRef);
 
     if (!commentDoc.exists) {
-      return;
+      throw Exception("Comment does not exist");
     }
 
     transaction.delete(commentRef);

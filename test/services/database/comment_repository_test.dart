@@ -248,14 +248,19 @@ void main() {
         expect(post.data.commentCount, equals(alreadyPresentCommentsCount - 1));
       });
 
-      test("should do nothing if the comment does not exist", () async {
+      test(
+          "should thrown an error and do nothing if the comment does not exist",
+          () async {
         await addComments(5);
 
         const commentId = CommentIdFirestore(value: "non_existent_comment_id");
 
-        await commentRepository.deleteComment(postId, commentId);
+        expect(
+          () async => await commentRepository.deleteComment(postId, commentId),
+          throwsA(isA<Exception>()),
+        );
 
-        // Check that the comments were not deleted
+        // Check that no comments were not deleted
         final actualCommentsQuerySnap = await commentsSubCollection.get();
         expect(actualCommentsQuerySnap.docs.length, equals(5));
 
