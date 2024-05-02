@@ -100,6 +100,7 @@ class ChallengeRepositoryService {
         activeChallenges,
         pos,
         userDocRef,
+        uid,
       );
     }
 
@@ -131,6 +132,7 @@ class ChallengeRepositoryService {
     List<ChallengeFirestore> activeChallenges,
     GeoPoint pos,
     DocumentReference parentRef,
+    UserIdFirestore excludedUser,
   ) async {
     final now = DateTime.now();
     final sum = now.add(maxChallengeDuration);
@@ -141,7 +143,7 @@ class ChallengeRepositoryService {
     ); // truncates to the day
 
     final Iterable<PostIdFirestore> possiblePosts =
-        await _inRangeUnsortedPosts(pos);
+        await _inRangeUnsortedPosts(pos, excludedUser);
     final Iterable<String> possiblePostsStringIds =
         possiblePosts.map((post) => post.value);
 
@@ -201,7 +203,10 @@ class ChallengeRepositoryService {
     await batch.commit();
   }
 
-  Future<Iterable<PostIdFirestore>> _inRangeUnsortedPosts(GeoPoint pos) async {
+  Future<Iterable<PostIdFirestore>> _inRangeUnsortedPosts(
+    GeoPoint pos,
+    UserIdFirestore excludedUser,
+  ) async {
     Iterable<PostFirestore> possiblePosts =
         await _postRepositoryService.getNearPosts(
       pos,
@@ -209,7 +214,9 @@ class ChallengeRepositoryService {
       minChallengeRadius,
     );
 
-    return possiblePosts.map((post) => post.id);
+    return possiblePosts
+        .where((post) => post.data.ownerId != excludedUser)
+        .map((post) => post.id);
   }
 }
 

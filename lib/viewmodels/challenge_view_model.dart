@@ -76,6 +76,8 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
   /// Returns false if the challenge could not be
   /// completed. This could be because the post given was not a challenge, was
   /// expired, or was already completed.
+  /// The future completes as soon as the boolean is known, the viewmodel might
+  /// take longer to update (it is not awaited on).
   Future<bool> completeChallenge(PostIdFirestore pid) async {
     final currentUser = ref.read(uidProvider);
     final challengeRepository = ref.read(challengeRepositoryServiceProvider);
