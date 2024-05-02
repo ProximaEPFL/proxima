@@ -33,12 +33,40 @@ class FirestoreUserGenerator {
     });
   }
 
-  static List<UserFirestore> generateUserFirestore(int count) {
-    return generateUserData(count).mapIndexed((i, data) {
+  static List<UserFirestore> generateUserFirestoreWithId(
+    List<UserIdFirestore> ids,
+  ) {
+    return generateUserData(ids.length).mapIndexed((i, data) {
       return UserFirestore(
-        uid: UserIdFirestore(value: "user_id_$i"),
+        uid: ids[i],
         data: data,
       );
     }).toList();
+  }
+
+  static List<UserFirestore> generateUserFirestore(int count) {
+    return generateUserFirestoreWithId(
+      List.generate(count, (i) => UserIdFirestore(value: "user_id_$i")),
+    );
+  }
+}
+
+/// Helper function to set a user in the firestore db
+Future<void> setUserFirestore(
+  FirebaseFirestore firestore,
+  UserFirestore user,
+) async {
+  await firestore
+      .collection(UserFirestore.collectionName)
+      .doc(user.uid.value)
+      .set({...user.data.toDbData()});
+}
+
+Future<void> setUsersFirestore(
+  FirebaseFirestore firestore,
+  List<UserFirestore> users,
+) async {
+  for (final user in users) {
+    await setUserFirestore(firestore, user);
   }
 }
