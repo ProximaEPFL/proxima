@@ -20,7 +20,7 @@ class CommentDataGenerator {
     });
   }
 
-  CommentData createRandomCommentData({
+  CommentData createMockCommentData({
     String? content,
     UserIdFirestore? ownerId,
     Timestamp? publicationTime,

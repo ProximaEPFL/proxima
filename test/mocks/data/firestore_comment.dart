@@ -19,7 +19,7 @@ class CommentFirestoreGenerator {
 
     return CommentFirestore(
       id: commentId ?? CommentIdFirestore(value: "commentId_$_commentId"),
-      data: data ?? _commentDataGenerator.createRandomCommentData(),
+      data: data ?? _commentDataGenerator.createMockCommentData(),
     );
   }
 }

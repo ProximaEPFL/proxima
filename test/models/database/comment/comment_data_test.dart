@@ -13,7 +13,7 @@ void main() {
     });
 
     test("hash overrides correctly", () {
-      final commentData = commentDataGenerator.createRandomCommentData();
+      final commentData = commentDataGenerator.createMockCommentData();
 
       final expectedHash = Object.hash(
         commentData.ownerId,
@@ -28,7 +28,7 @@ void main() {
     });
 
     test("equality overrides correctly", () {
-      final commentData = commentDataGenerator.createRandomCommentData();
+      final commentData = commentDataGenerator.createMockCommentData();
 
       final otherCommentData = CommentData(
         content: commentData.content,

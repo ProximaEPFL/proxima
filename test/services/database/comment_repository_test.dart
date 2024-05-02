@@ -32,7 +32,7 @@ void main() {
       final comments = <CommentFirestore>[];
 
       for (var i = 0; i < number; i++) {
-        final commentData = commentDataGenerator.createRandomCommentData();
+        final commentData = commentDataGenerator.createMockCommentData();
         final commentId =
             await commentRepository.addComment(postId, commentData);
         comments.add(CommentFirestore(id: commentId, data: commentData));
@@ -114,7 +114,7 @@ void main() {
         await postDocument
             .update({PostData.commentCountField: FieldValue.delete()});
 
-        final commentData = commentDataGenerator.createRandomCommentData();
+        final commentData = commentDataGenerator.createMockCommentData();
 
         await commentRepository.addComment(
           postId,
@@ -159,7 +159,7 @@ void main() {
         final alreadyPresentComments =
             await addComments(alreadyPresentCommentsCount);
 
-        final commentData = commentDataGenerator.createRandomCommentData();
+        final commentData = commentDataGenerator.createMockCommentData();
 
         final commentId = await commentRepository.addComment(
           postId,
