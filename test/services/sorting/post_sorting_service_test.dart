@@ -82,10 +82,14 @@ void main() {
       test(
         "${option.name} score $expectedBehaviourStr",
         () {
+          // The idea of this test is that this referencePost, which a
+          // our referential for all scores. For instance, a post which has
+          // 3 more upvotes than this one should have a vote score 3 greater.
           final referencePost = postGenerator.generatePostAt(userPosition0);
           final referenceScore =
               option.scoreFunction(referencePost, userPosition0);
 
+          // Get the relative score to the referencePost given by the sorting option.
           final actualScoreDifference = posts
               .map(
                 (post) =>
@@ -96,9 +100,16 @@ void main() {
                     forcePositiveScore ? difference.abs() : difference,
               );
 
+          // Get the relative score to the referencePost we should get by
+          // applying the expected behaviour. As before, a post which has
+          // 3 more upvotes than the referencePost should have a vote score
+          // 3 greater.
           final expectedScoreDifference = posts.map(
             (post) => expectedBehaviour(referencePost, post),
           );
+
+          // Those are supposed to be equivalent ways to compute the same
+          // thing.
           expect(actualScoreDifference, expectedScoreDifference);
         },
       );
