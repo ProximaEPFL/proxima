@@ -15,7 +15,7 @@ import "../mocks/data/firestore_post.dart";
 import "../mocks/data/firestore_user.dart";
 import "../mocks/data/geopoint.dart";
 import "../mocks/services/mock_post_repository_service.dart";
-import "../mocks/services/mock_post_upvote_repository_service.dart";
+import "../mocks/services/mock_post_upvote_repository_service.mocks.dart";
 
 void main() {
   group("UpVote ViewModel unit testing", () {

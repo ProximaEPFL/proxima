@@ -52,3 +52,6 @@ web/
 macos/
 linux/
 ios/
+
+# Generated code
+*.mocks.dart

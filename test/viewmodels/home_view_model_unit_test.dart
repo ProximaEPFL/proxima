@@ -15,7 +15,7 @@ import "../mocks/data/geopoint.dart";
 import "../mocks/data/post_data.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 import "../mocks/services/mock_post_repository_service.dart";
-import "../mocks/services/mock_user_repository_service.dart";
+import "../mocks/services/mock_user_repository_service.mocks.dart";
 
 void main() {
   group("Post Overview Provider unit testing", () {
