@@ -91,7 +91,7 @@ void main() {
 
     group("adding comments", () {
       test(
-          "should initialize the comment count of a post to 1 when the commentCount field doesn't exist",
+          "should initialize the comment count of a post to 1 when the commentCount field doesn't exist and a post is added",
           () async {
         // Remove the comment count field
         await postDocument
