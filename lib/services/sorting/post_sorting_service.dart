@@ -18,10 +18,10 @@ class PostSortingService {
     GeoPoint position, {
     Set<PostFirestore> putOnTop = const {},
   }) {
-    int defaultComparator(a, b) {
+    int defaultComparator(PostFirestore postA, PostFirestore postB) {
       final order = option
-          .scoreFunction(a, position)
-          .compareTo(option.scoreFunction(b, position));
+          .scoreFunction(postA, position)
+          .compareTo(option.scoreFunction(postB, position));
       // Multiplying by -1 reverses the order
       final sign = option.sortIncreasing ? 1 : -1;
       return sign * order;
