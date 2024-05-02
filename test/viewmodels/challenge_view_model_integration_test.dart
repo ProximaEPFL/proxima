@@ -45,7 +45,7 @@ void main() {
     expect(challenges, isEmpty);
   });
 
-  test("Active challenge is transformed correctly", () async {
+  test("`ChallengeFirestore` is transformed correctly into `ChallengeCardData`", () async {
     const extraTime = Duration(hours: 2, minutes: 30);
     final challengeGenerator = FirestoreChallengeGenerator();
     final postGenerator = FirestorePostGenerator();
