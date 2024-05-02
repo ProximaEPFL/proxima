@@ -83,6 +83,11 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
     final challengeCompleted =
         await challengeRepository.completeChallenge(currentUser!, pid);
     if (challengeCompleted) {
+      // we only need to refresh the view model if something actually changed
+      // we do not need to wait for this refresh, as most likely we will not
+      // actually call this method from inside the challenge UI
+      // if we do we might have a weird double loading, but probably not
+      // can change if we have a problem
       refresh();
     }
     return challengeCompleted;
