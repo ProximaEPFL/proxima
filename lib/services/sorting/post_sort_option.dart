@@ -6,7 +6,7 @@ import "package:proxima/models/database/post/post_firestore.dart";
 enum PostSortOption {
   hottest("Hottest", hotScore, false),
   top("Top", voteScore, false),
-  latest("Latest", dayScore, false),
+  latest("Latest", dayScore, true),
   nearest("Nearest", distanceScore, true);
 
   final String name;
