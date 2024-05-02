@@ -2,16 +2,21 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/profile/components/profile_badge.dart";
 import "package:proxima/views/pages/profile/components/user_account.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_pop_up.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_row.dart";
+import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
+import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
+import "../../../mocks/data/geopoint.dart";
 import "../../../mocks/providers/provider_homepage.dart";
 import "../../../mocks/providers/provider_profile_page.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
@@ -22,62 +27,70 @@ void main() {
   late FakeFirebaseFirestore fakeFireStore;
   late CollectionReference<Map<String, dynamic>> userCollection;
   late ProviderScope mockedProfilePage;
+  late PostFirestore fakePost;
 
   final expectedUser = testingUserFirestore;
 
   setUp(() async {
     setupFirebaseAuthMocks();
+    final postsGenerator = FirestorePostGenerator();
     fakeFireStore = FakeFirebaseFirestore();
     userCollection = fakeFireStore.collection(UserFirestore.collectionName);
+    fakePost =
+        postsGenerator.createUserPost(testingUserFirestoreId, userPosition1);
 
     await userCollection
         .doc(expectedUser.uid.value)
         .set(expectedUser.data.toDbData());
 
-    mockedProfilePage = profilePageProvider(
-      fakeFireStore,
-    );
+    setPostFirestore(fakePost, fakeFireStore);
+
+    mockedProfilePage = profileProviderScope(fakeFireStore, profilePageApp);
   });
 
   group("Widgets display", () {
     testWidgets("Display badges, posts comments and centauri", (tester) async {
       await tester.pumpWidget(mockedProfilePage);
-      await tester.pumpAndSettle();
-
-      // Check that badges are displayed
-      final badgeCard = find.byKey(ProfileBadge.badgeKey);
-      expect(badgeCard, findsWidgets);
-
-      //Check that the post card is displayed
-      final postCard = find.byKey(ProfileInfoCard.infoCardKey);
-      expect(postCard, findsWidgets);
-
-      // Check that the info column is displayed
-      final infoColumn = find.byKey(ProfilePage.postColumnKey);
-      expect(infoColumn, findsOneWidget);
-
-      // Check that the info row is displayed
-      final infoRowWidget = find.byKey(ProfileInfoRow.infoRowKey);
-      expect(infoRowWidget, findsOneWidget);
-
-      //Check that centauri points are displayed
-      final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
-      expect(centauriPoints, findsOneWidget);
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
       //Check that the user account is displayed
       final userAccount = find.byKey(UserAccount.userInfoKey);
       expect(userAccount, findsOneWidget);
 
+      //Check that centauri points are displayed
+      final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
+      expect(centauriPoints, findsOneWidget);
+
+      // Check that the info row is displayed
+      final infoRowWidget = find.byKey(ProfileInfoRow.infoRowKey);
+      expect(infoRowWidget, findsOneWidget);
+
+      // Check that badges are displayed
+      final badgeCard = find.byKey(ProfileBadge.badgeKey);
+      expect(badgeCard, findsWidgets);
+
       //Check that the tab is displayed
       final tab = find.byKey(ProfilePage.tabKey);
       expect(tab, findsOneWidget);
+
+      // Check that the post info column is displayed
+      final infoColumn = find.byKey(ProfileUserPosts.postColumnKey);
+      expect(infoColumn, findsOneWidget);
+
+      //Check that the post card is displayed
+      final postCard = find.byKey(ProfileInfoCard.infoCardKey);
+      expect(postCard, findsWidgets);
+
+      // Check that post data is displayed
+      expect(find.textContaining(fakePost.data.title), findsOneWidget);
+      expect(find.textContaining(fakePost.data.description), findsOneWidget);
     });
   });
 
   group("Functionality", () {
     testWidgets("Post popup working as expected", (tester) async {
       await tester.pumpWidget(mockedProfilePage);
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
       //Check tab on the first post
       final infoCardPost = find.byKey(ProfileInfoCard.infoCardKey);
@@ -99,6 +112,18 @@ void main() {
       final postPopupDescription =
           find.byKey(ProfileInfoPopUp.popUpDescriptionKey);
       expect(postPopupDescription, findsOneWidget);
+
+      // Check that post content is displayed on popup
+      final titleContent = find.descendant(
+        of: postPopup,
+        matching: find.textContaining(fakePost.data.title),
+      );
+      final descriptionContent = find.descendant(
+        of: postPopup,
+        matching: find.textContaining(fakePost.data.description),
+      );
+      expect(titleContent, findsOneWidget);
+      expect(descriptionContent, findsOneWidget);
 
       //Check that the delete button is displayed
       final postPopupDeleteButton =
@@ -167,7 +192,7 @@ void main() {
       expect(commentTab, findsOneWidget);
 
       //Check that post column is displayed
-      final postColumn = find.byKey(ProfilePage.postColumnKey);
+      final postColumn = find.byKey(ProfileUserPosts.postColumnKey);
       expect(postColumn, findsOneWidget);
 
       // Tap on the comment tab
@@ -190,6 +215,30 @@ void main() {
       // checking the text
       final centauriText = find.text("username_8456 · 0 Centauri");
       expect(centauriText, findsOneWidget);
+    });
+
+    testWidgets("Posts refreshing works correctly", (tester) async {
+      await tester.pumpWidget(mockedProfilePage);
+      await tester.pumpAndSettle();
+
+      // Check that the profile page is displayed
+      final profilePage = find.byType(ProfilePage);
+      expect(profilePage, findsOneWidget);
+
+      // Check that the post info column is displayed
+      final postColumn = find.byKey(ProfileUserPosts.postColumnKey);
+      expect(postColumn, findsOneWidget);
+
+      // Refresh the user posts
+      await tester.fling(postColumn, const Offset(100, 400.0), 1000.0);
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
+
+      // Check that refreshing was handled correctly
+      expect(find.byKey(ProfileUserPosts.postColumnKey), findsOneWidget);
+
+      // Check that the post card is displayed
+      final postCard = find.byKey(ProfileInfoCard.infoCardKey);
+      expect(postCard, findsOneWidget);
     });
   });
 
@@ -214,6 +263,40 @@ void main() {
       // Check that the profile page is displayed
       final profilePage = find.byType(ProfilePage);
       expect(profilePage, findsOneWidget);
+    });
+
+    testWidgets("Check that user centauri points count updates correctly.",
+        (tester) async {
+      await tester.pumpWidget(profileProviderScope(fakeFireStore, homePageApp));
+      await tester.pumpAndSettle();
+
+      final userPoints = expectedUser.data.centauriPoints.toString();
+      const increment = 10;
+
+      // Navigate to profile
+      await tester.tap(find.byKey(AppTopBar.profilePictureKey));
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
+
+      // Check correct centauri points
+      expect(find.textContaining(userPoints), findsOneWidget);
+
+      // Navigate back to home page
+      await tester.tap(find.byType(LeadingBackButton));
+      await tester.pumpAndSettle();
+
+      // Change the user points
+      await userCollection
+          .doc(expectedUser.uid.value)
+          .set(expectedUser.data.withPointsAddition(increment).toDbData());
+
+      // Navigate back to profile page
+      await tester.tap(find.byKey(AppTopBar.profilePictureKey));
+      await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
+
+      // Check update centauri points
+      final updatedUserPoints =
+          (expectedUser.data.centauriPoints + increment).toString();
+      expect(find.textContaining(updatedUserPoints), findsOneWidget);
     });
   });
 }
