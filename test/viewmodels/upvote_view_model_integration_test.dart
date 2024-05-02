@@ -6,8 +6,10 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/database/vote/upvote_state.dart";
 import "package:proxima/models/ui/post_vote.dart";
+import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/post_upvote_repository_service.dart";
+import "package:proxima/services/database/upvote_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/upvote_view_model.dart";
 
@@ -19,7 +21,7 @@ void main() {
   group("UpVote ViewModel integration testing", () {
     late FakeFirebaseFirestore fakeFireStore;
 
-    late PostUpvoteRepositoryService voteRepository;
+    late UpvoteRepositoryService<PostIdFirestore> voteRepository;
     late PostRepositoryService postRepository;
     late PostFirestore testingPost;
     late UserIdFirestore userId;
@@ -31,8 +33,6 @@ void main() {
 
     setUp(() async {
       fakeFireStore = FakeFirebaseFirestore();
-
-      voteRepository = PostUpvoteRepositoryService(firestore: fakeFireStore);
       postRepository = PostRepositoryService(firestore: fakeFireStore);
 
       // Add a post to the database
@@ -51,11 +51,13 @@ void main() {
 
       container = ProviderContainer(
         overrides: [
+          firestoreProvider.overrideWithValue(fakeFireStore),
           postRepositoryProvider.overrideWithValue(postRepository),
-          postUpvoteRepositoryProvider.overrideWithValue(voteRepository),
           uidProvider.overrideWithValue(userId),
         ],
       );
+
+      voteRepository = container.read(postUpvoteRepositoryProvider);
 
       voteViewModelProvider = postVoteProvider(testingPost.id);
     });
