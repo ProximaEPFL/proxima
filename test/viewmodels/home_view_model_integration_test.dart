@@ -92,6 +92,7 @@ void main() {
           description: postData.description,
           publicationTime: postData.publicationTime,
           voteScore: postData.voteScore,
+          commentCount: postData.commentCount,
         );
       }).first;
 
@@ -163,6 +164,7 @@ void main() {
               description: element.description,
               publicationTime: element.publicationTime,
               voteScore: element.voteScore,
+              commentCount: element.commentCount,
             ),
           )
           .toList();

@@ -24,6 +24,7 @@ final _emptyFirestorePost = PostFirestore(
     description: "",
     publicationTime: Timestamp.fromMillisecondsSinceEpoch(0),
     voteScore: 0,
+    commentCount: 0,
   ),
 );
 

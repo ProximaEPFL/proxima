@@ -11,6 +11,7 @@ class PostDataGenerator {
     description: "",
     publicationTime: Timestamp.fromMillisecondsSinceEpoch(0),
     voteScore: 0,
+    commentCount: 0,
   );
 
   final postData = PostData(
@@ -19,6 +20,7 @@ class PostDataGenerator {
     description: "Look at them go!",
     publicationTime: Timestamp.now(),
     voteScore: 0,
+    commentCount: 0,
   );
 
   /// Generate a list of [PostData]
@@ -33,6 +35,7 @@ class PostDataGenerator {
             Timestamp.fromMillisecondsSinceEpoch(i * 1000 * 60 * 60 * 24 * 5),
         // to have some increasing/decreasing parts
         voteScore: i * (i - 5) * (i - 10) * (i - 15),
+        commentCount: i,
       );
     });
   }

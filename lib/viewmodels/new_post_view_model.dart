@@ -67,6 +67,7 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
       description: description,
       publicationTime: Timestamp.now(),
       voteScore: 0,
+      commentCount: 0,
     );
 
     await postRepository.addPost(post, currPosition);
