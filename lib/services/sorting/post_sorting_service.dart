@@ -6,8 +6,8 @@ import "package:proxima/services/sorting/post_sort_option.dart";
 
 class PostSortingService {
   /// This method sorts the [posts] according to the [option]
-  /// and the [position] of the user. It also allows to put some
-  /// posts on top with the [putOnTop] set.
+  /// and the [position] of the user. Any elements that are in
+  /// [putOnTop] will be moreover first in the list.
   /// For instance, let's say that we have a list [A, b, c, D, e]
   /// randomly shuffled that we sort by alphabetical order. If
   /// putOnTop contains [A, D, K], then the result will be
