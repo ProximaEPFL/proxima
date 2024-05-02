@@ -3,7 +3,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
-import "package:proxima/services/database/post_repository_service.dart";
+import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
@@ -17,39 +17,23 @@ import "../mocks/services/mock_geo_location_service.dart";
 
 void main() {
   late MockGeoLocationService geoLocationService;
-  late FakeFirebaseFirestore fakeFireStore;
-
   late UserRepositoryService userRepo;
-  late PostRepositoryService postRepo;
-  late ChallengeRepositoryService challengeRepo;
-
+  late FakeFirebaseFirestore fakeFireStore;
   late ProviderContainer container;
 
   setUp(() async {
-    fakeFireStore = FakeFirebaseFirestore();
     geoLocationService = MockGeoLocationService();
-
-    userRepo = UserRepositoryService(
-      firestore: fakeFireStore,
-    );
-    postRepo = PostRepositoryService(
-      firestore: fakeFireStore,
-    );
-    challengeRepo = ChallengeRepositoryService(
-      firestore: fakeFireStore,
-      userRepositoryService: userRepo,
-      postRepositoryService: postRepo,
-    );
+    fakeFireStore = FakeFirebaseFirestore();
 
     container = ProviderContainer(
       overrides: [
         geoLocationServiceProvider.overrideWithValue(geoLocationService),
-        userRepositoryProvider.overrideWithValue(userRepo),
-        postRepositoryProvider.overrideWithValue(postRepo),
-        challengeRepositoryServiceProvider.overrideWithValue(challengeRepo),
         uidProvider.overrideWithValue(testingUserFirestoreId),
+        firestoreProvider.overrideWithValue(fakeFireStore),
       ],
     );
+
+    userRepo = container.read(userRepositoryProvider);
 
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) async => userPosition1,
@@ -61,8 +45,9 @@ void main() {
     expect(challenges, isEmpty);
   });
 
-  test("Active challenge is transformed correctly", () async {
-    const extraTime = Duration(hours: 3);
+  test("`ChallengeFirestore` is transformed correctly into `ChallengeCardData`",
+      () async {
+    const extraTime = Duration(hours: 2, minutes: 30);
     final challengeGenerator = FirestoreChallengeGenerator();
     final postGenerator = FirestorePostGenerator();
 
@@ -81,15 +66,15 @@ void main() {
     expect(uiChallenge.distance, 0);
     expect(
       uiChallenge.timeLeft,
-      anyOf(2, 3),
-    ); // 3 hours - 1 second or 3 hours - 0 seconds (we can't bet on the time of the above execution)
+      2,
+    );
     expect(uiChallenge.isFinished, false);
     expect(uiChallenge.reward, ChallengeRepositoryService.soloChallengeReward);
     expect(uiChallenge.title, post.data.title);
   });
 
   test("Completed challenge is transformed correctly", () async {
-    const extraTime = Duration(hours: 3);
+    const extraTime = Duration(hours: 2, minutes: 30);
     final challengeGenerator = FirestoreChallengeGenerator();
     final postGenerator = FirestorePostGenerator();
 
@@ -108,15 +93,15 @@ void main() {
     expect(uiChallenge.distance, null);
     expect(
       uiChallenge.timeLeft,
-      anyOf(2, 3),
-    ); // 3 hours - 1 second or 3 hours - 0 seconds (we can't bet on the time of the above execution)
+      2,
+    );
     expect(uiChallenge.isFinished, true);
     expect(uiChallenge.reward, ChallengeRepositoryService.soloChallengeReward);
     expect(uiChallenge.title, post.data.title);
   });
 
   test("Challenges are sorted correctly", () async {
-    const extraTime = Duration(hours: 3);
+    const extraTime = Duration(hours: 2, minutes: 30);
     final challengeGenerator = FirestoreChallengeGenerator();
     final postGenerator = FirestorePostGenerator();
 
@@ -142,11 +127,15 @@ void main() {
     final challenges = await container.read(challengeProvider.future);
     final areChallengesFinished = challenges.map((c) => c.isFinished).toList();
 
-    expect(areChallengesFinished, [false, true, true]);
+    expect(
+      areChallengesFinished,
+      List.filled(activeChallenges.length, false) +
+          List.filled(finishedChallenges.length, true),
+    );
   });
 
   test("Challenge can be completed", () async {
-    const extraTime = Duration(hours: 3);
+    const extraTime = Duration(hours: 2, minutes: 30);
     final challengeGenerator = FirestoreChallengeGenerator();
     final postGenerator = FirestorePostGenerator();
 
@@ -163,6 +152,9 @@ void main() {
     await container
         .read(challengeProvider.notifier)
         .completeChallenge(challenge.postId);
+
+    await Future.delayed(const Duration(milliseconds: 100));
+
     final challenges = await container.read(challengeProvider.future);
     expect(challenges.length, 1);
 
@@ -170,8 +162,8 @@ void main() {
     expect(uiChallenge.distance, null);
     expect(
       uiChallenge.timeLeft,
-      anyOf(2, 3),
-    ); // 3 hours - 1 second or 3 hours - 0 seconds (we can't bet on the time of the above execution)
+      2,
+    );
     expect(uiChallenge.isFinished, true);
     expect(uiChallenge.reward, ChallengeRepositoryService.soloChallengeReward);
     expect(uiChallenge.title, post.data.title);

@@ -234,7 +234,7 @@ void main() {
   });
 
   group("Challenge completion", () {
-    test("Complete a valid challenge", () async {
+    test("Can complete a valid challenge", () async {
       FirestorePostGenerator generator = FirestorePostGenerator();
       await generator.addPostsReturnDataOnly(firestore, inChallengeRange, 1);
       final challenges = await challengeRepository.getChallenges(uid, userPos);
@@ -262,7 +262,7 @@ void main() {
       );
     });
 
-    test("Complete a challenge that does not exist", () async {
+    test("Can't complete a challenge that does not exist", () async {
       final generator = FirestorePostGenerator();
       final post = generator.generatePostAt(inChallengeRange);
 
@@ -272,7 +272,7 @@ void main() {
       expect(isCompleted, false);
     });
 
-    test("Complete a challenge that is already completed", () async {
+    test("Can't complete a challenge that is already completed", () async {
       final postGenerator = FirestorePostGenerator();
       final post = postGenerator.generatePostAt(inChallengeRange);
       final challengeGenerator = FirestoreChallengeGenerator();
@@ -297,7 +297,7 @@ void main() {
       );
     });
 
-    test("Complete an expired challenge", () async {
+    test("Can't complete an expired challenge", () async {
       final postGenerator = FirestorePostGenerator();
       final post = postGenerator.generatePostAt(inChallengeRange);
       final challengeGenerator = FirestoreChallengeGenerator();
