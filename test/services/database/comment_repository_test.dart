@@ -28,19 +28,6 @@ void main() {
     late CommentFirestoreGenerator commentGenerator;
     late CommentDataGenerator commentDataGenerator;
 
-    Future<List<CommentFirestore>> addComments(int number) async {
-      final comments = <CommentFirestore>[];
-
-      for (var i = 0; i < number; i++) {
-        final commentData = commentDataGenerator.createMockCommentData();
-        final commentId =
-            await commentRepository.addComment(postId, commentData);
-        comments.add(CommentFirestore(id: commentId, data: commentData));
-      }
-
-      return comments;
-    }
-
     /// The setup add a single post with no comments
     setUp(() async {
       fakeFirestore = FakeFirebaseFirestore();
@@ -87,7 +74,8 @@ void main() {
       test(
           "should return the comments of a post when there are multiple comments",
           () async {
-        final comments = await addComments(5);
+        final comments =
+            await commentGenerator.addComments(5, postId, commentRepository);
 
         final actualComments = await commentRepository.getComments(postId);
 
@@ -156,8 +144,8 @@ void main() {
       test("should add comment to a post when there are already comments",
           () async {
         const alreadyPresentCommentsCount = 5;
-        final alreadyPresentComments =
-            await addComments(alreadyPresentCommentsCount);
+        final alreadyPresentComments = await commentGenerator.addComments(
+            alreadyPresentCommentsCount, postId, commentRepository);
 
         final commentData = commentDataGenerator.createMockCommentData();
 
@@ -189,7 +177,8 @@ void main() {
 
     group("deleting comments", () {
       test("should delete a comment from a post with single comment", () async {
-        final comment = await addComments(1);
+        final comment =
+            await commentGenerator.addComments(1, postId, commentRepository);
 
         final commentId = comment.first.id;
 
@@ -210,7 +199,8 @@ void main() {
           () async {
         const alreadyPresentCommentsCount = 5;
 
-        final comments = await addComments(alreadyPresentCommentsCount);
+        final comments = await commentGenerator.addComments(
+            alreadyPresentCommentsCount, postId, commentRepository);
 
         // Delete the third comment
         final commentToDeleteId = comments[2].id;
@@ -237,7 +227,8 @@ void main() {
       test(
           "should thrown an error and do nothing if the comment does not exist",
           () async {
-        final expectedComments = await addComments(5);
+        final expectedComments =
+            await commentGenerator.addComments(5, postId, commentRepository);
 
         const commentId = CommentIdFirestore(value: "non_existent_comment_id");
 
