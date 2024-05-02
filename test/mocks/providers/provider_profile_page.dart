@@ -8,8 +8,18 @@ import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
 import "../overrides/override_auth_providers.dart";
+import "../overrides/override_home_view_model.dart";
 
-ProviderScope profilePageProvider(FakeFirebaseFirestore fakeFireStore) {
+const profilePageApp = MaterialApp(
+  onGenerateRoute: generateRoute,
+  title: "Profile page",
+  home: ProfilePage(),
+);
+
+ProviderScope profileProviderScope(
+  FakeFirebaseFirestore fakeFireStore,
+  Widget child,
+) {
   final userRepo = UserRepositoryService(
     firestore: fakeFireStore,
   );
@@ -19,14 +29,11 @@ ProviderScope profilePageProvider(FakeFirebaseFirestore fakeFireStore) {
 
   return ProviderScope(
     overrides: [
+      ...mockEmptyHomeViewModelOverride,
       firebaseAuthProvider.overrideWith(mockFirebaseAuthSignedIn),
       userRepositoryProvider.overrideWithValue(userRepo),
       postRepositoryProvider.overrideWithValue(postRepo),
     ],
-    child: const MaterialApp(
-      onGenerateRoute: generateRoute,
-      title: "Profile page",
-      home: ProfilePage(),
-    ),
+    child: child,
   );
 }

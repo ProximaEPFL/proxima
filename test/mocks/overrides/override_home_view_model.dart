@@ -8,7 +8,7 @@ import "../data/post_overview.dart";
 /// This class is particularly useful for the UI tests where we want to expose
 /// particular data to the views.
 /// By default it exposes an empty list of [PostOverview] and does nothing on refresh.
-class MockHomeViewModel extends AsyncNotifier<List<PostOverview>>
+class MockHomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>>
     implements HomeViewModel {
   final Future<List<PostOverview>> Function() _build;
   final Future<void> Function() _onRefresh;

@@ -6,6 +6,7 @@ import "package:proxima/views/pages/profile/info_cards/profile_info_pop_up.dart"
 /// Info card for the profile page (post or comment)
 class ProfileInfoCard extends StatelessWidget {
   static const infoCardKey = Key("profileInfoCard");
+  static const deleteButtonCardKey = Key("deleteButtonCard");
 
   static const _borderRadius = BorderRadius.all(Radius.circular(10));
   static const _cardHeight = 80.0;
@@ -50,7 +51,10 @@ class ProfileInfoCard extends StatelessWidget {
         maxLines: title == null ? 3 : 2,
         overflow: TextOverflow.ellipsis,
       ),
-      trailing: DeleteButton(onClick: onDelete),
+      trailing: DeleteButton(
+        key: deleteButtonCardKey,
+        onClick: onDelete,
+      ),
     );
 
     final fullViewButton = InkWell(
