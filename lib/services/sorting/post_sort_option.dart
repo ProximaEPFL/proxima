@@ -22,24 +22,28 @@ enum PostSortOption {
   const PostSortOption(this.name, this.scoreFunction, this.sortIncreasing);
 }
 
-// Increases by 1 every upvote, but decreases by 1 every day
+/// Increases by 1 every upvote, but decreases by 1 every day
 double hotScore(PostFirestore post, GeoPoint userPosition) {
   return voteScore(post, userPosition) - dayScore(post, userPosition);
 }
 
-// Increase by 1 every upvote
+/// Increase by 1 every upvote
 double voteScore(PostFirestore post, GeoPoint userPosition) {
   return post.data.voteScore.toDouble();
 }
 
-// Increase by 1 every day
+/// Increase by 1 every day.
+/// The formula should be currentDate - postCreationDate, but we can simplify
+/// it to -postDate since the same constant added to all scores (currentDate)
+/// does not matter. See [PostSortOption] constructor documentation for more
+/// details.
 double dayScore(PostFirestore post, GeoPoint userPosition) {
   final timeInMs = post.data.publicationTime.millisecondsSinceEpoch;
   final timeInDays = timeInMs / (1000.0 * 60.0 * 60.0 * 24);
   return timeInDays;
 }
 
-// Increases by 1 every meters
+/// Increases by 1 every meters
 double distanceScore(PostFirestore post, GeoPoint userPosition) {
   final postPosition = post.location.geoPoint;
   return Geolocator.distanceBetween(
