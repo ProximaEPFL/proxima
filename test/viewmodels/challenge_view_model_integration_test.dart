@@ -46,7 +46,7 @@ void main() {
   });
 
   test("Active challenge is transformed correctly", () async {
-    const extraTime = Duration(hours: 3);
+    const extraTime = Duration(hours: 2, minutes: 30);
     final challengeGenerator = FirestoreChallengeGenerator();
     final postGenerator = FirestorePostGenerator();
 
@@ -65,15 +65,15 @@ void main() {
     expect(uiChallenge.distance, 0);
     expect(
       uiChallenge.timeLeft,
-      anyOf(2, 3),
-    ); // 3 hours - 1 second or 3 hours - 0 seconds (we can't bet on the time of the above execution)
+      2,
+    );
     expect(uiChallenge.isFinished, false);
     expect(uiChallenge.reward, ChallengeRepositoryService.soloChallengeReward);
     expect(uiChallenge.title, post.data.title);
   });
 
   test("Completed challenge is transformed correctly", () async {
-    const extraTime = Duration(hours: 3);
+    const extraTime = Duration(hours: 2, minutes: 30);
     final challengeGenerator = FirestoreChallengeGenerator();
     final postGenerator = FirestorePostGenerator();
 
@@ -92,15 +92,15 @@ void main() {
     expect(uiChallenge.distance, null);
     expect(
       uiChallenge.timeLeft,
-      anyOf(2, 3),
-    ); // 3 hours - 1 second or 3 hours - 0 seconds (we can't bet on the time of the above execution)
+      2,
+    );
     expect(uiChallenge.isFinished, true);
     expect(uiChallenge.reward, ChallengeRepositoryService.soloChallengeReward);
     expect(uiChallenge.title, post.data.title);
   });
 
   test("Challenges are sorted correctly", () async {
-    const extraTime = Duration(hours: 3);
+    const extraTime = Duration(hours: 2, minutes: 30);
     final challengeGenerator = FirestoreChallengeGenerator();
     final postGenerator = FirestorePostGenerator();
 
@@ -130,7 +130,7 @@ void main() {
   });
 
   test("Challenge can be completed", () async {
-    const extraTime = Duration(hours: 3);
+    const extraTime = Duration(hours: 2, minutes: 30);
     final challengeGenerator = FirestoreChallengeGenerator();
     final postGenerator = FirestorePostGenerator();
 
@@ -157,8 +157,8 @@ void main() {
     expect(uiChallenge.distance, null);
     expect(
       uiChallenge.timeLeft,
-      anyOf(2, 3),
-    ); // 3 hours - 1 second or 3 hours - 0 seconds (we can't bet on the time of the above execution)
+      2,
+    );
     expect(uiChallenge.isFinished, true);
     expect(uiChallenge.reward, ChallengeRepositoryService.soloChallengeReward);
     expect(uiChallenge.title, post.data.title);
