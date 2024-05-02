@@ -54,6 +54,6 @@ class PostSortingService {
   }
 }
 
-final postSortingProvider = Provider<PostSortingService>(
+final postSortingServiceProvider = Provider<PostSortingService>(
   (ref) => PostSortingService(),
 );

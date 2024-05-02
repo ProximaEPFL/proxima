@@ -23,7 +23,7 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
     final postRepository = ref.watch(postRepositoryProvider);
     final userRepository = ref.watch(userRepositoryProvider);
 
-    final postSortingService = ref.watch(postSortingProvider);
+    final postSortingService = ref.watch(postSortingServiceProvider);
     final sortOption = ref.watch(feedSortOptionsProvider);
 
     final position = await geoLocationService.getCurrentPosition();
