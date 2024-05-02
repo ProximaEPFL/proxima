@@ -87,11 +87,10 @@ class CommentRepositoryService {
   Future<void> deleteComment(
     PostIdFirestore parentPostId,
     CommentIdFirestore commentId,
-  ) async {
-    await _firestore.runTransaction((transaction) async {
-      await _deleteComment(parentPostId, commentId, transaction);
-    });
-  }
+  ) =>
+      _firestore.runTransaction(
+        (transaction) => _deleteComment(parentPostId, commentId, transaction),
+      );
 
   // Concrete implementation of the deletion of a comment
   Future<void> _deleteComment(
