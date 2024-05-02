@@ -3,7 +3,7 @@ import "package:proxima/models/database/firestore/id_firestore.dart";
 
 /// The id are strong typed to avoid misuse
 @immutable
-class PostIdFirestore extends IdFirestore {
+class PostIdFirestore implements IdFirestore {
   @override
   final String value;
 

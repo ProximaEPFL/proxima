@@ -3,7 +3,7 @@ import "package:flutter/foundation.dart";
 import "package:proxima/models/database/firestore/id_firestore.dart";
 
 @immutable
-class CommentIdFirestore extends IdFirestore {
+class CommentIdFirestore implements IdFirestore {
   @override
   final String value;
 
