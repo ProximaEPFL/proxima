@@ -238,7 +238,7 @@ void main() {
           throwsA(isA<Exception>()),
         );
 
-        // Check that no comments were not deleted
+        // Check that no comments were deleted
         final actualComments = await commentRepository.getComments(postId);
         expect(actualComments, expectedComments);
 
