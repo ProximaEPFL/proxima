@@ -6,8 +6,7 @@ import "../../../mocks/data/firestore_comment.dart";
 void main() {
   group("Testing comment firestore", () {
     test("hash overrides correctly", () {
-      final commentFirestore =
-          CommentFirestoreGenerator().createMockComment();
+      final commentFirestore = CommentFirestoreGenerator().createMockComment();
 
       final expectedHash =
           Object.hash(commentFirestore.id, commentFirestore.data);
@@ -18,8 +17,7 @@ void main() {
     });
 
     test("equality overrides correctly", () {
-      final commentFirestore =
-          CommentFirestoreGenerator().createMockComment();
+      final commentFirestore = CommentFirestoreGenerator().createMockComment();
 
       final otherCommentFirestore = CommentFirestore(
         id: commentFirestore.id,
