@@ -18,13 +18,13 @@ class PostMap extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final positionNotifier = ref.watch(mapProvider.notifier);
+    final mapNotifier = ref.watch(mapProvider.notifier);
 
     final positionValue = ref.watch(liveLocationServiceProvider);
 
     positionValue.when(
       data: (data) {
-        positionNotifier.redrawCircle(LatLng(data!.latitude, data.longitude));
+        mapNotifier.redrawCircle(LatLng(data!.latitude, data.longitude));
       },
       error: (error, _) {
         throw Exception("Live location error: $error");
@@ -47,8 +47,8 @@ class PostMap extends ConsumerWidget {
           target: mapInfo.initialLocation,
           zoom: initialZoomLevel,
         ),
-        circles: positionNotifier.circles,
-        onMapCreated: positionNotifier.onMapCreated,
+        circles: mapNotifier.circles,
+        onMapCreated: mapNotifier.onMapCreated,
       ),
     );
   }

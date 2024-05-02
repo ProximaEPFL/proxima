@@ -30,6 +30,9 @@ void main() {
       when(geoLocationService.getCurrentPosition()).thenAnswer(
         (_) => Future.value(testPoint),
       );
+      when(geoLocationService.getPositionStream()).thenAnswer(
+        (_) => Stream.value(testPoint),
+      );
 
       await tester.pumpWidget(homePageGPSWidget);
       await tester.pumpAndSettle();
