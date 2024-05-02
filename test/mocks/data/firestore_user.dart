@@ -53,8 +53,8 @@ class FirestoreUserGenerator {
 
 /// Helper function to set a user in the firestore db
 Future<void> setUserFirestore(
-  UserFirestore user,
   FirebaseFirestore firestore,
+  UserFirestore user,
 ) async {
   await firestore
       .collection(UserFirestore.collectionName)
@@ -63,10 +63,10 @@ Future<void> setUserFirestore(
 }
 
 Future<void> setUsersFirestore(
-  List<UserFirestore> users,
   FirebaseFirestore firestore,
+  List<UserFirestore> users,
 ) async {
   for (final user in users) {
-    await setUserFirestore(user, firestore);
+    await setUserFirestore(firestore, user);
   }
 }

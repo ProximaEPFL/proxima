@@ -47,7 +47,7 @@ void main() {
     final users = FirestoreUserGenerator.generateUserFirestoreWithId(
       posts.map((post) => post.data.ownerId).toList(),
     );
-    await setUsersFirestore(users, firestore);
+    await setUsersFirestore(firestore, users);
   });
 
   group("Sort options", () {
