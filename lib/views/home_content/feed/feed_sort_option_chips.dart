@@ -18,20 +18,22 @@ class FeedSortOptionChips extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedOption = ref.watch(feedSortOptionsProvider);
 
-    final sortOptions = PostSortOption.values.map((sortOption) {
-      return ChoiceChip(
-        key: optionChipKeys[sortOption],
-        selected: sortOption == selectedOption,
-        label: Text(sortOption.name),
-        onSelected: (bool selected) {
-          if (selected) {
-            ref
-                .read(feedSortOptionsProvider.notifier)
-                .setSortOption(sortOption);
-          }
-        },
-      );
-    }).toList();
+    final sortOptions = PostSortOption.values
+        .map(
+          (sortOption) => ChoiceChip(
+            key: optionChipKeys[sortOption],
+            selected: sortOption == selectedOption,
+            label: Text(sortOption.name),
+            onSelected: (bool selected) {
+              if (selected) {
+                ref
+                    .read(feedSortOptionsProvider.notifier)
+                    .setSortOption(sortOption);
+              }
+            },
+          ),
+        )
+        .toList();
 
     return Wrap(
       alignment: WrapAlignment.center,
