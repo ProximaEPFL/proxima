@@ -163,6 +163,9 @@ void main() {
     await container
         .read(challengeProvider.notifier)
         .completeChallenge(challenge.postId);
+
+    await Future.delayed(const Duration(milliseconds: 100));
+
     final challenges = await container.read(challengeProvider.future);
     expect(challenges.length, 1);
 

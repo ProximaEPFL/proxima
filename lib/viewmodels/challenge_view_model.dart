@@ -82,7 +82,9 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
 
     final challengeCompleted =
         await challengeRepository.completeChallenge(currentUser!, pid);
-    await refresh();
+    if (challengeCompleted) {
+      refresh();
+    }
     return challengeCompleted;
   }
 }
