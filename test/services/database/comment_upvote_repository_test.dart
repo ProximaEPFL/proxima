@@ -36,8 +36,6 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           firestoreProvider.overrideWithValue(firestore),
-          postRepositoryProvider.overrideWithValue(postRepository),
-          commentRepositoryProvider.overrideWithValue(commentRepository),
         ],
       );
 
