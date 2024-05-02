@@ -2,11 +2,11 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 import "package:proxima/utils/ui/user_avatar.dart";
-import "package:timeago/timeago.dart";
+import "package:timeago/timeago.dart" as timeago;
 
 /// Converts a timestamp to a time ago string.
 String timestampToTimeAgo(Timestamp timestamp) {
-  return format(timestamp.toDate(), locale: "en_short");
+  return timeago.format(timestamp.toDate(), locale: "en_short");
 }
 
 /// Converts a timestamp to a user readable date string.
