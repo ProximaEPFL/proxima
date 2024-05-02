@@ -271,6 +271,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final userPoints = expectedUser.data.centauriPoints.toString();
+      const increment = 10;
 
       // Navigate to profile
       await tester.tap(find.byKey(AppTopBar.profilePictureKey));
@@ -286,11 +287,16 @@ void main() {
       // Change the user points
       await userCollection
           .doc(expectedUser.uid.value)
-          .set(expectedUser.data.withPointsAddition(10).toDbData());
+          .set(expectedUser.data.withPointsAddition(increment).toDbData());
 
       // Navigate back to profile page
       await tester.tap(find.byKey(AppTopBar.profilePictureKey));
       await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
+
+      // Check update centauri points
+      final updatedUserPoints =
+          (expectedUser.data.centauriPoints + increment).toString();
+      expect(find.textContaining(updatedUserPoints), findsOneWidget);
     });
   });
 }
