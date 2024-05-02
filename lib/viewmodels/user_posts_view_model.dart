@@ -41,7 +41,9 @@ class UserPostsViewModel extends AutoDisposeAsyncNotifier<UserPostsState> {
   Future<void> deletePost(PostIdFirestore postId) async {
     final postRepository = ref.watch(postRepositoryProvider);
     await postRepository.deletePost(postId);
-    await refresh();
+
+    // Not awaited, will show loading for user (faster user feedback)
+    refresh();
   }
 
   /// Refresh the list of posts
