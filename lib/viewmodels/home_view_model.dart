@@ -10,7 +10,7 @@ import "package:proxima/services/geolocation_service.dart";
 /// It fetches the posts from the database and returns a list of
 /// (postId: [PostIdFirestore], postOverview: [PostOverview]) objects to be displayed.
 /// These represent the overview data to be displayed associated to the corresponding post id.
-/// Note: this is also the viewmodel for our post page
+/// Note: this viewmodel also provides the data for the post page
 class HomeViewModel extends AsyncNotifier<List<PostOverview>> {
   HomeViewModel();
 
