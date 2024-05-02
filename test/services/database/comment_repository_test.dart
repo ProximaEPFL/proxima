@@ -113,6 +113,27 @@ void main() {
     });
 
     group("adding comments", () {
+      test(
+          "should initialize the comment count of a post to 1 when the commentCount field doesn't exist",
+          () async {
+        // Remove the comment count field
+        await postDocument
+            .update({PostData.commentCountField: FieldValue.delete()});
+
+        final commentData = commentGenerator.createRandomComment().data;
+
+        await commentRepository.addComment(
+          postId,
+          commentData,
+        );
+
+        // Check that the comment count was updated correctly
+        final postDoc = await postDocument.get();
+        final post = PostFirestore.fromDb(postDoc);
+
+        expect(post.data.commentCount, equals(1));
+      });
+
       test("should add a single comment to a post", () async {
         final commentData = commentGenerator.createRandomComment().data;
 
