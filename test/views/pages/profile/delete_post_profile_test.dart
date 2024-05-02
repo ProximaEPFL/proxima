@@ -38,8 +38,9 @@ void main() {
       fakeFireStore,
     );
 
-    mockedProfilePage = profilePageProvider(
+    mockedProfilePage = profileProviderScope(
       fakeFireStore,
+      profilePageApp,
     );
   });
 
