@@ -21,14 +21,17 @@ void main() {
   final posts = postGenerator.generatePostsAtDifferentLocations(positions);
 
   group("Score functions are meaningful", () {
-    /// Compute the difference between the creation date of the [referencePost]
-    /// and the one of the [post].
+    /// Compute the difference between the number of days since creation
+    /// of [referencePost] and the one of the [post]. The formula
+    /// is (currentDate - referencePostCreation) - (currentDate - postCreation)
+    /// = postCreation - referencePostCreation. It therefore does not
+    /// depend on the currentDate.
     double dayDifference(PostFirestore referencePost, PostFirestore post) {
       final referenceDate = referencePost.data.publicationTime.toDate();
       final date = post.data.publicationTime.toDate();
 
       // Need to get the result in miliseconds to have a good precision
-      return referenceDate.difference(date).inMilliseconds /
+      return date.difference(referenceDate).inMilliseconds /
           (1000.0 * 60.0 * 60.0 * 24.0);
     }
 

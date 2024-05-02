@@ -40,7 +40,7 @@ double voteScore(PostFirestore post, GeoPoint userPosition) {
 double dayScore(PostFirestore post, GeoPoint userPosition) {
   final timeInMs = post.data.publicationTime.millisecondsSinceEpoch;
   final timeInDays = timeInMs / (1000.0 * 60.0 * 60.0 * 24);
-  return timeInDays;
+  return -timeInDays;
 }
 
 /// Increases by 1 every meters
