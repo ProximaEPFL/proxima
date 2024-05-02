@@ -41,7 +41,6 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           firestoreProvider.overrideWithValue(fakeFirestore),
-          postRepositoryProvider.overrideWithValue(postRepository),
         ],
       );
 
