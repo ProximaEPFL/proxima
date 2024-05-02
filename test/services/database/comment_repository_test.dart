@@ -77,7 +77,7 @@ void main() {
         expect(actualComments, unorderedEquals(comments));
       });
 
-      test("should return an error if the comment has missing field", () async {
+      test("should throw an error if the comment has missing field", () async {
         await commentsSubCollection.doc("comment_id").set({
           "missing_field": "missing_field",
         });
