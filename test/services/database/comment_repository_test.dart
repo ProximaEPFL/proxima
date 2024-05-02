@@ -9,17 +9,15 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
-import "package:proxima/services/database/post_repository_service.dart";
 
 import "../../mocks/data/comment_data.dart";
 import "../../mocks/data/firestore_comment.dart";
+import "../../mocks/data/firestore_post.dart";
 import "../../mocks/data/geopoint.dart";
-import "../../mocks/data/post_data.dart";
 
 void main() {
   group("Testing comment repository", () {
     late FakeFirebaseFirestore fakeFirestore;
-    late PostRepositoryService postRepository;
     late CommentRepositoryService commentRepository;
 
     late PostIdFirestore postId;
@@ -31,9 +29,6 @@ void main() {
     /// The setup add a single post with no comments
     setUp(() async {
       fakeFirestore = FakeFirebaseFirestore();
-      postRepository = PostRepositoryService(
-        firestore: fakeFirestore,
-      );
 
       // We get the comment repository from the provider container
       // because it allows to check that the provider constructs
@@ -46,8 +41,9 @@ void main() {
 
       commentRepository = container.read(commentRepositoryProvider);
 
-      final postData = PostDataGenerator().postData;
-      postId = await postRepository.addPost(postData, userPosition0);
+      final post = FirestorePostGenerator().generatePostAt(userPosition0);
+      postId = post.id;
+      await setPostFirestore(post, fakeFirestore);
 
       postDocument = fakeFirestore
           .collection(
