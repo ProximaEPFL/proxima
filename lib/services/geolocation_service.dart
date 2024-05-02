@@ -71,18 +71,18 @@ class GeoLocationService {
     return GeoPoint(position.latitude, position.longitude);
   }
 
-  Future<Stream<GeoPoint>> getPositionStream() async {
+  Stream<GeoPoint> getPositionStream() async* {
     //check if location services are enabled
     final state = await checkLocationServices();
     if (state != null) {
       throw state;
     }
 
-    return _geoLocator
-        .getPositionStream(
-          locationSettings: locationSettings,
-        )
-        .map((position) => GeoPoint(position.latitude, position.longitude));
+    await for (final position in _geoLocator.getPositionStream(
+      locationSettings: locationSettings,
+    )) {
+      yield GeoPoint(position.latitude, position.longitude);
+    }
   }
 }
 
@@ -92,12 +92,8 @@ final geoLocationServiceProvider = Provider<GeoLocationService>(
   ),
 );
 
-final liveLocationServiceProvider = StreamProvider<GeoPoint?>((ref) async* {
+final liveLocationServiceProvider = StreamProvider<GeoPoint?>((ref) {
   final locationService =
       GeoLocationService(geoLocator: GeolocatorPlatform.instance);
-  final stream = await locationService.getPositionStream();
-
-  await for (final value in stream) {
-    yield value;
-  }
+  return locationService.getPositionStream();
 });

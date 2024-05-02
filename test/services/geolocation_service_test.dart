@@ -143,17 +143,14 @@ void main() {
         ]),
       );
 
-      final stream = await geoLocationService.getPositionStream();
+      final stream = geoLocationService.getPositionStream();
 
-      final actualGeoPoint1 = await stream.first;
-
-      //read the second value
-      final actualGeoPoint2 = await stream.elementAt(1);
-
-      expect(actualGeoPoint1, equals(const GeoPoint(latitude, longitude)));
       expect(
-        actualGeoPoint2,
-        equals(const GeoPoint(latitude + 1, longitude + 1)),
+        stream,
+        emitsInOrder([
+          const GeoPoint(latitude, longitude),
+          const GeoPoint(latitude + 1, longitude + 1),
+        ]),
       );
     });
   });
