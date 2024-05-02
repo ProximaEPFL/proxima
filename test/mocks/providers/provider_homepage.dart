@@ -31,7 +31,6 @@ final loadingHomePageProvider = ProviderScope(
   child: homePageApp,
 );
 
-
 ProviderScope homePageFakeFirestoreProvider(
   FakeFirebaseFirestore firestore,
   MockGeoLocationService geoLocationService,
@@ -40,6 +39,17 @@ ProviderScope homePageFakeFirestoreProvider(
     overrides: [
       ...loggedInUserOverrides,
       firestoreProvider.overrideWithValue(firestore),
+      geoLocationServiceProvider.overrideWithValue(geoLocationService),
+    ],
+    child: homePageApp,
+  );
+}
+
+ProviderScope emptyHomePageProviderGPS(
+    MockGeoLocationService geoLocationService) {
+  return ProviderScope(
+    overrides: [
+      ...mockEmptyHomeViewModelOverride,
       geoLocationServiceProvider.overrideWithValue(geoLocationService),
     ],
     child: homePageApp,
