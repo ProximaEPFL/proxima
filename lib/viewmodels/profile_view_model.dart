@@ -5,7 +5,7 @@ import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
 /// User profile view model
-class ProfileViewModel extends AsyncNotifier<ProfileData> {
+class ProfileViewModel extends AutoDisposeAsyncNotifier<ProfileData> {
   ProfileViewModel();
 
   @override
@@ -29,6 +29,7 @@ class ProfileViewModel extends AsyncNotifier<ProfileData> {
 }
 
 /// Profile view model of the currently logged in user
-final profileProvider = AsyncNotifierProvider<ProfileViewModel, ProfileData>(
+final profileProvider =
+    AutoDisposeAsyncNotifierProvider<ProfileViewModel, ProfileData>(
   () => ProfileViewModel(),
 );

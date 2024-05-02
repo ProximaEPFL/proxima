@@ -7,14 +7,14 @@ import "package:proxima/views/pages/profile/components/profile_badge.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_column.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_row.dart";
+import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
 
 /// This widget is used to display the profile page
-/// It contains the user info, centauri points, badges, posts and comments
+/// It contains the user info, centauri points, badges, user posts and user comments
 class ProfilePage extends HookConsumerWidget {
   static const postTabKey = Key("postTab");
   static const commentTabKey = Key("commentTab");
   static const tabKey = Key("tab");
-  static const postColumnKey = Key("postColumn");
   static const commentColumnKey = Key("commentColumn");
 
   static const _badgesTitle = "Your badges:";
@@ -28,7 +28,6 @@ class ProfilePage extends HookConsumerWidget {
     final asyncUserData = ref.watch(profileProvider);
 
     final itemListBadge = <Widget>[];
-    final itemListPosts = <Widget>[];
     final itemListComments = <Widget>[];
 
     final shadow = BoxShadow(
@@ -38,30 +37,19 @@ class ProfilePage extends HookConsumerWidget {
       spreadRadius: 0.01,
     );
 
-    // This is a MOCK list of cards
-    // TODO replace by viewmodel
+    // This is a fake list of cards
     for (var i = 0; i < 10; i++) {
+      // TODO replace by profile badges viewmodel
       itemListBadge.add(
         ProfileBadge(shadow: shadow),
       );
 
-      itemListPosts.add(
-        ProfileInfoCard(
-          shadow: shadow,
-          title: "Post title",
-          content:
-              "My super post that talks about something that is super cool and is located in a super spot",
-          onDelete: () async {
-            // TODO handle post deletion
-          },
-        ),
-      );
-
+      // TODO replace by user comments viewmodel (follow `UserPosts` implementation)
       itemListComments.add(
         ProfileInfoCard(
           shadow: shadow,
           content:
-              "Here is a super comment on a super post that talks about something that is super cool and is located in a super spot that is very cosy and nice",
+              "Here is a FAKE data comment on a super post that talks about something that is super cool and is located in a super spot that is very cosy and nice",
           onDelete: () async {
             // TODO handle comment deletion
           },
@@ -73,7 +61,12 @@ class ProfilePage extends HookConsumerWidget {
       itemList: itemListBadge,
     );
 
-    const tabs = TabBar(
+    final comments = ProfileInfoColumn(
+      key: commentColumnKey,
+      itemList: itemListComments,
+    );
+
+    const tabsTitle = TabBar(
       key: tabKey,
       tabs: [
         Tab(text: _postsTab, key: postTabKey),
@@ -81,13 +74,13 @@ class ProfilePage extends HookConsumerWidget {
       ],
     );
 
-    final posts = ProfileInfoColumn(
-      itemList: itemListPosts,
-      columnKey: postColumnKey,
-    );
-    final comments = ProfileInfoColumn(
-      itemList: itemListComments,
-      columnKey: commentColumnKey,
+    final tabsContent = Expanded(
+      child: TabBarView(
+        children: [
+          ProfileUserPosts(shadow: shadow),
+          comments,
+        ],
+      ),
     );
 
     return CircularValue(
@@ -102,15 +95,8 @@ class ProfilePage extends HookConsumerWidget {
               child: Column(
                 children: [
                   badges,
-                  tabs,
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        posts,
-                        comments,
-                      ],
-                    ),
-                  ),
+                  tabsTitle,
+                  tabsContent,
                 ],
               ),
             ),
