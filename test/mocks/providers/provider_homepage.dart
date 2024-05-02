@@ -4,6 +4,7 @@ import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 
+import "../overrides/override_challenges_view_model.dart";
 import "../overrides/override_home_view_model.dart";
 import "../services/mock_geo_location_service.dart";
 
@@ -18,7 +19,7 @@ final emptyHomePageProvider = ProviderScope(
 );
 
 final nonEmptyHomePageProvider = ProviderScope(
-  overrides: mockNonEmptyHomeViewModelOverride,
+  overrides: [...mockNonEmptyHomeViewModelOverride, ...mockChallengeOverride],
   child: homePageApp,
 );
 
