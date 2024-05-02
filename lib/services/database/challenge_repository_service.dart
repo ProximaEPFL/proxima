@@ -10,24 +10,29 @@ import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
+import "package:proxima/services/database/user_repository_service.dart";
 
 /// This repository service is responsible for handling the challenges
 class ChallengeRepositoryService {
   final FirebaseFirestore _firestore;
   final PostRepositoryService _postRepositoryService;
+  final UserRepositoryService _userRepositoryService;
 
   static const int maxActiveChallenges = 3;
   static const double maxChallengeRadius = 3; // in km
   static const double minChallengeRadius = 0.5;
   static const maxChallengeDuration = Duration(days: 1);
+  static const soloChallengeReward = 500;
 
   /// Creates a new challenge repository service
   /// with the given [firestore] and [postRepositoryService]
   ChallengeRepositoryService({
     required FirebaseFirestore firestore,
     required PostRepositoryService postRepositoryService,
+    required UserRepositoryService userRepositoryService,
   })  : _firestore = firestore,
-        _postRepositoryService = postRepositoryService;
+        _postRepositoryService = postRepositoryService,
+        _userRepositoryService = userRepositoryService;
 
   CollectionReference<Map<String, dynamic>> _activeChallengesRef(
     DocumentReference parentRef,
@@ -42,16 +47,33 @@ class ChallengeRepositoryService {
         .collection(ChallengeFirestore.pastChallengesSubCollectionName);
   }
 
-  /// Completes the challenge of the user with id [uid] on the post with id [pid]
-  Future<void> completeChallenge(
+  /// Completes the challenge of the user with id [uid] on the post with id [pid].
+  /// Returns true if the challenge is valid and was completed, and false otherwise.
+  /// The challenge could be invalid if the post does not correspond to a current
+  /// challenge, if the challenge was already completed or if the challenge expired.
+  Future<bool> completeChallenge(
     UserIdFirestore uid,
     PostIdFirestore pid,
   ) async {
     final userDocRef =
         _firestore.collection(UserFirestore.collectionName).doc(uid.value);
+    final challengeSnap =
+        await _activeChallengesRef(userDocRef).doc(pid.value).get();
+
+    if (!challengeSnap.exists) {
+      return false;
+    }
+
+    final challengeData = ChallengeData.fromDb(challengeSnap.data()!);
+    if (challengeData.isCompleted || challengeData.isExpired) {
+      return false;
+    }
+
     await _activeChallengesRef(userDocRef).doc(pid.value).update({
       ChallengeData.isCompletedField: true,
     });
+    await _userRepositoryService.addPoints(uid, soloChallengeReward);
+    return true;
   }
 
   /// Returns the active challenges of the user with id [uid] who is located at [pos].
@@ -196,6 +218,7 @@ final challengeRepositoryServiceProvider = Provider<ChallengeRepositoryService>(
     return ChallengeRepositoryService(
       firestore: ref.watch(firestoreProvider),
       postRepositoryService: ref.watch(postRepositoryProvider),
+      userRepositoryService: ref.watch(userRepositoryProvider),
     );
   },
 );
