@@ -47,7 +47,7 @@ void main() {
 
       // Get the comment upvote repository for the post
       commentUpvoteRepository =
-          container.read(commentUpvoteRepositoryService(postId));
+          container.read(commentUpvoteRepositoryProvider(postId));
 
       // Add a comment to the post
       final commentData =

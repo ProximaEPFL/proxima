@@ -7,7 +7,7 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/upvote_repository_service.dart";
 
-final commentUpvoteRepositoryService = Provider.family<
+final commentUpvoteRepositoryProvider = Provider.family<
     UpvoteRepositoryService<CommentIdFirestore>,
     PostIdFirestore>((ref, postId) {
   final firestore = ref.read(firestoreProvider);
