@@ -1,0 +1,96 @@
+Title	URL	Assignees	Status
+Decide whether we introduce the code generation	https://github.com/ProximaEPFL/proxima/issues/194		Product Backlog
+Bug: error message on login out from challenges	https://github.com/ProximaEPFL/proxima/issues/217	Aderfish	Sprint Backlog
+Removing identical testing	https://github.com/ProximaEPFL/proxima/issues/207		Product Backlog
+Make the random mock generators seeded	https://github.com/ProximaEPFL/proxima/issues/203		Product Backlog
+Create method for distance computation	https://github.com/ProximaEPFL/proxima/issues/204		Product Backlog
+Make a view-model for the map	https://github.com/ProximaEPFL/proxima/issues/166		Product Backlog
+Decide on the use of `delayNeededForAsyncFunctionExecution` where not absolutely necessary in testing and apply the choice project wide	https://github.com/ProximaEPFL/proxima/issues/201		Product Backlog
+Manage the possible errors that can arise when voting with no internet connection	https://github.com/ProximaEPFL/proxima/issues/160		Product Backlog
+Add a button on the posts of the profile page that redirect to their position on the map	https://github.com/ProximaEPFL/proxima/issues/184		Product Backlog
+Make the profile picture component dynamically adapt to the username everywhere	https://github.com/ProximaEPFL/proxima/issues/183		Product Backlog
+As a Proxima user, I want the option to sort my feed based on upvotes, downvotes, or publication time, so I can prioritize content according to my preferences.	https://github.com/ProximaEPFL/proxima/issues/6		Product Backlog
+As a user, I want to be able to comment on a post, so that I can share my thoughts about it.	https://github.com/ProximaEPFL/proxima/issues/91		Sprint Backlog
+As a Proxima user, I want to have the ability to delete my posts even if I'm not currently near their locations, to have complete control over my online image.	https://github.com/ProximaEPFL/proxima/issues/12		Sprint Backlog
+As a Proxima user, I want to see a map with the position of the posts of my feed, so that I can know exactly where they were posted	https://github.com/ProximaEPFL/proxima/issues/136		Sprint Backlog
+As a user, I want to see the challenges in my in a distinctive manner with a different visual representation and sorting	https://github.com/ProximaEPFL/proxima/issues/210		Sprint Backlog
+As a user, I want to see a message when I gain centauri points, so that I can feel rewarded for my efforts.	https://github.com/ProximaEPFL/proxima/issues/202		Sprint Backlog
+Refresh post feed on post delete	https://github.com/ProximaEPFL/proxima/issues/205	camillelnne	Sprint Backlog
+Make the Google Map API key secret	https://github.com/ProximaEPFL/proxima/issues/153	Aderfish	Sprint Backlog
+Delete the subcollection of a post when a poost is deleted	https://github.com/ProximaEPFL/proxima/issues/206	Aderfish	Sprint Backlog
+Fix the profile page UI, to use a card instead of setting the background colour manually	https://github.com/ProximaEPFL/proxima/issues/197	camillelnne	Sprint Backlog
+Show a list of pins on the map	https://github.com/ProximaEPFL/proxima/issues/165	TheTexanCodeur	Sprint Backlog
+Test posts and challenges distance	https://github.com/ProximaEPFL/proxima/issues/209	gruvw	Sprint Backlog
+Create service for time conversion	https://github.com/ProximaEPFL/proxima/issues/208	gruvw	Sprint Backlog
+Always display challenge on the top of the feed, with a different UI	https://github.com/ProximaEPFL/proxima/issues/174	JoachimFavre	Sprint Backlog
+Congratulatory message on challenge completeted	https://github.com/ProximaEPFL/proxima/issues/211	JoachimFavre	Sprint Backlog
+Create the viewmodel for the comments	https://github.com/ProximaEPFL/proxima/issues/212	yoannLafore	Sprint Backlog
+Display initials of user in avatar	https://github.com/ProximaEPFL/proxima/issues/213	CHOOSEIT	Sprint Backlog
+Display the profile picture of the user in the avatar	https://github.com/ProximaEPFL/proxima/issues/214	CHOOSEIT	Sprint Backlog
+Fix release and apk build signature in CI	https://github.com/ProximaEPFL/proxima/issues/130	Aderfish	Sprint Backlog
+Refactor test package structure and providers	https://github.com/ProximaEPFL/proxima/issues/131	camillelnne	Done in Sprint 5
+As a user, I want to be challenged to visit trending posts nearby, so I can discover popular content and earn additional points.	https://github.com/ProximaEPFL/proxima/issues/10		Done in Sprint 6
+As a user, I want to be able to upvote and downvote posts, so that other users can see more relevant content	https://github.com/ProximaEPFL/proxima/issues/90		Done in Sprint 6
+Make the model for the challenges	https://github.com/ProximaEPFL/proxima/issues/140	Aderfish	Done in Sprint 6
+Add model to vote on comment	https://github.com/ProximaEPFL/proxima/issues/178	yoannLafore	Done in Sprint 6
+View model for the profile page	https://github.com/ProximaEPFL/proxima/issues/132	gruvw	Done in Sprint 6
+Verify (and fix if necessary) penpot	https://github.com/ProximaEPFL/proxima/issues/168	CHOOSEIT	Done in Sprint 6
+Write a profile picture/avatar component(s) (with username initials) that we can reuse in different parts of the application (appbar on home page and profile page mainly).	https://github.com/ProximaEPFL/proxima/issues/157	CHOOSEIT	Done in Sprint 6
+Refresh the overview page feed once the user created a post (navigation based refresh)	https://github.com/ProximaEPFL/proxima/issues/187	gruvw	Done in Sprint 6
+Display map page with position and circle	https://github.com/ProximaEPFL/proxima/issues/163	TheTexanCodeur	Done in Sprint 6
+Ability to delete posts on profile	https://github.com/ProximaEPFL/proxima/issues/170	gruvw	Done in Sprint 6
+Update architecture diagram	https://github.com/ProximaEPFL/proxima/issues/167	CHOOSEIT	Done in Sprint 6
+A user cannot have its own posts as challenges	https://github.com/ProximaEPFL/proxima/issues/195	Aderfish	Done in Sprint 6
+Make the position refreshed automatically for the map page	https://github.com/ProximaEPFL/proxima/issues/164	TheTexanCodeur	Done in Sprint 6
+View-model for challenges	https://github.com/ProximaEPFL/proxima/issues/173	Aderfish	Done in Sprint 6
+Add date and distance to the post page	https://github.com/ProximaEPFL/proxima/issues/171	camillelnne	Done in Sprint 6
+Allow the feed to be sorted according to the sort buttons	https://github.com/ProximaEPFL/proxima/issues/172	JoachimFavre	Done in Sprint 6
+Create model and repository for comments	https://github.com/ProximaEPFL/proxima/issues/176	yoannLafore	Done in Sprint 6
+Fix the challenge page crashing when there is no available challenge	https://github.com/ProximaEPFL/proxima/issues/216	JoachimFavre	Done in Sprint 7
+Demo video	https://github.com/ProximaEPFL/proxima/issues/169	Aderfish	Done in Sprint 7
+Apply the dart metrics suggestions to the code	https://github.com/ProximaEPFL/proxima/issues/133	CHOOSEIT	Done in Sprint 5
+Make the integration test run on the CI	https://github.com/ProximaEPFL/proxima/issues/141	yoannLafore	Done in Sprint 5
+Add tests for hashcode and == of immutable classes	https://github.com/ProximaEPFL/proxima/issues/142	yoannLafore	Done in Sprint 5
+Fix failing tests	https://github.com/ProximaEPFL/proxima/issues/156	JoachimFavre	Done in Sprint 5
+Move logout button to profile page	https://github.com/ProximaEPFL/proxima/issues/134	gruvw	Done in Sprint 5
+Make viewmodel for upvotes	https://github.com/ProximaEPFL/proxima/issues/135	yoannLafore	Done in Sprint 5
+Make the UI for the challenge page	https://github.com/ProximaEPFL/proxima/issues/139	JoachimFavre	Done in Sprint 5
+Make the penpot for the map with the nearby posts	https://github.com/ProximaEPFL/proxima/issues/137	TheTexanCodeur	Done in Sprint 5
+Make the UI for the post page	https://github.com/ProximaEPFL/proxima/issues/138	CHOOSEIT	Done in Sprint 5
+Refactor the profile page to follow best practices	https://github.com/ProximaEPFL/proxima/issues/161	gruvw	Done in Sprint 5
+Make a generic async capable loading button	https://github.com/ProximaEPFL/proxima/issues/162	gruvw	Done in Sprint 5
+As a Proxima user, I want to be able to see and join nearby groups with similar interests or objectives, so I can participate in collaborative activities and challenges with like-minded individuals.	https://github.com/ProximaEPFL/proxima/issues/13		Product Backlog
+As a user, I want to reply to other comments, so that I can interact with other users	https://github.com/ProximaEPFL/proxima/issues/92		Product Backlog
+As a user, I want to be able to upvote and downvote comments, so that interesting ones rise to the top	https://github.com/ProximaEPFL/proxima/issues/93		Product Backlog
+As a user, I want uninteresting comments to be hidden, so that I only see the interesting ones	https://github.com/ProximaEPFL/proxima/issues/94		Product Backlog
+As a user, I want to be able to upload a profile picture from my phone storage, so that other users can recognise me	https://github.com/ProximaEPFL/proxima/issues/97		Product Backlog
+As a user, I want to be able to upload a profile picture from my phone camera, so that I can quickly update my profile	https://github.com/ProximaEPFL/proxima/issues/98		Product Backlog
+As a Proxima user, I want to have a custom profile picture specific to the app, so that other users can better identify me compared to just reading my username.	https://github.com/ProximaEPFL/proxima/issues/39		Product Backlog
+As a Proxima user, I want to view a heat map of areas with trending posts, so I can explore areas likely to have interesting content.	https://github.com/ProximaEPFL/proxima/issues/11		Product Backlog
+As a Proxima user, I want to earn points from interactions within the app and traveling between interactions, so I can gain recognition and unlock cosmetic rewards.	https://github.com/ProximaEPFL/proxima/issues/9		Product Backlog
+As a Proxima user, I want to follow other users, so I can stay updated on their activities and interests.	https://github.com/ProximaEPFL/proxima/issues/14		Product Backlog
+As a Proxima user, I want to see the positions, authors, and publication dates of posts I was notified for on a map, for easier navigation and exploration of content.	https://github.com/ProximaEPFL/proxima/issues/15		Product Backlog
+As a Proxima user, I want my username to be unique so that when other users want to follow me, they don't follow someone else.	https://github.com/ProximaEPFL/proxima/issues/40		Product Backlog
+As a Proxima user, I want my account inputs to be validated so that my the application is correctly displayed and pleasant to use.	https://github.com/ProximaEPFL/proxima/issues/41		Product Backlog
+As a Proxima user, I want the feed of posts that are nearby to be automatically refreshed when I move so that I don't lose time manually refreshing everytime I change location.	https://github.com/ProximaEPFL/proxima/issues/44		Product Backlog
+As a proxima user, I want to be notified when my location service are misconfigured so that I can correctly configure to use and enjoy the app.	https://github.com/ProximaEPFL/proxima/issues/50		Product Backlog
+As a new user, I want to see imediately whether the username I have entered is valid, so I don't lose any time	https://github.com/ProximaEPFL/proxima/issues/88		Product Backlog
+The verification of a username and the creation of a new account should be atomic in Firebase	https://github.com/ProximaEPFL/proxima/issues/89		Product Backlog
+As a user, I want to be able to change my display name, so that I can have a new display name if I want to	https://github.com/ProximaEPFL/proxima/issues/100		Product Backlog
+As a proxima user, I want a refresh button that updates my feed with new nearby posts and hints that new posts are available, so I am encouraged to refresh my feed when new info is available.	https://github.com/ProximaEPFL/proxima/issues/126		Product Backlog
+As a user, I want the app to have a nice icon, so that I can find it in my apps.	https://github.com/ProximaEPFL/proxima/issues/129		Product Backlog
+As a Proxima user, I want to have the ability to delete my comments even if I'm not currently near their locations, to hve complete control over my online image.	https://github.com/ProximaEPFL/proxima/issues/175		Product Backlog
+Refractor fallback on error widget	https://github.com/ProximaEPFL/proxima/issues/186		Product Backlog
+Points in the user profile are not updated, they do not always reflect the database	https://github.com/ProximaEPFL/proxima/issues/198		Product Backlog
+Make mocks compatible with null argument matchers	https://github.com/ProximaEPFL/proxima/issues/96	Aderfish	Done is Sprint 4
+Handle error case on circular value	https://github.com/ProximaEPFL/proxima/issues/107	Aderfish	Done is Sprint 4
+Create model for upvotes/downvotes	https://github.com/ProximaEPFL/proxima/issues/108	JoachimFavre	Done is Sprint 4
+Fix flutter test CI	https://github.com/ProximaEPFL/proxima/issues/123	gruvw	Done is Sprint 4
+Clean-up test files	https://github.com/ProximaEPFL/proxima/issues/95	camillelnne	Done is Sprint 4
+Overflow in top bar "Your Challenges"	https://github.com/ProximaEPFL/proxima/issues/110	camillelnne	Done is Sprint 4
+Create popup screen to visualize a post/comment in the profile page	https://github.com/ProximaEPFL/proxima/issues/106	CHOOSEIT	Done is Sprint 4
+Create viewmodel to get username and centauri points	https://github.com/ProximaEPFL/proxima/issues/105	TheTexanCodeur	Done is Sprint 4
+Duplicate key string in profile testing makes test pass when they should not	https://github.com/ProximaEPFL/proxima/issues/119	CHOOSEIT	Done is Sprint 4
+Create model function to get the posts of a user	https://github.com/ProximaEPFL/proxima/issues/104	gruvw	Done is Sprint 4
+Posts are not updated correctly on refresh	https://github.com/ProximaEPFL/proxima/issues/78	yoannLafore	Done is Sprint 4
+Create model function to delete posts	https://github.com/ProximaEPFL/proxima/issues/103	gruvw	Done is Sprint 4
