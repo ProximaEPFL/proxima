@@ -20,7 +20,7 @@ class ChallengeList extends ConsumerWidget {
       builder: (context, challenges) {
         return RefreshIndicator(
           onRefresh: () => ref.read(challengeProvider.notifier).refresh(),
-          child: (challenges.isEmpty)
+          child: challenges.isEmpty
               ? emptyChallenge
               : ListView(
                   children: challenges
