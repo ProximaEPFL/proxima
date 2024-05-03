@@ -12,7 +12,7 @@ class ChallengeList extends ConsumerWidget {
     final asyncChallenges = ref.watch(challengeProvider);
 
     Widget emptyChallenge = const Center(
-      child: Text("No challenges available here"),
+      child: Text("No challenge available here!"),
     );
 
     return CircularValue(
