@@ -1,18 +1,11 @@
 import "package:flutter_test/flutter_test.dart";
-import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/ui/post_overview.dart";
+
+import "../../mocks/data/post_overview.dart";
 
 void main() {
   group("Post Overview testing", () {
     test("hash overrides correctly", () {
-      const postOverview = PostOverview(
-        postId: PostIdFirestore(value: "post_1"),
-        title: "title",
-        description: "description",
-        voteScore: 12,
-        commentNumber: 3,
-        ownerDisplayName: "username",
-      );
+      final postOverview = testPosts[0];
 
       final expectedHash = Object.hash(
         postOverview.postId,
@@ -21,6 +14,8 @@ void main() {
         postOverview.voteScore,
         postOverview.commentNumber,
         postOverview.ownerDisplayName,
+        postOverview.publicationDate,
+        postOverview.distance,
       );
 
       final actualHash = postOverview.hashCode;
@@ -29,23 +24,9 @@ void main() {
     });
 
     test("equality overrides correctly", () {
-      const postOverview = PostOverview(
-        postId: PostIdFirestore(value: "post_1"),
-        title: "title",
-        description: "description",
-        voteScore: 12,
-        commentNumber: 3,
-        ownerDisplayName: "username",
-      );
+      final postOverview = testPosts[0];
 
-      const postOverviewCopy = PostOverview(
-        postId: PostIdFirestore(value: "post_1"),
-        title: "title",
-        description: "description",
-        voteScore: 12,
-        commentNumber: 3,
-        ownerDisplayName: "username",
-      );
+      final postOverviewCopy = testPosts[0];
 
       expect(postOverview, postOverviewCopy);
     });

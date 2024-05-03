@@ -1,5 +1,6 @@
 import "package:collection/collection.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_data.dart";
@@ -114,6 +115,11 @@ void main() {
           voteScore: postData.voteScore,
           ownerDisplayName: owner.data.displayName,
           commentNumber: 0,
+          publicationDate: postData.publicationTime.toDate(),
+          distance: (const GeoFirePoint(userPosition)
+                      .distanceBetweenInKm(geopoint: postPosition) *
+                  1000)
+              .round(),
         ),
       ];
 
@@ -205,6 +211,11 @@ void main() {
           voteScore: data.voteScore,
           ownerDisplayName: owner.data.displayName,
           commentNumber: 0,
+          publicationDate: data.publicationTime.toDate(),
+          distance: (const GeoFirePoint(userPosition0)
+                      .distanceBetweenInKm(geopoint: postPositions[index]) *
+                  1000)
+              .round(),
         );
 
         return postOverview;

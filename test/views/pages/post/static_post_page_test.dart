@@ -1,14 +1,16 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:intl/intl.dart";
 import "package:proxima/views/home_content/feed/post_card/post_card.dart";
-import "package:proxima/views/home_content/feed/post_card/user_bar_widget.dart";
+import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/post/post_page.dart";
 import "package:proxima/views/pages/post/post_page_widget/bottom_bar_add_comment.dart";
 import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.dart";
 import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
+import "package:timeago/timeago.dart" as timeago;
 
 import "../../../mocks/data/post_comment.dart";
 import "../../../mocks/data/post_overview.dart";
@@ -86,16 +88,46 @@ void main() {
       final postUserBar = find.byKey(CompletePostWidget.postUserBarKey);
       expect(postUserBar, findsOneWidget);
 
+      //Check that the owner display name is displayed
       final postUserBarDisplayNameTextWidget = tester.widget(
         find.descendant(
           of: postUserBar,
-          matching: find.byKey(UserBarWidget.displayNameTextKey),
+          matching: find.byKey(PostHeaderWidget.displayNameTextKey),
         ),
       );
+
       expect(
         postUserBarDisplayNameTextWidget is Text &&
             postUserBarDisplayNameTextWidget.data == post.ownerDisplayName,
         true,
+      );
+
+      //Check that the publication time is displayed
+      final postUserBarTimestampTextWidget = tester.widget(
+        find.descendant(
+          of: postUserBar,
+          matching: find.byKey(PostHeaderWidget.publicationDateTextKey),
+        ),
+      );
+
+      expect(
+        postUserBarTimestampTextWidget is Text &&
+            postUserBarTimestampTextWidget.data ==
+                "${timeago.format(post.publicationDate, locale: "en_short")} ago",
+        true,
+      );
+
+      // Check Tooltip message
+      final tooltip = find.byType(Tooltip);
+      expect(tooltip, findsOneWidget);
+
+      final tooltipWidget = tester.widget(tooltip);
+      expect(tooltipWidget is Tooltip, true);
+
+      final tooltipMessage = (tooltipWidget as Tooltip).message;
+      expect(
+        tooltipMessage,
+        DateFormat("EEEE, MMMM d, yyyy HH:mm").format(post.publicationDate),
       );
     });
 
@@ -164,7 +196,7 @@ void main() {
       final Iterable<Text> displayNameWidgets = tester.widgetList<Text>(
         find.descendant(
           of: find.byKey(CommentPostWidget.commentUserWidgetKey),
-          matching: find.byKey(UserBarWidget.displayNameTextKey),
+          matching: find.byKey(PostHeaderWidget.displayNameTextKey),
         ),
       );
 

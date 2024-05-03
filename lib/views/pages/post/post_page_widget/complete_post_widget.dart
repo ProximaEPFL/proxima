@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/post_overview.dart";
-
-import "package:proxima/views/home_content/feed/post_card/user_bar_widget.dart";
+import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
 import "package:proxima/views/home_content/feed/post_card/votes_widget.dart";
 
 class CompletePostWidget extends StatelessWidget {
@@ -43,9 +42,10 @@ class CompletePostWidget extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 16, top: 8),
-          child: UserBarWidget(
+          child: PostHeaderWidget(
             key: postUserBarKey,
             posterUsername: post.ownerDisplayName,
+            publicationDate: post.publicationDate,
           ),
         ),
         postBody,

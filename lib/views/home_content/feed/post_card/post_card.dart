@@ -3,7 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/views/home_content/feed/post_card/comment_widget.dart";
-import "package:proxima/views/home_content/feed/post_card/user_bar_widget.dart";
+import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
 import "package:proxima/views/home_content/feed/post_card/votes_widget.dart";
 import "package:proxima/views/navigation/routes.dart";
 
@@ -16,7 +16,7 @@ class PostCard extends ConsumerWidget {
   static const postCardTitleKey = Key("postCardTitle");
   static const postCardDescriptionKey = Key("postCardDescription");
   static const postCardVotesKey = Key("postCardVotes");
-  static const postCardCommentsKey = Key("postCardComments");
+  static const postCardCommentsNumberKey = Key("postCardCommentsNumber");
   static const postCardUserKey = Key("postCardUser");
 
   final PostOverview postOverview;
@@ -72,7 +72,7 @@ class PostCard extends ConsumerWidget {
             ),
             onTap: () => _onPostSelect(context, postOverview, ref),
             child: CommentWidget(
-              key: postCardCommentsKey,
+              key: postCardCommentsNumberKey,
               commentNumber: postOverview.commentNumber,
             ),
           ),
@@ -91,9 +91,10 @@ class PostCard extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 8),
-              child: UserBarWidget(
+              child: PostHeaderWidget(
                 key: postCardUserKey,
                 posterUsername: postOverview.ownerDisplayName,
+                publicationDate: postOverview.publicationDate,
               ),
             ),
             postBody,

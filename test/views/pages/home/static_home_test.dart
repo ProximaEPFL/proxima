@@ -65,8 +65,8 @@ void main() {
       final postVotes = find.byKey(PostCard.postCardVotesKey);
       expect(postVotes, findsExactly(testPosts.length));
 
-      //Check that the posts comments are displayed
-      final postComments = find.byKey(PostCard.postCardCommentsKey);
+      //Check that the number of posts comments are displayed
+      final postComments = find.byKey(PostCard.postCardCommentsNumberKey);
       expect(postComments, findsExactly(testPosts.length));
 
       //Check that the posts user card are displayed
