@@ -81,6 +81,7 @@ class FirestorePostGenerator {
         description: "desciption",
         publicationTime: Timestamp.fromMicrosecondsSinceEpoch(1000000),
         voteScore: Random().nextInt(100),
+        commentCount: Random().nextInt(100),
       ),
     );
   }

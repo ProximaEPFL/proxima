@@ -19,12 +19,16 @@ class PostData {
   final int voteScore;
   static const String voteScoreField = "voteScore";
 
+  final int commentCount;
+  static const String commentCountField = "commentCount";
+
   const PostData({
     required this.ownerId,
     required this.title,
     required this.description,
     required this.publicationTime,
     required this.voteScore,
+    required this.commentCount,
   });
 
   /// This method will create an instance of [PostData] from the
@@ -37,6 +41,7 @@ class PostData {
         description: data[descriptionField],
         publicationTime: data[publicationTimeField],
         voteScore: data[voteScoreField],
+        commentCount: data[commentCountField] ?? 0,
       );
     } catch (e) {
       if (e is TypeError) {
@@ -56,6 +61,7 @@ class PostData {
       descriptionField: description,
       publicationTimeField: publicationTime,
       voteScoreField: voteScore,
+      commentCountField: commentCount,
     };
   }
 
@@ -68,11 +74,19 @@ class PostData {
         other.title == title &&
         other.description == description &&
         other.publicationTime == publicationTime &&
-        other.voteScore == voteScore;
+        other.voteScore == voteScore &&
+        other.commentCount == commentCount;
   }
 
   @override
   int get hashCode {
-    return Object.hash(ownerId, title, description, publicationTime, voteScore);
+    return Object.hash(
+      ownerId,
+      title,
+      description,
+      publicationTime,
+      voteScore,
+      commentCount,
+    );
   }
 }

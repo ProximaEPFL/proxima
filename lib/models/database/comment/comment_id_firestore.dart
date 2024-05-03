@@ -1,17 +1,17 @@
 import "package:flutter/foundation.dart";
 import "package:proxima/models/database/firestore/id_firestore.dart";
 
-/// The id are strong typed to avoid misuse
+/// The comment id is strong typed to avoid misuse
 @immutable
-class UserIdFirestore implements IdFirestore {
+class CommentIdFirestore implements IdFirestore {
   @override
   final String value;
 
-  const UserIdFirestore({required this.value});
+  const CommentIdFirestore({required this.value});
 
   @override
   bool operator ==(Object other) {
-    return other is UserIdFirestore && other.value == value;
+    return other is CommentIdFirestore && other.value == value;
   }
 
   @override
