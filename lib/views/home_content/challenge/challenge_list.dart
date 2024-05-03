@@ -11,16 +11,22 @@ class ChallengeList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncChallenges = ref.watch(challengeProvider);
 
+    Widget emptyChallenge = const Center(
+      child: Text("No challenge available here!"),
+    );
+
     return CircularValue(
       value: asyncChallenges,
       builder: (context, challenges) {
         return RefreshIndicator(
           onRefresh: () => ref.read(challengeProvider.notifier).refresh(),
-          child: ListView(
-            children: challenges
-                .map((challenge) => ChallengeCard(challenge))
-                .toList(),
-          ),
+          child: challenges.isEmpty
+              ? emptyChallenge
+              : ListView(
+                  children: challenges
+                      .map((challenge) => ChallengeCard(challenge))
+                      .toList(),
+                ),
         );
       },
     );
