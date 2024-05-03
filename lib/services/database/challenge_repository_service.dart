@@ -144,6 +144,12 @@ class ChallengeRepositoryService {
 
     final Iterable<PostIdFirestore> possiblePosts =
         await _inRangeUnsortedPosts(pos, excludedUser);
+
+    // The whereIn argument of the where method crashed
+    // if the query is empty for the real firestore. This
+    // cannot be tested with the mock firestore.
+    if (possiblePosts.isEmpty) return;
+
     final Iterable<String> possiblePostsStringIds =
         possiblePosts.map((post) => post.value);
 
