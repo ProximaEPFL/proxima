@@ -18,9 +18,9 @@ It allows people to share posts, but with a catch: one has to physically move to
 
 ## User Interface Design
 
-Link to the [Mockup](https://design.penpot.app/#/view/93d0ad32-dfe5-8194-8004-0171998eeabe?page-id=76cd5706-e69f-8069-8004-1a1578d3f0c7&section=interactions&index=30&share-id=2bf3009f-0e08-815c-8004-2f94bccac32f) (view mode only).
+Link to the [Mockup](https://design.penpot.app/#/view/93d0ad32-dfe5-8194-8004-0171998eeabe?page-id=76cd5706-e69f-8069-8004-1a1578d3f0c7&section=interactions&index=40&share-id=2bf3009f-0e08-815c-8004-2f94bccac32f) (view mode only).
 
-Link to the [Wireframe](https://design.penpot.app/#/view/93d0ad32-dfe5-8194-8004-0171998eeabe?page-id=93d0ad32-dfe5-8194-8004-0171998eeabf&section=interactions&index=18&share-id=a9010c45-753d-8133-8004-2d800e7a903a) (view mode only).
+Link to the [Wireframe](https://design.penpot.app/#/view/93d0ad32-dfe5-8194-8004-0171998eeabe?page-id=93d0ad32-dfe5-8194-8004-0171998eeabf&section=interactions&index=20&share-id=a9010c45-753d-8133-8004-2d800e7a903a) (view mode only).
 
 Link to the [Penpot Project](https://design.penpot.app/#/workspace/43442e9d-d45f-8169-8004-017078780238/93d0ad32-dfe5-8194-8004-0171998eeabe).
 
