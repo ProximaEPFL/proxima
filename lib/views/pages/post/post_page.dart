@@ -28,16 +28,17 @@ class PostPage extends HookConsumerWidget {
 
     final comments = ref.watch(commentListProvider);
 
+    // Top app bar content = Title + Distance
     List<Widget> appBarContent = [
       const Text(_appBarTitle),
       Text(
+        "${postOverview.distance}m away",
         key: postDistanceKey,
-        //TODO: Add distance to post
-        "50m away",
         style: themeData.textTheme.titleSmall,
       ),
     ];
 
+    // Body = Complete post + Comments
     List<Widget> bodyChildren = [
       CompletePostWidget(
         key: completePostWidgetKey,

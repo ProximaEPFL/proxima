@@ -52,4 +52,14 @@ class MockGeolocatorPlatform extends Mock implements GeolocatorPlatform {
       returnValue: Future.value(getSimplePosition(0, 0)),
     );
   }
+
+  @override
+  Stream<Position> getPositionStream({
+    LocationSettings? locationSettings,
+  }) {
+    return super.noSuchMethod(
+      Invocation.method(#getPositionStream, []),
+      returnValue: Stream.fromIterable([getSimplePosition(0, 0)]),
+    );
+  }
 }

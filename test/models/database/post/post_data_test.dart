@@ -17,6 +17,7 @@ void main() {
         data.description,
         data.publicationTime,
         data.voteScore,
+        data.commentCount,
       );
 
       final actualHash = data.hashCode;

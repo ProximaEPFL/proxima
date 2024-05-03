@@ -1,20 +1,22 @@
 import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
-
+import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/views/home_content/feed/post_card/comment_widget.dart";
-import "package:proxima/views/home_content/feed/post_card/user_bar_widget.dart";
+import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
 import "package:proxima/views/home_content/feed/post_card/votes_widget.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 /// This widget is used to display the post card in the home feed.
 /// It contains the post title, description, votes, comments
 /// and the user (profile picture and username).
-class PostCard extends StatelessWidget {
+/// On click, the corresponding challenge (if it exists), is marked as completed.
+class PostCard extends ConsumerWidget {
   static const postCardKey = Key("postCard");
   static const postCardTitleKey = Key("postCardTitle");
   static const postCardDescriptionKey = Key("postCardDescription");
   static const postCardVotesKey = Key("postCardVotes");
-  static const postCardCommentsKey = Key("postCardComments");
+  static const postCardCommentsNumberKey = Key("postCardCommentsNumber");
   static const postCardUserKey = Key("postCardUser");
 
   final PostOverview postOverview;
@@ -24,12 +26,22 @@ class PostCard extends StatelessWidget {
     required this.postOverview,
   });
 
-  void _onPostSelect(BuildContext context, PostOverview post) {
+  void _onPostSelect(
+    BuildContext context,
+    PostOverview post,
+    WidgetRef ref,
+  ) async {
     Navigator.pushNamed(context, Routes.post.name, arguments: post);
+    bool challengeCompleted = await ref
+        .read(challengeProvider.notifier)
+        .completeChallenge(post.postId);
+    if (challengeCompleted) {
+      // TODO show something to the user, points were awarded
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final postBody = ListTile(
       title: Text(
         key: postCardTitleKey,
@@ -58,9 +70,9 @@ class PostCard extends StatelessWidget {
             customBorder: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            onTap: () => _onPostSelect(context, postOverview),
+            onTap: () => _onPostSelect(context, postOverview, ref),
             child: CommentWidget(
-              key: postCardCommentsKey,
+              key: postCardCommentsNumberKey,
               commentNumber: postOverview.commentNumber,
             ),
           ),
@@ -73,15 +85,16 @@ class PostCard extends StatelessWidget {
       key: postCardKey,
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onTap: () => _onPostSelect(context, postOverview),
+        onTap: () => _onPostSelect(context, postOverview, ref),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 8),
-              child: UserBarWidget(
+              child: PostHeaderWidget(
                 key: postCardUserKey,
                 posterUsername: postOverview.ownerDisplayName,
+                publicationDate: postOverview.publicationDate,
               ),
             ),
             postBody,

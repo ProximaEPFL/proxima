@@ -76,6 +76,7 @@ void main() {
               description: postData.description,
               publicationTime: postData.publicationTime,
               voteScore: postData.voteScore,
+              commentCount: postData.commentCount,
             ),
           )
           .toList()[0];
@@ -94,6 +95,8 @@ void main() {
           voteScore: post.data.voteScore,
           commentNumber: 0,
           ownerDisplayName: owner.data.displayName,
+          publicationDate: post.data.publicationTime.toDate(),
+          distance: 0,
         ),
       ];
 
@@ -114,7 +117,7 @@ void main() {
 
       final actualPosts = await container.read(postOverviewProvider.future);
 
-      expect(actualPosts, expectedPosts);
+      expect(actualPosts, unorderedEquals(expectedPosts));
     });
 
     test(
@@ -130,6 +133,7 @@ void main() {
                 description: postData.description,
                 publicationTime: postData.publicationTime,
                 voteScore: postData.voteScore,
+                commentCount: postData.commentCount,
               ),
             )
             .toList();
@@ -146,6 +150,8 @@ void main() {
             voteScore: post.data.voteScore,
             commentNumber: 0,
             ownerDisplayName: owner.data.displayName,
+            publicationDate: post.data.publicationTime.toDate(),
+            distance: 0,
           );
 
           return postOverview;
@@ -171,7 +177,7 @@ void main() {
         // Check the actual posts
         final actualPosts = await container.read(postOverviewProvider.future);
 
-        expect(actualPosts, expectedPosts);
+        expect(actualPosts, unorderedEquals(expectedPosts));
       },
     );
 
@@ -191,6 +197,7 @@ void main() {
             description: element.description,
             publicationTime: element.publicationTime,
             voteScore: element.voteScore,
+            commentCount: element.commentCount,
           ),
         );
 
@@ -206,6 +213,8 @@ void main() {
             voteScore: post.data.voteScore,
             commentNumber: 0,
             ownerDisplayName: owners[index].data.displayName,
+            publicationDate: post.data.publicationTime.toDate(),
+            distance: 0,
           );
 
           return postOverview;
@@ -233,7 +242,7 @@ void main() {
         // Check the actual posts
         final actualPosts = await container.read(postOverviewProvider.future);
 
-        expect(actualPosts, expectedPosts);
+        expect(actualPosts, unorderedEquals(expectedPosts));
       },
     );
 
@@ -265,6 +274,7 @@ void main() {
               description: postData.description,
               publicationTime: postData.publicationTime,
               voteScore: postData.voteScore,
+              commentCount: postData.commentCount,
             ),
           )
           .toList()[0];
@@ -279,6 +289,8 @@ void main() {
           voteScore: post.data.voteScore,
           commentNumber: 0,
           ownerDisplayName: owner.data.displayName,
+          publicationDate: post.data.publicationTime.toDate(),
+          distance: 0,
         ),
       ];
 
@@ -301,7 +313,7 @@ void main() {
       final postAfterRefresh =
           await container.read(postOverviewProvider.future);
 
-      expect(postAfterRefresh, expectedPosts);
+      expect(postAfterRefresh, unorderedEquals(expectedPosts));
     });
 
     test("Error is exposed correctly on refresh", () async {

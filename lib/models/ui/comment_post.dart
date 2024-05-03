@@ -4,10 +4,12 @@ import "package:flutter/foundation.dart";
 class CommentPost {
   final String content;
   final String ownerDisplayName;
+  final DateTime publicationDate;
 
   const CommentPost({
     required this.content,
     required this.ownerDisplayName,
+    required this.publicationDate,
   });
 
   @override
@@ -16,7 +18,8 @@ class CommentPost {
 
     return other is CommentPost &&
         other.content == content &&
-        other.ownerDisplayName == ownerDisplayName;
+        other.ownerDisplayName == ownerDisplayName &&
+        other.publicationDate == publicationDate;
   }
 
   @override
@@ -24,6 +27,7 @@ class CommentPost {
     return Object.hash(
       content,
       ownerDisplayName,
+      publicationDate,
     );
   }
 }

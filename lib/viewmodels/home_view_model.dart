@@ -1,14 +1,19 @@
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/services/sorting/post_sorting_service.dart";
+import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
 
 /// This viewmodel is used to fetch the list of posts that are displayed in the home feed.
 /// It fetches the posts from the database and returns a list of
 /// (postId: [PostIdFirestore], postOverview: [PostOverview]) objects to be displayed.
 /// These represent the overview data to be displayed associated to the corresponding post id.
+/// Note: this viewmodel also provides the data for the post page
 class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
   HomeViewModel();
 
@@ -20,10 +25,20 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
     final postRepository = ref.watch(postRepositoryProvider);
     final userRepository = ref.watch(userRepositoryProvider);
 
+    final postSortingService = ref.watch(postSortingServiceProvider);
+    final sortOption = ref.watch(feedSortOptionsProvider);
+
     final position = await geoLocationService.getCurrentPosition();
 
-    final postsFirestore =
-        await postRepository.getNearPosts(position, kmPostRadius);
+    List<PostFirestore> postsFirestore = await postRepository.getNearPosts(
+      position,
+      kmPostRadius,
+    );
+    postsFirestore = postSortingService.sort(
+      postsFirestore,
+      sortOption,
+      position,
+    );
 
     final postOwnersId =
         postsFirestore.map((post) => post.data.ownerId).toSet();
@@ -39,6 +54,10 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
         // the user repository would have already thrown an exception.
         orElse: () => throw Exception("Owner not found"),
       );
+      final distance = (GeoFirePoint(position)
+                  .distanceBetweenInKm(geopoint: post.location.geoPoint) *
+              1000)
+          .round(); //TODO: create method because used here and in challenges (+tests)
 
       final postOverview = PostOverview(
         postId: post.id,
@@ -46,8 +65,10 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
         description: post.data.description,
         voteScore: post.data.voteScore,
         ownerDisplayName: owner.data.displayName,
-        commentNumber:
-            0, // TODO: Update appropriately when comments are implemented
+        commentNumber: 0,
+        // TODO: Update appropriately when comments are implemented
+        publicationDate: post.data.publicationTime.toDate(),
+        distance: distance,
       );
 
       return postOverview;

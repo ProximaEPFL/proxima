@@ -15,12 +15,12 @@ import "../mocks/data/firestore_post.dart";
 import "../mocks/data/firestore_user.dart";
 import "../mocks/data/geopoint.dart";
 import "../mocks/services/mock_post_repository_service.dart";
-import "../mocks/services/mock_post_upvote_repository_service.dart";
+import "../mocks/services/mock_upvote_repository_service.dart";
 
 void main() {
   group("UpVote ViewModel unit testing", () {
     late MockPostRepositoryService postRepository;
-    late MockPostUpvoteRepositoryService voteRepository;
+    late MockUpvoteRepositoryService<PostIdFirestore> voteRepository;
     late UserIdFirestore userId;
     late PostFirestore testingPost;
     late AutoDisposeFamilyAsyncNotifierProvider<UpVoteViewModel, PostVote,
@@ -30,7 +30,7 @@ void main() {
 
     setUp(() {
       postRepository = MockPostRepositoryService();
-      voteRepository = MockPostUpvoteRepositoryService();
+      voteRepository = MockUpvoteRepositoryService<PostIdFirestore>();
       userId = testingUserFirestoreId;
       testingPost =
           FirestorePostGenerator().createUserPost(userId, userPosition0);

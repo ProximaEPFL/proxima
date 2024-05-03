@@ -11,6 +11,7 @@ class PostDataGenerator {
     description: "",
     publicationTime: Timestamp.fromMillisecondsSinceEpoch(0),
     voteScore: 0,
+    commentCount: 0,
   );
 
   final postData = PostData(
@@ -19,6 +20,7 @@ class PostDataGenerator {
     description: "Look at them go!",
     publicationTime: Timestamp.now(),
     voteScore: 0,
+    commentCount: 0,
   );
 
   /// Generate a list of [PostData]
@@ -28,8 +30,12 @@ class PostDataGenerator {
         description: "description_$i",
         title: "title_$i",
         ownerId: UserIdFirestore(value: "owner_id_$i"),
-        publicationTime: Timestamp.fromMillisecondsSinceEpoch(1000 * i),
-        voteScore: i,
+        // one every 5 days
+        publicationTime:
+            Timestamp.fromMillisecondsSinceEpoch(i * 1000 * 60 * 60 * 24 * 5),
+        // to have some increasing/decreasing parts
+        voteScore: i * (i - 5) * (i - 10) * (i - 15),
+        commentCount: i,
       );
     });
   }

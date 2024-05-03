@@ -14,9 +14,13 @@ class ChallengeList extends ConsumerWidget {
     return CircularValue(
       value: asyncChallenges,
       builder: (context, challenges) {
-        return ListView(
-          children:
-              challenges.map((challenge) => ChallengeCard(challenge)).toList(),
+        return RefreshIndicator(
+          onRefresh: () => ref.read(challengeProvider.notifier).refresh(),
+          child: ListView(
+            children: challenges
+                .map((challenge) => ChallengeCard(challenge))
+                .toList(),
+          ),
         );
       },
     );

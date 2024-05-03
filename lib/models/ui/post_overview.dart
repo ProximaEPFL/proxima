@@ -9,6 +9,8 @@ class PostOverview {
   final int voteScore;
   final int commentNumber;
   final String ownerDisplayName;
+  final DateTime publicationDate;
+  final int distance; // in meters
 
   const PostOverview({
     required this.postId,
@@ -17,6 +19,8 @@ class PostOverview {
     required this.voteScore,
     required this.commentNumber,
     required this.ownerDisplayName,
+    required this.publicationDate,
+    required this.distance,
   });
 
   @override
@@ -29,7 +33,9 @@ class PostOverview {
         other.description == description &&
         other.voteScore == voteScore &&
         other.commentNumber == commentNumber &&
-        other.ownerDisplayName == ownerDisplayName;
+        other.ownerDisplayName == ownerDisplayName &&
+        other.publicationDate == publicationDate &&
+        other.distance == distance;
   }
 
   @override
@@ -41,6 +47,8 @@ class PostOverview {
       voteScore,
       commentNumber,
       ownerDisplayName,
+      publicationDate,
+      distance,
     );
   }
 }

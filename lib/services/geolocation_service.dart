@@ -1,3 +1,5 @@
+import "dart:async";
+
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:geolocator/geolocator.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -25,15 +27,14 @@ class GeoLocationService {
   // This code is adapted from the geolocator package documentation
   // Source : https://pub.dev/packages/geolocator
 
-  /// This method will retrieve the current position of the user.
-  Future<GeoPoint> getCurrentPosition() async {
-    bool serviceEnabled;
+  Future<Exception?> checkLocationServices() async {
     LocationPermission permission;
+    bool serviceEnabled;
 
     // Test if location services are enabled.
     serviceEnabled = await _geoLocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      throw Exception("Location services are disabled.");
+      return Exception("Location services are disabled.");
     }
 
     // Check location permissions
@@ -42,23 +43,46 @@ class GeoLocationService {
       permission = await _geoLocator.requestPermission();
       if (permission == LocationPermission.denied) {
         // Permissions are denied after requesting
-        throw Exception("Location permissions are denied");
+        return Exception("Location permissions are denied");
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever
       // TODO : Handle this case to notify the user that the location permissions are denied forever
-      throw Exception(
+      return Exception(
         "Location permissions are permanently denied, we cannot request permissions.",
       );
     }
+    return null;
+  }
 
+  /// This method will retrieve the current position of the user.
+  Future<GeoPoint> getCurrentPosition() async {
+    //check if location services are enabled
+    final state = await checkLocationServices();
+    if (state != null) {
+      throw state;
+    }
     final position = await _geoLocator.getCurrentPosition(
       locationSettings: locationSettings,
     );
 
     return GeoPoint(position.latitude, position.longitude);
+  }
+
+  Stream<GeoPoint> getPositionStream() async* {
+    //check if location services are enabled
+    final state = await checkLocationServices();
+    if (state != null) {
+      throw state;
+    }
+
+    await for (final position in _geoLocator.getPositionStream(
+      locationSettings: locationSettings,
+    )) {
+      yield GeoPoint(position.latitude, position.longitude);
+    }
   }
 }
 
@@ -67,3 +91,8 @@ final geoLocationServiceProvider = Provider<GeoLocationService>(
     geoLocator: GeolocatorPlatform.instance,
   ),
 );
+
+final liveLocationServiceProvider = StreamProvider<GeoPoint?>((ref) {
+  final locationService = ref.watch(geoLocationServiceProvider);
+  return locationService.getPositionStream();
+});

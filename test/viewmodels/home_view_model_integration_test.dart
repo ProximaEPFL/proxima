@@ -1,5 +1,6 @@
 import "package:collection/collection.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_data.dart";
@@ -92,6 +93,7 @@ void main() {
           description: postData.description,
           publicationTime: postData.publicationTime,
           voteScore: postData.voteScore,
+          commentCount: postData.commentCount,
         );
       }).first;
 
@@ -113,12 +115,17 @@ void main() {
           voteScore: postData.voteScore,
           ownerDisplayName: owner.data.displayName,
           commentNumber: 0,
+          publicationDate: postData.publicationTime.toDate(),
+          distance: (const GeoFirePoint(userPosition)
+                      .distanceBetweenInKm(geopoint: postPosition) *
+                  1000)
+              .round(),
         ),
       ];
 
       final actualPosts = await container.read(postOverviewProvider.future);
 
-      expect(actualPosts, expectedPosts);
+      expect(actualPosts, unorderedEquals(expectedPosts));
     });
 
     test("Throws an exception when the owner of a post is not found", () async {
@@ -163,6 +170,7 @@ void main() {
               description: element.description,
               publicationTime: element.publicationTime,
               voteScore: element.voteScore,
+              commentCount: element.commentCount,
             ),
           )
           .toList();
@@ -203,6 +211,11 @@ void main() {
           voteScore: data.voteScore,
           ownerDisplayName: owner.data.displayName,
           commentNumber: 0,
+          publicationDate: data.publicationTime.toDate(),
+          distance: (const GeoFirePoint(userPosition0)
+                      .distanceBetweenInKm(geopoint: postPositions[index]) *
+                  1000)
+              .round(),
         );
 
         return postOverview;
@@ -210,7 +223,7 @@ void main() {
 
       final actualPosts = await container.read(postOverviewProvider.future);
 
-      expect(actualPosts, expectedPosts);
+      expect(actualPosts, unorderedEquals(expectedPosts));
     });
   });
 }
