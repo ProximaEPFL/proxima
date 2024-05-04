@@ -4,15 +4,18 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
+import "package:proxima/viewmodels/login_view_model.dart";
 
 import "../mocks/data/firestore_post.dart";
 import "../mocks/data/firestore_user.dart";
 import "../mocks/data/geopoint.dart";
 import "../mocks/data/post_data.dart";
+import "../mocks/services/mock_challenge_repository_service.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 import "../mocks/services/mock_post_repository_service.dart";
 import "../mocks/services/mock_user_repository_service.dart";
@@ -22,6 +25,7 @@ void main() {
     late MockGeoLocationService geoLocationService;
     late PostRepositoryService postRepository;
     late UserRepositoryService userRepository;
+    late ChallengeRepositoryService challengeRepository;
 
     late ProviderContainer container;
 
@@ -29,6 +33,7 @@ void main() {
       geoLocationService = MockGeoLocationService();
       postRepository = MockPostRepositoryService();
       userRepository = MockUserRepositoryService();
+      challengeRepository = MockChallengeRepositoryService();
 
       container = ProviderContainer(
         overrides: [
@@ -41,7 +46,20 @@ void main() {
           userRepositoryProvider.overrideWithValue(
             userRepository,
           ),
+          challengeRepositoryServiceProvider.overrideWithValue(
+            challengeRepository,
+          ),
+          uidProvider.overrideWithValue(testingUserFirestoreId),
         ],
+      );
+
+      when(
+        challengeRepository.getChallenges(
+          testingUserFirestoreId,
+          userPosition0,
+        ),
+      ).thenAnswer(
+        (_) async => [],
       );
     });
 
