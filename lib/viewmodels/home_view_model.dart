@@ -3,11 +3,13 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/services/sorting/post_sorting_service.dart";
 import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
+import "package:proxima/viewmodels/login_view_model.dart";
 
 /// This viewmodel is used to fetch the list of posts that are displayed in the home feed.
 /// It fetches the posts from the database and returns a list of
@@ -24,6 +26,9 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
     final geoLocationService = ref.watch(geoLocationServiceProvider);
     final postRepository = ref.watch(postRepositoryProvider);
     final userRepository = ref.watch(userRepositoryProvider);
+    final challengeRepositoryService = ref.watch(
+      challengeRepositoryServiceProvider,
+    );
 
     final postSortingService = ref.watch(postSortingServiceProvider);
     final sortOption = ref.watch(feedSortOptionsProvider);
@@ -34,10 +39,18 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
       position,
       kmPostRadius,
     );
+
+    final challenges = await challengeRepositoryService.getChallenges(
+      ref.read(uidProvider)!,
+      position,
+    );
+    final challengesId = challenges.map((challenge) => challenge.postId);
+
     postsFirestore = postSortingService.sort(
       postsFirestore,
       sortOption,
       position,
+      putOnTop: challengesId.toSet(),
     );
 
     final postOwnersId =
