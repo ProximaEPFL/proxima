@@ -35,75 +35,77 @@ void main() {
     nonEmptyPostPageWidget = nonEmptyPostPageProvider;
   });
 
-  testWidgets("Check navigation to post page and comeback to feed",
-      (tester) async {
-    await tester.pumpWidget(nonEmptyHomePageWidget);
-    await tester.pumpAndSettle();
+  group("Navigation from feed to post page", () {
+    testWidgets("Check navigation to post page and comeback to feed",
+        (tester) async {
+      await tester.pumpWidget(nonEmptyHomePageWidget);
+      await tester.pumpAndSettle();
 
-    // Tap of the first post
-    await tester.tap(find.byKey(PostCard.postCardKey).first);
-    await tester.pumpAndSettle();
+      // Tap of the first post
+      await tester.tap(find.byKey(PostCard.postCardKey).first);
+      await tester.pumpAndSettle();
 
-    // Check if the post page is displayed, with the correct title
-    expect(find.byType(CompletePostWidget), findsOneWidget);
-    expect(find.text(testPosts.first.title), findsAtLeastNWidgets(1));
+      // Check if the post page is displayed, with the correct title
+      expect(find.byType(CompletePostWidget), findsOneWidget);
+      expect(find.text(testPosts.first.title), findsAtLeastNWidgets(1));
 
-    // Tap on the back button
-    await tester.tap(find.byKey(LeadingBackButton.leadingBackButtonKey));
-    await tester.pumpAndSettle();
+      // Tap on the back button
+      await tester.tap(find.byKey(LeadingBackButton.leadingBackButtonKey));
+      await tester.pumpAndSettle();
 
-    // Check if the feed is displayed
-    final postFeed = find.byType(PostFeed);
-    expect(postFeed, findsOneWidget);
+      // Check if the feed is displayed
+      final postFeed = find.byType(PostFeed);
+      expect(postFeed, findsOneWidget);
+    });
+
+    void testSnackbarNavigation(bool clickChallenge) {
+      testWidgets(
+        clickChallenge
+            ? "Navigation to post page displays a snackbar when clicking a challenge"
+            : "Navigation to post page displays no snackbar when clicking a non-challenge",
+        (tester) async {
+          await tester.pumpWidget(nonEmptyHomePageWidget);
+          await tester.pumpAndSettle();
+
+          final challenges = testPosts
+              .where((post) => post.isChallenge)
+              .map(
+                (post) => FirestoreChallengeGenerator.generateFromPostId(
+                  post.postId,
+                ),
+              )
+              .toList();
+          await setUserFirestore(fakeFireStore, testingUserFirestore);
+          await setChallenges(
+            fakeFireStore,
+            challenges,
+            testingUserFirestoreId,
+          );
+
+          // Find all the widgets we may want to click on, i.e. challenges
+          // if we want to click on a challenge, and non-challenges otherwise
+          final clickOnFinder = find.byWidgetPredicate(
+            (widget) =>
+                widget is PostCard &&
+                (widget.postOverview.isChallenge == clickChallenge),
+          );
+          expect(clickOnFinder, findsAtLeast(1));
+          await tester.tap(clickOnFinder.first);
+
+          // Wait enough time for the snackbar to be displayed, but
+          // not enough for it to disappear
+          await tester.pump(centauriPointsSnackBarDuration * 0.75);
+
+          // Check if the snackbar is displayed
+          final snackBar = find.textContaining("You won");
+          expect(snackBar, clickChallenge ? findsOneWidget : findsNothing);
+        },
+      );
+    }
+
+    testSnackbarNavigation(true);
+    testSnackbarNavigation(false);
   });
-
-  void testSnackbarNavigation(bool clickChallenge) {
-    testWidgets(
-      clickChallenge
-          ? "Navigation to post page displays a snackbar when clicking a challenge"
-          : "Navigation to post page displays no snackbar when clicking a non-challenge",
-      (tester) async {
-        await tester.pumpWidget(nonEmptyHomePageWidget);
-        await tester.pumpAndSettle();
-
-        final challenges = testPosts
-            .where((post) => post.isChallenge)
-            .map(
-              (post) => FirestoreChallengeGenerator.generateFromPostId(
-                post.postId,
-              ),
-            )
-            .toList();
-        await setUserFirestore(fakeFireStore, testingUserFirestore);
-        await setChallenges(
-          fakeFireStore,
-          challenges,
-          testingUserFirestoreId,
-        );
-
-        // Find all the widgets we may want to click on, i.e. challenges
-        // if we want to click on a challenge, and non-challenges otherwise
-        final clickOnFinder = find.byWidgetPredicate(
-          (widget) =>
-              widget is PostCard &&
-              (widget.postOverview.isChallenge == clickChallenge),
-        );
-        expect(clickOnFinder, findsAtLeast(1));
-        await tester.tap(clickOnFinder.first);
-
-        // Wait enough time for the snackbar to be displayed, but
-        // not enough for it to disappear
-        await tester.pump(centauriPointsSnackBarDuration * 0.75);
-
-        // Check if the snackbar is displayed
-        final snackBar = find.textContaining("You won");
-        expect(snackBar, clickChallenge ? findsOneWidget : findsNothing);
-      },
-    );
-  }
-
-  testSnackbarNavigation(true);
-  testSnackbarNavigation(false);
 
   group("Widgets display", () {
     testWidgets("Check displayed post information", (tester) async {
