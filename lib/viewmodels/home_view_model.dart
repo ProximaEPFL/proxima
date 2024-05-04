@@ -1,6 +1,7 @@
 import "package:collection/collection.dart";
 import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/challenge/challenge_firestore.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
@@ -36,15 +37,23 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
 
     final position = await geoLocationService.getCurrentPosition();
 
-    List<PostFirestore> postsFirestore = await postRepository.getNearPosts(
+    final postsFirestoreFuture = postRepository.getNearPosts(
       position,
       kmPostRadius,
     );
-
-    final challenges = await challengeRepositoryService.getChallenges(
+    final challengesFuture = challengeRepositoryService.getChallenges(
       ref.read(uidProvider)!,
       position,
     );
+
+    // Wait for both futures to complete for optimisation
+    final List<dynamic> results = await Future.wait([
+      postsFirestoreFuture,
+      challengesFuture,
+    ]);
+    List<PostFirestore> postsFirestore = results[0];
+    final List<ChallengeFirestore> challenges = results[1];
+
     final uncompletedChallenges = challenges.whereNot(
       (challenge) => challenge.data.isCompleted,
     );
