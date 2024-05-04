@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:intl/intl.dart";
+import "package:proxima/utils/ui/centauri_snack_bar.dart";
 import "package:proxima/views/home_content/feed/post_card/post_card.dart";
 import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
@@ -12,10 +13,14 @@ import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.da
 import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
 import "package:timeago/timeago.dart" as timeago;
 
+import "../../../mocks/data/firestore_challenge.dart";
+import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/data/post_comment.dart";
 import "../../../mocks/data/post_overview.dart";
+import "../../../mocks/overrides/override_firestore.dart";
 import "../../../mocks/providers/provider_homepage.dart";
 import "../../../mocks/providers/provider_post_page.dart";
+import "../../../mocks/services/setup_firebase_mocks.dart";
 
 void main() {
   late ProviderScope nonEmptyHomePageWidget;
@@ -23,6 +28,8 @@ void main() {
   late ProviderScope nonEmptyPostPageWidget;
 
   setUp(() async {
+    setupFirebaseAuthMocks();
+
     nonEmptyHomePageWidget = nonEmptyHomePageProvider;
     emptyPostPageWidget = emptyPostPageProvider;
     nonEmptyPostPageWidget = nonEmptyPostPageProvider;
@@ -49,6 +56,54 @@ void main() {
     final postFeed = find.byType(PostFeed);
     expect(postFeed, findsOneWidget);
   });
+
+  void testSnackbarNavigation(bool clickChallenge) {
+    testWidgets(
+      clickChallenge
+          ? "Navigation to post page displays a snackbar when clicking a challenge"
+          : "Navigation to post page displays no snackbar when clicking a non-challenge",
+      (tester) async {
+        await tester.pumpWidget(nonEmptyHomePageWidget);
+        await tester.pumpAndSettle();
+
+        final challenges = testPosts
+            .where((post) => post.isChallenge)
+            .map(
+              (post) => FirestoreChallengeGenerator.generateFromPostId(
+                post.postId,
+              ),
+            )
+            .toList();
+        await setUserFirestore(fakeFireStore, testingUserFirestore);
+        await setChallenges(
+          fakeFireStore,
+          challenges,
+          testingUserFirestoreId,
+        );
+
+        // Find all the widgets we may want to click on, i.e. challenges
+        // if we want to click on a challenge, and non-challenges otherwise
+        final clickOnFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is PostCard &&
+              (widget.postOverview.isChallenge == clickChallenge),
+        );
+        expect(clickOnFinder, findsAtLeast(1));
+        await tester.tap(clickOnFinder.first);
+
+        // Wait enough time for the snackbar to be displayed, but
+        // not enough for it to disappear
+        await tester.pump(centauriPointsSnackBarDuration * 0.75);
+
+        // Check if the snackbar is displayed
+        final snackBar = find.textContaining("You won");
+        expect(snackBar, clickChallenge ? findsOneWidget : findsNothing);
+      },
+    );
+  }
+
+  testSnackbarNavigation(true);
+  testSnackbarNavigation(false);
 
   group("Widgets display", () {
     testWidgets("Check displayed post information", (tester) async {
