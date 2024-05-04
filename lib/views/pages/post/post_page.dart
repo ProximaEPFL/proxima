@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
-import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/viewmodels/post_view_model.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/post/post_page_widget/bottom_bar_add_comment.dart";
