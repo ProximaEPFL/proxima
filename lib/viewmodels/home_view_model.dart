@@ -82,6 +82,7 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
         // TODO: Update appropriately when comments are implemented
         publicationDate: post.data.publicationTime.toDate(),
         distance: distance,
+        isChallenge: challengesId.contains(post.id),
       );
 
       return postOverview;
