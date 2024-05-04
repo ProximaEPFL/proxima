@@ -31,7 +31,7 @@ class FirestoreChallengeGenerator {
   static ChallengeFirestore generateFromPostId(
     PostIdFirestore postId, [
     bool isCompleted = false,
-    Duration expirationDelay = Duration.zero,
+    Duration expirationDelay = const Duration(days: 1),
   ]) {
     return ChallengeFirestore(
       postId: postId,
