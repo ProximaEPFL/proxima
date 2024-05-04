@@ -19,6 +19,7 @@ import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
+import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
@@ -26,6 +27,7 @@ import "../mocks/data/geopoint.dart";
 import "../mocks/overrides/override_auth_providers.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 import "../mocks/services/setup_firebase_mocks.dart";
+import "../utils/delay_async_func.dart";
 
 void main() {
   late FakeFirebaseFirestore fakeFireStore;
@@ -233,4 +235,37 @@ Future<void> createPost(WidgetTester tester) async {
   await tester.pumpAndSettle();
   expect(find.text(postTitle), findsOneWidget);
   expect(find.text(postDescription), findsOneWidget);
+}
+
+/// Delete a post
+Future<void> deletePost(WidgetTester tester) async {
+  expect(find.byType(ProfilePage), findsOneWidget);
+
+  // Check that the post card is displayed
+  final postCard = find.byKey(ProfileInfoCard.infoCardKey);
+  expect(postCard, findsOneWidget);
+
+  // Find the delete button on card
+  final deleteButton = find.byKey(ProfileInfoCard.deleteButtonCardKey);
+  expect(deleteButton, findsOneWidget);
+
+  await tester.tap(deleteButton);
+  await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
+
+  // Can't find post anymore
+  const postTitle = "I like turtles";
+  const postDescription = "Look at them go!";
+  expect(find.text(postTitle), findsNothing);
+  expect(find.text(postDescription), findsNothing);
+
+  // Go back to home page
+  final backButton = find.byType(LeadingBackButton);
+  expect(backButton, findsOneWidget);
+  await tester.tap(backButton);
+  await tester.pumpAndSettle();
+  expect(find.byType(HomePage), findsOneWidget);
+
+  // Can't find post anymore
+  expect(find.text(postTitle), findsNothing);
+  expect(find.text(postDescription), findsNothing);
 }
