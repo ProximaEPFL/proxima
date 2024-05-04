@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
@@ -44,13 +45,18 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
       ref.read(uidProvider)!,
       position,
     );
-    final challengesId = challenges.map((challenge) => challenge.postId);
+    final uncompletedChallenges = challenges.whereNot(
+      (challenge) => challenge.data.isCompleted,
+    );
+    final uncompletedChallengesId = uncompletedChallenges.map(
+      (challenge) => challenge.postId,
+    );
 
     postsFirestore = postSortingService.sort(
       postsFirestore,
       sortOption,
       position,
-      putOnTop: challengesId.toSet(),
+      putOnTop: uncompletedChallengesId.toSet(),
     );
 
     final postOwnersId =
@@ -82,7 +88,7 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
         // TODO: Update appropriately when comments are implemented
         publicationDate: post.data.publicationTime.toDate(),
         distance: distance,
-        isChallenge: challengesId.contains(post.id),
+        isChallenge: uncompletedChallengesId.contains(post.id),
       );
 
       return postOverview;
