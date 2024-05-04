@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
+import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/home_content/feed/post_card/comment_widget.dart";
 import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
 import "package:proxima/views/home_content/feed/post_card/votes_widget.dart";
@@ -36,6 +37,7 @@ class PostCard extends ConsumerWidget {
         .read(challengeProvider.notifier)
         .completeChallenge(post.postId);
     if (challengeCompleted) {
+      await ref.read(postOverviewProvider.notifier).refresh();
       // TODO show something to the user, points were awarded
     }
   }
