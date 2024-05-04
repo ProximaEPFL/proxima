@@ -32,10 +32,10 @@ class PostCard extends ConsumerWidget {
     WidgetRef ref,
   ) async {
     Navigator.pushNamed(context, Routes.post.name, arguments: post);
-    bool challengeCompleted = await ref
+    int? pointsAwarded = await ref
         .read(challengeProvider.notifier)
         .completeChallenge(post.postId);
-    if (challengeCompleted) {
+    if (pointsAwarded != null) {
       // TODO show something to the user, points were awarded
     }
   }
