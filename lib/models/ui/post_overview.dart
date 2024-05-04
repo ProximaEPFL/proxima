@@ -11,6 +11,7 @@ class PostOverview {
   final String ownerDisplayName;
   final DateTime publicationDate;
   final int distance; // in meters
+  final bool isChallenge;
 
   const PostOverview({
     required this.postId,
@@ -21,6 +22,7 @@ class PostOverview {
     required this.ownerDisplayName,
     required this.publicationDate,
     required this.distance,
+    this.isChallenge = false,
   });
 
   @override
@@ -35,7 +37,8 @@ class PostOverview {
         other.commentNumber == commentNumber &&
         other.ownerDisplayName == ownerDisplayName &&
         other.publicationDate == publicationDate &&
-        other.distance == distance;
+        other.distance == distance &&
+        other.isChallenge == isChallenge;
   }
 
   @override
@@ -49,6 +52,7 @@ class PostOverview {
       ownerDisplayName,
       publicationDate,
       distance,
+      isChallenge,
     );
   }
 }
