@@ -11,6 +11,7 @@ void showCentauriPointsSnackBar(
 ) {
   scaffoldMessengerState.showSnackBar(
     SnackBar(
+      behavior: SnackBarBehavior.floating,
       content: Text(
         "You won $value Centauri! 🎉",
       ),
