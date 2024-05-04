@@ -223,7 +223,14 @@ Future<void> createPost(WidgetTester tester) async {
   await tester.drag(find.byType(PostFeed), const Offset(0, 500));
   await tester.pumpAndSettle();
 
-  // Check that the post is displayed
+  // Check that the post is displayed in feed
+  expect(find.text(postTitle), findsOneWidget);
+  expect(find.text(postDescription), findsOneWidget);
+
+  // Check that the post is displayed in profile page
+  final profilePicture = find.byKey(AppTopBar.profilePictureKey);
+  await tester.tap(profilePicture);
+  await tester.pumpAndSettle();
   expect(find.text(postTitle), findsOneWidget);
   expect(find.text(postDescription), findsOneWidget);
 }
