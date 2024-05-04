@@ -15,9 +15,9 @@ import "package:proxima/views/pages/profile/profile_page.dart";
 import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/providers/provider_login_page.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
+import "../../../utils/delay_async_func.dart";
 
 void main() {
-  const delayNeededForAsyncFunctionExecution = Duration(seconds: 1);
   late FakeFirebaseFirestore fakeFireStore;
   late CollectionReference<Map<String, dynamic>> userCollection;
   late ProviderScope mockedLoginPage;
