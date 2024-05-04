@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 
+const centauriPointsSnackBarDuration = Duration(seconds: 4); // default value
+
 /// the state ScaffoldMessenger.of(context)
 /// Show a snackbar telling the user they won [value] Centauri points.
 /// [scaffoldMessengerState] is the current state of the scaffolds,
@@ -12,6 +14,7 @@ void showCentauriPointsSnackBar(
   scaffoldMessengerState.showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
+      duration: centauriPointsSnackBarDuration,
       content: Text(
         "You won $value Centauri! 🎉",
       ),
