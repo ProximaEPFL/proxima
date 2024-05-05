@@ -68,8 +68,13 @@ class PostPage extends HookConsumerWidget {
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 8),
         child: Center(
-          child: ListView(
-            children: bodyChildren,
+          child: RefreshIndicator(
+            onRefresh: ref
+                .read(commentListProvider(postOverview.postId).notifier)
+                .refresh,
+            child: ListView(
+              children: bodyChildren,
+            ),
           ),
         ),
       ),
