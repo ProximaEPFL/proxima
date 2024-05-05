@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/database/user/user_data.dart";
-import "package:proxima/utils/ui/user_avatar.dart";
+import "package:proxima/utils/ui/personal_user_avatar.dart";
 
 /// This widget display the user info in the profile page
 class UserAccount extends StatelessWidget {
@@ -30,8 +30,7 @@ class UserAccount extends StatelessWidget {
       "${userData.username} · ${userData.centauriPoints} Centauri",
     );
 
-    final profilePicture =
-        UserAvatar(displayName: userData.displayName, radius: 20);
+    const profilePicture = PersonalUserAvatar(radius: 20);
 
     return Row(
       key: userInfoKey,

@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/utils/ui/user_avatar.dart";
+import "package:proxima/utils/ui/personal_user_avatar.dart";
 
 class BottomBarAddComment extends StatelessWidget {
   static const commentUserAvatarKey = Key("commentUserAvatar");
@@ -21,11 +21,10 @@ class BottomBarAddComment extends StatelessWidget {
       // Align items to the start of the cross axis
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: UserAvatar(
+        const Padding(
+          padding: EdgeInsets.only(right: 8),
+          child: PersonalUserAvatar(
             key: commentUserAvatarKey,
-            displayName: currentDisplayName,
             radius: 22,
           ),
         ),

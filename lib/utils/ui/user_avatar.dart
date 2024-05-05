@@ -25,7 +25,9 @@ class UserAvatar extends StatelessWidget {
       radius: radius,
       child: Stack(
         children: [
-          Center(child: Text(displayName.substring(0, 1))),
+          Center(
+            child: Text(displayName.isEmpty ? "" : displayName.substring(0, 1)),
+          ),
           Material(
             shape: const CircleBorder(),
             clipBehavior: Clip.hardEdge,
