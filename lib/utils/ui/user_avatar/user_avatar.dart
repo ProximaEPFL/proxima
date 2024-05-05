@@ -4,6 +4,8 @@ import "package:flutter/material.dart";
 /// It provides a [onTap] parameter to handle the user's tap,
 /// which adds an InkWell response.
 class UserAvatar extends StatelessWidget {
+  static const initialDisplayNameKey = Key("initialDisplayName");
+
   const UserAvatar({
     super.key,
     required this.displayName,
@@ -26,7 +28,10 @@ class UserAvatar extends StatelessWidget {
       child: Stack(
         children: [
           Center(
-            child: Text(displayName.isEmpty ? "" : displayName.substring(0, 1)),
+            child: Text(
+              key: initialDisplayNameKey,
+              displayName.isEmpty ? "" : displayName.substring(0, 1),
+            ),
           ),
           Material(
             shape: const CircleBorder(),
