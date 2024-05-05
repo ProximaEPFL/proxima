@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/utils/ui/personal_user_avatar.dart";
+import "package:proxima/utils/ui/user_avatar/dynamic_user_avatar.dart";
 
 class BottomBarAddComment extends StatelessWidget {
   static const commentUserAvatarKey = Key("commentUserAvatar");
@@ -23,8 +23,9 @@ class BottomBarAddComment extends StatelessWidget {
       children: [
         const Padding(
           padding: EdgeInsets.only(right: 8),
-          child: PersonalUserAvatar(
+          child: DynamicUserAvatar(
             key: commentUserAvatarKey,
+            uid: null,
             radius: 22,
           ),
         ),
