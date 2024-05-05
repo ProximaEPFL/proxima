@@ -3,6 +3,7 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/user_post.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/utils/ui/circular_value.dart";
+import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
 typedef UserPostsState = List<UserPost>;
@@ -46,6 +47,8 @@ class UserPostsViewModel extends AutoDisposeAsyncNotifier<UserPostsState> {
 
     // Not awaited, will show loading for user (faster user feedback)
     refresh();
+    // Refresh the home feed after post deletion
+    ref.read(postOverviewProvider.notifier).refresh();
   }
 
   /// Refresh the list of posts
