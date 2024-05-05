@@ -8,6 +8,8 @@ import "package:proxima/models/ui/new_comment_state.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
+/// The view model for adding a new comment to a post whose
+/// post id [PostIdFirestore] is provided as an argument.
 class NewCommentViewModel
     extends AutoDisposeFamilyAsyncNotifier<NewCommentState, PostIdFirestore> {
   static const String _contentError = "Please enter a coment";
