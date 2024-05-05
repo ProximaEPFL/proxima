@@ -37,6 +37,12 @@ class NewCommentViewModel
     return true;
   }
 
+  /// Resets the state to be ready for adding a new comment.
+  Future<void> reset() async {
+    ref.invalidateSelf();
+    await future;
+  }
+
   /// Verifies that the content is not empty, then adds a new comment to the database.
   /// If the content is empty, the state is updated with the appropriate error message.
   /// If the comment is successfully added, the state is updated with the posted flag set to true.
