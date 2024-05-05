@@ -1,5 +1,6 @@
 import "dart:async";
 
+import "package:collection/collection.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/comment_post.dart";
@@ -42,7 +43,13 @@ class CommentViewModel
       );
     }).toList();
 
-    return comments;
+    // Sort the comments from the newest to the oldest
+    final sortedComments = comments.sorted(
+      (commentA, commentB) =>
+          -commentA.publicationDate.compareTo(commentB.publicationDate),
+    );
+
+    return sortedComments;
   }
 
   /// Refreshes the list of comments under the post
