@@ -8,11 +8,8 @@ class BottomBarAddComment extends StatelessWidget {
 
   static const _textFieldHintAddComment = "Add a comment";
 
-  final String currentDisplayName;
-
   const BottomBarAddComment({
     super.key,
-    required this.currentDisplayName,
   });
 
   @override
