@@ -54,7 +54,7 @@ class CommentViewModel
   }
 }
 
-final commentsProvider = AsyncNotifierProvider.autoDispose
+final commentListProvider = AsyncNotifierProvider.autoDispose
     .family<CommentViewModel, List<CommentPost>, PostIdFirestore>(
   () => CommentViewModel(),
 );
