@@ -53,3 +53,8 @@ class CommentViewModel
     state = await AsyncValue.guard(() => build(arg));
   }
 }
+
+final commentsProvider = AsyncNotifierProvider.autoDispose
+    .family<CommentViewModel, List<CommentPost>, PostIdFirestore>(
+  () => CommentViewModel(),
+);
