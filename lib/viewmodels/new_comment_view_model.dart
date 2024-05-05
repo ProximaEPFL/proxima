@@ -77,3 +77,8 @@ class NewCommentViewModel
     return state.value!;
   }
 }
+
+final newCommentStateProvider = AsyncNotifierProvider.autoDispose
+    .family<NewCommentViewModel, NewCommentState, PostIdFirestore>(
+  () => NewCommentViewModel(),
+);
