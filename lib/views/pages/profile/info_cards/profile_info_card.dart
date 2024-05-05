@@ -34,6 +34,7 @@ class ProfileInfoCard extends StatelessWidget {
       boxShadow: [if (shadow != null) shadow!],
     );
 
+    // Post have title, comments don't
     final potentialTitle = title != null
         ? Text(
             title!,
@@ -57,6 +58,7 @@ class ProfileInfoCard extends StatelessWidget {
       ),
     );
 
+    // On click, show the full content
     final fullViewButton = InkWell(
       onTap: () => showDialog(
         context: context,
