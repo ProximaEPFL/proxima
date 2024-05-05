@@ -40,9 +40,11 @@ class NewCommentViewModel
   /// Verifies that the content is not empty, then adds a new comment to the database.
   /// If the content is empty, the state is updated with the appropriate error message.
   /// If the comment is successfully added, the state is updated with the posted flag set to true.
-  Future<void> tryAddComment(String content) async {
+  /// Returns true if the comment was successfully added, false otherwise.
+  Future<bool> tryAddComment(String content) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() => _tryAddComment(content));
+    return state.value?.posted ?? false;
   }
 
   Future<NewCommentState> _tryAddComment(String content) async {
