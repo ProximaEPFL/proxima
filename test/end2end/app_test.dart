@@ -235,6 +235,8 @@ Future<void> createPost(WidgetTester tester) async {
   await tester.pumpAndSettle();
   expect(find.text(postTitle), findsOneWidget);
   expect(find.text(postDescription), findsOneWidget);
+  final postCard = find.byKey(ProfileInfoCard.infoCardKey);
+  expect(postCard, findsOneWidget);
 }
 
 /// Delete a post
@@ -245,6 +247,12 @@ Future<void> deletePost(WidgetTester tester) async {
   final postCard = find.byKey(ProfileInfoCard.infoCardKey);
   expect(postCard, findsOneWidget);
 
+  // Check that the post content is displayed
+  const postTitle = "I like turtles";
+  const postDescription = "Look at them go!";
+  expect(find.text(postTitle), findsOneWidget);
+  expect(find.text(postDescription), findsOneWidget);
+
   // Find the delete button on card
   final deleteButton = find.byKey(ProfileInfoCard.deleteButtonCardKey);
   expect(deleteButton, findsOneWidget);
@@ -253,8 +261,6 @@ Future<void> deletePost(WidgetTester tester) async {
   await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
   // Can't find post anymore
-  const postTitle = "I like turtles";
-  const postDescription = "Look at them go!";
   expect(find.text(postTitle), findsNothing);
   expect(find.text(postDescription), findsNothing);
 
