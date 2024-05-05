@@ -12,7 +12,7 @@ import "package:proxima/viewmodels/login_view_model.dart";
 /// post id [PostIdFirestore] is provided as an argument.
 class NewCommentViewModel
     extends AutoDisposeFamilyAsyncNotifier<NewCommentState, PostIdFirestore> {
-  static const String _contentError = "Please enter a coment";
+  static const String _contentError = "Please fill out your comment";
 
   @override
   Future<NewCommentState> build(PostIdFirestore arg) async {
