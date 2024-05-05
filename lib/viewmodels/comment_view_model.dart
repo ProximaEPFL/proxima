@@ -6,6 +6,9 @@ import "package:proxima/models/ui/comment_post.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 
+/// This view model is used to fetch the comments of a post.
+/// It fetches the comments under the post with the id [arg] and returns
+/// a list of [CommentPost] objects to be displayed.
 class CommentViewModel
     extends AutoDisposeFamilyAsyncNotifier<List<CommentPost>, PostIdFirestore> {
   @override
@@ -42,6 +45,9 @@ class CommentViewModel
     return comments;
   }
 
+  /// Refreshes the list of comments under the post
+  /// This will put the state in a loading state, fetch the comments
+  /// and update the state with the new comments.
   Future<void> refresh() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => build(arg));
