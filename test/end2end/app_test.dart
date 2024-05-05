@@ -258,6 +258,9 @@ Future<void> deletePost(WidgetTester tester) async {
   expect(find.text(postTitle), findsNothing);
   expect(find.text(postDescription), findsNothing);
 
+  // Check that the post card is not displayed anymore
+  expect(postCard, findsNothing);
+
   // Go back to home page
   final backButton = find.byType(LeadingBackButton);
   expect(backButton, findsOneWidget);
