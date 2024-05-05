@@ -111,5 +111,39 @@ void main() {
         expect(actualComments, expectedSortedComments);
       });
     });
+
+    group("refresh logic", () {
+      test("refresh shows newly added comment", () async {
+        // Before the refresh, there should be no comments
+        final comments = await container.read(commentViewModelProvider.future);
+
+        expect(comments, isEmpty);
+
+        // Then a comment is added
+        final owner = FirestoreUserGenerator.generateUserFirestore(1).first;
+        await userRepository.setUser(owner.uid, owner.data);
+
+        final commentData =
+            commentDataGenerator.createMockCommentData(ownerId: owner.uid);
+        await commentRepository.addComment(
+          postId,
+          commentData,
+        );
+
+        final expectedComment = CommentPost.from(
+          commentData,
+          owner.data,
+        );
+
+        // The user refreshes the comments
+        await container.read(commentViewModelProvider.notifier).refresh();
+
+        // The user should see the newly added comment
+        final actualComments =
+            await container.read(commentViewModelProvider.future);
+
+        expect(actualComments, equals([expectedComment]));
+      });
+    });
   });
 }
