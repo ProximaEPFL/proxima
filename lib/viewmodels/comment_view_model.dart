@@ -34,13 +34,7 @@ class CommentViewModel
         orElse: () => throw Exception("Owner not found"),
       );
 
-      return CommentPost(
-        content: commentFirestore.data.content,
-        ownerDisplayName: owner.data.displayName,
-        publicationDate: DateTime.fromMillisecondsSinceEpoch(
-          commentFirestore.data.publicationTime.millisecondsSinceEpoch,
-        ),
-      );
+      return CommentPost.from(commentFirestore.data, owner.data);
     }).toList();
 
     // Sort the comments from the newest to the oldest
