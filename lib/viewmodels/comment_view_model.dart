@@ -9,7 +9,7 @@ import "package:proxima/services/database/user_repository_service.dart";
 class CommentViewModel
     extends AutoDisposeFamilyAsyncNotifier<List<CommentPost>, PostIdFirestore> {
   @override
-  FutureOr<List<CommentPost>> build(PostIdFirestore arg) async {
+  Future<List<CommentPost>> build(PostIdFirestore arg) async {
     final commentRepository = ref.read(commentRepositoryProvider);
     final userRepository = ref.read(userRepositoryProvider);
 
