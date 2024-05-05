@@ -82,6 +82,7 @@ void main() {
     await homeToProfilePage(tester);
     await bottomNavigation(tester);
     await createPost(tester);
+    await deletePost(tester);
   });
 }
 
