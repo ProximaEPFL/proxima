@@ -79,11 +79,11 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
   /// The future completes as soon as the boolean is known, the viewmodel might
   /// take longer to update (it is not awaited on).
   Future<bool> completeChallenge(PostIdFirestore pid) async {
-    final currentUser = ref.read(uidProvider);
+    final currentUser = ref.read(validUidProvider);
     final challengeRepository = ref.read(challengeRepositoryServiceProvider);
 
     final challengeCompleted =
-        await challengeRepository.completeChallenge(currentUser!, pid);
+        await challengeRepository.completeChallenge(currentUser, pid);
     if (challengeCompleted) {
       // we only need to refresh the view model if something actually changed
       // we do not need to wait for this refresh, as most likely we will not
