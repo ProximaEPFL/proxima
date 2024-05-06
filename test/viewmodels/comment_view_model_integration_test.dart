@@ -100,13 +100,16 @@ void main() {
         // Check that all the comments are present
         expect(actualComments, unorderedEquals(expectedComments));
 
-        final expectedSortedComments = expectedComments.sorted(
-          (commentA, commentB) =>
-              -commentA.publicationDate.compareTo(commentB.publicationDate),
-        );
-
         // Check that the comments are sorted from the newest to the oldest
-        expect(actualComments, expectedSortedComments);
+        for (var i = 0; i < actualComments.length - 1; i++) {
+          final currentComment = actualComments[i];
+          final nextComment = actualComments[i + 1];
+
+          expect(
+            currentComment.publicationDate.isAfter(nextComment.publicationDate),
+            isTrue,
+          );
+        }
       });
     });
 
