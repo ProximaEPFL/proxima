@@ -2,7 +2,6 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/user_post.dart";
 import "package:proxima/services/database/post_repository_service.dart";
-import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
@@ -17,13 +16,7 @@ class UserPostsViewModel extends AutoDisposeAsyncNotifier<UserPostsState> {
   @override
   Future<UserPostsState> build() async {
     final postRepository = ref.watch(postRepositoryProvider);
-    final user = ref.watch(uidProvider);
-
-    if (user == null) {
-      return Future.error(
-        "${CircularValue.debugErrorTag} User must be logged in before displaying the home page.",
-      );
-    }
+    final user = ref.watch(validUidProvider);
 
     final postsFirestore = await postRepository.getUserPosts(user);
     final posts = postsFirestore.map((post) {

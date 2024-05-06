@@ -27,10 +27,7 @@ class UpVoteViewModel
   @override
   FutureOr<PostVote> build(PostIdFirestore arg) async {
     final postId = arg;
-    final uid = ref.watch(uidProvider);
-    if (uid == null) {
-      throw Exception("User is not logged in");
-    }
+    final uid = ref.watch(validUidProvider);
 
     final voteRepository = ref.watch(postUpvoteRepositoryProvider);
     final postRepository = ref.watch(postRepositoryProvider);
@@ -59,10 +56,7 @@ class UpVoteViewModel
 
   Future<void> _triggerVote(UpvoteState selectedUpVoteState) async {
     final postId = arg;
-    final uid = ref.watch(uidProvider);
-    if (uid == null) {
-      throw Exception("User is not logged in");
-    }
+    final uid = ref.watch(validUidProvider);
 
     final voteRepository = ref.read(postUpvoteRepositoryProvider);
 
