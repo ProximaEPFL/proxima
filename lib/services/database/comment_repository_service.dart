@@ -109,6 +109,19 @@ class CommentRepositoryService {
           );
         },
       );
+
+  /// This method will delete all the comments of the post with id [parentPostId].
+  /// Helper method to delete a post. Adds all the deletions to the batch [batch].
+  Future<void> deleteAllComments(
+    PostIdFirestore parentPostId,
+    WriteBatch batch,
+  ) async {
+    final comments = await _commentsSubCollection(parentPostId).get();
+    for (final comment in comments.docs) {
+      batch.delete(comment.reference);
+    }
+    batch.update(_postDocument(parentPostId), {PostData.commentCountField: 0});
+  }
 }
 
 final commentRepositoryProvider = Provider<CommentRepositoryService>(

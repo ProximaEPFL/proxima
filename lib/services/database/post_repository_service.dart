@@ -6,15 +6,27 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
+import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
+import "package:proxima/services/database/upvote_repository_service.dart";
 
 /// This repository service is responsible for managing the posts in the database
 class PostRepositoryService {
-  final CollectionReference _collectionRef;
+  final FirebaseFirestore _firestore;
+  final CollectionReference<Map<String, dynamic>> _collectionRef;
+  final CommentRepositoryService _commentRepository;
+  final UpvoteRepositoryService<PostIdFirestore> _upvoteRepository;
 
   PostRepositoryService({
     required FirebaseFirestore firestore,
-  }) : _collectionRef = firestore.collection(PostFirestore.collectionName);
+  })  : _firestore = firestore,
+        _collectionRef = firestore.collection(PostFirestore.collectionName),
+        _commentRepository = CommentRepositoryService(firestore: firestore),
+        _upvoteRepository = UpvoteRepositoryService<PostIdFirestore>(
+          firestore: firestore,
+          parentCollection: firestore.collection(PostFirestore.collectionName),
+          voteScoreField: PostData.voteScoreField,
+        );
 
   /// This method creates a new post that has for data [postData]
   /// and that is located at [position] and adds it to the database
@@ -31,7 +43,13 @@ class PostRepositoryService {
 
   /// This method deletes the post with id [postId] from the database
   Future<void> deletePost(PostIdFirestore postId) async {
-    await _collectionRef.doc(postId.value).delete();
+    final batch = _firestore.batch();
+
+    await _commentRepository.deleteAllComments(postId, batch);
+    await _upvoteRepository.deleteAllUpvotes(postId, batch);
+    batch.delete(_collectionRef.doc(postId.value));
+
+    await batch.commit();
   }
 
   /// This method returns true if the post with id [postId] exists in the database
