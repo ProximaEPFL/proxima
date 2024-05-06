@@ -117,19 +117,20 @@ class CommentRepositoryService {
     PostIdFirestore parentPostId,
     WriteBatch batch,
   ) async {
-    final comments = await _commentsSubCollection(parentPostId).get();
+    final commentsRef = _commentsSubCollection(parentPostId);
+    final comments = await commentsRef.get();
     final commentUpvoteRepository = UpvoteRepositoryService<CommentIdFirestore>(
       firestore: _firestore,
-      parentCollection: _commentsSubCollection(parentPostId),
+      parentCollection: commentsRef,
       voteScoreField: CommentData.voteScoreField,
     );
 
     for (final comment in comments.docs) {
-      batch.delete(comment.reference);
       await commentUpvoteRepository.deleteAllUpvotes(
         CommentIdFirestore(value: comment.id),
         batch,
       );
+      batch.delete(comment.reference);
     }
 
     batch.update(_postDocument(parentPostId), {PostData.commentCountField: 0});
