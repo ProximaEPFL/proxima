@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:intl/intl.dart";
+import "package:proxima/utils/ui/user_avatar/user_avatar.dart";
 import "package:proxima/views/home_content/feed/post_card/post_card.dart";
 import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
@@ -12,6 +13,7 @@ import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.da
 import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
 import "package:timeago/timeago.dart" as timeago;
 
+import "../../../mocks/data/firebase_auth_user.dart";
 import "../../../mocks/data/post_comment.dart";
 import "../../../mocks/data/post_overview.dart";
 import "../../../mocks/providers/provider_homepage.dart";
@@ -159,6 +161,17 @@ void main() {
       final commentUserAvatar =
           find.byKey(BottomBarAddComment.commentUserAvatarKey);
       expect(commentUserAvatar, findsOneWidget);
+
+      //Check user initial is displayed in the user account bar
+      final userInitial = find.descendant(
+        of: commentUserAvatar,
+        matching: find.byKey(UserAvatar.initialDisplayNameKey),
+      );
+      expect(userInitial, findsOneWidget);
+
+      //Check that the first initial of the test user is displayed
+      final Text textWidget = tester.widget(userInitial) as Text;
+      expect(textWidget.data, equals(testingLoginUser.displayName![0]));
 
       //Check that the add comment text field is displayed
       final addCommentTextField =

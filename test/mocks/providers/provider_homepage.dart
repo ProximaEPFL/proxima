@@ -20,7 +20,7 @@ const homePageApp = MaterialApp(
 final emptyHomePageProvider = ProviderScope(
   overrides: [
     ...mockEmptyHomeViewModelOverride,
-    ...mockDynamicUserAvatarViewModelTestLoginUserOverride,
+    ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
   ],
   child: homePageApp,
 );
@@ -29,7 +29,7 @@ final nonEmptyHomePageProvider = ProviderScope(
   overrides: [
     ...mockNonEmptyHomeViewModelOverride,
     ...mockChallengeOverride,
-    ...mockDynamicUserAvatarViewModelTestLoginUserOverride,
+    ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
   ],
   child: homePageApp,
 );
@@ -46,7 +46,7 @@ ProviderScope homePageFakeFirestoreProvider(
   return ProviderScope(
     overrides: [
       ...loggedInUserOverrides,
-      ...mockDynamicUserAvatarViewModelTestLoginUserOverride,
+      ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
       firestoreProvider.overrideWithValue(firestore),
       geoLocationServiceProvider.overrideWithValue(geoLocationService),
     ],

@@ -25,3 +25,11 @@ final mockDynamicUserAvatarViewModelTestLoginUserOverride = [
     ),
   ),
 ];
+
+final mockDynamicUserAvatarViewModelEmptyDisplayNameOverride = [
+  userDisplayNameProvider.overrideWith(
+    () => MockDynamicUserAvatarViewModel(
+      build: (userUID) async => "",
+    ),
+  ),
+];
