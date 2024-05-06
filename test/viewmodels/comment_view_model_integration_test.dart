@@ -63,9 +63,7 @@ void main() {
         // Create and add the comments owner to the database
         final owners =
             FirestoreUserGenerator.generateUserFirestore(numberOwners);
-        for (final owner in owners) {
-          await userRepository.setUser(owner.uid, owner.data);
-        }
+        await setUsersFirestore(fakeFirestore, owners);
 
         // Create and add the comments to the database
         final commentsData = commentDataGenerator
