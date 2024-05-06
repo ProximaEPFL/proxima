@@ -4,8 +4,6 @@ import "package:proxima/utils/ui/types.dart";
 /// This widget defines the style of the columns in the profile page,
 /// such as the posts and comments columns
 class ProfileInfoColumn extends StatelessWidget {
-  static const _separator = SizedBox(height: 10);
-
   const ProfileInfoColumn({
     super.key,
     required this.itemList,
@@ -19,14 +17,13 @@ class ProfileInfoColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Padding between the tabs and the content
     const padding = EdgeInsets.all(8);
 
-    final list = ListView.separated(
+    final list = ListView(
       padding: padding,
       scrollDirection: Axis.vertical,
-      itemCount: itemList.length,
-      itemBuilder: (BuildContext context, int index) => itemList[index],
-      separatorBuilder: (BuildContext context, int index) => _separator,
+      children: itemList,
     );
 
     final emptyInfo = ListView(
