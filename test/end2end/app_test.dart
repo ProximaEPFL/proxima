@@ -40,7 +40,7 @@ void main() {
   MockGeoLocationService geoLocationService = MockGeoLocationService();
   const GeoPoint testLocation = userPosition0;
 
-  setUpAll(() async {
+  setUp(() async {
     setupFirebaseAuthMocks();
     await Firebase.initializeApp();
     fakeFireStore = FakeFirebaseFirestore();
