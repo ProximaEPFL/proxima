@@ -3,21 +3,21 @@ import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
-import "package:proxima/views/components/logout_button.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
+import "package:proxima/views/pages/profile/components/logout_button.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
 import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/providers/provider_login_page.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
+import "../../../utils/delay_async_func.dart";
 
 void main() {
-  const delayNeededForAsyncFunctionExecution = Duration(seconds: 1);
   late FakeFirebaseFirestore fakeFireStore;
   late CollectionReference<Map<String, dynamic>> userCollection;
   late ProviderScope mockedLoginPage;
