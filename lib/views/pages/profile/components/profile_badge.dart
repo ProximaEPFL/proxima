@@ -6,10 +6,7 @@ class ProfileBadge extends StatelessWidget {
 
   const ProfileBadge({
     super.key,
-    required this.shadow,
   });
-
-  final BoxShadow shadow;
 
   @override
   Widget build(BuildContext context) {

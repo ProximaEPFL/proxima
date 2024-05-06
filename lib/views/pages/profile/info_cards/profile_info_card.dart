@@ -13,13 +13,11 @@ class ProfileInfoCard extends StatelessWidget {
     required this.content,
     required this.onDelete,
     this.title,
-    this.shadow,
   });
 
   final String content;
   final FutureVoidCallback onDelete;
   final String? title;
-  final BoxShadow? shadow;
 
   @override
   Widget build(BuildContext context) {
