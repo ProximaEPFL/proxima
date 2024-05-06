@@ -115,10 +115,8 @@ void main() {
 
     group("refresh logic", () {
       test("refresh shows newly added comment", () async {
-        // Before the refresh, there should be no comments
-        final comments = await container.read(commentViewModelProvider.future);
-
-        expect(comments, isEmpty);
+        // We force the build of the view model to compute the initial state
+        await container.read(commentViewModelProvider.future);
 
         // Then a comment is added
         final owner = FirestoreUserGenerator.generateUserFirestore(1).first;
@@ -131,13 +129,18 @@ void main() {
           commentData,
         );
 
+        // Before the refresh, there should be no comments when re-reading
+        final comments = await container.read(commentViewModelProvider.future);
+
+        expect(comments, isEmpty);
+
+        // The user refreshes the comments
+        await container.read(commentViewModelProvider.notifier).refresh();
+
         final expectedComment = CommentPost.from(
           commentData,
           owner.data,
         );
-
-        // The user refreshes the comments
-        await container.read(commentViewModelProvider.notifier).refresh();
 
         // The user should see the newly added comment
         final actualComments =
