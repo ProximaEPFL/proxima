@@ -7,6 +7,7 @@ import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
+import "package:proxima/services/database/upvote_repository_service.dart";
 
 /// This class is a service that allows to interact with the comments
 /// of the posts in the firestore database.
@@ -117,9 +118,20 @@ class CommentRepositoryService {
     WriteBatch batch,
   ) async {
     final comments = await _commentsSubCollection(parentPostId).get();
+    final commentUpvoteRepository = UpvoteRepositoryService<CommentIdFirestore>(
+      firestore: _firestore,
+      parentCollection: _commentsSubCollection(parentPostId),
+      voteScoreField: CommentData.voteScoreField,
+    );
+
     for (final comment in comments.docs) {
       batch.delete(comment.reference);
+      await commentUpvoteRepository.deleteAllUpvotes(
+        CommentIdFirestore(value: comment.id),
+        batch,
+      );
     }
+
     batch.update(_postDocument(parentPostId), {PostData.commentCountField: 0});
   }
 }
