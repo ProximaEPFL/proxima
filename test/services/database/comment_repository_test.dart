@@ -248,6 +248,26 @@ void main() {
 
         expect(post.data.commentCount, equals(5));
       });
+
+      test("can delete all comments", () async {
+        await commentGenerator.addComments(
+          5,
+          postId,
+          commentRepository,
+        );
+
+        final batch = fakeFirestore.batch();
+        await commentRepository.deleteAllComments(postId, batch);
+        await batch.commit();
+
+        final actualComments = await commentRepository.getComments(postId);
+        expect(actualComments, isEmpty);
+
+        final postDoc = await postDocument.get();
+        final post = PostFirestore.fromDb(postDoc);
+
+        expect(post.data.commentCount, equals(0));
+      });
     });
   });
 }
