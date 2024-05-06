@@ -38,7 +38,7 @@ class DynamicUserAvatarViewModel
 //Flexible provider allowing to retrieve the user's display name given its id.
 // If the id is null, the current user's display name is fetched.
 //TODO: Extend to fetch the user's avatar image.
-final userDisplayNameProvider = AsyncNotifierProvider.autoDispose
+final dynamicUserAvatarViewModelProvider = AsyncNotifierProvider.autoDispose
     .family<DynamicUserAvatarViewModel, String, UserIdFirestore?>(
   () => DynamicUserAvatarViewModel(),
 );

@@ -21,7 +21,8 @@ class DynamicUserAvatar extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final displayNameAsyncValue = ref.watch(userDisplayNameProvider(uid));
+    final displayNameAsyncValue =
+        ref.watch(dynamicUserAvatarViewModelProvider(uid));
 
     return displayNameAsyncValue.when(
       data: (displayName) => UserAvatar(

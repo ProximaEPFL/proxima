@@ -34,7 +34,8 @@ void main() {
 
     test("Find non existant current user display name", () async {
       expect(
-        () async => await container.read(userDisplayNameProvider(null).future),
+        () async => await container
+            .read(dynamicUserAvatarViewModelProvider(null).future),
         throwsA(isA<Exception>()),
       );
     });
@@ -67,7 +68,7 @@ void main() {
 
     test("Find current user display name", () async {
       final displayName =
-          await container.read(userDisplayNameProvider(null).future);
+          await container.read(dynamicUserAvatarViewModelProvider(null).future);
 
       expect(
         displayName,
@@ -77,8 +78,8 @@ void main() {
 
     test("Find user display name by userId", () async {
       for (final user in availableUsers) {
-        final displayName =
-            await container.read(userDisplayNameProvider(user.uid).future);
+        final displayName = await container
+            .read(dynamicUserAvatarViewModelProvider(user.uid).future);
 
         expect(
           displayName,
