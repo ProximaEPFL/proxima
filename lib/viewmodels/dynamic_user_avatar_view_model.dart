@@ -20,7 +20,7 @@ class DynamicUserAvatarViewModel
 
     if (userID == null) {
       if (currentUID == null) {
-        return Future.error("User id was not found.");
+        throw Exception("User is not logged in.");
       }
 
       userData = await userDataBase.getUser(currentUID);
