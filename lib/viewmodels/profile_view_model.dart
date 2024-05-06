@@ -16,7 +16,7 @@ class ProfileViewModel extends AutoDisposeAsyncNotifier<ProfileData> {
 
     if (user == null) {
       return Future.error(
-        "${CircularValue.debugErrorTag} User must be logged in before displaying the home page.",
+        "${CircularValue.debugErrorTag} User must be logged in before displaying the profile page.",
       );
     }
 
