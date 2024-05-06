@@ -1,6 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:firebase_core/firebase_core.dart";
+import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
@@ -19,6 +20,7 @@ import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
+import "package:proxima/views/pages/profile/components/logout_button.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
@@ -59,8 +61,8 @@ void main() {
     );
   });
 
-  testWidgets("End-to-end test of the app navigation flow",
-      (WidgetTester tester) async {
+  /// Pump the full Proxima app into the tester.
+  Future<void> loadProxima(WidgetTester tester) async {
     // Set up the app with mocked providers
     await tester.pumpWidget(
       ProviderScope(
@@ -74,8 +76,12 @@ void main() {
         child: const ProximaApp(),
       ),
     );
-
     await tester.pumpAndSettle();
+  }
+
+  testWidgets("End-to-end test of the app navigation flow",
+      (WidgetTester tester) async {
+    await loadProxima(tester);
 
     await loginToCreateAccount(tester);
     await createAccountToHome(tester);
@@ -83,6 +89,30 @@ void main() {
     await bottomNavigation(tester);
     await createPost(tester);
     await deletePost(tester);
+  });
+
+  testWidgets("Logout from challenges does not cause error", (tester) async {
+    await loadProxima(tester);
+
+    await loginToCreateAccount(tester);
+    await createAccountToHome(tester);
+
+    // Load challenges
+    await tester.tap(find.text("Challenge"));
+    await tester.pumpAndSettle();
+
+    // Go to profile page
+    final profilePicture = find.byKey(AppTopBar.profilePictureKey);
+    expect(profilePicture, findsOneWidget);
+    await tester.tap(profilePicture);
+    await tester.pumpAndSettle();
+
+    final logoutButton = find.byKey(LogoutButton.logoutButtonKey);
+    await tester.tap(logoutButton);
+    await tester.pumpAndSettle();
+
+    final errorPopup = find.bySubtype<AlertDialog>();
+    expect(errorPopup, findsNothing);
   });
 }
 
