@@ -20,10 +20,10 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
     final challengeRepository = ref.watch(challengeRepositoryServiceProvider);
 
     final currentPosition = await geoLocationService.getCurrentPosition();
-    final currentUser = ref.watch(uidProvider);
+    final currentUser = ref.watch(validUidProvider);
 
     final firestoreChallenges = await challengeRepository.getChallenges(
-      currentUser!,
+      currentUser,
       currentPosition,
     );
 
