@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 /// A widget that displays the user's avatar.
 /// It provides a [onTap] parameter to handle the user's tap,
 /// which adds an InkWell response.
+/// The [radius] parameter is the radius of the avatar.
 class UserAvatar extends StatelessWidget {
   static const initialDisplayNameKey = Key("initialDisplayName");
 
