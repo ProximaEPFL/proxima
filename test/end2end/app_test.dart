@@ -6,9 +6,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/main.dart";
-import "package:proxima/services/database/challenge_repository_service.dart";
-import "package:proxima/services/database/post_repository_service.dart";
-import "package:proxima/services/database/user_repository_service.dart";
+import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/home_content/map/map_screen.dart";
@@ -33,9 +31,6 @@ import "../utils/delay_async_func.dart";
 
 void main() {
   late FakeFirebaseFirestore fakeFireStore;
-  late PostRepositoryService postRepo;
-  late UserRepositoryService userRepo;
-  late ChallengeRepositoryService challengeRepo;
 
   MockGeoLocationService geoLocationService = MockGeoLocationService();
   const GeoPoint testLocation = userPosition0;
@@ -44,15 +39,7 @@ void main() {
     setupFirebaseAuthMocks();
     await Firebase.initializeApp();
     fakeFireStore = FakeFirebaseFirestore();
-    postRepo = PostRepositoryService(firestore: fakeFireStore);
-    userRepo = UserRepositoryService(
-      firestore: fakeFireStore,
-    );
-    challengeRepo = ChallengeRepositoryService(
-      firestore: fakeFireStore,
-      postRepositoryService: postRepo,
-      userRepositoryService: userRepo,
-    );
+
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) => Future.value(testLocation),
     );
@@ -68,10 +55,8 @@ void main() {
       ProviderScope(
         overrides: [
           ...firebaseAuthMocksOverrides,
-          userRepositoryProvider.overrideWithValue(userRepo),
           geoLocationServiceProvider.overrideWithValue(geoLocationService),
-          postRepositoryProvider.overrideWithValue(postRepo),
-          challengeRepositoryServiceProvider.overrideWithValue(challengeRepo),
+          firestoreProvider.overrideWithValue(fakeFireStore),
         ],
         child: const ProximaApp(),
       ),
