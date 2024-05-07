@@ -1,7 +1,6 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:firebase_core/firebase_core.dart";
-import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
@@ -18,7 +17,6 @@ import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
-import "package:proxima/views/pages/profile/components/logout_button.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
@@ -29,77 +27,35 @@ import "../mocks/services/mock_geo_location_service.dart";
 import "../mocks/services/setup_firebase_mocks.dart";
 import "../utils/delay_async_func.dart";
 
-void main() {
-  late FakeFirebaseFirestore fakeFireStore;
+/// open the proxima app in the tester (with a fake empty firestore and fake
+/// position at userPosition0)
+Future<void> openProxima(WidgetTester tester) async {
+  setupFirebaseAuthMocks();
+  await Firebase.initializeApp();
+  final FakeFirebaseFirestore fakeFireStore = FakeFirebaseFirestore();
 
-  MockGeoLocationService geoLocationService = MockGeoLocationService();
+  final MockGeoLocationService geoLocationService = MockGeoLocationService();
   const GeoPoint testLocation = userPosition0;
 
-  setUp(() async {
-    setupFirebaseAuthMocks();
-    await Firebase.initializeApp();
-    fakeFireStore = FakeFirebaseFirestore();
+  when(geoLocationService.getCurrentPosition()).thenAnswer(
+    (_) => Future.value(testLocation),
+  );
+  when(geoLocationService.getPositionStream()).thenAnswer(
+    (_) => Stream.value(testLocation),
+  );
 
-    when(geoLocationService.getCurrentPosition()).thenAnswer(
-      (_) => Future.value(testLocation),
-    );
-    when(geoLocationService.getPositionStream()).thenAnswer(
-      (_) => Stream.value(testLocation),
-    );
-  });
-
-  /// Pump the full Proxima app into the tester.
-  Future<void> loadProxima(WidgetTester tester) async {
-    // Set up the app with mocked providers
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          ...firebaseAuthMocksOverrides,
-          geoLocationServiceProvider.overrideWithValue(geoLocationService),
-          firestoreProvider.overrideWithValue(fakeFireStore),
-        ],
-        child: const ProximaApp(),
-      ),
-    );
-    await tester.pumpAndSettle();
-  }
-
-  testWidgets("End-to-end test of the app navigation flow",
-      (WidgetTester tester) async {
-    await loadProxima(tester);
-
-    await loginToCreateAccount(tester);
-    await createAccountToHome(tester);
-    await homeToProfilePage(tester);
-    await bottomNavigation(tester);
-    await createPost(tester);
-    await deletePost(tester);
-  });
-
-  testWidgets("Logout from challenges does not cause error", (tester) async {
-    await loadProxima(tester);
-
-    await loginToCreateAccount(tester);
-    await createAccountToHome(tester);
-
-    // Load challenges
-    await tester.tap(find.text("Challenge"));
-    await tester.pumpAndSettle();
-
-    // Go to profile page
-    final profilePicture = find.byKey(AppTopBar.profilePictureKey);
-    expect(profilePicture, findsOneWidget);
-    await tester.tap(profilePicture);
-    await tester.pumpAndSettle();
-
-    final logoutButton = find.byKey(LogoutButton.logoutButtonKey);
-    expect(logoutButton, findsOneWidget);
-    await tester.tap(logoutButton);
-    await tester.pumpAndSettle();
-
-    final errorPopup = find.bySubtype<AlertDialog>();
-    expect(errorPopup, findsNothing);
-  });
+  // Set up the app with mocked providers
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [
+        ...firebaseAuthMocksOverrides,
+        geoLocationServiceProvider.overrideWithValue(geoLocationService),
+        firestoreProvider.overrideWithValue(fakeFireStore),
+      ],
+      child: const ProximaApp(),
+    ),
+  );
+  await tester.pumpAndSettle();
 }
 
 /// Navigate to the login page and login
