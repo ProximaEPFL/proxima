@@ -55,6 +55,8 @@ class NewCommentViewModel
 
   Future<NewCommentState> _tryAddComment(String content) async {
     final currentUserId = ref.read(uidProvider);
+    final commentRepository = ref.read(commentRepositoryProvider);
+
     if (currentUserId == null) {
       throw Exception("User must be logged in before creating a comment");
     }
@@ -74,7 +76,6 @@ class NewCommentViewModel
       voteScore: 0,
     );
 
-    final commentRepository = ref.read(commentRepositoryProvider);
     await commentRepository.addComment(postId, commentData);
 
     state = AsyncData(
