@@ -12,6 +12,8 @@ import "package:proxima/services/database/user_repository_service.dart";
 /// a list of [CommentPost] objects to be displayed.
 class CommentViewModel
     extends AutoDisposeFamilyAsyncNotifier<List<CommentPost>, PostIdFirestore> {
+  // Note that we cannot rename `arg` to `postId` as it is a parameter
+  // of an override method. Doing so lead to a warning.
   @override
   Future<List<CommentPost>> build(PostIdFirestore arg) async {
     final commentRepository = ref.read(commentRepositoryProvider);
