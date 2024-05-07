@@ -23,7 +23,10 @@ final isUserLoggedInProvider = Provider<bool>((ref) {
 });
 
 /// Firebase logged in user id provider, returns null if the user is not logged
-/// in
+/// in. [validUidProvider] should almost always be used: its
+/// error does not cause a pop-up to be shown by the circular
+/// value, which is typically what one want since the user will
+/// get navigated back to the log-in page anyway.
 final uidProvider = Provider<UserIdFirestore?>((ref) {
   final user = ref.watch(userProvider).valueOrNull;
 
@@ -31,7 +34,10 @@ final uidProvider = Provider<UserIdFirestore?>((ref) {
 });
 
 /// Firebase logged in user id provider, throws an exception if the user is
-/// not logged in
+/// not logged in. This error contains the [CircularValue.debugErrorTag],
+/// so it will not create a pop-up (which is useful to avoid errors
+/// where the user is logged out before page navigation).
+/// This prover should not be overriden, override [uidProvider].
 final validUidProvider = Provider<UserIdFirestore>((ref) {
   final user = ref.watch(uidProvider);
 

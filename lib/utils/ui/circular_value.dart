@@ -12,7 +12,7 @@ class CircularValue<T> extends StatelessWidget {
   final Widget Function(BuildContext context, T data) builder;
   final Widget Function(BuildContext context, Object error) fallbackBuilder;
 
-  /// Tag to be placed at inside of an error message to display the
+  /// Tag to be placed inside of an error message to display the
   /// message directly instead of the widget.
   /// Does not trigger a pop up dialog. Useful for debug error messages
   /// that should never occur for a real user of the app (not front facing errors).
