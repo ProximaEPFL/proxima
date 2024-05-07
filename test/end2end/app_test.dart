@@ -19,6 +19,7 @@ import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
+import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
@@ -26,6 +27,7 @@ import "../mocks/data/geopoint.dart";
 import "../mocks/overrides/override_auth_providers.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 import "../mocks/services/setup_firebase_mocks.dart";
+import "../utils/delay_async_func.dart";
 
 void main() {
   late FakeFirebaseFirestore fakeFireStore;
@@ -80,6 +82,7 @@ void main() {
     await homeToProfilePage(tester);
     await bottomNavigation(tester);
     await createPost(tester);
+    await deletePost(tester);
   });
 }
 
@@ -223,7 +226,56 @@ Future<void> createPost(WidgetTester tester) async {
   await tester.drag(find.byType(PostFeed), const Offset(0, 500));
   await tester.pumpAndSettle();
 
-  // Check that the post is displayed
+  // Check that the post is displayed in feed
   expect(find.text(postTitle), findsOneWidget);
   expect(find.text(postDescription), findsOneWidget);
+
+  // Check that the post is displayed in profile page
+  final profilePicture = find.byKey(AppTopBar.profilePictureKey);
+  await tester.tap(profilePicture);
+  await tester.pumpAndSettle();
+  expect(find.text(postTitle), findsOneWidget);
+  expect(find.text(postDescription), findsOneWidget);
+  final postCard = find.byKey(ProfileInfoCard.infoCardKey);
+  expect(postCard, findsOneWidget);
+}
+
+/// Delete a post
+Future<void> deletePost(WidgetTester tester) async {
+  expect(find.byType(ProfilePage), findsOneWidget);
+
+  // Check that the post card is displayed
+  final postCard = find.byKey(ProfileInfoCard.infoCardKey);
+  expect(postCard, findsOneWidget);
+
+  // Check that the post content is displayed
+  const postTitle = "I like turtles";
+  const postDescription = "Look at them go!";
+  expect(find.text(postTitle), findsOneWidget);
+  expect(find.text(postDescription), findsOneWidget);
+
+  // Find the delete button on card
+  final deleteButton = find.byKey(ProfileInfoCard.deleteButtonCardKey);
+  expect(deleteButton, findsOneWidget);
+
+  await tester.tap(deleteButton);
+  await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
+
+  // Can't find post anymore
+  expect(find.text(postTitle), findsNothing);
+  expect(find.text(postDescription), findsNothing);
+
+  // Check that the post card is not displayed anymore
+  expect(postCard, findsNothing);
+
+  // Go back to home page
+  final backButton = find.byType(LeadingBackButton);
+  expect(backButton, findsOneWidget);
+  await tester.tap(backButton);
+  await tester.pumpAndSettle();
+  expect(find.byType(HomePage), findsOneWidget);
+
+  // Can't find post anymore
+  expect(find.text(postTitle), findsNothing);
+  expect(find.text(postDescription), findsNothing);
 }

@@ -6,7 +6,6 @@ class ProfileInfoRow extends StatelessWidget {
   static const infoRowKey = Key("infoRow");
 
   static const _rowHeight = 100.0;
-  static const _separator = SizedBox(width: 10);
 
   const ProfileInfoRow({
     super.key,
@@ -19,17 +18,11 @@ class ProfileInfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const decoration = BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-    );
-
     final content = Expanded(
-      child: ListView.separated(
+      child: ListView(
         padding: const EdgeInsets.only(top: 8, bottom: 8),
         scrollDirection: Axis.horizontal,
-        itemCount: itemList.length,
-        itemBuilder: (BuildContext context, int index) => itemList[index],
-        separatorBuilder: (BuildContext context, int index) => _separator,
+        children: itemList,
       ),
     );
 
@@ -41,15 +34,13 @@ class ProfileInfoRow extends StatelessWidget {
       ),
     );
 
-    return Container(
+    return SizedBox(
       key: infoRowKey,
       height: _rowHeight,
-      decoration: decoration,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           rowTitle,
-          const SizedBox(height: 5),
           content,
         ],
       ),

@@ -16,8 +16,8 @@ class MockChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>>
   Future<void> refresh() async {}
 
   @override
-  Future<bool> completeChallenge(PostIdFirestore pid) async {
-    return false;
+  Future<int?> completeChallenge(PostIdFirestore pid) async {
+    return null;
   }
 }
 
