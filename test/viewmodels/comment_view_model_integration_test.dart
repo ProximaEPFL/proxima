@@ -62,10 +62,7 @@ void main() {
 
         // Create and add the comments owner to the database
         final owners =
-            FirestoreUserGenerator.generateUserFirestore(numberOwners);
-        for (final owner in owners) {
-          await userRepository.setUser(owner.uid, owner.data);
-        }
+            await FirestoreUserGenerator.addUsers(fakeFirestore, numberOwners);
 
         // Create and add the comments to the database
         final commentsData = commentDataGenerator
@@ -102,22 +99,23 @@ void main() {
         // Check that all the comments are present
         expect(actualComments, unorderedEquals(expectedComments));
 
-        final expectedSortedComments = expectedComments.sorted(
-          (commentA, commentB) =>
-              -commentA.publicationDate.compareTo(commentB.publicationDate),
-        );
-
         // Check that the comments are sorted from the newest to the oldest
-        expect(actualComments, expectedSortedComments);
+        for (var i = 0; i < actualComments.length - 1; i++) {
+          final currentComment = actualComments[i];
+          final nextComment = actualComments[i + 1];
+
+          expect(
+            currentComment.publicationDate.isAfter(nextComment.publicationDate),
+            isTrue,
+          );
+        }
       });
     });
 
     group("refresh logic", () {
       test("refresh shows newly added comment", () async {
-        // Before the refresh, there should be no comments
-        final comments = await container.read(commentViewModelProvider.future);
-
-        expect(comments, isEmpty);
+        // We force the build of the view model to compute the initial state
+        await container.read(commentViewModelProvider.future);
 
         // Then a comment is added
         final owner = FirestoreUserGenerator.generateUserFirestore(1).first;
@@ -130,13 +128,18 @@ void main() {
           commentData,
         );
 
+        // Before the refresh, there should be no comments when re-reading
+        final comments = await container.read(commentViewModelProvider.future);
+
+        expect(comments, isEmpty);
+
+        // The user refreshes the comments
+        await container.read(commentViewModelProvider.notifier).refresh();
+
         final expectedComment = CommentPost.from(
           commentData,
           owner.data,
         );
-
-        // The user refreshes the comments
-        await container.read(commentViewModelProvider.notifier).refresh();
 
         // The user should see the newly added comment
         final actualComments =

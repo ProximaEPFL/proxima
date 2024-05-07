@@ -16,6 +16,7 @@ void main() {
         postOverview.ownerDisplayName,
         postOverview.publicationDate,
         postOverview.distance,
+        postOverview.isChallenge,
       );
 
       final actualHash = postOverview.hashCode;

@@ -20,10 +20,9 @@ import "../../../mocks/data/geopoint.dart";
 import "../../../mocks/providers/provider_homepage.dart";
 import "../../../mocks/providers/provider_profile_page.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
+import "../../../utils/delay_async_func.dart";
 
 void main() {
-  const delayNeededForAsyncFunctionExecution = Duration(seconds: 1);
-
   late FakeFirebaseFirestore fakeFireStore;
   late CollectionReference<Map<String, dynamic>> userCollection;
   late ProviderScope mockedProfilePage;

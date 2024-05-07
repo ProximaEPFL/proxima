@@ -39,14 +39,6 @@ class PostPage extends HookConsumerWidget {
       ),
     ];
 
-    final commentList = CircularValue(
-      value: commentsAsync,
-      builder: (context, comments) => CommentList(
-        key: commentListWidgetKey,
-        comments: comments,
-      ),
-    );
-
     // Body = Complete post + Comments
     List<Widget> bodyChildren = [
       CompletePostWidget(
@@ -54,7 +46,13 @@ class PostPage extends HookConsumerWidget {
         post: postOverview,
       ),
       const SizedBox(height: 10),
-      commentList,
+      CircularValue(
+        value: commentsAsync,
+        builder: (context, comments) => CommentList(
+          key: commentListWidgetKey,
+          comments: comments,
+        ),
+      ),
     ];
 
     return Scaffold(

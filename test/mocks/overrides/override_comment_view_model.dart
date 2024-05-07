@@ -40,12 +40,3 @@ final mockNonEmptyCommentViewModelOverride = [
     ),
   ),
 ];
-
-final mockLoadingCommentViewModelOverride = [
-  commentListProvider.overrideWith(
-    () => MockCommentViewModel(
-      // Future.any([]) will never complete and simulate a loading state
-      build: (PostIdFirestore arg) => Future.any([]),
-    ),
-  ),
-];

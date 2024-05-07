@@ -24,6 +24,7 @@ final List<PostOverview> testPosts = [
     ownerDisplayName: "Proxima",
     publicationDate: publicationDate1,
     distance: 20,
+    isChallenge: true,
   ),
   PostOverview(
     postId: const PostIdFirestore(value: "post_3"),
