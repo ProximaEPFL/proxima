@@ -30,24 +30,16 @@ class ProfilePage extends HookConsumerWidget {
     final itemListBadge = <Widget>[];
     final itemListComments = <Widget>[];
 
-    final shadow = BoxShadow(
-      color: Theme.of(context).colorScheme.shadow.withOpacity(0.4),
-      offset: const Offset(0, 1),
-      blurRadius: 0.1,
-      spreadRadius: 0.01,
-    );
-
     // This is a fake list of cards
     for (var i = 0; i < 10; i++) {
       // TODO replace by profile badges viewmodel
       itemListBadge.add(
-        ProfileBadge(shadow: shadow),
+        const ProfileBadge(),
       );
 
       // TODO replace by user comments viewmodel (follow `UserPosts` implementation)
       itemListComments.add(
         ProfileInfoCard(
-          shadow: shadow,
           content:
               "Here is a FAKE data comment on a super post that talks about something that is super cool and is located in a super spot that is very cosy and nice",
           onDelete: () async {
@@ -77,7 +69,7 @@ class ProfilePage extends HookConsumerWidget {
     final tabsContent = Expanded(
       child: TabBarView(
         children: [
-          ProfileUserPosts(shadow: shadow),
+          const ProfileUserPosts(),
           comments,
         ],
       ),
