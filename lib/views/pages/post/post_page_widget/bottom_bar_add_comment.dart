@@ -62,7 +62,6 @@ class BottomBarAddComment extends HookConsumerWidget {
 
         // The button to post the comment
         final addCommentButton = Align(
-          // Keeps the IconButton centered in the cross axis
           alignment: Alignment.center,
           child: IconButton(
             key: postCommentButtonKey,
@@ -91,7 +90,6 @@ class BottomBarAddComment extends HookConsumerWidget {
         );
 
         return Row(
-          // Align items to the start of the cross axis
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             userAvatar,
