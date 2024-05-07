@@ -5,7 +5,8 @@ import "package:mockito/mockito.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/views/pages/post/post_page_widget/bottom_bar_add_comment.dart";
+import "package:proxima/views/pages/post/components/comment/new_comment_button.dart";
+import "package:proxima/views/pages/post/components/comment/new_comment_textfield.dart";
 
 import "../../../mocks/data/comment_data.dart";
 import "../../../mocks/data/firestore_comment.dart";
@@ -43,7 +44,7 @@ void main() {
             commentDataGenerator.createMockCommentData().content;
 
         final commentField =
-            find.byKey(BottomBarAddComment.addCommentTextFieldKey);
+            find.byKey(NewCommentTextField.addCommentTextFieldKey);
         await widgetTester.enterText(commentField, validContent);
         await widgetTester.pumpAndSettle();
 
@@ -52,7 +53,7 @@ void main() {
 
         final timeBeforeAdd = Timestamp.now();
 
-        final postButton = find.byKey(BottomBarAddComment.postCommentButtonKey);
+        final postButton = find.byKey(NewCommentButton.postCommentButtonKey);
         await widgetTester.tap(postButton);
         await widgetTester.pumpAndSettle();
 

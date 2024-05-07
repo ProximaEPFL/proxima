@@ -6,8 +6,10 @@ import "package:proxima/views/home_content/feed/post_card/post_card.dart";
 import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
+import "package:proxima/views/pages/post/components/comment/new_comment_button.dart";
+import "package:proxima/views/pages/post/components/comment/new_comment_textfield.dart";
+import "package:proxima/views/pages/post/components/comment/new_comment_user_avatar.dart";
 import "package:proxima/views/pages/post/post_page.dart";
-import "package:proxima/views/pages/post/post_page_widget/bottom_bar_add_comment.dart";
 import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.dart";
 import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
 import "package:timeago/timeago.dart" as timeago;
@@ -157,17 +159,17 @@ void main() {
 
       //Check that the comment user avatar is displayed
       final commentUserAvatar =
-          find.byKey(BottomBarAddComment.commentUserAvatarKey);
+          find.byKey(NewCommentUserAvatar.commentUserAvatarKey);
       expect(commentUserAvatar, findsOneWidget);
 
       //Check that the add comment text field is displayed
       final addCommentTextField =
-          find.byKey(BottomBarAddComment.addCommentTextFieldKey);
+          find.byKey(NewCommentTextField.addCommentTextFieldKey);
       expect(addCommentTextField, findsOneWidget);
 
       //Check that the post comment button is displayed
       final postCommentButton =
-          find.byKey(BottomBarAddComment.postCommentButtonKey);
+          find.byKey(NewCommentButton.postCommentButtonKey);
       expect(postCommentButton, findsOneWidget);
     });
 
