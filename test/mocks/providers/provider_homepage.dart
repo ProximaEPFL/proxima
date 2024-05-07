@@ -7,8 +7,8 @@ import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 
 import "../overrides/override_auth_providers.dart";
-import "../overrides/override_challenges_view_model.dart";
 import "../overrides/override_dynamic_user_avatar_view_model.dart";
+import "../overrides/override_firestore.dart";
 import "../overrides/override_home_view_model.dart";
 import "../services/mock_geo_location_service.dart";
 
@@ -28,8 +28,9 @@ final emptyHomePageProvider = ProviderScope(
 final nonEmptyHomePageProvider = ProviderScope(
   overrides: [
     ...mockNonEmptyHomeViewModelOverride,
-    ...mockChallengeOverride,
     ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
+    ...firebaseMocksOverrides,
+    ...loggedInUserOverrides,
   ],
   child: homePageApp,
 );
