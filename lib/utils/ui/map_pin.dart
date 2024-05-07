@@ -1,5 +1,6 @@
 import "package:google_maps_flutter/google_maps_flutter.dart";
 
+//custom map pin class used to display pins on the map
 class MapPin {
   const MapPin({
     required this.id,
