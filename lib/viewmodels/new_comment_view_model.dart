@@ -1,6 +1,7 @@
 import "dart:async";
 
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
@@ -11,8 +12,13 @@ import "package:proxima/viewmodels/login_view_model.dart";
 /// The view model for adding a new comment to a post whose
 /// post id [PostIdFirestore] is provided as an argument.
 class NewCommentViewModel
-    extends AutoDisposeFamilyAsyncNotifier<NewCommentState, PostIdFirestore> {
+    extends FamilyAsyncNotifier<NewCommentState, PostIdFirestore> {
   static const String contentEmptyError = "Please fill out your comment";
+
+  // The controller for the content of the comment
+  // is kept in the view model to avoid losing the content of the comment
+  // if the user navigates away from the page inadvertedly.
+  final contentController = TextEditingController();
 
   @override
   Future<NewCommentState> build(PostIdFirestore arg) async {
@@ -89,7 +95,7 @@ class NewCommentViewModel
   }
 }
 
-final newCommentStateProvider = AsyncNotifierProvider.autoDispose
-    .family<NewCommentViewModel, NewCommentState, PostIdFirestore>(
+final newCommentStateProvider = AsyncNotifierProvider.family<
+    NewCommentViewModel, NewCommentState, PostIdFirestore>(
   () => NewCommentViewModel(),
 );

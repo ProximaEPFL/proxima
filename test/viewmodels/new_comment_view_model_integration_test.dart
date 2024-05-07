@@ -21,8 +21,8 @@ void main() {
     late CommentDataGenerator commentDataGenerator;
 
     late CommentRepositoryService commentRepository;
-    late AutoDisposeFamilyAsyncNotifierProvider<NewCommentViewModel,
-        NewCommentState, PostIdFirestore> newCommentViewModelProvider;
+    late AsyncNotifierFamilyProvider<NewCommentViewModel, NewCommentState,
+        PostIdFirestore> newCommentViewModelProvider;
 
     late ProviderContainer container;
 

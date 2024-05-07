@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/utils/ui/circular_value.dart";
@@ -25,11 +24,15 @@ class BottomBarAddComment extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final contentController = useTextEditingController();
+    final newCommentViewModel = ref.read(
+      newCommentStateProvider(parentPostId).notifier,
+    );
 
     final asyncNewCommentState = ref.watch(
       newCommentStateProvider(parentPostId),
     );
+
+    final contentController = newCommentViewModel.contentController;
 
     return CircularValue(
       value: asyncNewCommentState,
@@ -67,10 +70,6 @@ class BottomBarAddComment extends HookConsumerWidget {
             key: postCommentButtonKey,
             icon: const Icon(Icons.send),
             onPressed: () async {
-              final newCommentViewModel = ref.read(
-                newCommentStateProvider(parentPostId).notifier,
-              );
-
               final commentPosted = await newCommentViewModel.tryAddComment(
                 contentController.text,
               );
