@@ -250,7 +250,7 @@ void main() {
           allPosts,
           option,
           userPosition0,
-          putOnTop: postsToPutOnTop.toSet(),
+          putOnTop: postsToPutOnTop.map((post) => (post.id)).toSet(),
         );
 
         // Test for the global structure
