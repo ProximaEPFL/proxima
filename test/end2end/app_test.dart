@@ -108,6 +108,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final logoutButton = find.byKey(LogoutButton.logoutButtonKey);
+    expect(logoutButton, findsOneWidget);
     await tester.tap(logoutButton);
     await tester.pumpAndSettle();
 
