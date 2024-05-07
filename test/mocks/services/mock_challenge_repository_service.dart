@@ -9,13 +9,13 @@ import "package:proxima/services/database/challenge_repository_service.dart";
 class MockChallengeRepositoryService extends Mock
     implements ChallengeRepositoryService {
   @override
-  Future<bool> completeChallenge(
+  Future<int?> completeChallenge(
     UserIdFirestore uid,
     PostIdFirestore pid,
   ) async {
     return super.noSuchMethod(
       Invocation.method(#completeChallenge, [uid, pid]),
-      returnValue: Future.value(true),
+      returnValue: Future.value(null),
     );
   }
 

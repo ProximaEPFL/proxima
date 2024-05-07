@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/utils/ui/centauri_snack_bar.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/home_content/feed/post_card/comment_widget.dart";
@@ -33,12 +34,14 @@ class PostCard extends ConsumerWidget {
     WidgetRef ref,
   ) async {
     Navigator.pushNamed(context, Routes.post.name, arguments: post);
-    bool challengeCompleted = await ref
+    final scaffoldMessengerState = ScaffoldMessenger.of(context);
+
+    int? pointsAwarded = await ref
         .read(challengeProvider.notifier)
         .completeChallenge(post.postId);
-    if (challengeCompleted) {
+    if (pointsAwarded != null) {
+      showCentauriPointsSnackBar(pointsAwarded, scaffoldMessengerState);
       await ref.read(postOverviewProvider.notifier).refresh();
-      // TODO show something to the user, points were awarded
     }
   }
 
