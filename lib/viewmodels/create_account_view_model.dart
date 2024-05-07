@@ -95,13 +95,7 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
 
     // Create the account before applying the new state
     if (newState.valueOrNull?.noError == true) {
-      final uid = ref.read(uidProvider);
-      if (uid == null) {
-        // The user is no longer logged in, so they will anyway be sent to the login page
-        state = const AsyncValue.data(CreateAccountModel());
-
-        return;
-      }
+      final uid = ref.read(validUidProvider);
 
       final userData = UserData(
         username: uniqueUsername,
