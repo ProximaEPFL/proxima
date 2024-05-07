@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter/widgets.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:geolocator/geolocator.dart";
+import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/services/geolocation_service.dart";
@@ -10,11 +11,13 @@ import "package:proxima/views/home_content/map/map_screen.dart";
 import "package:proxima/views/home_content/map/post_map.dart";
 import "package:proxima/views/option_widgets/map/map_selection_option.dart";
 import "package:proxima/views/option_widgets/map/map_selection_option_chips.dart";
+import "../../../mocks/data/map_pin.dart";
 import "../../../mocks/providers/provider_map_page.dart";
 import "../../../mocks/services/mock_geolocator_platform.dart";
 
 void main() {
   late ProviderScope mapWidget;
+  late ProviderScope mapWidgetWithPins;
   late MockGeolocatorPlatform mockGeolocator;
   late GeoLocationService geoLocationService;
   late Set<GeoPoint?> geoPoints;
@@ -26,6 +29,7 @@ void main() {
       const GeoPoint(38.4219983, -123.084),
     };
     mapWidget = newMapPageProvider(geoLocationService, geoPoints);
+    mapWidgetWithPins = newMapPageWithPins(geoLocationService);
   });
 
   group("Widgets display", () {
@@ -78,6 +82,66 @@ void main() {
         find.byKey(PostMap.postMapKey),
         findsOneWidget,
       );
+    });
+  });
+
+  group("Pins display", () {
+    testWidgets("Map receives pins", (tester) async {
+      const latitude = 37.4219983;
+      const longitude = -122.084;
+
+      when(mockGeolocator.isLocationServiceEnabled())
+          .thenAnswer((_) async => true);
+      when(mockGeolocator.checkPermission())
+          .thenAnswer((_) async => LocationPermission.always);
+      when(
+        mockGeolocator.getCurrentPosition(
+          locationSettings: geoLocationService.locationSettings,
+        ),
+      ).thenAnswer(
+        (_) async => getSimplePosition(latitude, longitude),
+      );
+      when(
+        mockGeolocator.getPositionStream(
+          locationSettings: geoLocationService.locationSettings,
+        ),
+      ).thenAnswer(
+        (_) => Stream.fromIterable([
+          getSimplePosition(latitude, longitude),
+          getSimplePosition(latitude + 1, longitude),
+        ]),
+      );
+
+      await tester.pumpWidget(mapWidgetWithPins);
+      await tester.pumpAndSettle();
+
+      // Verify that the map screen is displayed
+      expect(find.byKey(MapScreen.mapScreenKey), findsOneWidget);
+
+      //check that Set<Marker> markers is not empty
+      final markers = tester
+          .widget<GoogleMap>(
+            find.byKey(PostMap.postMapKey),
+          )
+          .markers;
+
+      expect(markers, isNotEmpty);
+
+      //check that the markers are displayed on the map have the correct data
+      for (final pin in testPins) {
+        expect(
+          markers,
+          contains(
+            isA<Marker>()
+                .having(
+                  (marker) => marker.markerId,
+                  "markerId",
+                  MarkerId(pin.id),
+                )
+                .having((marker) => marker.position, "position", pin.position),
+          ),
+        );
+      }
     });
   });
 }
