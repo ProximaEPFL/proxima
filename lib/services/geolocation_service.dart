@@ -18,6 +18,8 @@ class GeoLocationService {
   /// Source : https://pub.dev/documentation/geolocator_android/latest/geolocator_android/LocationAccuracy.html
   final LocationSettings locationSettings = AndroidSettings(
     accuracy: LocationAccuracy.best,
+    // We set the distance filter to 20m to avoid unnecessary updates for small movements.
+    distanceFilter: 20,
   );
 
   GeoLocationService({

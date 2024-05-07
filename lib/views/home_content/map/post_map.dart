@@ -3,6 +3,7 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_info.dart";
 import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/viewmodels/map_pin_view_model.dart";
 import "package:proxima/viewmodels/map_view_model.dart";
 
 /// This widget displays the Google Map
@@ -19,8 +20,13 @@ class PostMap extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // This provider is used to get information about the map.
     final mapNotifier = ref.watch(mapProvider.notifier);
 
+    // This provider is used to get the list of map pins.
+    final mapPins = ref.watch(mapPinProvider);
+
+    // This provider is used to get the live location of the user.
     final positionValue = ref.watch(liveLocationServiceProvider);
 
     positionValue.when(
@@ -32,6 +38,20 @@ class PostMap extends ConsumerWidget {
       },
       loading: () => (),
     );
+
+    //list of Marker displayed on the map
+    Set<Marker> markers = {};
+
+    //translates the list of map pins into markers
+    for (final pin in mapPins) {
+      markers.add(
+        Marker(
+          markerId: MarkerId(pin.id),
+          position: pin.position,
+          onTap: pin.callbackFunction,
+        ),
+      );
+    }
 
     return Expanded(
       child: GoogleMap(
@@ -49,6 +69,7 @@ class PostMap extends ConsumerWidget {
           zoom: initialZoomLevel,
         ),
         circles: mapNotifier.circles,
+        markers: markers,
         onMapCreated: mapNotifier.onMapCreated,
       ),
     );
