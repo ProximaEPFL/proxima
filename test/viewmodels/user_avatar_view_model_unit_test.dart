@@ -39,7 +39,7 @@ void main() {
         );
       });
 
-      test("Find non existant current user display name", () async {
+      test("Find non existent current user display name", () async {
         expect(
           () async => await container
               .read(dynamicUserAvatarViewModelProvider(null).future),
