@@ -57,21 +57,21 @@ void main() {
       final newCommentViewModel =
           container.read(newCommentViewModelProvider.notifier);
 
-      //  --- Check the state before adding the comment
+      // Check the state before adding the comment
       final stateBeforeAdd = await newCommentViewModel.future;
       expect(
         stateBeforeAdd,
         NewCommentState(contentError: null, posted: false),
       );
 
-      // --- Add the comment
+      // Add the comment
       final timeBeforeAdd = Timestamp.now();
       final addResult = await newCommentViewModel.tryAddComment(validContent);
       final timeAfterAdd = Timestamp.now();
 
       expect(addResult, isTrue);
 
-      // --- Get the comments
+      // Get the comments
       final comments = await commentRepository.getComments(postId);
 
       expect(comments, hasLength(1));
@@ -81,7 +81,7 @@ void main() {
       expect(comment.data.content, validContent);
       expect(comment.data.ownerId, userId);
 
-      // --- Check the publication time is between the timeBeforeAdd and timeAfterAdd
+      // Check the publication time is between the timeBeforeAdd and timeAfterAdd
       expect(
         comment.data.publicationTime.microsecondsSinceEpoch,
         greaterThanOrEqualTo(timeBeforeAdd.microsecondsSinceEpoch),
@@ -91,17 +91,17 @@ void main() {
         lessThanOrEqualTo(timeAfterAdd.microsecondsSinceEpoch),
       );
 
-      // --- Check the state after adding the comment
+      // Check the state after adding the comment
       final stateAfterAdd = await newCommentViewModel.future;
       expect(
         stateAfterAdd,
         NewCommentState(contentError: null, posted: true),
       );
 
-      // --- Reset the state
+      // Reset the state
       await newCommentViewModel.reset();
 
-      // --- Check the state after resetting
+      // Check the state after resetting
       final stateAfterReset = await newCommentViewModel.future;
       expect(
         stateAfterReset,
@@ -115,19 +115,19 @@ void main() {
       final newCommentViewModel =
           container.read(newCommentViewModelProvider.notifier);
 
-      //  --- Check the state before adding the comment
+      // Check the state before adding the comment
       final stateBeforeAdd = await newCommentViewModel.future;
       expect(
         stateBeforeAdd,
         NewCommentState(contentError: null, posted: false),
       );
 
-      // --- Add the comment
+      // Add the comment
       final addResult = await newCommentViewModel.tryAddComment(invalidContent);
 
       expect(addResult, isFalse);
 
-      // --- Check the state after adding the comment
+      // Check the state after adding the comment
       final stateAfterAdd = await newCommentViewModel.future;
       expect(
         stateAfterAdd,
