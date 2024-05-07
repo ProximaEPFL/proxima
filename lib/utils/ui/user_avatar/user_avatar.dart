@@ -30,6 +30,9 @@ class UserAvatar extends StatelessWidget {
           Center(
             child: Text(
               key: initialDisplayNameKey,
+              // Display the first letter of the [displayName] parameter (user's initial).
+              // If the display name is empty, display an empty string (because
+              // it causes an error if it is empty).
               displayName.isEmpty ? "" : displayName.substring(0, 1),
             ),
           ),
