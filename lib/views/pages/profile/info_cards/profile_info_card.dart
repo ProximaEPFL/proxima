@@ -8,32 +8,22 @@ class ProfileInfoCard extends StatelessWidget {
   static const infoCardKey = Key("profileInfoCard");
   static const deleteButtonCardKey = Key("deleteButtonCard");
 
-  static const _borderRadius = BorderRadius.all(Radius.circular(10));
-  static const _cardHeight = 80.0;
-
   const ProfileInfoCard({
     super.key,
     required this.content,
     required this.onDelete,
     this.title,
-    this.shadow,
   });
 
   final String content;
   final FutureVoidCallback onDelete;
   final String? title;
-  final BoxShadow? shadow;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    final decoration = BoxDecoration(
-      color: themeData.colorScheme.secondaryContainer,
-      borderRadius: _borderRadius,
-      boxShadow: [if (shadow != null) shadow!],
-    );
-
+    // Post have title, comments don't
     final potentialTitle = title != null
         ? Text(
             title!,
@@ -57,6 +47,7 @@ class ProfileInfoCard extends StatelessWidget {
       ),
     );
 
+    // On click, show the full content
     final fullViewButton = InkWell(
       onTap: () => showDialog(
         context: context,
@@ -73,16 +64,10 @@ class ProfileInfoCard extends StatelessWidget {
       ),
     );
 
-    return Container(
+    return Card(
       key: infoCardKey,
-      height: _cardHeight,
-      decoration: decoration,
-      child: Material(
-        clipBehavior: Clip.hardEdge,
-        borderRadius: _borderRadius,
-        color: Colors.transparent,
-        child: fullViewButton,
-      ),
+      clipBehavior: Clip.hardEdge,
+      child: fullViewButton,
     );
   }
 }

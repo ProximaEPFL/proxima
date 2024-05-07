@@ -55,7 +55,6 @@ class LoginPage extends HookConsumerWidget {
           left: 24,
           right: 24,
         ),
-        // TODO: verify that the text style is correct after the theme is finalized
         child: Text(
           tagLineText,
           // Ensure the text itself is centered if it spans multiple lines
