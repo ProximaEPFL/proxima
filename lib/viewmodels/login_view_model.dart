@@ -3,6 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/login_user.dart";
 import "package:proxima/services/login_service.dart";
+import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 /// Firebase authentication change provider
@@ -21,11 +22,32 @@ final isUserLoggedInProvider = Provider<bool>((ref) {
   return ref.watch(userProvider).valueOrNull != null;
 });
 
-/// Firebase logged in user id provider
+/// Firebase logged in user id provider, returns null if the user is not logged
+/// in. [validUidProvider] should almost always be used: its
+/// error does not cause a pop-up to be shown by the circular
+/// value, which is typically what one want since the user will
+/// get navigated back to the log-in page anyway.
 final uidProvider = Provider<UserIdFirestore?>((ref) {
   final user = ref.watch(userProvider).valueOrNull;
 
   return user == null ? null : UserIdFirestore(value: user.id);
+});
+
+/// Firebase logged in user id provider, throws an exception if the user is
+/// not logged in. This error contains the [CircularValue.debugErrorTag],
+/// so it will not create a pop-up (which is useful to avoid errors
+/// where the user is logged out before page navigation).
+/// This prover should not be overriden, override [uidProvider].
+final validUidProvider = Provider<UserIdFirestore>((ref) {
+  final user = ref.watch(uidProvider);
+
+  if (user == null) {
+    throw Exception(
+      "${CircularValue.debugErrorTag} User must be logged in.",
+    );
+  }
+
+  return user;
 });
 
 /// Login Service provider; dependency injection used for testing purposes

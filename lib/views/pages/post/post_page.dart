@@ -83,8 +83,6 @@ class PostPage extends HookConsumerWidget {
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: BottomBarAddComment(
             key: bottomBarAddCommentKey,
-            //TODO: Replace with actual username
-            currentDisplayName: "Username",
             parentPostId: postOverview.postId,
           ),
         ),

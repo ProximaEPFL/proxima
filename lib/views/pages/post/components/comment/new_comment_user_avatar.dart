@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/utils/ui/user_avatar.dart";
+import "package:proxima/views/components/user_avatar/dynamic_user_avatar.dart";
 
 /// The avatar of the current user on the left of the new comment text field.
 class NewCommentUserAvatar extends StatelessWidget {
@@ -7,18 +7,15 @@ class NewCommentUserAvatar extends StatelessWidget {
 
   const NewCommentUserAvatar({
     super.key,
-    required this.currentDisplayName,
   });
-
-  final String currentDisplayName;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8),
-      child: UserAvatar(
+    return const Padding(
+      padding: EdgeInsets.only(right: 8),
+      child: DynamicUserAvatar(
         key: commentUserAvatarKey,
-        displayName: currentDisplayName,
+        uid: null,
         radius: 22,
       ),
     );

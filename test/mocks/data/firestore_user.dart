@@ -50,6 +50,7 @@ class FirestoreUserGenerator {
     );
   }
 
+  // Create [numberOfUsers] users and add them to the [firestore] db
   static Future<List<UserFirestore>> addUsers(
     FirebaseFirestore firestore,
     int numberOfUsers,

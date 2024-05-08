@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/views/components/user_avatar/user_avatar.dart";
 import "package:proxima/views/home_content/feed/post_card/post_card.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
@@ -39,6 +40,17 @@ void main() {
       //Check profile picture is displayed
       final profilePicture = find.byKey(AppTopBar.profilePictureKey);
       expect(profilePicture, findsOneWidget);
+
+      //Check user initial is displayed in the app bar
+      final userInitial = find.descendant(
+        of: profilePicture,
+        matching: find.byKey(UserAvatar.initialDisplayNameKey),
+      );
+      expect(userInitial, findsOneWidget);
+
+      //Check that the first initial of the test user is displayed
+      final Text textWidget = tester.widget(userInitial) as Text;
+      expect(textWidget.data, equals(""));
     });
 
     testWidgets("Display feed", (tester) async {
