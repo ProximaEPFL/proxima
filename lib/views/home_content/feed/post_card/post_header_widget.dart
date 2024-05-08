@@ -1,12 +1,12 @@
 import "package:flutter/material.dart";
-import "package:intl/intl.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/services/human_time_service.dart";
 import "package:proxima/views/components/user_avatar/user_avatar.dart";
-import "package:timeago/timeago.dart" as timeago;
 
 /// This widget is used to display the info bar in the post card.
 /// It contains the user's profile picture and username
 /// and the publication time of the post.
-class PostHeaderWidget extends StatelessWidget {
+class PostHeaderWidget extends ConsumerWidget {
   static const displayNameTextKey = Key("displayNameText");
   static const publicationDateTextKey = Key("publicationTimeTextKey");
 
@@ -19,19 +19,17 @@ class PostHeaderWidget extends StatelessWidget {
   final String posterUsername;
   final DateTime publicationDate;
 
-  /// Converts a timestamp to a time ago string.
-  String _dateTimeToTimeAgo(DateTime dateTime) {
-    return "${timeago.format(dateTime, locale: "en_short")} ago";
-  }
-
-  /// Converts a timestamp to a user readable date string.
-  String _dateFormat(DateTime dateTime) {
-    DateFormat formatter = DateFormat("EEEE, MMMM d, yyyy HH:mm");
-    return formatter.format(dateTime);
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final humanTimeService = ref.watch(humanTimeServiceProvider);
+
+    final relativeTimeText = humanTimeService.textTimeSince(
+      publicationDate,
+    );
+    final absoluteTimeText = humanTimeService.textTimeAbsolute(
+      publicationDate,
+    );
+
     final posterName = Flexible(
       child: Text(
         posterUsername,
@@ -49,10 +47,10 @@ class PostHeaderWidget extends StatelessWidget {
     );
 
     final publicationTime = Tooltip(
-      message: _dateFormat(publicationDate),
+      message: absoluteTimeText,
       child: Text(
         key: publicationDateTextKey,
-        _dateTimeToTimeAgo(publicationDate),
+        relativeTimeText,
       ),
     );
 

@@ -2,7 +2,7 @@ name: proxima
 description: "A new Flutter project."
 
 publish_to: "none"
-version: 0.2.3
+version: 0.3.1
 
 environment:
   sdk: '>=3.3.1 <4.0.0'
