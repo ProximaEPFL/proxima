@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
 import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
 
 import "../../../mocks/data/post_overview.dart";
@@ -61,6 +62,23 @@ void main() {
       await tester.pumpAndSettle();
 
       const expectedTimeValue = "now";
+
+      final postUserBar = find.byKey(CompletePostWidget.postUserBarKey);
+      expect(postUserBar, findsOneWidget);
+
+      final actualTimeDisplayed = find.descendant(
+        of: postUserBar,
+        matching: find.text(expectedTimeValue),
+      );
+
+      expect(actualTimeDisplayed, findsOneWidget);
+    });
+
+    testWidgets("Check correct timing on custom post", (tester) async {
+      await tester.pumpWidget(customPostOverviewPage(customPost));
+      await tester.pumpAndSettle();
+
+      const expectedTimeValue = "~1y ago";
 
       final postUserBar = find.byKey(CompletePostWidget.postUserBarKey);
       expect(postUserBar, findsOneWidget);
