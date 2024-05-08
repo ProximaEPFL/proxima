@@ -4,11 +4,13 @@ import "package:proxima/models/ui/map_pin.dart";
 
 void main() {
   group("Map pin testing", () {
+    testFunction() {}
+    testFunctionDifferent() {}
     test("hash overrides correctly", () {
       MapPin mapPin = MapPin(
         id: const MarkerId("1"),
         position: const LatLng(0, 0),
-        callbackFunction: () {},
+        callbackFunction: testFunction,
       );
 
       final expectedHash = Object.hash(
@@ -24,57 +26,68 @@ void main() {
 
     test("equality overrides correctly", () {
       //both pin need to have the same method, not just two different methods that have the same logic
-      testFunction() {}
 
       MapPin mapPin = MapPin(
         id: const MarkerId("1"),
         position: const LatLng(0, 0),
-        callbackFunction: testFunction(),
+        callbackFunction: testFunction,
       );
 
       MapPin mapPinCopy = MapPin(
         id: const MarkerId("1"),
         position: const LatLng(0, 0),
-        callbackFunction: testFunction(),
+        callbackFunction: testFunction,
       );
 
       expect(mapPin, mapPinCopy);
     });
 
     test("inequality test on id", () {
-      testFunction() {}
-
       MapPin mapPin = MapPin(
         id: const MarkerId("1"),
         position: const LatLng(0, 0),
-        callbackFunction: testFunction(),
+        callbackFunction: testFunction,
       );
 
-      MapPin mapPinCopy = MapPin(
+      MapPin mapPinDifferent = MapPin(
         id: const MarkerId("2"),
         position: const LatLng(0, 0),
-        callbackFunction: testFunction(),
+        callbackFunction: testFunction,
       );
 
-      expect(mapPin == mapPinCopy, false);
+      expect(mapPin == mapPinDifferent, false);
     });
 
     test("inequality test on position", () {
-      testFunction() {}
-
       MapPin mapPin = MapPin(
         id: const MarkerId("1"),
         position: const LatLng(0, 0),
-        callbackFunction: testFunction(),
+        callbackFunction: testFunction,
       );
 
-      MapPin mapPinCopy = MapPin(
+      MapPin mapPinDifferent = MapPin(
         id: const MarkerId("1"),
         position: const LatLng(1, 1),
-        callbackFunction: testFunction(),
+        callbackFunction: testFunction,
       );
 
-      expect(mapPin == mapPinCopy, false);
+      expect(mapPin == mapPinDifferent, false);
+    });
+
+    test("inequality test on callback function", () {
+      MapPin mapPin = MapPin(
+        id: const MarkerId("1"),
+        position: const LatLng(0, 0),
+        callbackFunction: testFunction,
+      );
+
+      MapPin mapPinDifferent = MapPin(
+        id: const MarkerId("1"),
+        position: const LatLng(0, 0),
+        callbackFunction: testFunctionDifferent,
+      );
+
+      expect(mapPin == mapPinDifferent, false);
     });
   });
 }
