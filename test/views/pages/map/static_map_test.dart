@@ -30,34 +30,35 @@ void main() {
     };
     mapWidget = newMapPageProvider(geoLocationService, geoPoints);
     mapWidgetWithPins = newMapPageWithPins(geoLocationService);
+
+    const latitude = 37.4219983;
+    const longitude = -122.084;
+
+    when(mockGeolocator.isLocationServiceEnabled())
+        .thenAnswer((_) async => true);
+    when(mockGeolocator.checkPermission())
+        .thenAnswer((_) async => LocationPermission.always);
+    when(
+      mockGeolocator.getCurrentPosition(
+        locationSettings: geoLocationService.locationSettings,
+      ),
+    ).thenAnswer(
+      (_) async => getSimplePosition(latitude, longitude),
+    );
+    when(
+      mockGeolocator.getPositionStream(
+        locationSettings: geoLocationService.locationSettings,
+      ),
+    ).thenAnswer(
+      (_) => Stream.fromIterable([
+        getSimplePosition(latitude, longitude),
+        getSimplePosition(latitude + 1, longitude),
+      ]),
+    );
   });
 
   group("Widgets display", () {
     testWidgets("Display map, chips, and divider", (tester) async {
-      const latitude = 37.4219983;
-      const longitude = -122.084;
-
-      when(mockGeolocator.isLocationServiceEnabled())
-          .thenAnswer((_) async => true);
-      when(mockGeolocator.checkPermission())
-          .thenAnswer((_) async => LocationPermission.always);
-      when(
-        mockGeolocator.getCurrentPosition(
-          locationSettings: geoLocationService.locationSettings,
-        ),
-      ).thenAnswer(
-        (_) async => getSimplePosition(latitude, longitude),
-      );
-      when(
-        mockGeolocator.getPositionStream(
-          locationSettings: geoLocationService.locationSettings,
-        ),
-      ).thenAnswer(
-        (_) => Stream.fromIterable([
-          getSimplePosition(latitude, longitude),
-          getSimplePosition(latitude + 1, longitude),
-        ]),
-      );
       await tester.pumpWidget(mapWidget);
       await tester.pumpAndSettle();
 
@@ -87,31 +88,6 @@ void main() {
 
   group("Pins display", () {
     testWidgets("Map receives pins", (tester) async {
-      const latitude = 37.4219983;
-      const longitude = -122.084;
-
-      when(mockGeolocator.isLocationServiceEnabled())
-          .thenAnswer((_) async => true);
-      when(mockGeolocator.checkPermission())
-          .thenAnswer((_) async => LocationPermission.always);
-      when(
-        mockGeolocator.getCurrentPosition(
-          locationSettings: geoLocationService.locationSettings,
-        ),
-      ).thenAnswer(
-        (_) async => getSimplePosition(latitude, longitude),
-      );
-      when(
-        mockGeolocator.getPositionStream(
-          locationSettings: geoLocationService.locationSettings,
-        ),
-      ).thenAnswer(
-        (_) => Stream.fromIterable([
-          getSimplePosition(latitude, longitude),
-          getSimplePosition(latitude + 1, longitude),
-        ]),
-      );
-
       await tester.pumpWidget(mapWidgetWithPins);
       await tester.pumpAndSettle();
 
