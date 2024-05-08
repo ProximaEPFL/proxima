@@ -10,11 +10,8 @@ class ProfileUserPosts extends HookConsumerWidget {
 
   static const noPostsInfoText = "You don't have any post yet.";
 
-  final BoxShadow? shadow;
-
   const ProfileUserPosts({
     super.key,
-    this.shadow,
   });
 
   @override
@@ -29,7 +26,6 @@ class ProfileUserPosts extends HookConsumerWidget {
               (p) => ProfileInfoCard(
                 title: p.title,
                 content: p.description,
-                shadow: shadow,
                 onDelete: () =>
                     ref.read(userPostsProvider.notifier).deletePost(p.postId),
               ),

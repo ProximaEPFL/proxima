@@ -49,6 +49,16 @@ class FirestoreUserGenerator {
       List.generate(count, (i) => UserIdFirestore(value: "user_id_$i")),
     );
   }
+
+  // Create [numberOfUsers] users and add them to the [firestore] db
+  static Future<List<UserFirestore>> addUsers(
+    FirebaseFirestore firestore,
+    int numberOfUsers,
+  ) async {
+    final users = generateUserFirestore(numberOfUsers);
+    await setUsersFirestore(firestore, users);
+    return users;
+  }
 }
 
 /// Helper function to set a user in the firestore db

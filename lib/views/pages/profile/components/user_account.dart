@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/database/user/user_data.dart";
-import "package:proxima/utils/ui/user_avatar.dart";
+import "package:proxima/views/components/user_avatar/user_avatar.dart";
 
 /// This widget display the user info in the profile page
 class UserAccount extends StatelessWidget {

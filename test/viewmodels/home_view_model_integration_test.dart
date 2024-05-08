@@ -5,10 +5,12 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
+import "package:proxima/viewmodels/login_view_model.dart";
 import "package:test/test.dart";
 
 import "../mocks/data/firestore_user.dart";
@@ -46,8 +48,8 @@ void main() {
       container = ProviderContainer(
         overrides: [
           geoLocationServiceProvider.overrideWithValue(geoLocationService),
-          userRepositoryProvider.overrideWithValue(userRepo),
-          postRepositoryProvider.overrideWithValue(postRepo),
+          firestoreProvider.overrideWithValue(fakeFireStore),
+          uidProvider.overrideWithValue(testingUserFirestoreId),
         ],
       );
 
@@ -114,7 +116,7 @@ void main() {
           description: postData.description,
           voteScore: postData.voteScore,
           ownerDisplayName: owner.data.displayName,
-          commentNumber: 0,
+          commentNumber: postData.commentCount,
           publicationDate: postData.publicationTime.toDate(),
           distance: (const GeoFirePoint(userPosition)
                       .distanceBetweenInKm(geopoint: postPosition) *
@@ -210,7 +212,7 @@ void main() {
           description: data.description,
           voteScore: data.voteScore,
           ownerDisplayName: owner.data.displayName,
-          commentNumber: 0,
+          commentNumber: data.commentCount,
           publicationDate: data.publicationTime.toDate(),
           distance: (const GeoFirePoint(userPosition0)
                       .distanceBetweenInKm(geopoint: postPositions[index]) *
