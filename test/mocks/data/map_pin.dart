@@ -3,7 +3,7 @@ import "package:proxima/models/ui/map_pin.dart";
 
 class MapPinGenerator {
   //generate a list of MapPin
-  List<MapPin> generateMapPins(int numberOfPins) {
+  static List<MapPin> generateMapPins(int numberOfPins) {
     List<MapPin> mapPins = List.generate(
       numberOfPins,
       (index) => MapPin(
