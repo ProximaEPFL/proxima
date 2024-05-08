@@ -13,16 +13,38 @@ void main() {
       );
     });
 
-    test("Check correct absolute time 1", () {
+    test("Check correct simple absolute time", () {
       final time1 = DateTime.utc(2002);
-      const expectedHumanText = "Tuesday, January 1, 2002 00:00";
+      const expectedSimpleHumanText = "Tuesday, January 1, 2002 00:00";
 
-      final actualHumanText = humanTimeService.textTimeAbsolute(time1);
-      expect(
-        actualHumanText,
-        expectedHumanText,
+      final actualSimpleHumanText = humanTimeService.textTimeAbsolute(
+        time1,
       );
-      // humanTimeService.
+
+      expect(
+        actualSimpleHumanText,
+        expectedSimpleHumanText,
+      );
+    });
+
+    test("Check correct complex absolute time", () {
+      final time2 = DateTime.utc(
+        2023,
+        11,
+        21,
+        1,
+      );
+
+      const expectedComplexHumanText = "Tuesday, November 21, 2023 01:00";
+
+      final actualComplexHumanText = humanTimeService.textTimeAbsolute(
+        time2,
+      );
+
+      expect(
+        actualComplexHumanText,
+        expectedComplexHumanText,
+      );
     });
   });
 }
