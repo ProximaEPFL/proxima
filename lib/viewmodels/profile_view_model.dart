@@ -12,16 +12,14 @@ class ProfileViewModel extends AutoDisposeAsyncNotifier<ProfileData> {
   Future<ProfileData> build() async {
     final user = ref.watch(userProvider).valueOrNull;
     final userDataBase = ref.watch(userRepositoryProvider);
-    final uid = ref.watch(uidProvider);
+    final uid = ref.watch(validUidProvider);
 
     if (user == null) {
       return Future.error(
-        "${CircularValue.debugErrorTag} User must be logged in before displaying the home page.",
+        "${CircularValue.debugErrorTag} User must be logged in before displaying the profile page.",
       );
     }
-    if (uid == null) {
-      return Future.error("User id was not found.");
-    }
+
     final userData = await userDataBase.getUser(uid);
 
     return ProfileData(loginUser: user, firestoreUser: userData);
