@@ -4,10 +4,9 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:geolocator/geolocator.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
-const minimalDistanceForUpdate = 5;
-
 class GeoLocationService {
   final GeolocatorPlatform _geoLocator;
+  static const minimalDistanceForUpdate = 5;
 
   /// Here we use the LocationAccuracy.best setting to get the most accurate location possible. (~0m on IOS, 0-100m on Android)
   /// We do not use the LocationAccuracy.high setting because the accuracy is lower
