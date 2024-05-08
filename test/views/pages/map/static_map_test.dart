@@ -104,7 +104,7 @@ void main() {
       expect(markers, isNotEmpty);
 
       //check that the markers are displayed on the map have the correct data
-      for (final pin in testPins) {
+      for (final pin in MapPinGenerator().generateMapPins(5)) {
         expect(
           markers,
           contains(

@@ -42,7 +42,7 @@ ProviderScope newMapPageWithPins(
   return ProviderScope(
     overrides: [
       geoLocationServiceProvider.overrideWithValue(geoLocationService),
-      mapPinProvider.overrideWithValue(testPins),
+      mapPinProvider.overrideWithValue(MapPinGenerator().generateMapPins(5)),
     ],
     child: mapPage,
   );
