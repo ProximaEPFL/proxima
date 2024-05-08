@@ -50,11 +50,50 @@ void main() {
     test("Check special case 'now' relative time", () {
       final nowTime = constantTestingTime.add(const Duration(seconds: 1));
 
+      const expectedNowRelativeTime = "now";
+
       final actualNowTimeHumanText = humanTimeService.textTimeSince(
         nowTime,
       );
 
-      expect(actualNowTimeHumanText, "now");
+      expect(
+        actualNowTimeHumanText,
+        expectedNowRelativeTime,
+      );
+    });
+
+    test("Check 10 minutes relative time", () {
+      final relative10Minutes = constantTestingTime.subtract(
+        const Duration(minutes: 10),
+      );
+
+      const expectedRelative10Minutes = "10m ago";
+
+      final actualMinuteTimeHumanText = humanTimeService.textTimeSince(
+        relative10Minutes,
+      );
+
+      expect(
+        actualMinuteTimeHumanText,
+        expectedRelative10Minutes,
+      );
+    });
+
+    test("Check 4 days relative time", () {
+      final relative4Days = constantTestingTime.subtract(
+        const Duration(days: 4),
+      );
+
+      const expectedRelative4Days = "4d ago";
+
+      final actualDaysTimeHumanText = humanTimeService.textTimeSince(
+        relative4Days,
+      );
+
+      expect(
+        actualDaysTimeHumanText,
+        expectedRelative4Days,
+      );
     });
   });
 }
