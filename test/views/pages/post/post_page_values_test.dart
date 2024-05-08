@@ -2,6 +2,10 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/views/home_content/feed/post_card/post_card.dart";
+import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
+import "package:proxima/views/pages/post/post_page.dart";
+import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
 
 import "../../../mocks/data/post_overview.dart";
 import "../../../mocks/providers/provider_post_page.dart";
@@ -26,7 +30,7 @@ void main() {
     emptyPostPageWidget = emptyPostPageProvider;
   });
 
-  group("Distances and Timing values", () {
+  group("Post Distances and Timing values", () {
     testWidgets("Check correct distance on basic post", (tester) async {
       await tester.pumpWidget(emptyPostPageWidget);
       await tester.pumpAndSettle();
@@ -48,6 +52,21 @@ void main() {
       final distanceDisplay = find.text(actualDistanceText);
 
       expect(distanceDisplay, findsOneWidget);
+    });
+
+    testWidgets("Check correct timing on basic post", (tester) async {
+      await tester.pumpWidget(customPostOverviewPage(testPosts.first));
+      await tester.pumpAndSettle();
+
+      const expectedTimeValue = "now";
+
+      final publicationDateText = find.byKey(CompletePostWidget.postUserBarKey);
+      final actualTimeDisplayed = find.descendant(
+        of: publicationDateText,
+        matching: find.text(expectedTimeValue),
+      );
+
+      expect(actualTimeDisplayed, findsOneWidget);
     });
   });
 }
