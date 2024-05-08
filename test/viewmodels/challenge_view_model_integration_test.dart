@@ -57,15 +57,15 @@ void main() {
       final postGenerator = FirestorePostGenerator();
 
       final post = postGenerator.generatePostAt(
-            userPosition1,
-          ); // the challenge is added by hand, so we can use the user position
-          await setPostFirestore(post, fakeFireStore);
+        userPosition1,
+      ); // the challenge is added by hand, so we can use the user position
+      await setPostFirestore(post, fakeFireStore);
 
       final challenge = challengeGenerator.generateChallenge(false, extraTime);
       await setChallenge(fakeFireStore, challenge, testingUserFirestoreId);
 
       final challenges = await container.read(challengeProvider.future);
-          expect(challenges.length, 1);
+      expect(challenges.length, 1);
 
       final uiChallenge = challenges.first;
       expect(uiChallenge.distance, 0);
@@ -75,7 +75,9 @@ void main() {
       );
       expect(uiChallenge.isFinished, false);
       expect(
-          uiChallenge.reward, ChallengeRepositoryService.soloChallengeReward);
+        uiChallenge.reward,
+        ChallengeRepositoryService.soloChallengeReward,
+      );
       expect(uiChallenge.title, post.data.title);
     });
 
@@ -103,7 +105,9 @@ void main() {
       );
       expect(uiChallenge.isFinished, true);
       expect(
-          uiChallenge.reward, ChallengeRepositoryService.soloChallengeReward);
+        uiChallenge.reward,
+        ChallengeRepositoryService.soloChallengeReward,
+      );
       expect(uiChallenge.title, post.data.title);
     });
 
@@ -174,7 +178,9 @@ void main() {
       );
       expect(uiChallenge.isFinished, true);
       expect(
-          uiChallenge.reward, ChallengeRepositoryService.soloChallengeReward);
+        uiChallenge.reward,
+        ChallengeRepositoryService.soloChallengeReward,
+      );
       expect(uiChallenge.title, post.data.title);
 
       // tests that points are added
