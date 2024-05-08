@@ -1,8 +1,10 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/services/human_time_service.dart";
 
+final constantTestingTime = DateTime.utc(2000);
+
 CurrentDateTimeCallback constantTimeCallback() {
-  return () => DateTime.utc(2000);
+  return () => constantTestingTime;
 }
 
 final constantDateTimeCallbackProvider =
