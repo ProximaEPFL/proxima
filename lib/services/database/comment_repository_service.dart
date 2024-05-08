@@ -89,27 +89,30 @@ class CommentRepositoryService {
   Future<void> deleteComment(
     PostIdFirestore parentPostId,
     CommentIdFirestore commentId,
-  ) =>
-      _firestore.runTransaction(
-        (transaction) async {
-          final commentRef =
-              _commentsSubCollection(parentPostId).doc(commentId.value);
+  ) async {
+    final batch = _firestore.batch();
+    final commentsRef = _commentsSubCollection(parentPostId);
 
-          final commentDoc = await transaction.get(commentRef);
+    final commentUpvoteRepository = UpvoteRepositoryService<CommentIdFirestore>(
+      firestore: _firestore,
+      parentCollection: commentsRef,
+      voteScoreField: CommentData.voteScoreField,
+    );
 
-          if (!commentDoc.exists) {
-            throw Exception("Comment does not exist");
-          }
+    await _deleteCommentNoCountUpdate(
+      parentPostId,
+      commentId,
+      batch,
+      commentUpvoteRepository,
+    );
 
-          transaction.delete(commentRef);
+    batch.update(
+      _postDocument(parentPostId),
+      {PostData.commentCountField: FieldValue.increment(-1)},
+    );
 
-          final postDocRef = _postDocument(parentPostId);
-          transaction.update(
-            postDocRef,
-            {PostData.commentCountField: FieldValue.increment(-1)},
-          );
-        },
-      );
+    await batch.commit();
+  }
 
   /// This method will delete all the comments of the post with id [parentPostId].
   /// Helper method to delete a post. Adds all the deletions to the batch [batch].
