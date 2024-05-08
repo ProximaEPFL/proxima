@@ -8,10 +8,21 @@ void main() {
     late HumanTimeService humanTimeService;
 
     setUp(() {
-      humanTimeService =
-          HumanTimeService(currentDateTimeCallback: constantTimeCallback());
+      humanTimeService = HumanTimeService(
+        currentDateTimeCallback: constantTimeCallback(),
+      );
     });
 
-    test("Check correct absolute time 1", () {});
+    test("Check correct absolute time 1", () {
+      final time1 = DateTime.utc(2002);
+      const expectedHumanText = "Tuesday, January 1, 2002 00:00";
+
+      final actualHumanText = humanTimeService.textTimeAbsolute(time1);
+      expect(
+        actualHumanText,
+        expectedHumanText,
+      );
+      // humanTimeService.
+    });
   });
 }
