@@ -1,10 +1,12 @@
 import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/services/human_time_service.dart";
 import "package:proxima/utils/ui/user_avatar.dart";
 
 /// This widget is used to display the info bar in the post card.
 /// It contains the user's profile picture and username
 /// and the publication time of the post.
-class PostHeaderWidget extends StatelessWidget {
+class PostHeaderWidget extends ConsumerWidget {
   static const displayNameTextKey = Key("displayNameText");
   static const publicationDateTextKey = Key("publicationTimeTextKey");
 
@@ -18,7 +20,16 @@ class PostHeaderWidget extends StatelessWidget {
   final DateTime publicationDate;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final humanTimeService = ref.watch(humanTimeServiceProvider);
+
+    final relativeTimeText = humanTimeService.textTimeSince(
+      publicationDate,
+    );
+    final absoluteTimeText = humanTimeService.textTimeAbsolute(
+      publicationDate,
+    );
+
     final posterName = Flexible(
       child: Text(
         posterUsername,
