@@ -11,6 +11,14 @@ class HumanTimeService {
   HumanTimeService({
     required this.currentDateTimeCallback,
   });
+
+  /// Converts a [DateTime] to a human readable time ago string
+  /// Examples of format: "5m ago", "now", 2 days ago
+  String textTimeSince(DateTime dateTime) {}
+
+  /// Converts a [DateTime] to a human readable date time string
+  /// Example of format: Friday, April 19, 2024 18:04
+  String textTime(DateTime dateTime) {}
 }
 
 final currentDateTimeCallbackProvider =
