@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
-import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
 import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
 
 import "../../../mocks/data/post_overview.dart";
@@ -34,8 +33,10 @@ void main() {
       final post = testPosts.first;
       final expectedDistanceText = "${post.distance}m away";
 
+      // Find post distance value with expected human readable distance
       final distanceDisplay = find.text(expectedDistanceText);
 
+      // Check that the distance is displayed with correct value
       expect(distanceDisplay, findsOneWidget);
     });
 
@@ -45,14 +46,18 @@ void main() {
 
       final expectedDistanceText = "${customPost.distance}m away";
 
+      // Find the container for the distance
       final appBar = find.byType(AppBar);
+      // Check that the container is correctly displayed
       expect(appBar, findsOneWidget);
 
+      // Find the child widget of the appBar (containing the distance)
       final actualDistanceDisplayed = find.descendant(
         of: appBar,
         matching: find.text(expectedDistanceText),
       );
 
+      // Check that the distance is correctly displayed and with the right value
       expect(actualDistanceDisplayed, findsOneWidget);
     });
 
@@ -63,14 +68,17 @@ void main() {
 
       const expectedTimeValue = "now";
 
+      // Find the parent of the timing text
       final postUserBar = find.byKey(CompletePostWidget.postUserBarKey);
       expect(postUserBar, findsOneWidget);
 
+      // Find if the parent contains a child with the expected timing text
       final actualTimeDisplayed = find.descendant(
         of: postUserBar,
         matching: find.text(expectedTimeValue),
       );
 
+      // Check the special case 'now' is correctly handled in UI
       expect(actualTimeDisplayed, findsOneWidget);
     });
 
@@ -80,14 +88,17 @@ void main() {
 
       const expectedTimeValue = "~1y ago";
 
+      // Find the parent of the timing text
       final postUserBar = find.byKey(CompletePostWidget.postUserBarKey);
       expect(postUserBar, findsOneWidget);
 
+      // Find if the parent contains a child with the expected timing text
       final actualTimeDisplayed = find.descendant(
         of: postUserBar,
         matching: find.text(expectedTimeValue),
       );
 
+      // Check the timing value is correct
       expect(actualTimeDisplayed, findsOneWidget);
     });
   });
