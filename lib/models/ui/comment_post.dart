@@ -1,4 +1,6 @@
 import "package:flutter/foundation.dart";
+import "package:proxima/models/database/comment/comment_data.dart";
+import "package:proxima/models/database/user/user_data.dart";
 
 @immutable
 class CommentPost {
@@ -28,6 +30,22 @@ class CommentPost {
       content,
       ownerDisplayName,
       publicationDate,
+    );
+  }
+
+  /// Factory method to create a [CommentPost] from a [CommentData]
+  /// and a [UserData] that represents the owner of the comment.
+  /// (The one that wrote the comment)
+  factory CommentPost.from(
+    CommentData commentData,
+    UserData ownerData,
+  ) {
+    return CommentPost(
+      content: commentData.content,
+      ownerDisplayName: ownerData.displayName,
+      publicationDate: DateTime.fromMillisecondsSinceEpoch(
+        commentData.publicationTime.millisecondsSinceEpoch,
+      ),
     );
   }
 }

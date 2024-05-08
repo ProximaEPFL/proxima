@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
-import "package:proxima/viewmodels/post_view_model.dart";
+import "package:proxima/utils/ui/circular_value.dart";
+import "package:proxima/viewmodels/comment_view_model.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/post/post_page_widget/bottom_bar_add_comment.dart";
 import "package:proxima/views/pages/post/post_page_widget/comment_list.dart";
@@ -26,7 +27,7 @@ class PostPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ThemeData themeData = Theme.of(context);
 
-    final comments = ref.watch(commentListProvider);
+    final commentsAsync = ref.watch(commentListProvider(postOverview.postId));
 
     // Top app bar content = Title + Distance
     List<Widget> appBarContent = [
@@ -45,9 +46,12 @@ class PostPage extends HookConsumerWidget {
         post: postOverview,
       ),
       const SizedBox(height: 10),
-      CommentList(
-        key: commentListWidgetKey,
-        comments: comments,
+      CircularValue(
+        value: commentsAsync,
+        builder: (context, comments) => CommentList(
+          key: commentListWidgetKey,
+          comments: comments,
+        ),
       ),
     ];
 
@@ -62,8 +66,13 @@ class PostPage extends HookConsumerWidget {
       body: Padding(
         padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 8),
         child: Center(
-          child: ListView(
-            children: bodyChildren,
+          child: RefreshIndicator(
+            onRefresh: ref
+                .read(commentListProvider(postOverview.postId).notifier)
+                .refresh,
+            child: ListView(
+              children: bodyChildren,
+            ),
           ),
         ),
       ),
