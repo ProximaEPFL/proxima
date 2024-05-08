@@ -81,8 +81,9 @@ class PostPage extends HookConsumerWidget {
           padding:
               // This is necessary to prevent the keyboard from covering the bottom bar
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: const BottomBarAddComment(
+          child: BottomBarAddComment(
             key: bottomBarAddCommentKey,
+            parentPostId: postOverview.postId,
           ),
         ),
       ],
