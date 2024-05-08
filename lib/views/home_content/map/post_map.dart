@@ -39,16 +39,26 @@ class PostMap extends ConsumerWidget {
       loading: () => (),
     );
 
-    // //list of Marker displayed on the map
-    Set<Marker> markers = mapPins
-        .map(
-          (pin) => Marker(
-            markerId: pin.id,
-            position: pin.position,
-            onTap: pin.callbackFunction,
-          ),
-        )
-        .toSet();
+    //list of Marker displayed on the map
+    Set<Marker> markers = {};
+
+    mapPins.when(
+      data: (data) {
+        markers = data
+            .map(
+              (pin) => Marker(
+                markerId: pin.id,
+                position: pin.position,
+                onTap: pin.callbackFunction,
+              ),
+            )
+            .toSet();
+      },
+      error: (error, _) {
+        throw Exception("Map pins error: $error");
+      },
+      loading: () => (),
+    );
 
     return Expanded(
       child: GoogleMap(
