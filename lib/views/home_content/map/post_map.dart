@@ -46,7 +46,7 @@ class PostMap extends ConsumerWidget {
     for (final pin in mapPins) {
       markers.add(
         Marker(
-          markerId: MarkerId(pin.id),
+          markerId: pin.id,
           position: pin.position,
           onTap: pin.callbackFunction,
         ),

@@ -12,7 +12,7 @@ class MapPin {
     required this.callbackFunction,
   });
 
-  final String id;
+  final MarkerId id;
   final LatLng position;
   final void Function()? callbackFunction;
 

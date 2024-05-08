@@ -6,7 +6,7 @@ void main() {
   group("Map pin testing", () {
     test("hash overrides correctly", () {
       MapPin mapPin = MapPin(
-        id: "1",
+        id: const MarkerId("1"),
         position: const LatLng(0, 0),
         callbackFunction: () {},
       );
@@ -27,13 +27,13 @@ void main() {
       testFunction() {}
 
       MapPin mapPin = MapPin(
-        id: "1",
+        id: const MarkerId("1"),
         position: const LatLng(0, 0),
         callbackFunction: testFunction(),
       );
 
       MapPin mapPinCopy = MapPin(
-        id: "1",
+        id: const MarkerId("1"),
         position: const LatLng(0, 0),
         callbackFunction: testFunction(),
       );
@@ -45,13 +45,13 @@ void main() {
       testFunction() {}
 
       MapPin mapPin = MapPin(
-        id: "1",
+        id: const MarkerId("1"),
         position: const LatLng(0, 0),
         callbackFunction: testFunction(),
       );
 
       MapPin mapPinCopy = MapPin(
-        id: "2",
+        id: const MarkerId("2"),
         position: const LatLng(0, 0),
         callbackFunction: testFunction(),
       );
@@ -63,13 +63,13 @@ void main() {
       testFunction() {}
 
       MapPin mapPin = MapPin(
-        id: "1",
+        id: const MarkerId("1"),
         position: const LatLng(0, 0),
         callbackFunction: testFunction(),
       );
 
       MapPin mapPinCopy = MapPin(
-        id: "1",
+        id: const MarkerId("1"),
         position: const LatLng(1, 1),
         callbackFunction: testFunction(),
       );

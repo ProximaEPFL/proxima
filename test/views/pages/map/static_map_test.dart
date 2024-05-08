@@ -136,7 +136,7 @@ void main() {
                 .having(
                   (marker) => marker.markerId,
                   "markerId",
-                  MarkerId(pin.id),
+                  pin.id,
                 )
                 .having((marker) => marker.position, "position", pin.position),
           ),
