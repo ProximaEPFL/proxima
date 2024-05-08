@@ -6,7 +6,11 @@ typedef CurrentDateTimeCallback = DateTime Function();
 /// Human Time Service is a service that uses dependency injection
 /// to provide related time as a human readable text given a [DateTime]
 class HumanTimeService {
-  HumanTimeService();
+  final CurrentDateTimeCallback currentDateTimeCallback;
+
+  HumanTimeService({
+    required this.currentDateTimeCallback,
+  });
 }
 
 final currentDateTimeCallbackProvider =
@@ -15,5 +19,9 @@ final currentDateTimeCallbackProvider =
 });
 
 final humanTimeServiceProvider = Provider<HumanTimeService>((ref) {
-  return HumanTimeService();
+  final currentDateTimeCallback = ref.watch(currentDateTimeCallbackProvider);
+
+  return HumanTimeService(
+    currentDateTimeCallback: currentDateTimeCallback,
+  );
 });
