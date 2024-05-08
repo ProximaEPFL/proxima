@@ -14,7 +14,7 @@ class MapPin {
 
   final MarkerId id;
   final LatLng position;
-  final void Function()? callbackFunction;
+  final void Function() callbackFunction;
 
   @override
   bool operator ==(Object other) {
