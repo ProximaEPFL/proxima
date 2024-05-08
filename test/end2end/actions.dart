@@ -1,7 +1,6 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:firebase_core/firebase_core.dart";
-import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
@@ -18,7 +17,6 @@ import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
-import "package:proxima/views/pages/profile/components/logout_button.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
@@ -252,24 +250,4 @@ Future<void> deletePost(WidgetTester tester) async {
   // Can't find post anymore
   expect(find.text(postTitle), findsNothing);
   expect(find.text(postDescription), findsNothing);
-}
-
-Future<void> toProfilePage(WidgetTester tester) async {
-  // Go to profile page
-  final profilePicture = find.byKey(AppTopBar.profilePictureKey);
-  expect(profilePicture, findsOneWidget);
-  await tester.tap(profilePicture);
-  await tester.pumpAndSettle();
-}
-
-Future<void> logout(WidgetTester tester) async {
-  final logoutButton = find.byKey(LogoutButton.logoutButtonKey);
-  expect(logoutButton, findsOneWidget);
-  await tester.tap(logoutButton);
-  await tester.pumpAndSettle();
-}
-
-Future<void> expectNoErrorPopup(WidgetTester tester) async {
-  final errorPopup = find.bySubtype<AlertDialog>();
-  expect(errorPopup, findsNothing);
 }
