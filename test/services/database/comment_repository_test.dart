@@ -2,17 +2,21 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/comment/comment_firestore.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/models/database/vote/upvote_state.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
+import "package:proxima/services/database/upvote_repository_service.dart";
 
 import "../../mocks/data/comment_data.dart";
 import "../../mocks/data/firestore_comment.dart";
 import "../../mocks/data/firestore_post.dart";
+import "../../mocks/data/firestore_user.dart";
 import "../../mocks/data/geopoint.dart";
 
 void main() {
@@ -25,6 +29,8 @@ void main() {
     late DocumentReference<Map<String, dynamic>> postDocument;
     late CommentFirestoreGenerator commentGenerator;
     late CommentDataGenerator commentDataGenerator;
+
+    late UpvoteRepositoryService<CommentIdFirestore> commentUpvoteRepository;
 
     /// The setup add a single post with no comments
     setUp(() async {
@@ -57,6 +63,12 @@ void main() {
 
       commentGenerator = CommentFirestoreGenerator();
       commentDataGenerator = CommentDataGenerator();
+
+      commentUpvoteRepository = UpvoteRepositoryService(
+        firestore: fakeFirestore,
+        parentCollection: commentsSubCollection,
+        voteScoreField: CommentData.voteScoreField,
+      );
     });
 
     group("getting comments", () {
@@ -180,11 +192,25 @@ void main() {
 
         final commentId = comment.first.id;
 
+        // Add an upvote to the comment to later check that it is deleted
+        commentUpvoteRepository.setUpvoteState(
+          testingUserFirestoreId,
+          commentId,
+          UpvoteState.upvoted,
+        );
+
         await commentRepository.deleteComment(postId, commentId);
 
         // Check that the comment was deleted
         final actualComments = await commentRepository.getComments(postId);
         expect(actualComments, isEmpty);
+
+        // Check that the upvote was deleted
+        final upvote = await commentUpvoteRepository.getUpvoteState(
+          testingUserFirestoreId,
+          commentId,
+        );
+        expect(upvote, UpvoteState.none);
 
         // Check that the comment count was updated correctly
         final postDoc = await postDocument.get();
