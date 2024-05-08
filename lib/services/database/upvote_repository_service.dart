@@ -1,5 +1,11 @@
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:proxima/models/database/comment/comment_data.dart";
+import "package:proxima/models/database/comment/comment_firestore.dart";
+import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/firestore/id_firestore.dart";
+import "package:proxima/models/database/post/post_data.dart";
+import "package:proxima/models/database/post/post_firestore.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/database/vote/upvote_state.dart";
 import "package:proxima/models/database/vote/vote_firestore.dart";
@@ -11,13 +17,43 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
   final CollectionReference<Map<String, dynamic>> _parentCollection;
   final String _voteScoreField;
 
-  UpvoteRepositoryService({
+  UpvoteRepositoryService._({
     required FirebaseFirestore firestore,
     required CollectionReference<Map<String, dynamic>> parentCollection,
     required voteScoreField,
   })  : _firestore = firestore,
         _parentCollection = parentCollection,
         _voteScoreField = voteScoreField;
+
+  /// Returns an instance of [UpvoteRepositoryService] for up-voting posts that
+  /// are stored in the [firestore] database.
+  static UpvoteRepositoryService<PostIdFirestore> postUpvoteRepository(
+    FirebaseFirestore firestore,
+  ) {
+    return UpvoteRepositoryService._(
+      firestore: firestore,
+      parentCollection: firestore.collection(PostFirestore.collectionName),
+      voteScoreField: PostData.voteScoreField,
+    );
+  }
+
+  /// Returns an instance of [UpvoteRepositoryService] for up-voting comments
+  /// relating to the post with id [postId]. Everything is stored in the
+  /// [firestore] database.
+  static UpvoteRepositoryService<CommentIdFirestore> commentUpvoteRepository(
+    FirebaseFirestore firestore,
+    PostIdFirestore postId,
+  ) {
+    final parentCollection = firestore
+        .collection(PostFirestore.collectionName)
+        .doc(postId.value)
+        .collection(CommentFirestore.subCollectionName);
+    return UpvoteRepositoryService._(
+      firestore: firestore,
+      parentCollection: parentCollection,
+      voteScoreField: CommentData.voteScoreField,
+    );
+  }
 
   /// Returns the document reference of the parent with id [parentId]
   DocumentReference<Map<String, dynamic>> _parentDocument(
