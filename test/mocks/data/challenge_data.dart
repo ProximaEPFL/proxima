@@ -9,7 +9,7 @@ class ChallengeGenerator {
   /// and the generated challenge may be completed or not, depending on [isCompleted].
   static ChallengeData generate([
     bool isCompleted = false,
-    Duration expirationDelay = Duration.zero,
+    Duration expirationDelay = const Duration(days: 1),
   ]) {
     final expiration = DateTime.now().add(expirationDelay);
     return ChallengeData(

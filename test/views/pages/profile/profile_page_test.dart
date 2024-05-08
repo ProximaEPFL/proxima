@@ -1,9 +1,11 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
+import "package:flutter/widgets.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/views/components/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 import "package:proxima/views/pages/profile/components/profile_badge.dart";
@@ -58,6 +60,17 @@ void main() {
       //Check that the user account is displayed
       final userAccount = find.byKey(UserAccount.userInfoKey);
       expect(userAccount, findsOneWidget);
+
+      //Check user initial is displayed in the user account bar
+      final userInitial = find.descendant(
+        of: userAccount,
+        matching: find.byKey(UserAvatar.initialDisplayNameKey),
+      );
+      expect(userInitial, findsOneWidget);
+
+      //Check that the first initial of the test user is displayed
+      final Text textWidget = tester.widget(userInitial) as Text;
+      expect(textWidget.data, equals(testingUserFirestore.data.displayName[0]));
 
       //Check that centauri points are displayed
       final centauriPoints = find.byKey(UserAccount.centauriPointsKey);

@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/utils/ui/user_avatar.dart";
+import "package:proxima/views/components/user_avatar/dynamic_user_avatar.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 /// This widget is the top bar of the home page
@@ -20,11 +20,10 @@ class AppTopBar extends HookConsumerWidget {
       style: Theme.of(context).textTheme.headlineMedium,
     );
 
-    //TODO: add user display name to UserAvatar
-    final userAvatar = UserAvatar(
+    final userAvatar = DynamicUserAvatar(
       key: profilePictureKey,
+      uid: null,
       radius: 20,
-      displayName: "Proxima",
       onTap: () => {
         Navigator.pushNamed(context, Routes.profile.name),
       },

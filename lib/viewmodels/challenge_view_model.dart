@@ -71,20 +71,19 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
     state = await AsyncValue.guard(() => build());
   }
 
-  /// Complete a challenge associated with post of id [pid]. Returns true if the
-  /// challenge was indeed completed and points were awarded.
-  /// Returns false if the challenge could not be
-  /// completed. This could be because the post given was not a challenge, was
-  /// expired, or was already completed.
+  /// Complete a challenge associated with post of id [pid]. Returns the number
+  /// of points that was awarded if the challenge was indeed completed. Returns
+  /// null if the challenge could not be completed. This could be because the
+  /// post given was not a challenge, was expired, or was already completed.
   /// The future completes as soon as the boolean is known, the viewmodel might
   /// take longer to update (it is not awaited on).
-  Future<bool> completeChallenge(PostIdFirestore pid) async {
+  Future<int?> completeChallenge(PostIdFirestore pid) async {
     final currentUser = ref.read(validUidProvider);
     final challengeRepository = ref.read(challengeRepositoryServiceProvider);
 
-    final challengeCompleted =
+    final pointsAwarded =
         await challengeRepository.completeChallenge(currentUser, pid);
-    if (challengeCompleted) {
+    if (pointsAwarded != null) {
       // we only need to refresh the view model if something actually changed
       // we do not need to wait for this refresh, as most likely we will not
       // actually call this method from inside the challenge UI
@@ -92,7 +91,7 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
       // can change if we have a problem
       refresh();
     }
-    return challengeCompleted;
+    return pointsAwarded;
   }
 }
 

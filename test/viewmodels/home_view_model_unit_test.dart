@@ -3,16 +3,23 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_data.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/services/sorting/post_sorting_service.dart";
+import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
+import "package:proxima/viewmodels/login_view_model.dart";
 
+import "../mocks/data/firestore_challenge.dart";
 import "../mocks/data/firestore_post.dart";
 import "../mocks/data/firestore_user.dart";
 import "../mocks/data/geopoint.dart";
 import "../mocks/data/post_data.dart";
+import "../mocks/services/mock_challenge_repository_service.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 import "../mocks/services/mock_post_repository_service.dart";
 import "../mocks/services/mock_user_repository_service.dart";
@@ -22,6 +29,7 @@ void main() {
     late MockGeoLocationService geoLocationService;
     late PostRepositoryService postRepository;
     late UserRepositoryService userRepository;
+    late ChallengeRepositoryService challengeRepository;
 
     late ProviderContainer container;
 
@@ -29,6 +37,7 @@ void main() {
       geoLocationService = MockGeoLocationService();
       postRepository = MockPostRepositoryService();
       userRepository = MockUserRepositoryService();
+      challengeRepository = MockChallengeRepositoryService();
 
       container = ProviderContainer(
         overrides: [
@@ -41,7 +50,20 @@ void main() {
           userRepositoryProvider.overrideWithValue(
             userRepository,
           ),
+          challengeRepositoryServiceProvider.overrideWithValue(
+            challengeRepository,
+          ),
+          uidProvider.overrideWithValue(testingUserFirestoreId),
         ],
+      );
+
+      when(
+        challengeRepository.getChallenges(
+          testingUserFirestoreId,
+          userPosition0,
+        ),
+      ).thenAnswer(
+        (_) async => [],
       );
     });
 
@@ -93,7 +115,7 @@ void main() {
           title: post.data.title,
           description: post.data.description,
           voteScore: post.data.voteScore,
-          commentNumber: 0,
+          commentNumber: post.data.commentCount,
           ownerDisplayName: owner.data.displayName,
           publicationDate: post.data.publicationTime.toDate(),
           distance: 0,
@@ -148,7 +170,7 @@ void main() {
             title: post.data.title,
             description: post.data.description,
             voteScore: post.data.voteScore,
-            commentNumber: 0,
+            commentNumber: post.data.commentCount,
             ownerDisplayName: owner.data.displayName,
             publicationDate: post.data.publicationTime.toDate(),
             distance: 0,
@@ -211,7 +233,7 @@ void main() {
             title: post.data.title,
             description: post.data.description,
             voteScore: post.data.voteScore,
-            commentNumber: 0,
+            commentNumber: post.data.commentCount,
             ownerDisplayName: owners[index].data.displayName,
             publicationDate: post.data.publicationTime.toDate(),
             distance: 0,
@@ -287,7 +309,7 @@ void main() {
           title: post.data.title,
           description: post.data.description,
           voteScore: post.data.voteScore,
-          commentNumber: 0,
+          commentNumber: post.data.commentCount,
           ownerDisplayName: owner.data.displayName,
           publicationDate: post.data.publicationTime.toDate(),
           distance: 0,
@@ -343,6 +365,99 @@ void main() {
           "Exception: $expectedErrorMessage",
         ),
       );
+    });
+
+    test("Puts challenges on top of the list", () async {
+      final generator = FirestorePostGenerator();
+      final posts = generator.generatePostsAt(
+        userPosition0,
+        10,
+      );
+      final validChallenges = [
+        posts[2],
+        posts[5],
+      ].map((post) => FirestoreChallengeGenerator.generateFromPostId(post.id));
+
+      final challenges = [
+        ...validChallenges,
+        FirestoreChallengeGenerator.generateFromPostId(
+          const PostIdFirestore(value: "inexistent_id"),
+        ),
+      ];
+
+      when(geoLocationService.getCurrentPosition()).thenAnswer(
+        (_) async => userPosition0,
+      );
+      when(
+        postRepository.getNearPosts(
+          userPosition0,
+          HomeViewModel.kmPostRadius,
+        ),
+      ).thenAnswer(
+        (_) async => posts,
+      );
+      for (final post in posts) {
+        when(userRepository.getUser(post.data.ownerId)).thenAnswer(
+          (_) async => FirestoreUserGenerator.generateUserFirestoreWithId(
+            [post.data.ownerId],
+          ).first,
+        );
+      }
+
+      final sortOption = container.read(feedSortOptionsProvider);
+
+      // No challenge
+      final actualPostsNoChallenge = await container.read(
+        postOverviewProvider.future,
+      );
+      final sortedPostsNoChallenge = PostSortingService().sort(
+        posts,
+        sortOption,
+        userPosition0,
+      );
+
+      // Check the list is in correct order
+      expect(
+        actualPostsNoChallenge.map((p) => p.postId.value),
+        equals(sortedPostsNoChallenge.map((p) => p.id.value)),
+      );
+      // Check no post is a challenge
+      expect(actualPostsNoChallenge.any((p) => p.isChallenge), isFalse);
+
+      // Challenges
+      when(
+        challengeRepository.getChallenges(
+          testingUserFirestoreId,
+          userPosition0,
+        ),
+      ).thenAnswer(
+        (_) async => challenges,
+      );
+      await container.read(postOverviewProvider.notifier).refresh();
+
+      final actualPosts = await container.read(
+        postOverviewProvider.future,
+      );
+
+      final sortedPosts = PostSortingService().sort(
+        posts,
+        sortOption,
+        userPosition0,
+        putOnTop: challenges.map((c) => c.postId).toSet(),
+      );
+
+      // Check list is in correct order
+      expect(
+        actualPosts.map((p) => p.postId.value),
+        equals(sortedPosts.map((p) => p.id.value)),
+      );
+
+      // Check the first validChallenges.length are challenges, and that
+      // the rest are not (i.e. the challenges are on top)
+      final actualPostsTop = actualPosts.take(validChallenges.length);
+      final actualPostsBottom = actualPosts.skip(validChallenges.length);
+      expect(actualPostsTop.any((p) => !p.isChallenge), isFalse);
+      expect(actualPostsBottom.any((p) => p.isChallenge), isFalse);
     });
   });
 }
