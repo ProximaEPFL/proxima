@@ -2,7 +2,6 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/comment/comment_firestore.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/post/post_data.dart";
@@ -64,10 +63,9 @@ void main() {
       commentGenerator = CommentFirestoreGenerator();
       commentDataGenerator = CommentDataGenerator();
 
-      commentUpvoteRepository = UpvoteRepositoryService(
-        firestore: fakeFirestore,
-        parentCollection: commentsSubCollection,
-        voteScoreField: CommentData.voteScoreField,
+      commentUpvoteRepository = UpvoteRepositoryService.commentUpvoteRepository(
+        fakeFirestore,
+        postId,
       );
     });
 

@@ -22,11 +22,8 @@ class PostRepositoryService {
   })  : _firestore = firestore,
         _collectionRef = firestore.collection(PostFirestore.collectionName),
         _commentRepository = CommentRepositoryService(firestore: firestore),
-        _upvoteRepository = UpvoteRepositoryService<PostIdFirestore>(
-          firestore: firestore,
-          parentCollection: firestore.collection(PostFirestore.collectionName),
-          voteScoreField: PostData.voteScoreField,
-        );
+        _upvoteRepository =
+            UpvoteRepositoryService.postUpvoteRepository(firestore);
 
   /// This method creates a new post that has for data [postData]
   /// and that is located at [position] and adds it to the database
