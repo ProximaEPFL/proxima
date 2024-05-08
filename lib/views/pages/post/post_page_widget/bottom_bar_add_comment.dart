@@ -8,13 +8,11 @@ import "package:proxima/views/pages/post/components/comment/new_comment_textfiel
 import "package:proxima/views/pages/post/components/comment/new_comment_user_avatar.dart";
 
 class BottomBarAddComment extends HookConsumerWidget {
-  final String currentDisplayName;
   final PostIdFirestore parentPostId;
 
   const BottomBarAddComment({
     super.key,
     required this.parentPostId,
-    required this.currentDisplayName,
   });
 
   @override
@@ -33,8 +31,7 @@ class BottomBarAddComment extends HookConsumerWidget {
       value: asyncNewCommentState,
       builder: (context, newCommentState) {
         // The avatar of the current user on the left
-        final userAvatar =
-            NewCommentUserAvatar(currentDisplayName: currentDisplayName);
+        const userAvatar = NewCommentUserAvatar();
 
         // The field in which the user can write a comment
         final commentTextField = NewCommentTextField(
