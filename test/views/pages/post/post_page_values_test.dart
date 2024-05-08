@@ -1,10 +1,7 @@
+import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_overview.dart";
-import "package:proxima/views/home_content/feed/post_card/post_card.dart";
-import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
-import "package:proxima/views/pages/post/post_page.dart";
 import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
 
 import "../../../mocks/data/post_overview.dart";
@@ -12,7 +9,7 @@ import "../../../mocks/providers/provider_post_page.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
 
 void main() {
-  late ProviderScope emptyPostPageWidget;
+  // Custom post for testing specific date and distances
   final customPost = PostOverview(
     postId: const PostIdFirestore(value: "post_1"),
     title: "title",
@@ -26,19 +23,17 @@ void main() {
 
   setUp(() async {
     setupFirebaseAuthMocks();
-
-    emptyPostPageWidget = emptyPostPageProvider;
   });
 
   group("Post Distances and Timing values", () {
     testWidgets("Check correct distance on basic post", (tester) async {
-      await tester.pumpWidget(emptyPostPageWidget);
+      await tester.pumpWidget(emptyPostPageProvider);
       await tester.pumpAndSettle();
 
       final post = testPosts.first;
-      final actualDistanceText = "${post.distance}m away";
+      final expectedDistanceText = "${post.distance}m away";
 
-      final distanceDisplay = find.text(actualDistanceText);
+      final distanceDisplay = find.text(expectedDistanceText);
 
       expect(distanceDisplay, findsOneWidget);
     });
@@ -47,22 +42,31 @@ void main() {
       await tester.pumpWidget(customPostOverviewPage(customPost));
       await tester.pumpAndSettle();
 
-      final actualDistanceText = "${customPost.distance}m away";
+      final expectedDistanceText = "${customPost.distance}m away";
 
-      final distanceDisplay = find.text(actualDistanceText);
+      final appBar = find.byType(AppBar);
+      expect(appBar, findsOneWidget);
 
-      expect(distanceDisplay, findsOneWidget);
+      final actualDistanceDisplayed = find.descendant(
+        of: appBar,
+        matching: find.text(expectedDistanceText),
+      );
+
+      expect(actualDistanceDisplayed, findsOneWidget);
     });
 
-    testWidgets("Check correct timing on basic post", (tester) async {
+    testWidgets("Check correct timing on basic post, special 'now' case",
+        (tester) async {
       await tester.pumpWidget(customPostOverviewPage(testPosts.first));
       await tester.pumpAndSettle();
 
       const expectedTimeValue = "now";
 
-      final publicationDateText = find.byKey(CompletePostWidget.postUserBarKey);
+      final postUserBar = find.byKey(CompletePostWidget.postUserBarKey);
+      expect(postUserBar, findsOneWidget);
+
       final actualTimeDisplayed = find.descendant(
-        of: publicationDateText,
+        of: postUserBar,
         matching: find.text(expectedTimeValue),
       );
 
