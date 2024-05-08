@@ -41,7 +41,9 @@ class PostRepositoryService {
     return PostIdFirestore(value: reference.id);
   }
 
-  /// This method deletes the post with id [postId] from the database
+  /// This method deletes the post with id [postId] from the database.
+  /// This means removing the corresponding document, and all the
+  /// subcollections.
   Future<void> deletePost(PostIdFirestore postId) async {
     final batch = _firestore.batch();
 
