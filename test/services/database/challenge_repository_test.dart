@@ -243,12 +243,16 @@ void main() {
       await setUserFirestore(firestore, testingUserFirestore);
       final challenge = challenges.first;
       expect(challenge.data.isCompleted, false);
-      bool isComplete = await challengeRepository.completeChallenge(
+      int? pointsAwarded = await challengeRepository.completeChallenge(
         uid,
         challenge.postId,
       );
 
-      expect(isComplete, true);
+      expect(pointsAwarded, isNotNull);
+      expect(
+        pointsAwarded,
+        equals(ChallengeRepositoryService.soloChallengeReward),
+      );
 
       final updatedChallenges =
           await challengeRepository.getChallenges(uid, userPos);
@@ -266,10 +270,10 @@ void main() {
       final generator = FirestorePostGenerator();
       final post = generator.generatePostAt(inChallengeRange);
 
-      final isCompleted =
+      final pointsAwarded =
           await challengeRepository.completeChallenge(uid, post.id);
 
-      expect(isCompleted, false);
+      expect(pointsAwarded, isNull);
     });
 
     test("Can't complete a challenge that is already completed", () async {
@@ -285,10 +289,10 @@ void main() {
       await setPostFirestore(post, firestore);
       await setChallenge(firestore, challenge, uid);
 
-      final isCompleted =
+      final pointsAwarded =
           await challengeRepository.completeChallenge(uid, post.id);
 
-      expect(isCompleted, false);
+      expect(pointsAwarded, isNull);
 
       final updatedUser = await userRepository.getUser(uid);
       expect(
@@ -310,10 +314,10 @@ void main() {
       await setPostFirestore(post, firestore);
       await setChallenge(firestore, challenge, uid);
 
-      final isCompleted =
+      final pointsAwarded =
           await challengeRepository.completeChallenge(uid, post.id);
 
-      expect(isCompleted, false);
+      expect(pointsAwarded, isNull);
 
       final updatedUser = await userRepository.getUser(uid);
       expect(

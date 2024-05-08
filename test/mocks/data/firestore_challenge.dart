@@ -24,6 +24,23 @@ class FirestoreChallengeGenerator {
     // time, yielding different challenges.
     return List.generate(count, (_) => generateChallenge(done, extra));
   }
+
+  /// Generates a challenge linked to some [postId]. Its data is defined by
+  /// [ChallengeGenerator.generate]. See this function for documentation of
+  /// the other parameters.
+  static ChallengeFirestore generateFromPostId(
+    PostIdFirestore postId, [
+    bool isCompleted = false,
+    Duration expirationDelay = const Duration(days: 1),
+  ]) {
+    return ChallengeFirestore(
+      postId: postId,
+      data: ChallengeGenerator.generate(
+        isCompleted,
+        expirationDelay,
+      ),
+    );
+  }
 }
 
 Future<void> setChallenge(

@@ -48,10 +48,11 @@ class ChallengeRepositoryService {
   }
 
   /// Completes the challenge of the user with id [uid] on the post with id [pid].
-  /// Returns true if the challenge is valid and was completed, and false otherwise.
-  /// The challenge could be invalid if the post does not correspond to a current
-  /// challenge, if the challenge was already completed or if the challenge expired.
-  Future<bool> completeChallenge(
+  /// Returns the number of points that was added to the user if the challenge is
+  /// valid and was completed, and null otherwise. The challenge could be invalid
+  /// if the post does not correspond to a current challenge, if the challenge was
+  /// already completed or if the challenge expired.
+  Future<int?> completeChallenge(
     UserIdFirestore uid,
     PostIdFirestore pid,
   ) async {
@@ -61,19 +62,19 @@ class ChallengeRepositoryService {
         await _activeChallengesRef(userDocRef).doc(pid.value).get();
 
     if (!challengeSnap.exists) {
-      return false;
+      return null;
     }
 
     final challengeData = ChallengeData.fromDb(challengeSnap.data()!);
     if (challengeData.isCompleted || challengeData.isExpired) {
-      return false;
+      return null;
     }
 
     await _activeChallengesRef(userDocRef).doc(pid.value).update({
       ChallengeData.isCompletedField: true,
     });
     await _userRepositoryService.addPoints(uid, soloChallengeReward);
-    return true;
+    return soloChallengeReward;
   }
 
   /// Returns the active challenges of the user with id [uid] who is located at [pos].
