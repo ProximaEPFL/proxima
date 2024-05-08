@@ -8,6 +8,7 @@ import "package:proxima/views/pages/post/post_page.dart";
 
 import "../data/post_overview.dart";
 import "../overrides/override_comment_view_model.dart";
+import "../overrides/override_dynamic_user_avatar_view_model.dart";
 import "../overrides/override_firestore.dart";
 import "../services/mock_comment_repository_service.dart";
 
@@ -20,12 +21,18 @@ final postPage = MaterialApp(
 );
 
 final emptyPostPageProvider = ProviderScope(
-  overrides: mockEmptyCommentViewModelOverride,
+  overrides: [
+    ...mockDynamicUserAvatarViewModelTestLoginUserOverride,
+    ...mockEmptyCommentViewModelOverride,
+  ],
   child: postPage,
 );
 
 final nonEmptyPostPageProvider = ProviderScope(
-  overrides: mockNonEmptyCommentViewModelOverride,
+  overrides: [
+    ...mockDynamicUserAvatarViewModelTestLoginUserOverride,
+    ...mockNonEmptyCommentViewModelOverride,
+  ],
   child: postPage,
 );
 
@@ -37,6 +44,7 @@ ProviderScope postPageProvider(
     overrides: [
       ...firebaseMocksOverrides,
       ...mockEmptyCommentViewModelOverride,
+      ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
       commentRepositoryProvider.overrideWithValue(commentRepository),
       uidProvider.overrideWithValue(userId),
     ],
