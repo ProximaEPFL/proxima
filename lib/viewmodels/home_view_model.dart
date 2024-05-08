@@ -93,8 +93,7 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
         description: post.data.description,
         voteScore: post.data.voteScore,
         ownerDisplayName: owner.data.displayName,
-        commentNumber: 0,
-        // TODO: Update appropriately when comments are implemented
+        commentNumber: post.data.commentCount,
         publicationDate: post.data.publicationTime.toDate(),
         distance: distance,
         isChallenge: uncompletedChallengesId.contains(post.id),
