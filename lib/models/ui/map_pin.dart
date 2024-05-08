@@ -18,8 +18,6 @@ class MapPin {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
     return other is MapPin &&
         other.id == id &&
         other.position == position &&
