@@ -39,19 +39,16 @@ class PostMap extends ConsumerWidget {
       loading: () => (),
     );
 
-    //list of Marker displayed on the map
-    Set<Marker> markers = {};
-
-    //translates the list of map pins into markers
-    for (final pin in mapPins) {
-      markers.add(
-        Marker(
-          markerId: pin.id,
-          position: pin.position,
-          onTap: pin.callbackFunction,
-        ),
-      );
-    }
+    // //list of Marker displayed on the map
+    Set<Marker> markers = mapPins
+        .map(
+          (pin) => Marker(
+            markerId: pin.id,
+            position: pin.position,
+            onTap: pin.callbackFunction,
+          ),
+        )
+        .toSet();
 
     return Expanded(
       child: GoogleMap(
