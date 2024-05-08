@@ -11,6 +11,7 @@ import "../data/post_overview.dart";
 import "../overrides/override_comment_view_model.dart";
 import "../overrides/override_firestore.dart";
 import "../services/mock_comment_repository_service.dart";
+import "provider_human_time_service.dart";
 
 // Create a post page with the first post from the testPosts list
 final postPage = MaterialApp(
@@ -54,7 +55,10 @@ ProviderScope customPostOverviewPage(PostOverview post) {
   );
 
   final app = ProviderScope(
-    overrides: mockEmptyCommentViewModelOverride,
+    overrides: [
+      ...mockEmptyCommentViewModelOverride,
+      constantHumanTimeServiceProvider,
+    ],
     child: customPostApp,
   );
 
