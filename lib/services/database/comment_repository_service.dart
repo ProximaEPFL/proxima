@@ -126,14 +126,30 @@ class CommentRepositoryService {
     );
 
     for (final comment in comments.docs) {
-      await commentUpvoteRepository.deleteAllUpvotes(
+      await _deleteCommentNoCountUpdate(
+        parentPostId,
         CommentIdFirestore(value: comment.id),
         batch,
+        commentUpvoteRepository,
       );
-      batch.delete(comment.reference);
     }
 
     batch.update(_postDocument(parentPostId), {PostData.commentCountField: 0});
+  }
+
+  Future<void> _deleteCommentNoCountUpdate(
+    PostIdFirestore parentPostId,
+    CommentIdFirestore commentId,
+    WriteBatch batch,
+    UpvoteRepositoryService<CommentIdFirestore> commentUpvoteRepository,
+  ) async {
+    final commentRef =
+        _commentsSubCollection(parentPostId).doc(commentId.value);
+    await commentUpvoteRepository.deleteAllUpvotes(
+      commentId,
+      batch,
+    );
+    batch.delete(commentRef);
   }
 }
 
