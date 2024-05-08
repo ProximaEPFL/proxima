@@ -54,7 +54,7 @@ void main() {
       expect(actualPost.exists, false);
     });
 
-    test("Delete deletes subcollections", () async {
+    test("Delete method deletes subcollections", () async {
       await setPostFirestore(post, firestore);
       final postRef =
           firestore.collection(PostFirestore.collectionName).doc(post.id.value);
