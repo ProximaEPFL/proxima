@@ -4,6 +4,8 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:geolocator/geolocator.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
+const minimalDistanceForUpdate = 5;
+
 class GeoLocationService {
   final GeolocatorPlatform _geoLocator;
 
@@ -18,8 +20,8 @@ class GeoLocationService {
   /// Source : https://pub.dev/documentation/geolocator_android/latest/geolocator_android/LocationAccuracy.html
   final LocationSettings locationSettings = AndroidSettings(
     accuracy: LocationAccuracy.best,
-    // We set the distance filter to 20m to avoid unnecessary updates for small movements.
-    distanceFilter: 20,
+    // We set the distance filter to avoid unnecessary updates for small movements.
+    distanceFilter: minimalDistanceForUpdate,
   );
 
   GeoLocationService({
