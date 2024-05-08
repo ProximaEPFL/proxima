@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/utils/ui/user_avatar/dynamic_user_avatar.dart";
+import "package:proxima/views/components/user_avatar/dynamic_user_avatar.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 /// This widget is the top bar of the home page

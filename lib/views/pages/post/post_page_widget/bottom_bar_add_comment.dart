@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/utils/ui/user_avatar/dynamic_user_avatar.dart";
+import "package:proxima/views/components/user_avatar/dynamic_user_avatar.dart";
 
 /// This widget displays a bottom bar in post page to add a comment.
 /// It contains the avatar of the current user and a text field.
