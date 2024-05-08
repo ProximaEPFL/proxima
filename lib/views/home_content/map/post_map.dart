@@ -24,7 +24,7 @@ class PostMap extends ConsumerWidget {
     final mapNotifier = ref.watch(mapProvider.notifier);
 
     // This provider is used to get the list of map pins.
-    final mapPins = ref.watch(mapPinProvider);
+    final mapPinsAsync = ref.watch(mapPinProvider);
 
     // This provider is used to get the live location of the user.
     final positionValue = ref.watch(liveLocationServiceProvider);
@@ -42,7 +42,7 @@ class PostMap extends ConsumerWidget {
     //list of Marker displayed on the map
     Set<Marker> markers = {};
 
-    mapPins.when(
+    mapPinsAsync.when(
       data: (data) {
         markers = data
             .map(
