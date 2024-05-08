@@ -47,10 +47,10 @@ class PostHeaderWidget extends ConsumerWidget {
     );
 
     final publicationTime = Tooltip(
-      message: _dateFormat(publicationDate),
+      message: absoluteTimeText,
       child: Text(
         key: publicationDateTextKey,
-        _dateTimeToTimeAgo(publicationDate),
+        relativeTimeText,
       ),
     );
 
