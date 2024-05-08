@@ -47,10 +47,7 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
   }
 
   Future<NewPostState> _addPost(String title, String description) async {
-    final currentUser = ref.read(uidProvider);
-    if (currentUser == null) {
-      throw Exception("User must be logged in before creating a post");
-    }
+    final currentUser = ref.read(validUidProvider);
 
     if (!validate(title, description)) {
       // not loading or error since validation failed and wrote to the state
