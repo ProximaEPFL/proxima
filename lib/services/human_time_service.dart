@@ -22,7 +22,13 @@ class HumanTimeService {
   /// Converts a [DateTime] to a human readable time ago string
   /// Examples of format: "5m ago", "now", "2 days ago"
   String textTimeSince(DateTime dateTime) {
-    final textTime = timeago.format(dateTime, locale: _relativeLocale);
+    final referenceClock = currentDateTimeCallback();
+
+    final textTime = timeago.format(
+      dateTime,
+      locale: _relativeLocale,
+      clock: referenceClock,
+    );
 
     if (_agoExceptions.contains(textTime)) {
       return textTime;
