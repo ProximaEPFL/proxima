@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
-import "package:proxima/utils/ui/user_avatar.dart";
+import "package:proxima/views/components/user_avatar/user_avatar.dart";
 import "package:timeago/timeago.dart" as timeago;
 
 /// This widget is used to display the info bar in the post card.

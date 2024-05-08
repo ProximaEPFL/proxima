@@ -6,6 +6,7 @@ import "package:proxima/views/pages/post/post_page.dart";
 
 import "../data/post_comment.dart";
 import "../data/post_overview.dart";
+import "../overrides/override_dynamic_user_avatar_view_model.dart";
 
 // Create a post page with the first post from the testPosts list
 final postPage = MaterialApp(
@@ -16,11 +17,13 @@ final postPage = MaterialApp(
 );
 
 final emptyPostPageProvider = ProviderScope(
+  overrides: [...mockDynamicUserAvatarViewModelTestLoginUserOverride],
   child: postPage,
 );
 
 final nonEmptyPostPageProvider = ProviderScope(
   overrides: [
+    ...mockDynamicUserAvatarViewModelTestLoginUserOverride,
     commentListProvider.overrideWithValue(testComments),
   ],
   child: postPage,
