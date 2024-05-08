@@ -25,6 +25,8 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
         _parentCollection = parentCollection,
         _voteScoreField = voteScoreField;
 
+  /// Returns an instance of [UpvoteRepositoryService] for up-voting posts that
+  /// are stored in the [firestore] database.
   static UpvoteRepositoryService<PostIdFirestore> postUpvoteRepository(
     FirebaseFirestore firestore,
   ) {
@@ -35,6 +37,9 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
     );
   }
 
+  /// Returns an instance of [UpvoteRepositoryService] for up-voting comments
+  /// relating to the post with id [postId]. Everything is stored in the
+  /// [firestore] database.
   static UpvoteRepositoryService<CommentIdFirestore> commentUpvoteRepository(
     FirebaseFirestore firestore,
     PostIdFirestore postId,
