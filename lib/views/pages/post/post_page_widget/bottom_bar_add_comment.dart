@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
-import "package:proxima/utils/ui/user_avatar.dart";
+import "package:proxima/views/components/user_avatar/dynamic_user_avatar.dart";
 
+/// This widget displays a bottom bar in post page to add a comment.
+/// It contains the avatar of the current user and a text field.
 class BottomBarAddComment extends StatelessWidget {
   static const commentUserAvatarKey = Key("commentUserAvatar");
   static const addCommentTextFieldKey = Key("addCommentTextField");
@@ -8,11 +10,8 @@ class BottomBarAddComment extends StatelessWidget {
 
   static const _textFieldHintAddComment = "Add a comment";
 
-  final String currentDisplayName;
-
   const BottomBarAddComment({
     super.key,
-    required this.currentDisplayName,
   });
 
   @override
@@ -21,11 +20,11 @@ class BottomBarAddComment extends StatelessWidget {
       // Align items to the start of the cross axis
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: UserAvatar(
+        const Padding(
+          padding: EdgeInsets.only(right: 8),
+          child: DynamicUserAvatar(
             key: commentUserAvatarKey,
-            displayName: currentDisplayName,
+            uid: null,
             radius: 22,
           ),
         ),

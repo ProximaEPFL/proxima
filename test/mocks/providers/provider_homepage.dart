@@ -7,6 +7,7 @@ import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 
 import "../overrides/override_auth_providers.dart";
+import "../overrides/override_dynamic_user_avatar_view_model.dart";
 import "../overrides/override_firestore.dart";
 import "../overrides/override_home_view_model.dart";
 import "../services/mock_geo_location_service.dart";
@@ -17,13 +18,17 @@ const homePageApp = MaterialApp(
 );
 
 final emptyHomePageProvider = ProviderScope(
-  overrides: mockEmptyHomeViewModelOverride,
+  overrides: [
+    ...mockEmptyHomeViewModelOverride,
+    ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
+  ],
   child: homePageApp,
 );
 
 final nonEmptyHomePageProvider = ProviderScope(
   overrides: [
     ...mockNonEmptyHomeViewModelOverride,
+    ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
     ...firebaseMocksOverrides,
     ...loggedInUserOverrides,
   ],
@@ -42,6 +47,7 @@ ProviderScope homePageFakeFirestoreProvider(
   return ProviderScope(
     overrides: [
       ...loggedInUserOverrides,
+      ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
       firestoreProvider.overrideWithValue(firestore),
       geoLocationServiceProvider.overrideWithValue(geoLocationService),
     ],
@@ -54,6 +60,7 @@ ProviderScope emptyHomePageProviderGPS(
 ) {
   return ProviderScope(
     overrides: [
+      ...mockDynamicUserAvatarViewModelTestLoginUserOverride,
       ...mockEmptyHomeViewModelOverride,
       geoLocationServiceProvider.overrideWithValue(geoLocationService),
     ],
