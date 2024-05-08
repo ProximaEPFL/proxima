@@ -46,5 +46,15 @@ void main() {
         expectedComplexHumanText,
       );
     });
+
+    test("Check special case 'now' relative time", () {
+      final nowTime = constantTestingTime.add(const Duration(seconds: 1));
+
+      final actualNowTimeHumanText = humanTimeService.textTimeSince(
+        nowTime,
+      );
+
+      expect(actualNowTimeHumanText, "now");
+    });
   });
 }
