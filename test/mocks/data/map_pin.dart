@@ -1,5 +1,5 @@
 import "package:google_maps_flutter/google_maps_flutter.dart";
-import "package:proxima/utils/ui/map_pin.dart";
+import "package:proxima/models/ui/map_pin.dart";
 
 //mock data to test the MapPin viewmodel
 List<MapPin> testPins = [

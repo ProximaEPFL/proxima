@@ -1,6 +1,6 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
-import "package:proxima/utils/ui/map_pin.dart";
+import "package:proxima/models/ui/map_pin.dart";
 
 void main() {
   group("Map pin testing", () {
