@@ -134,20 +134,34 @@ class CommentRepositoryService {
         CommentIdFirestore(value: comment.id),
         batch,
         commentUpvoteRepository,
+        false,
       );
     }
 
     batch.update(_postDocument(parentPostId), {PostData.commentCountField: 0});
   }
 
+  /// Helper method to delete a comment. Adds all the deletions to the batch [batch].
+  /// Does not update the comment count of the post. That should be done separately.
+  /// If [checkExists] is true, the method will check if the comment exists before
+  /// deleting it. If it does not exist, the method will throw an error.
   Future<void> _deleteCommentNoCountUpdate(
     PostIdFirestore parentPostId,
     CommentIdFirestore commentId,
     WriteBatch batch,
-    UpvoteRepositoryService<CommentIdFirestore> commentUpvoteRepository,
-  ) async {
+    UpvoteRepositoryService<CommentIdFirestore> commentUpvoteRepository, [
+    bool checkExists = true,
+  ]) async {
     final commentRef =
         _commentsSubCollection(parentPostId).doc(commentId.value);
+
+    if (checkExists) {
+      final comment = await commentRef.get();
+      if (!comment.exists) {
+        throw Exception("Comment does not exist");
+      }
+    }
+
     await commentUpvoteRepository.deleteAllUpvotes(
       commentId,
       batch,
