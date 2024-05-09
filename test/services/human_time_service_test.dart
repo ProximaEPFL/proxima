@@ -25,7 +25,7 @@ void main() {
         time1,
       );
 
-      // Check that the absolut time value is correct
+      // Check that the absolute time value is correct
       expect(
         actualSimpleHumanText,
         expectedSimpleHumanText,
@@ -48,7 +48,7 @@ void main() {
         time2,
       );
 
-      // Check that the specific absolut time value is correct
+      // Check that the specific absolute time value is correct
       expect(
         actualComplexHumanText,
         expectedComplexHumanText,
@@ -76,7 +76,7 @@ void main() {
     });
 
     test("Check 10 minutes relative time", () {
-      // Setup specific time values for 10 min before contsant time
+      // Setup specific time values for 10 min before constant time
       final relative10Minutes = constantTestingTime.subtract(
         const Duration(minutes: 10),
       );
@@ -96,7 +96,7 @@ void main() {
     });
 
     test("Check 4 days relative time", () {
-      // Setup specific time values for 4 days before contsant time
+      // Setup specific time values for 4 days before constant time
       final relative4Days = constantTestingTime.subtract(
         const Duration(days: 4),
       );
