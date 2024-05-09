@@ -37,3 +37,15 @@ final List<PostOverview> testPosts = [
     distance: 20,
   ),
 ];
+
+// Custom post for testing specific date and distances
+final timeDistancePost = PostOverview(
+  postId: const PostIdFirestore(value: "post_1"),
+  title: "title",
+  description: "description",
+  voteScore: 1,
+  commentNumber: 5,
+  ownerDisplayName: "owner",
+  publicationDate: DateTime.utc(1999),
+  distance: 100,
+);

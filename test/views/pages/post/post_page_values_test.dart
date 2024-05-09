@@ -1,8 +1,6 @@
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
 
 import "../../../mocks/data/post_overview.dart";
@@ -10,18 +8,6 @@ import "../../../mocks/providers/provider_post_page.dart";
 import "../../../mocks/services/setup_firebase_mocks.dart";
 
 void main() {
-  // Custom post for testing specific date and distances
-  final customPost = PostOverview(
-    postId: const PostIdFirestore(value: "post_1"),
-    title: "title",
-    description: "description",
-    voteScore: 1,
-    commentNumber: 5,
-    ownerDisplayName: "owner",
-    publicationDate: DateTime.utc(1999),
-    distance: 100,
-  );
-
   setUp(() async {
     setupFirebaseAuthMocks();
     await Firebase.initializeApp();
@@ -43,10 +29,10 @@ void main() {
     });
 
     testWidgets("Check correct distance on custom post", (tester) async {
-      await tester.pumpWidget(customPostOverviewPage(customPost));
+      await tester.pumpWidget(customPostOverviewPage(timeDistancePost));
       await tester.pumpAndSettle();
 
-      final expectedDistanceText = "${customPost.distance}m away";
+      final expectedDistanceText = "${timeDistancePost.distance}m away";
 
       // Find the container for the distance
       final appBar = find.byType(AppBar);
@@ -85,7 +71,7 @@ void main() {
     });
 
     testWidgets("Check correct timing on custom post", (tester) async {
-      await tester.pumpWidget(customPostOverviewPage(customPost));
+      await tester.pumpWidget(customPostOverviewPage(timeDistancePost));
       await tester.pumpAndSettle();
 
       const expectedTimeValue = "~1y ago";
