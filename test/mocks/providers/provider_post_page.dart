@@ -62,7 +62,7 @@ ProviderScope customPostOverviewPage(PostOverview post) {
     ),
   );
 
-  final app = ProviderScope(
+  return ProviderScope(
     overrides: [
       ...mockDynamicUserAvatarViewModelTestLoginUserOverride,
       ...mockEmptyCommentViewModelOverride,
@@ -70,6 +70,4 @@ ProviderScope customPostOverviewPage(PostOverview post) {
     ],
     child: customPostApp,
   );
-
-  return app;
 }
