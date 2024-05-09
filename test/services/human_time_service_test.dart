@@ -57,7 +57,7 @@ void main() {
 
     test("Check special case 'now' relative time", () {
       // Setup actual relative values for 'now' case
-      final nowTime = constantTestingTime.add(const Duration(seconds: 1));
+      final nowTime = constantTestingTime.subtract(const Duration(seconds: 1));
 
       const expectedNowRelativeTime = "now";
 
