@@ -6,6 +6,13 @@ import "package:proxima/views/home_content/map/map_screen.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 import "../overrides/override_map_view_model.dart";
+import "../overrides/override_pin_view_model.dart";
+
+const mapPage = MaterialApp(
+  onGenerateRoute: generateRoute,
+  title: "Map page",
+  home: MapScreen(),
+);
 
 ProviderScope newMapPageProvider(
   GeoLocationService geoLocationService,
@@ -17,21 +24,25 @@ ProviderScope newMapPageProvider(
       liveLocationServiceProvider
           .overrideWith((ref) => Stream.fromIterable(geoPoints)),
     ],
-    child: const MaterialApp(
-      onGenerateRoute: generateRoute,
-      title: "Map page",
-      home: MapScreen(),
-    ),
+    child: mapPage,
   );
 }
 
 ProviderScope newMapPageNoGPS() {
   return ProviderScope(
     overrides: mockNoGPSMapViewModelOverride,
-    child: const MaterialApp(
-      onGenerateRoute: generateRoute,
-      title: "Map page",
-      home: MapScreen(),
-    ),
+    child: mapPage,
+  );
+}
+
+ProviderScope newMapPageWithPins(
+  GeoLocationService geoLocationService,
+) {
+  return ProviderScope(
+    overrides: [
+      geoLocationServiceProvider.overrideWithValue(geoLocationService),
+      mockPinViewModelOverride,
+    ],
+    child: mapPage,
   );
 }
