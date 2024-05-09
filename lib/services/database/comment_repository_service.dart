@@ -133,7 +133,7 @@ class CommentRepositoryService {
         CommentIdFirestore(value: comment.id),
         batch,
         commentUpvoteRepository,
-        false,
+        checkExists: false,
       );
     }
 
@@ -148,9 +148,9 @@ class CommentRepositoryService {
     PostIdFirestore parentPostId,
     CommentIdFirestore commentId,
     WriteBatch batch,
-    UpvoteRepositoryService<CommentIdFirestore> commentUpvoteRepository, [
+    UpvoteRepositoryService<CommentIdFirestore> commentUpvoteRepository, {
     bool checkExists = true,
-  ]) async {
+  }) async {
     final commentRef =
         _commentsSubCollection(parentPostId).doc(commentId.value);
 
