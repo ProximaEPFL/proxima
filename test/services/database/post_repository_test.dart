@@ -1,13 +1,20 @@
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
+import "package:proxima/models/database/comment/comment_firestore.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
+import "package:proxima/models/database/vote/upvote_state.dart";
+import "package:proxima/models/database/vote/vote_firestore.dart";
+import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
+import "package:proxima/services/database/upvote_repository_service.dart";
 
+import "../../mocks/data/firestore_comment.dart";
 import "../../mocks/data/firestore_post.dart";
+import "../../mocks/data/firestore_user.dart";
 import "../../mocks/data/geopoint.dart";
 import "../../mocks/data/post_data.dart";
 
@@ -45,6 +52,41 @@ void main() {
           .doc(post.id.value)
           .get();
       expect(actualPost.exists, false);
+    });
+
+    test("Delete method deletes subcollections", () async {
+      await setPostFirestore(post, firestore);
+      final postRef =
+          firestore.collection(PostFirestore.collectionName).doc(post.id.value);
+      // Check that the post is in the db
+      final dbPost = await postRef.get();
+      expect(dbPost.exists, true);
+
+      final commentRepository = CommentRepositoryService(firestore: firestore);
+      await CommentFirestoreGenerator()
+          .addComments(4, post.id, commentRepository);
+
+      final upvoteRepository = UpvoteRepositoryService.postUpvoteRepository(
+        firestore,
+      );
+
+      await upvoteRepository.setUpvoteState(
+        testingUserFirestoreId,
+        post.id,
+        UpvoteState.upvoted,
+      );
+
+      await postRepository.deletePost(post.id);
+      final actualPost = await postRef.get();
+      expect(actualPost.exists, false);
+
+      final actualComments =
+          await postRef.collection(CommentFirestore.subCollectionName).get();
+      expect(actualComments.docs.length, 0);
+
+      final actualVoters =
+          await postRef.collection(VoteFirestore.votersSubCollectionName).get();
+      expect(actualVoters.size, 0);
     });
 
     test("Get post correctly", () async {

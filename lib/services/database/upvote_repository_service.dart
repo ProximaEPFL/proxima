@@ -133,4 +133,18 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
       );
     });
   }
+
+  /// Deletes all the upvotes of the parent with id [parentId]. Should not be
+  /// used on its own but rather as part of the deletion of the parent. Adds all
+  /// the deletions to the batch [batch].
+  Future<void> deleteAllUpvotes(
+    ParentIdFirestore parentId,
+    WriteBatch batch,
+  ) async {
+    final upvotes = await _votersCollection(parentId).get();
+    for (final upvote in upvotes.docs) {
+      batch.delete(upvote.reference);
+    }
+    batch.update(_parentDocument(parentId), {_voteScoreField: 0});
+  }
 }

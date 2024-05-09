@@ -7,6 +7,7 @@ import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
+import "package:proxima/services/database/upvote_repository_service.dart";
 
 /// This class is a service that allows to interact with the comments
 /// of the posts in the firestore database.
@@ -88,27 +89,84 @@ class CommentRepositoryService {
   Future<void> deleteComment(
     PostIdFirestore parentPostId,
     CommentIdFirestore commentId,
-  ) =>
-      _firestore.runTransaction(
-        (transaction) async {
-          final commentRef =
-              _commentsSubCollection(parentPostId).doc(commentId.value);
+  ) async {
+    final batch = _firestore.batch();
 
-          final commentDoc = await transaction.get(commentRef);
+    final commentUpvoteRepository =
+        UpvoteRepositoryService.commentUpvoteRepository(
+      _firestore,
+      parentPostId,
+    );
 
-          if (!commentDoc.exists) {
-            throw Exception("Comment does not exist");
-          }
+    await _deleteCommentNoCountUpdate(
+      parentPostId,
+      commentId,
+      batch,
+      commentUpvoteRepository,
+    );
 
-          transaction.delete(commentRef);
+    batch.update(
+      _postDocument(parentPostId),
+      {PostData.commentCountField: FieldValue.increment(-1)},
+    );
 
-          final postDocRef = _postDocument(parentPostId);
-          transaction.update(
-            postDocRef,
-            {PostData.commentCountField: FieldValue.increment(-1)},
-          );
-        },
+    await batch.commit();
+  }
+
+  /// This method will delete all the comments of the post with id [parentPostId].
+  /// Helper method to delete a post. Adds all the deletions to the batch [batch].
+  Future<void> deleteAllComments(
+    PostIdFirestore parentPostId,
+    WriteBatch batch,
+  ) async {
+    final commentsRef = _commentsSubCollection(parentPostId);
+    final comments = await commentsRef.get();
+    final commentUpvoteRepository =
+        UpvoteRepositoryService.commentUpvoteRepository(
+      _firestore,
+      parentPostId,
+    );
+
+    for (final comment in comments.docs) {
+      await _deleteCommentNoCountUpdate(
+        parentPostId,
+        CommentIdFirestore(value: comment.id),
+        batch,
+        commentUpvoteRepository,
+        checkExists: false,
       );
+    }
+
+    batch.update(_postDocument(parentPostId), {PostData.commentCountField: 0});
+  }
+
+  /// Helper method to delete a comment. Adds all the deletions to the batch [batch].
+  /// Does not update the comment count of the post. That should be done separately.
+  /// If [checkExists] is true, the method will check if the comment exists before
+  /// deleting it. If it does not exist, the method will throw an error.
+  Future<void> _deleteCommentNoCountUpdate(
+    PostIdFirestore parentPostId,
+    CommentIdFirestore commentId,
+    WriteBatch batch,
+    UpvoteRepositoryService<CommentIdFirestore> commentUpvoteRepository, {
+    bool checkExists = true,
+  }) async {
+    final commentRef =
+        _commentsSubCollection(parentPostId).doc(commentId.value);
+
+    if (checkExists) {
+      final comment = await commentRef.get();
+      if (!comment.exists) {
+        throw Exception("Comment does not exist");
+      }
+    }
+
+    await commentUpvoteRepository.deleteAllUpvotes(
+      commentId,
+      batch,
+    );
+    batch.delete(commentRef);
+  }
 }
 
 final commentRepositoryProvider = Provider<CommentRepositoryService>(
