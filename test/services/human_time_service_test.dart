@@ -57,13 +57,15 @@ void main() {
 
     test("Check special case 'now' relative time", () {
       // Setup actual relative values for 'now' case
-      final nowTime = constantTestingTime.subtract(const Duration(seconds: 1));
+      final closeToNowTime = constantTestingTime.subtract(
+        const Duration(seconds: 1),
+      );
 
       const expectedNowRelativeTime = "now";
 
       // Use the service to get relative human time
       final actualNowTimeHumanText = humanTimeService.textTimeSince(
-        nowTime,
+        closeToNowTime,
       );
 
       // Check that the time value is correctly 'now'
