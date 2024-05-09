@@ -6,6 +6,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 
 class GeoLocationService {
   final GeolocatorPlatform _geoLocator;
+  static const minimalDistanceForUpdate = 5;
 
   /// Here we use the LocationAccuracy.best setting to get the most accurate location possible. (~0m on IOS, 0-100m on Android)
   /// We do not use the LocationAccuracy.high setting because the accuracy is lower
@@ -18,6 +19,8 @@ class GeoLocationService {
   /// Source : https://pub.dev/documentation/geolocator_android/latest/geolocator_android/LocationAccuracy.html
   final LocationSettings locationSettings = AndroidSettings(
     accuracy: LocationAccuracy.best,
+    // We set the distance filter to avoid unnecessary updates for small movements.
+    distanceFilter: minimalDistanceForUpdate,
   );
 
   GeoLocationService({
