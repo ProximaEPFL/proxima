@@ -1,10 +1,10 @@
 import "package:flutter_test/flutter_test.dart";
-import "package:proxima/models/ui/new_post_state.dart";
+import "package:proxima/models/ui/new_post_validation.dart";
 
 void main() {
   group("Create Account Model testing", () {
     test("hash overrides correctly", () {
-      final newPostState = NewPostState(
+      final newPostState = NewPostValidation(
         titleError: "titleError",
         descriptionError: "descriptionError",
         posted: true,
@@ -22,13 +22,13 @@ void main() {
     });
 
     test("equality overrides correctly", () {
-      final newPostState = NewPostState(
+      final newPostState = NewPostValidation(
         descriptionError: "descriptionError",
         titleError: "titleError",
         posted: true,
       );
 
-      final newPostStateCopy = NewPostState(
+      final newPostStateCopy = NewPostValidation(
         descriptionError: "descriptionError",
         titleError: "titleError",
         posted: true,

@@ -1,9 +1,9 @@
-class NewPostState {
+class NewPostValidation {
   final String? titleError;
   final String? descriptionError;
   final bool posted;
 
-  NewPostState({
+  NewPostValidation({
     required this.titleError,
     required this.descriptionError,
     required this.posted,
@@ -13,7 +13,7 @@ class NewPostState {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is NewPostState &&
+    return other is NewPostValidation &&
         other.titleError == titleError &&
         other.descriptionError == descriptionError &&
         other.posted == posted;

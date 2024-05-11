@@ -1,19 +1,19 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_data.dart";
-import "package:proxima/models/ui/new_post_state.dart";
+import "package:proxima/models/ui/new_post_validation.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
-class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
+class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostValidation> {
   static const _titleError = "Please enter a title";
   static const _bodyError = "Please enter a body";
 
   @override
-  Future<NewPostState> build() async {
-    return NewPostState(
+  Future<NewPostValidation> build() async {
+    return NewPostValidation(
       titleError: null,
       descriptionError: null,
       posted: false,
@@ -25,7 +25,7 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
   bool validate(String title, String description) {
     if (title.isEmpty || description.isEmpty) {
       state = AsyncData(
-        NewPostState(
+        NewPostValidation(
           titleError: title.isEmpty ? _titleError : null,
           descriptionError: description.isEmpty ? _bodyError : null,
           posted: false,
@@ -46,7 +46,7 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
     state = await AsyncValue.guard(() => _addPost(title, description));
   }
 
-  Future<NewPostState> _addPost(String title, String description) async {
+  Future<NewPostValidation> _addPost(String title, String description) async {
     final currentUser = ref.read(validUidProvider);
 
     if (!validate(title, description)) {
@@ -72,7 +72,7 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
     // Refresh the home feed after post creation
     ref.read(postOverviewProvider.notifier).refresh();
 
-    return NewPostState(
+    return NewPostValidation(
       titleError: null,
       descriptionError: null,
       posted: true,
@@ -81,6 +81,6 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostState> {
 }
 
 final newPostStateProvider =
-    AsyncNotifierProvider.autoDispose<NewPostViewModel, NewPostState>(
+    AsyncNotifierProvider.autoDispose<NewPostViewModel, NewPostValidation>(
   () => NewPostViewModel(),
 );
