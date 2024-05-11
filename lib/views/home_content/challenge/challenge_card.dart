@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_svg/svg.dart";
 import "package:proxima/models/ui/challenge_card_data.dart";
-import "package:proxima/utils/ui/key_value_list_generator.dart";
+import "package:proxima/views/helpers/key_value_list_builder.dart";
 
 class ChallengeCard extends StatelessWidget {
   static const challengeGroupIconKey = Key("challenge_group_icon");
@@ -17,7 +17,7 @@ class ChallengeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    KeyValueListGenerator listGenerator = KeyValueListGenerator(
+    KeyValueListBuilder listGenerator = KeyValueListBuilder(
       style: DefaultTextStyle.of(context).style,
     );
 

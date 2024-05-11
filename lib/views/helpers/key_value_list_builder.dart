@@ -1,19 +1,20 @@
 import "package:flutter/material.dart";
 
 /// A class to generate a [RichText] containing a list of key-value pairs.
-class KeyValueListGenerator {
+/// Uses the Builder design pattern (see https://en.wikipedia.org/wiki/Builder_pattern)
+class KeyValueListBuilder {
   List<TextSpan> content = [];
   TextStyle? style;
 
-  /// Creates a new instance of [KeyValueListGenerator].
+  /// Creates a new instance of [KeyValueListBuilder].
   /// The [style] is the style of the text. [RichText] does not
   /// inherit its parent style by default. If you want to inherit
   /// the parent style, you can set the [style] to [DefaultTextStyle.of(context).style].
   /// If you want to use the default style, you can set the [style] to `null`.
-  KeyValueListGenerator({required this.style});
+  KeyValueListBuilder({required this.style});
 
   /// Adds a new line to the text, if its content is not empty.
-  KeyValueListGenerator _newLine() {
+  KeyValueListBuilder _newLine() {
     if (content.isNotEmpty) {
       content.add(const TextSpan(text: "\n"));
     }
@@ -21,7 +22,7 @@ class KeyValueListGenerator {
   }
 
   /// Adds a new [key]-[value] pair to the text. The value will be bold.
-  KeyValueListGenerator addPair(String key, String value) {
+  KeyValueListBuilder addPair(String key, String value) {
     _newLine();
     content.add(TextSpan(text: "$key: ", style: style));
     content.add(
@@ -34,7 +35,7 @@ class KeyValueListGenerator {
   }
 
   /// Adds a new [line] to the text.
-  KeyValueListGenerator addLine(String line) {
+  KeyValueListBuilder addLine(String line) {
     _newLine();
     content.add(TextSpan(text: line));
     return this;
