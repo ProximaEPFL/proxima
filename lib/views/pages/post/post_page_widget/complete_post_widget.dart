@@ -20,7 +20,7 @@ class CompletePostWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final postBottomBar = Padding(
       padding: const EdgeInsets.all(8),
-      child: VotesWidget(
+      child: PostVotes(
         key: postVoteWidgetKey,
         postId: post.postId,
       ),

@@ -68,7 +68,7 @@ class PostCard extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          VotesWidget(
+          PostVotes(
             key: postCardVotesKey,
             postId: postOverview.postId,
           ),
