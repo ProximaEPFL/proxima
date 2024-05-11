@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/comment_details.dart";
-import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.dart";
+import "package:proxima/views/pages/post/components/comment/comment_post_widget.dart";
 
 class CommentList extends StatelessWidget {
   const CommentList({

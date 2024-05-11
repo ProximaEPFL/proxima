@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/post_details.dart";
-import "package:proxima/views/pages/home/content/feed/post_card/post_header.dart";
-import "package:proxima/views/pages/home/content/feed/post_card/post_votes.dart";
+import "package:proxima/views/pages/home/content/feed/components/post_header.dart";
+import "package:proxima/views/pages/home/content/feed/components/post_votes.dart";
 
-class CompletePostWidget extends StatelessWidget {
+class CompletePost extends StatelessWidget {
   static const postTitleKey = Key("postTitle");
   static const postDescriptionKey = Key("postDescription");
   static const postVoteWidgetKey = Key("postVoteWidget");
@@ -11,7 +11,7 @@ class CompletePostWidget extends StatelessWidget {
 
   final PostDetails post;
 
-  const CompletePostWidget({
+  const CompletePost({
     super.key,
     required this.post,
   });

@@ -5,15 +5,15 @@ import "package:intl/intl.dart";
 import "package:proxima/views/components/feedback/centauri_snack_bar.dart";
 import "package:proxima/views/components/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
-import "package:proxima/views/pages/home/content/feed/post_card/post_card.dart";
-import "package:proxima/views/pages/home/content/feed/post_card/post_header.dart";
+import "package:proxima/views/pages/home/content/feed/components/post_card.dart";
+import "package:proxima/views/pages/home/content/feed/components/post_header.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
-import "package:proxima/views/pages/post/components/comment/new_comment_button.dart";
-import "package:proxima/views/pages/post/components/comment/new_comment_textfield.dart";
-import "package:proxima/views/pages/post/components/comment/new_comment_user_avatar.dart";
+import "package:proxima/views/pages/post/components/comment/comment_post_widget.dart";
+import "package:proxima/views/pages/post/components/complete_post.dart";
+import "package:proxima/views/pages/post/components/new_comment/new_comment_button.dart";
+import "package:proxima/views/pages/post/components/new_comment/new_comment_textfield.dart";
+import "package:proxima/views/pages/post/components/new_comment/new_comment_user_avatar.dart";
 import "package:proxima/views/pages/post/post_page.dart";
-import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.dart";
-import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
 import "package:timeago/timeago.dart" as timeago;
 
 import "../../../mocks/data/firebase_auth_user.dart";
@@ -50,7 +50,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Check if the post page is displayed, with the correct title
-      expect(find.byType(CompletePostWidget), findsOneWidget);
+      expect(find.byType(CompletePost), findsOneWidget);
       expect(find.text(testPosts.first.title), findsAtLeastNWidgets(1));
 
       // Tap on the back button
@@ -123,7 +123,7 @@ void main() {
       expect(completePostWidget, findsOneWidget);
 
       //Check that the post title is displayed
-      final postTitle = find.byKey(CompletePostWidget.postTitleKey);
+      final postTitle = find.byKey(CompletePost.postTitleKey);
       expect(postTitle, findsOneWidget);
       final postTitleWidget = tester.widget(postTitle);
       expect(
@@ -132,7 +132,7 @@ void main() {
       );
 
       //Check that the post description is displayed
-      final postDescription = find.byKey(CompletePostWidget.postDescriptionKey);
+      final postDescription = find.byKey(CompletePost.postDescriptionKey);
       expect(postDescription, findsOneWidget);
       final postDescriptionWidget = tester.widget(postDescription);
       expect(
@@ -142,11 +142,11 @@ void main() {
       );
 
       //Check that the post vote widget is displayed
-      final postVote = find.byKey(CompletePostWidget.postVoteWidgetKey);
+      final postVote = find.byKey(CompletePost.postVoteWidgetKey);
       expect(postVote, findsOneWidget);
 
       //Check the userbar is displayed
-      final postUserBar = find.byKey(CompletePostWidget.postUserBarKey);
+      final postUserBar = find.byKey(CompletePost.postUserBarKey);
       expect(postUserBar, findsOneWidget);
 
       //Check that the owner display name is displayed

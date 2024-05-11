@@ -3,11 +3,13 @@ import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/views/components/options/map/map_selection_option.dart";
 
 class MapSelectionOptionChips extends StatelessWidget {
+  static const selectOptionsKey = Key("selectOptions");
+
   const MapSelectionOptionChips({
     required this.mapInfo,
     super.key,
   });
-  static const selectOptionsKey = Key("selectOptions");
+
   final MapDetails mapInfo;
 
   @override

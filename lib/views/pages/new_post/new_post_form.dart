@@ -15,7 +15,7 @@ class NewPostForm extends HookConsumerWidget {
   static const _bodyHint = "Body";
   static const _postButtonText = "Post";
 
-  Padding verticallyPadded(Widget child) {
+  Padding _verticallyPadded(Widget child) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
       child: child,
@@ -87,12 +87,12 @@ class NewPostForm extends HookConsumerWidget {
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            verticallyPadded(titleField),
+            _verticallyPadded(titleField),
             Flexible(
               fit: FlexFit.loose,
-              child: verticallyPadded(bodyField),
+              child: _verticallyPadded(bodyField),
             ),
-            verticallyPadded(buttonRow),
+            _verticallyPadded(buttonRow),
           ],
         );
       },

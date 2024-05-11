@@ -4,9 +4,9 @@ import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/viewmodels/comments_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
-import "package:proxima/views/pages/post/post_page_widget/bottom_bar_add_comment.dart";
-import "package:proxima/views/pages/post/post_page_widget/comment_list.dart";
-import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
+import "package:proxima/views/pages/post/components/bottom_bar_add_comment.dart";
+import "package:proxima/views/pages/post/components/comment/comment_list.dart";
+import "package:proxima/views/pages/post/components/complete_post.dart";
 
 class PostPage extends ConsumerWidget {
   static const postDistanceKey = Key("postDistance");
@@ -25,14 +25,14 @@ class PostPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ThemeData themeData = Theme.of(context);
+    final themeData = Theme.of(context);
 
     final commentsAsync = ref.watch(
       commentsViewModelProvider(postDetails.postId),
     );
 
     // Top app bar content = Title + Distance
-    List<Widget> appBarContent = [
+    final appBarContent = [
       const Text(_appBarTitle),
       Text(
         "${postDetails.distance}m away",
@@ -42,8 +42,8 @@ class PostPage extends ConsumerWidget {
     ];
 
     // Body = Complete post + Comments
-    List<Widget> bodyChildren = [
-      CompletePostWidget(
+    final bodyChildren = [
+      CompletePost(
         key: completePostWidgetKey,
         post: postDetails,
       ),

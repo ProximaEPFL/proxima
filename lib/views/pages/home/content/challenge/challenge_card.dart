@@ -17,7 +17,7 @@ class ChallengeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    KeyValueListBuilder listGenerator = KeyValueListBuilder(
+    final listGenerator = KeyValueListBuilder(
       style: DefaultTextStyle.of(context).style,
     );
 

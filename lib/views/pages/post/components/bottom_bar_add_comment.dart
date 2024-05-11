@@ -3,9 +3,9 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/viewmodels/new_comment_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
-import "package:proxima/views/pages/post/components/comment/new_comment_button.dart";
-import "package:proxima/views/pages/post/components/comment/new_comment_textfield.dart";
-import "package:proxima/views/pages/post/components/comment/new_comment_user_avatar.dart";
+import "package:proxima/views/pages/post/components/new_comment/new_comment_button.dart";
+import "package:proxima/views/pages/post/components/new_comment/new_comment_textfield.dart";
+import "package:proxima/views/pages/post/components/new_comment/new_comment_user_avatar.dart";
 
 class BottomBarAddComment extends ConsumerWidget {
   final PostIdFirestore parentPostId;

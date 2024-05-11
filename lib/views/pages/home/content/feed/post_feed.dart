@@ -1,11 +1,10 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/components/options/feed/feed_sort_option_chips.dart";
 import "package:proxima/views/navigation/routes.dart";
-import "package:proxima/views/pages/home/content/feed/post_card/post_card.dart";
+import "package:proxima/views/pages/home/content/feed/components/post_list.dart";
 
 /// This widget is the feed of the home page
 /// It contains the posts
@@ -33,11 +32,13 @@ class PostFeed extends ConsumerWidget {
         style: TextStyle(color: Colors.blue),
       ),
     );
+
     final refreshButton = ElevatedButton(
       key: refreshButtonKey,
       onPressed: () => ref.read(postsFeedViewModelProvider.notifier).refresh(),
       child: const Text("Refresh"),
     );
+
     final emptyHelper = Center(
       key: emptyfeedKey,
       child: Column(
@@ -79,8 +80,8 @@ class PostFeed extends ConsumerWidget {
             builder: (context, posts) {
               final postsList = PostList(
                 posts: posts,
-                onRefresh: () =>
-                    ref.read(postsFeedViewModelProvider.notifier).refresh(),
+                onRefresh:
+                    ref.read(postsFeedViewModelProvider.notifier).refresh,
               );
 
               return posts.isEmpty ? emptyHelper : postsList;
@@ -91,36 +92,6 @@ class PostFeed extends ConsumerWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class PostList extends StatelessWidget {
-  static const homeFeedKey = Key("homeFeed");
-
-  const PostList({
-    super.key,
-    required this.posts,
-    required this.onRefresh,
-  });
-
-  final List<PostDetails> posts;
-  final Future<void> Function() onRefresh;
-
-  @override
-  Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: onRefresh,
-      child: ListView(
-        key: homeFeedKey,
-        children: posts
-            .map(
-              (post) => PostCard(
-                postDetails: post,
-              ),
-            )
-            .toList(),
-      ),
     );
   }
 }

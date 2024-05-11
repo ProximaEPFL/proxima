@@ -11,20 +11,22 @@ class LoginButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final button = ElevatedButton(
+      key: loginButtonKey,
+      onPressed: () => ref.read(authLoginServiceProvider).signIn(),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.login),
+          SizedBox(width: 8),
+          Text(_buttonText),
+        ],
+      ),
+    );
+
     return Container(
       padding: const EdgeInsets.all(8),
-      child: ElevatedButton(
-        key: loginButtonKey,
-        onPressed: () => ref.read(authLoginServiceProvider).signIn(),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.login),
-            SizedBox(width: 8),
-            Text(_buttonText),
-          ],
-        ),
-      ),
+      child: button,
     );
   }
 }

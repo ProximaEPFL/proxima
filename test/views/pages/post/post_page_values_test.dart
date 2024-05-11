@@ -1,7 +1,7 @@
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
+import "package:proxima/views/pages/post/components/complete_post.dart";
 
 import "../../../mocks/data/post_overview.dart";
 import "../../../mocks/providers/provider_post_page.dart";
@@ -57,7 +57,7 @@ void main() {
       const expectedTimeValue = "now";
 
       // Find the parent of the timing text
-      final postUserBar = find.byKey(CompletePostWidget.postUserBarKey);
+      final postUserBar = find.byKey(CompletePost.postUserBarKey);
       expect(postUserBar, findsOneWidget);
 
       // Find if the parent contains a child with the expected timing text
@@ -77,7 +77,7 @@ void main() {
       const expectedTimeValue = "~1y ago";
 
       // Find the parent of the timing text
-      final postUserBar = find.byKey(CompletePostWidget.postUserBarKey);
+      final postUserBar = find.byKey(CompletePost.postUserBarKey);
       expect(postUserBar, findsOneWidget);
 
       // Find if the parent contains a child with the expected timing text

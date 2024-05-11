@@ -4,7 +4,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/components/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
-import "package:proxima/views/pages/home/content/feed/post_card/post_card.dart";
+import "package:proxima/views/pages/home/content/feed/components/post_card.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";

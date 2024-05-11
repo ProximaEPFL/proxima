@@ -5,9 +5,9 @@ import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/feedback/centauri_snack_bar.dart";
 import "package:proxima/views/navigation/routes.dart";
-import "package:proxima/views/pages/home/content/feed/post_card/comment_count.dart";
-import "package:proxima/views/pages/home/content/feed/post_card/post_header.dart";
-import "package:proxima/views/pages/home/content/feed/post_card/post_votes.dart";
+import "package:proxima/views/pages/home/content/feed/components/comment_count.dart";
+import "package:proxima/views/pages/home/content/feed/components/post_header.dart";
+import "package:proxima/views/pages/home/content/feed/components/post_votes.dart";
 
 /// This widget is used to display the post card in the home feed.
 /// It contains the post title, description, votes, comments

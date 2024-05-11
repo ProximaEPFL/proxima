@@ -3,6 +3,8 @@ import "package:google_fonts/google_fonts.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 class ProximaApp extends StatelessWidget {
+  static const title = "Proxima";
+
   const ProximaApp({super.key});
 
   @override
@@ -10,7 +12,7 @@ class ProximaApp extends StatelessWidget {
     final brightness = MediaQuery.platformBrightnessOf(context);
 
     return MaterialApp(
-      title: "Proxima",
+      title: title,
       onGenerateRoute: generateRoute,
       initialRoute: Routes.login.name,
       theme: ThemeData(

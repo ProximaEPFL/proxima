@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:proxima/views/pages/create_account/create_account_form.dart";
 import "package:proxima/views/pages/create_account/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 
@@ -11,11 +12,11 @@ void main() {
     await tester.pumpAndSettle();
 
     final uniqueUsernameField =
-        find.byKey(CreateAccountPage.uniqueUsernameFieldKey);
+        find.byKey(CreateAccountForm.uniqueUsernameFieldKey);
     expect(uniqueUsernameField, findsOneWidget);
     await tester.enterText(uniqueUsernameField, "AUniqueUsername");
 
-    final pseudoField = find.byKey(CreateAccountPage.pseudoFieldKey);
+    final pseudoField = find.byKey(CreateAccountForm.pseudoFieldKey);
     expect(pseudoField, findsOneWidget);
     await tester.enterText(pseudoField, "ANicePseudo");
 

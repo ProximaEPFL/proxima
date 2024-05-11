@@ -19,7 +19,7 @@ class UserAvatar extends StatelessWidget {
   final VoidCallback? onTap;
 
   //TODO: Add a parameter to display the user's profile picture.
-  //Note that the [backgroundImage] parameter on the [CircleAvatar] widget is
+  // Note that the [backgroundImage] parameter on the [CircleAvatar] widget is
   // working and displays the user's profile picture behind the InkWell response.
 
   @override

@@ -8,12 +8,12 @@ import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/views/components/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
+import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
+import "package:proxima/views/pages/profile/components/info_cards/profile_info_pop_up.dart";
+import "package:proxima/views/pages/profile/components/info_cards/profile_info_row.dart";
 import "package:proxima/views/pages/profile/components/profile_badge.dart";
+import "package:proxima/views/pages/profile/components/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/components/user_account.dart";
-import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
-import "package:proxima/views/pages/profile/info_cards/profile_info_pop_up.dart";
-import "package:proxima/views/pages/profile/info_cards/profile_info_row.dart";
-import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
 import "../../../mocks/data/firestore_post.dart";

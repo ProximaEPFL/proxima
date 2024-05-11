@@ -25,8 +25,9 @@ class DynamicUserAvatar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final displayNameAsyncValue =
-        ref.watch(dynamicUserAvatarViewModelProvider(uid));
+    final displayNameAsyncValue = ref.watch(
+      dynamicUserAvatarViewModelProvider(uid),
+    );
 
     return displayNameAsyncValue.when(
       data: (displayName) => UserAvatar(
@@ -39,7 +40,7 @@ class DynamicUserAvatar extends ConsumerWidget {
         radius: radius,
         onTap: onTap,
       ),
-      error: (error, _) => (throw Exception("User avatar error: $error")),
+      error: (error, _) => throw Exception("User avatar error: $error"),
     );
   }
 }

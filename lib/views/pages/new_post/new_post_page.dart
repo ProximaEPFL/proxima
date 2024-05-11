@@ -17,7 +17,7 @@ class NewPostPage extends StatelessWidget {
       ),
       body: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-        child: Center(child: NewPostForm()),
+        child: Center(child: NewPostForm(),),
       ),
     );
   }

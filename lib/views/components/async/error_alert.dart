@@ -15,17 +15,19 @@ class ErrorAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final okButton = TextButton(
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+      key: okButtonKey,
+      child: const Text("OK"),
+    );
+
     return AlertDialog(
       title: const Text("An error occurred"),
       content: Text(error.toString()),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          key: okButtonKey,
-          child: const Text("OK"),
-        ),
+      actions: [
+        okButton,
       ],
     );
   }
