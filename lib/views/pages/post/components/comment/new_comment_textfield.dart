@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/models/ui/new_comment_state.dart";
+import "package:proxima/models/ui/new_comment_validation.dart";
 
 /// The text field in which the user can write a new comment.
 class NewCommentTextField extends StatelessWidget {
@@ -13,7 +13,7 @@ class NewCommentTextField extends StatelessWidget {
   });
 
   final TextEditingController commentContentController;
-  final NewCommentState newCommentState;
+  final NewCommentValidation newCommentState;
 
   @override
   Widget build(BuildContext context) {

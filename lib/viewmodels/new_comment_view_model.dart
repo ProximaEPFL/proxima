@@ -5,14 +5,14 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/ui/new_comment_state.dart";
+import "package:proxima/models/ui/new_comment_validation.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
 /// The view model for adding a new comment to a post whose
 /// post id [PostIdFirestore] is provided as an argument.
 class NewCommentViewModel
-    extends FamilyAsyncNotifier<NewCommentState, PostIdFirestore> {
+    extends FamilyAsyncNotifier<NewCommentValidation, PostIdFirestore> {
   static const String contentEmptyError = "Please fill out your comment";
 
   // The controller for the content of the comment
@@ -21,8 +21,8 @@ class NewCommentViewModel
   final contentController = TextEditingController();
 
   @override
-  Future<NewCommentState> build(PostIdFirestore arg) async {
-    return NewCommentState(contentError: null, posted: false);
+  Future<NewCommentValidation> build(PostIdFirestore arg) async {
+    return NewCommentValidation(contentError: null, posted: false);
   }
 
   /// Validates that the content is not empty.
@@ -31,7 +31,7 @@ class NewCommentViewModel
   bool validate(String content) {
     if (content.isEmpty) {
       state = AsyncData(
-        NewCommentState(
+        NewCommentValidation(
           contentError: contentEmptyError,
           posted: false,
         ),
@@ -59,7 +59,7 @@ class NewCommentViewModel
     return state.value?.posted ?? false;
   }
 
-  Future<NewCommentState> _tryAddComment(String content) async {
+  Future<NewCommentValidation> _tryAddComment(String content) async {
     final currentUserId = ref.read(uidProvider);
     final commentRepository = ref.read(commentRepositoryProvider);
 
@@ -85,7 +85,7 @@ class NewCommentViewModel
     await commentRepository.addComment(postId, commentData);
 
     state = AsyncData(
-      NewCommentState(
+      NewCommentValidation(
         contentError: null,
         posted: true,
       ),
@@ -96,6 +96,6 @@ class NewCommentViewModel
 }
 
 final newCommentStateProvider = AsyncNotifierProvider.family<
-    NewCommentViewModel, NewCommentState, PostIdFirestore>(
+    NewCommentViewModel, NewCommentValidation, PostIdFirestore>(
   () => NewCommentViewModel(),
 );
