@@ -4,7 +4,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/ui/comment_post.dart";
+import "package:proxima/models/ui/comment_details.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
@@ -23,7 +23,7 @@ void main() {
     late UserRepositoryService userRepository;
     late CommentRepositoryService commentRepository;
     late AutoDisposeFamilyAsyncNotifierProvider<CommentViewModel,
-        List<CommentPost>, PostIdFirestore> commentViewModelProvider;
+        List<CommentDetails>, PostIdFirestore> commentViewModelProvider;
     late ProviderContainer container;
 
     late PostIdFirestore postId;
@@ -77,7 +77,7 @@ void main() {
             )
             .toList();
 
-        final expectedComments = <CommentPost>[];
+        final expectedComments = <CommentDetails>[];
 
         for (var i = 0; i < numberComments; i++) {
           final commentData = commentsData[i];
@@ -88,7 +88,7 @@ void main() {
             commentData,
           );
 
-          final comment = CommentPost.from(commentData, owner.data);
+          final comment = CommentDetails.from(commentData, owner.data);
 
           expectedComments.add(comment);
         }
@@ -136,7 +136,7 @@ void main() {
         // The user refreshes the comments
         await container.read(commentViewModelProvider.notifier).refresh();
 
-        final expectedComment = CommentPost.from(
+        final expectedComment = CommentDetails.from(
           commentData,
           owner.data,
         );

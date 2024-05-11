@@ -3,19 +3,19 @@ import "dart:async";
 import "package:collection/collection.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/ui/comment_post.dart";
+import "package:proxima/models/ui/comment_details.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 
 /// This view model is used to fetch the comments of a post.
 /// It fetches the comments under the post with the id [arg] and returns
-/// a list of [CommentPost] objects to be displayed.
+/// a list of [CommentDetails] objects to be displayed.
 class CommentViewModel
-    extends AutoDisposeFamilyAsyncNotifier<List<CommentPost>, PostIdFirestore> {
+    extends AutoDisposeFamilyAsyncNotifier<List<CommentDetails>, PostIdFirestore> {
   // Note that we cannot rename `arg` to `postId` as it is a parameter
   // of an override method. Doing so lead to a warning.
   @override
-  Future<List<CommentPost>> build(PostIdFirestore arg) async {
+  Future<List<CommentDetails>> build(PostIdFirestore arg) async {
     final commentRepository = ref.read(commentRepositoryProvider);
     final userRepository = ref.read(userRepositoryProvider);
 
@@ -36,7 +36,7 @@ class CommentViewModel
         orElse: () => throw Exception("Owner not found"),
       );
 
-      return CommentPost.from(commentFirestore.data, owner.data);
+      return CommentDetails.from(commentFirestore.data, owner.data);
     }).toList();
 
     // Sort the comments from the newest to the oldest
@@ -58,6 +58,6 @@ class CommentViewModel
 }
 
 final commentListProvider = AsyncNotifierProvider.autoDispose
-    .family<CommentViewModel, List<CommentPost>, PostIdFirestore>(
+    .family<CommentViewModel, List<CommentDetails>, PostIdFirestore>(
   () => CommentViewModel(),
 );

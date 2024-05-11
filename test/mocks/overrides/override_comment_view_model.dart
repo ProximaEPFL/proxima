@@ -1,27 +1,27 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/ui/comment_post.dart";
+import "package:proxima/models/ui/comment_details.dart";
 import "package:proxima/viewmodels/comment_view_model.dart";
 
 import "../data/post_comment.dart";
 
 /// A mock implementation of the [CommentViewModel] class.
-/// By default it exposes an empty list of [CommentPost] and does nothing on refresh.
+/// By default it exposes an empty list of [CommentDetails] and does nothing on refresh.
 class MockCommentViewModel
-    extends AutoDisposeFamilyAsyncNotifier<List<CommentPost>, PostIdFirestore>
+    extends AutoDisposeFamilyAsyncNotifier<List<CommentDetails>, PostIdFirestore>
     implements CommentViewModel {
-  final Future<List<CommentPost>> Function(PostIdFirestore arg) _build;
+  final Future<List<CommentDetails>> Function(PostIdFirestore arg) _build;
   final Future<void> Function() _onRefresh;
 
   MockCommentViewModel({
-    Future<List<CommentPost>> Function(PostIdFirestore arg)? build,
+    Future<List<CommentDetails>> Function(PostIdFirestore arg)? build,
     Future<void> Function()? onRefresh,
   })  : _build =
-            build ?? ((PostIdFirestore arg) async => List<CommentPost>.empty()),
+            build ?? ((PostIdFirestore arg) async => List<CommentDetails>.empty()),
         _onRefresh = onRefresh ?? (() async {});
 
   @override
-  Future<List<CommentPost>> build(PostIdFirestore arg) => _build(arg);
+  Future<List<CommentDetails>> build(PostIdFirestore arg) => _build(arg);
 
   @override
   Future<void> refresh() => _onRefresh();

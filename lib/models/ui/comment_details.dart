@@ -3,12 +3,12 @@ import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/user/user_data.dart";
 
 @immutable
-class CommentPost {
+class CommentDetails {
   final String content;
   final String ownerDisplayName;
   final DateTime publicationDate;
 
-  const CommentPost({
+  const CommentDetails({
     required this.content,
     required this.ownerDisplayName,
     required this.publicationDate,
@@ -18,7 +18,7 @@ class CommentPost {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is CommentPost &&
+    return other is CommentDetails &&
         other.content == content &&
         other.ownerDisplayName == ownerDisplayName &&
         other.publicationDate == publicationDate;
@@ -33,14 +33,14 @@ class CommentPost {
     );
   }
 
-  /// Factory method to create a [CommentPost] from a [CommentData]
+  /// Factory method to create a [CommentDetails] from a [CommentData]
   /// and a [UserData] that represents the owner of the comment.
   /// (The one that wrote the comment)
-  factory CommentPost.from(
+  factory CommentDetails.from(
     CommentData commentData,
     UserData ownerData,
   ) {
-    return CommentPost(
+    return CommentDetails(
       content: commentData.content,
       ownerDisplayName: ownerData.displayName,
       publicationDate: DateTime.fromMillisecondsSinceEpoch(

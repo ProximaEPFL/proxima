@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/models/ui/comment_post.dart";
+import "package:proxima/models/ui/comment_details.dart";
 import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.dart";
 
 class CommentList extends StatelessWidget {
@@ -8,7 +8,7 @@ class CommentList extends StatelessWidget {
     required this.comments,
   });
 
-  final List<CommentPost> comments;
+  final List<CommentDetails> comments;
 
   @override
   Widget build(BuildContext context) {
