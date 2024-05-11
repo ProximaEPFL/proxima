@@ -7,7 +7,7 @@ import "package:proxima/services/sorting/post_sort_option.dart";
 import "package:proxima/services/sorting/post_sorting_service.dart";
 import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
-import "package:proxima/views/home_content/feed/feed_sort_option_chips.dart";
+import "package:proxima/views/components/options/feed/feed_sort_option_chips.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 
 import "../../../mocks/data/firestore_post.dart";

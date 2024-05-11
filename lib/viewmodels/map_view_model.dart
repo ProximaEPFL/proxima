@@ -5,7 +5,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_info.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
-import "package:proxima/views/option_widgets/map/map_selection_option.dart";
+import "package:proxima/views/components/options/map/map_selection_option.dart";
 
 class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
   @override

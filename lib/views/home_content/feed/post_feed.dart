@@ -3,7 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
-import "package:proxima/views/home_content/feed/feed_sort_option_chips.dart";
+import "package:proxima/views/components/options/feed/feed_sort_option_chips.dart";
 import "package:proxima/views/home_content/feed/post_card/post_card.dart";
 import "package:proxima/views/navigation/routes.dart";
 

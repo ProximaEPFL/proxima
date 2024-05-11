@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/map_info.dart";
-import "package:proxima/views/option_widgets/map/map_selection_option.dart";
+import "package:proxima/views/components/options/map/map_selection_option.dart";
 
 class MapSelectionOptionChips extends StatelessWidget {
   const MapSelectionOptionChips({
