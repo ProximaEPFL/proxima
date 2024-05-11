@@ -2,7 +2,7 @@ import "package:flutter/foundation.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 
 @immutable
-class PostOverview {
+class PostDetails {
   final PostIdFirestore postId;
   final String title;
   final String description;
@@ -13,7 +13,7 @@ class PostOverview {
   final int distance; // in meters
   final bool isChallenge;
 
-  const PostOverview({
+  const PostDetails({
     required this.postId,
     required this.title,
     required this.description,
@@ -29,7 +29,7 @@ class PostOverview {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is PostOverview &&
+    return other is PostDetails &&
         other.postId == postId &&
         other.title == title &&
         other.description == description &&

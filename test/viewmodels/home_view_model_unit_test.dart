@@ -4,7 +4,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
@@ -110,7 +110,7 @@ void main() {
       );
 
       final expectedPosts = [
-        PostOverview(
+        PostDetails(
           postId: post.id,
           title: post.data.title,
           description: post.data.description,
@@ -165,7 +165,7 @@ void main() {
         }).toList();
 
         final expectedPosts = posts.map((post) {
-          final postOverview = PostOverview(
+          final postOverview = PostDetails(
             postId: post.id,
             title: post.data.title,
             description: post.data.description,
@@ -228,7 +228,7 @@ void main() {
         }).toList();
 
         final expectedPosts = posts.mapIndexed((index, post) {
-          final postOverview = PostOverview(
+          final postOverview = PostDetails(
             postId: post.id,
             title: post.data.title,
             description: post.data.description,
@@ -304,7 +304,7 @@ void main() {
           FirestorePostGenerator().createPostAt(postData, userPosition0);
 
       final expectedPosts = [
-        PostOverview(
+        PostDetails(
           postId: post.id,
           title: post.data.title,
           description: post.data.description,

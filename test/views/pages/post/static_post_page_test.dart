@@ -91,7 +91,7 @@ void main() {
           final clickOnFinder = find.byWidgetPredicate(
             (widget) =>
                 widget is PostCard &&
-                (widget.postOverview.isChallenge == clickChallenge),
+                (widget.postDetails.isChallenge == clickChallenge),
           );
           expect(clickOnFinder, findsAtLeast(1));
           await tester.tap(clickOnFinder.first);

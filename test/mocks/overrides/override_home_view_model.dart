@@ -1,5 +1,5 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 
 import "../data/post_overview.dart";
@@ -7,20 +7,20 @@ import "../data/post_overview.dart";
 /// A mock implementation of the [HomeViewModel] class.
 /// This class is particularly useful for the UI tests where we want to expose
 /// particular data to the views.
-/// By default it exposes an empty list of [PostOverview] and does nothing on refresh.
-class MockHomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>>
+/// By default it exposes an empty list of [PostDetails] and does nothing on refresh.
+class MockHomeViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>>
     implements HomeViewModel {
-  final Future<List<PostOverview>> Function() _build;
+  final Future<List<PostDetails>> Function() _build;
   final Future<void> Function() _onRefresh;
 
   MockHomeViewModel({
-    Future<List<PostOverview>> Function()? build,
+    Future<List<PostDetails>> Function()? build,
     Future<void> Function()? onRefresh,
-  })  : _build = build ?? (() async => List<PostOverview>.empty()),
+  })  : _build = build ?? (() async => List<PostDetails>.empty()),
         _onRefresh = onRefresh ?? (() async {});
 
   @override
-  Future<List<PostOverview>> build() => _build();
+  Future<List<PostDetails>> build() => _build();
 
   @override
   Future<void> refresh() => _onRefresh();

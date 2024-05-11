@@ -1,13 +1,13 @@
 import "package:flutter/foundation.dart";
-import "package:proxima/models/database/vote/upvote_state.dart";
+import "package:proxima/models/database/vote/vote_state.dart";
 
 @immutable
-class PostVote {
-  final UpvoteState upvoteState;
+class VotesDetails {
+  final VoteState upvoteState;
 
   final int votes;
 
-  const PostVote({
+  const VotesDetails({
     required this.upvoteState,
     required this.votes,
   });
@@ -16,7 +16,7 @@ class PostVote {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is PostVote &&
+    return other is VotesDetails &&
         other.upvoteState == upvoteState &&
         other.votes == votes;
   }

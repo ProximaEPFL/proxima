@@ -1,12 +1,12 @@
 import "package:google_maps_flutter/google_maps_flutter.dart";
-import "package:proxima/models/ui/map_pin.dart";
+import "package:proxima/models/ui/map_pin_details.dart";
 
 class MapPinGenerator {
   //generate a list of MapPin
-  static List<MapPin> generateMapPins(int numberOfPins) {
-    List<MapPin> mapPins = List.generate(
+  static List<MapPinDetails> generateMapPins(int numberOfPins) {
+    List<MapPinDetails> mapPins = List.generate(
       numberOfPins,
-      (index) => MapPin(
+      (index) => MapPinDetails(
         id: MarkerId(index.toString()),
         position: LatLng(index.toDouble(), index.toDouble()),
         callbackFunction: () {},

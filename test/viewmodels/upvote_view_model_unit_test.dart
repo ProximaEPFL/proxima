@@ -4,8 +4,8 @@ import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/models/database/vote/upvote_state.dart";
-import "package:proxima/models/ui/post_vote.dart";
+import "package:proxima/models/database/vote/vote_state.dart";
+import "package:proxima/models/ui/votes_details.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/post_upvote_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
@@ -23,7 +23,7 @@ void main() {
     late MockUpvoteRepositoryService<PostIdFirestore> voteRepository;
     late UserIdFirestore userId;
     late PostFirestore testingPost;
-    late AutoDisposeFamilyAsyncNotifierProvider<UpVoteViewModel, PostVote,
+    late AutoDisposeFamilyAsyncNotifierProvider<UpVoteViewModel, VotesDetails,
         PostIdFirestore> voteViewModelProvider;
 
     late ProviderContainer container;
@@ -49,13 +49,13 @@ void main() {
       test("The correct initial state is returned correctly (UpVote)",
           () async {
         when(voteRepository.getUpvoteState(userId, testingPost.id))
-            .thenAnswer((_) => Future.value(UpvoteState.upvoted));
+            .thenAnswer((_) => Future.value(VoteState.upvoted));
 
         when(postRepository.getPost(testingPost.id))
             .thenAnswer((_) => Future.value(testingPost));
 
-        final expectedVote = PostVote(
-          upvoteState: UpvoteState.upvoted,
+        final expectedVote = VotesDetails(
+          upvoteState: VoteState.upvoted,
           votes: testingPost.data.voteScore,
         );
 
@@ -83,7 +83,7 @@ void main() {
       setUp(() {
         // Setup the initial state of the vote
         when(voteRepository.getUpvoteState(userId, testingPost.id))
-            .thenAnswer((_) => Future.value(UpvoteState.none));
+            .thenAnswer((_) => Future.value(VoteState.none));
 
         when(postRepository.getPost(testingPost.id))
             .thenAnswer((_) => Future.value(testingPost));
@@ -102,8 +102,8 @@ void main() {
         () async {
           await container.read(voteViewModelProvider.notifier).triggerUpVote();
 
-          final expectedVote = PostVote(
-            upvoteState: UpvoteState.upvoted,
+          final expectedVote = VotesDetails(
+            upvoteState: VoteState.upvoted,
             votes: testingPost.data.voteScore + 1,
           );
 
@@ -115,7 +115,7 @@ void main() {
             voteRepository.setUpvoteState(
               userId,
               testingPost.id,
-              UpvoteState.upvoted,
+              VoteState.upvoted,
             ),
           );
         },
@@ -128,8 +128,8 @@ void main() {
               .read(voteViewModelProvider.notifier)
               .triggerDownVote();
 
-          final expectedVote = PostVote(
-            upvoteState: UpvoteState.downvoted,
+          final expectedVote = VotesDetails(
+            upvoteState: VoteState.downvoted,
             votes: testingPost.data.voteScore - 1,
           );
 
@@ -141,7 +141,7 @@ void main() {
             voteRepository.setUpvoteState(
               userId,
               testingPost.id,
-              UpvoteState.downvoted,
+              VoteState.downvoted,
             ),
           );
         },
@@ -152,12 +152,12 @@ void main() {
         () async {
           // Set the initial state to downvoted
           when(voteRepository.getUpvoteState(userId, testingPost.id))
-              .thenAnswer((_) => Future.value(UpvoteState.downvoted));
+              .thenAnswer((_) => Future.value(VoteState.downvoted));
 
           await container.read(voteViewModelProvider.notifier).triggerUpVote();
 
-          final expectedVote = PostVote(
-            upvoteState: UpvoteState.upvoted,
+          final expectedVote = VotesDetails(
+            upvoteState: VoteState.upvoted,
             votes: testingPost.data.voteScore + 2,
           );
 
@@ -169,7 +169,7 @@ void main() {
             voteRepository.setUpvoteState(
               userId,
               testingPost.id,
-              UpvoteState.upvoted,
+              VoteState.upvoted,
             ),
           );
         },
@@ -180,14 +180,14 @@ void main() {
         () async {
           // Set the initial state to upvoted
           when(voteRepository.getUpvoteState(userId, testingPost.id))
-              .thenAnswer((_) => Future.value(UpvoteState.upvoted));
+              .thenAnswer((_) => Future.value(VoteState.upvoted));
 
           await container
               .read(voteViewModelProvider.notifier)
               .triggerDownVote();
 
-          final expectedVote = PostVote(
-            upvoteState: UpvoteState.downvoted,
+          final expectedVote = VotesDetails(
+            upvoteState: VoteState.downvoted,
             votes: testingPost.data.voteScore - 2,
           );
 
@@ -199,7 +199,7 @@ void main() {
             voteRepository.setUpvoteState(
               userId,
               testingPost.id,
-              UpvoteState.downvoted,
+              VoteState.downvoted,
             ),
           );
         },
@@ -210,12 +210,12 @@ void main() {
         () async {
           // Set the initial state to upvoted
           when(voteRepository.getUpvoteState(userId, testingPost.id))
-              .thenAnswer((_) => Future.value(UpvoteState.upvoted));
+              .thenAnswer((_) => Future.value(VoteState.upvoted));
 
           await container.read(voteViewModelProvider.notifier).triggerUpVote();
 
-          final expectedVote = PostVote(
-            upvoteState: UpvoteState.none,
+          final expectedVote = VotesDetails(
+            upvoteState: VoteState.none,
             // The -1 is normal because we consider that the user already had an upvote
             votes: testingPost.data.voteScore - 1,
           );
@@ -228,7 +228,7 @@ void main() {
             voteRepository.setUpvoteState(
               userId,
               testingPost.id,
-              UpvoteState.none,
+              VoteState.none,
             ),
           );
         },

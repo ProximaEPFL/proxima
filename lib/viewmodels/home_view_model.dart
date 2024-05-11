@@ -4,7 +4,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/challenge/challenge_firestore.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
@@ -15,16 +15,16 @@ import "package:proxima/viewmodels/login_view_model.dart";
 
 /// This viewmodel is used to fetch the list of posts that are displayed in the home feed.
 /// It fetches the posts from the database and returns a list of
-/// (postId: [PostIdFirestore], postOverview: [PostOverview]) objects to be displayed.
+/// (postId: [PostIdFirestore], postDetails: [PostDetails]) objects to be displayed.
 /// These represent the overview data to be displayed associated to the corresponding post id.
 /// Note: this viewmodel also provides the data for the post page
-class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
+class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
   HomeViewModel();
 
   static const kmPostRadius = 0.1;
 
   @override
-  Future<List<PostOverview>> build() async {
+  Future<List<PostDetails>> build() async {
     final geoLocationService = ref.watch(geoLocationServiceProvider);
     final postRepository = ref.watch(postRepositoryProvider);
     final userRepository = ref.watch(userRepositoryProvider);
@@ -87,7 +87,7 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
               1000)
           .round(); //TODO: create method because used here and in challenges (+tests)
 
-      final postOverview = PostOverview(
+      final postDetails = PostDetails(
         postId: post.id,
         title: post.data.title,
         description: post.data.description,
@@ -99,7 +99,7 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
         isChallenge: uncompletedChallengesId.contains(post.id),
       );
 
-      return postOverview;
+      return postDetails;
     }).toList();
 
     return posts;
@@ -115,6 +115,6 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostOverview>> {
 }
 
 final postOverviewProvider =
-    AutoDisposeAsyncNotifierProvider<HomeViewModel, List<PostOverview>>(
+    AutoDisposeAsyncNotifierProvider<HomeViewModel, List<PostDetails>>(
   () => HomeViewModel(),
 );

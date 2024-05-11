@@ -1,12 +1,12 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
-import "package:proxima/models/ui/map_info.dart";
+import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/views/components/options/map/map_selection_option.dart";
 
 void main() {
   group("hash and == works", () {
     test("hash", () {
-      const mapInfo1 = MapInfo(
+      const mapInfo1 = MapDetails(
         initialLocation: LatLng(0, 0),
         selectOption: MapSelectionOptions.nearby,
       );
@@ -22,15 +22,15 @@ void main() {
     });
 
     test("==", () {
-      const mapInfo1 = MapInfo(
+      const mapInfo1 = MapDetails(
         initialLocation: LatLng(0, 0),
         selectOption: MapSelectionOptions.nearby,
       );
-      const mapInfo2 = MapInfo(
+      const mapInfo2 = MapDetails(
         initialLocation: LatLng(1, 1),
         selectOption: MapSelectionOptions.nearby,
       );
-      const mapInfo3 = MapInfo(
+      const mapInfo3 = MapDetails(
         initialLocation: LatLng(0, 0),
         selectOption: MapSelectionOptions.nearby,
       );

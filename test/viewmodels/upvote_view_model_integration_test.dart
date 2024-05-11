@@ -4,8 +4,8 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/models/database/vote/upvote_state.dart";
-import "package:proxima/models/ui/post_vote.dart";
+import "package:proxima/models/database/vote/vote_state.dart";
+import "package:proxima/models/ui/votes_details.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/post_upvote_repository_service.dart";
@@ -26,7 +26,7 @@ void main() {
     late PostFirestore testingPost;
     late UserIdFirestore userId;
 
-    late AutoDisposeFamilyAsyncNotifierProvider<UpVoteViewModel, PostVote,
+    late AutoDisposeFamilyAsyncNotifierProvider<UpVoteViewModel, VotesDetails,
         PostIdFirestore> voteViewModelProvider;
 
     late ProviderContainer container;
@@ -71,7 +71,7 @@ void main() {
           await voteRepository.getUpvoteState(userId, testingPost.id);
 
       expect(updatedPost.data.voteScore, testingPost.data.voteScore + 1);
-      expect(updatedVoteState, UpvoteState.upvoted);
+      expect(updatedVoteState, VoteState.upvoted);
     });
 
     test("Downvote correctly updates the state and vote count on the database",
@@ -83,7 +83,7 @@ void main() {
           await voteRepository.getUpvoteState(userId, testingPost.id);
 
       expect(updatedPost.data.voteScore, testingPost.data.voteScore - 1);
-      expect(updatedVoteState, UpvoteState.downvoted);
+      expect(updatedVoteState, VoteState.downvoted);
     });
 
     test("Upvoting twice correctly add then removes the upvote on the database",
@@ -100,7 +100,7 @@ void main() {
         updatedPostFirstUpvote.data.voteScore,
         testingPost.data.voteScore + 1,
       );
-      expect(updatedVoteStateFirstUpvote, UpvoteState.upvoted);
+      expect(updatedVoteStateFirstUpvote, VoteState.upvoted);
 
       // Perform second upvote
       await container.read(voteViewModelProvider.notifier).triggerUpVote();
@@ -114,7 +114,7 @@ void main() {
         updatedPostSecondUpvote.data.voteScore,
         testingPost.data.voteScore,
       );
-      expect(updatedVoteStateSecondUpvote, UpvoteState.none);
+      expect(updatedVoteStateSecondUpvote, VoteState.none);
     });
 
     test("Upvoting then downvoting correctly removes 2 votes on the database",
@@ -131,7 +131,7 @@ void main() {
         updatedPostFirstUpvote.data.voteScore,
         testingPost.data.voteScore + 1,
       );
-      expect(updatedVoteStateFirstUpvote, UpvoteState.upvoted);
+      expect(updatedVoteStateFirstUpvote, VoteState.upvoted);
 
       // Perform downvote
       await container.read(voteViewModelProvider.notifier).triggerDownVote();
@@ -145,7 +145,7 @@ void main() {
         updatedPostSecondUpvote.data.voteScore,
         testingPost.data.voteScore - 1,
       );
-      expect(updatedVoteStateSecondUpvote, UpvoteState.downvoted);
+      expect(updatedVoteStateSecondUpvote, VoteState.downvoted);
     });
   });
 }

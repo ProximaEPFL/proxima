@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/viewmodels/comment_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
@@ -18,22 +18,22 @@ class PostPage extends HookConsumerWidget {
 
   const PostPage({
     super.key,
-    required this.postOverview,
+    required this.postDetails,
   });
 
-  final PostOverview postOverview;
+  final PostDetails postDetails;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ThemeData themeData = Theme.of(context);
 
-    final commentsAsync = ref.watch(commentListProvider(postOverview.postId));
+    final commentsAsync = ref.watch(commentListProvider(postDetails.postId));
 
     // Top app bar content = Title + Distance
     List<Widget> appBarContent = [
       const Text(_appBarTitle),
       Text(
-        "${postOverview.distance}m away",
+        "${postDetails.distance}m away",
         key: postDistanceKey,
         style: themeData.textTheme.titleSmall,
       ),
@@ -43,7 +43,7 @@ class PostPage extends HookConsumerWidget {
     List<Widget> bodyChildren = [
       CompletePostWidget(
         key: completePostWidgetKey,
-        post: postOverview,
+        post: postDetails,
       ),
       const SizedBox(height: 10),
       CircularValue(
@@ -68,7 +68,7 @@ class PostPage extends HookConsumerWidget {
         child: Center(
           child: RefreshIndicator(
             onRefresh: ref
-                .read(commentListProvider(postOverview.postId).notifier)
+                .read(commentListProvider(postDetails.postId).notifier)
                 .refresh,
             child: ListView(
               children: bodyChildren,
@@ -83,7 +83,7 @@ class PostPage extends HookConsumerWidget {
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: BottomBarAddComment(
             key: bottomBarAddCommentKey,
-            parentPostId: postOverview.postId,
+            parentPostId: postDetails.postId,
           ),
         ),
       ],

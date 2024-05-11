@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/database/vote/upvote_state.dart";
+import "package:proxima/models/database/vote/vote_state.dart";
 import "package:proxima/viewmodels/upvote_view_model.dart";
 
 /// This widget is used to display the votes of a post.
@@ -21,7 +21,7 @@ class PostVotes extends HookConsumerWidget {
 
     final votes = asyncPostVote.valueOrNull?.votes ?? 0;
     final upvoteState =
-        asyncPostVote.valueOrNull?.upvoteState ?? UpvoteState.none;
+        asyncPostVote.valueOrNull?.upvoteState ?? VoteState.none;
 
     // For the upvote and downvote buttons, we use "padding: EdgeInsets.zero"
     // This is to reduce the padding and InkWell created by the IconButton widget
@@ -32,7 +32,7 @@ class PostVotes extends HookConsumerWidget {
       icon: Icon(
         Icons.expand_less,
         size: 30,
-        color: upvoteState == UpvoteState.upvoted ? Colors.blue : null,
+        color: upvoteState == VoteState.upvoted ? Colors.blue : null,
       ),
       style: const ButtonStyle(
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -46,7 +46,7 @@ class PostVotes extends HookConsumerWidget {
       icon: Icon(
         Icons.expand_more,
         size: 30,
-        color: upvoteState == UpvoteState.downvoted ? Colors.blue : null,
+        color: upvoteState == VoteState.downvoted ? Colors.blue : null,
       ),
       style: const ButtonStyle(
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,

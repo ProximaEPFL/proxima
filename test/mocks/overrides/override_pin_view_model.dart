@@ -1,19 +1,19 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/ui/map_pin.dart";
+import "package:proxima/models/ui/map_pin_details.dart";
 import "package:proxima/viewmodels/map_pin_view_model.dart";
 
 import "../data/map_pin.dart";
 
-class MockPinViewModel extends AsyncNotifier<List<MapPin>>
+class MockPinViewModel extends AsyncNotifier<List<MapPinDetails>>
     implements MapPinViewModel {
-  final Future<List<MapPin>> Function() _build;
+  final Future<List<MapPinDetails>> Function() _build;
 
   MockPinViewModel({
-    Future<List<MapPin>> Function()? build,
+    Future<List<MapPinDetails>> Function()? build,
   }) : _build = build ?? (() async => List.empty());
 
   @override
-  Future<List<MapPin>> build() => _build();
+  Future<List<MapPinDetails>> build() => _build();
 }
 
 final mockPinViewModelOverride = mapPinProvider.overrideWith(

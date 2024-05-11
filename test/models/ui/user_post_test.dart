@@ -1,11 +1,11 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/ui/user_post.dart";
+import "package:proxima/models/ui/user_post_details.dart";
 
 void main() {
   group("User Post model testing", () {
     test("hash overrides correctly", () {
-      const userPost = UserPost(
+      const userPost = UserPostDetails(
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description",
@@ -23,13 +23,13 @@ void main() {
     });
 
     test("equality overrides correctly", () {
-      const userPost = UserPost(
+      const userPost = UserPostDetails(
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description",
       );
 
-      const userPostCopy = UserPost(
+      const userPostCopy = UserPostDetails(
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description",
@@ -39,13 +39,13 @@ void main() {
     });
 
     test("inequality test on content", () {
-      const userPost1 = UserPost(
+      const userPost1 = UserPostDetails(
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description 1",
       );
 
-      const userPost2 = UserPost(
+      const userPost2 = UserPostDetails(
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description 2",

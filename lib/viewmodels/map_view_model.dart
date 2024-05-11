@@ -2,17 +2,17 @@ import "dart:async";
 import "package:flutter/material.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/ui/map_info.dart";
+import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_option.dart";
 
-class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
+class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   @override
-  Future<MapInfo> build() async {
+  Future<MapDetails> build() async {
     final actualLocation =
         await ref.read(geoLocationServiceProvider).getCurrentPosition();
-    return MapInfo(
+    return MapDetails(
       initialLocation:
           LatLng(actualLocation.latitude, actualLocation.longitude),
       selectOption: MapSelectionOptions.nearby,
@@ -55,6 +55,6 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapInfo> {
   }
 }
 
-final mapProvider = AsyncNotifierProvider.autoDispose<MapViewModel, MapInfo>(
+final mapProvider = AsyncNotifierProvider.autoDispose<MapViewModel, MapDetails>(
   () => MapViewModel(),
 );

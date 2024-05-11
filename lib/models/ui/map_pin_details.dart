@@ -1,24 +1,26 @@
 import "package:google_maps_flutter/google_maps_flutter.dart";
 
-//custom map pin class used to display pins on the map
-class MapPin {
-  const MapPin({
-    //unique id that identifies the pin
-    //must be unique for each pin
+/// Custom map pin class used to display pins on the map
+class MapPinDetails {
+  const MapPinDetails({
     required this.id,
-    //position of the pin on the map
     required this.position,
-    //callback function that is called when we click on the pin
     required this.callbackFunction,
   });
 
+  /// Unique id that identifies the pin
+  /// (must be unique for each pin)
   final MarkerId id;
+
+  /// Position of the pin on the map
   final LatLng position;
+
+  /// Callback function that is called when we click on the pin
   final void Function() callbackFunction;
 
   @override
   bool operator ==(Object other) {
-    return other is MapPin &&
+    return other is MapPinDetails &&
         other.id == id &&
         other.position == position &&
         other.callbackFunction == callbackFunction;

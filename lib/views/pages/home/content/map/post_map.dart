@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/ui/map_info.dart";
+import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/map_pin_view_model.dart";
 import "package:proxima/viewmodels/map_view_model.dart";
@@ -10,7 +10,7 @@ import "package:proxima/views/components/async/error_alert.dart";
 
 /// This widget displays the Google Map
 class PostMap extends ConsumerWidget {
-  final MapInfo mapInfo;
+  final MapDetails mapInfo;
   static const initialZoomLevel = 17.5;
 
   static const postMapKey = Key("postMap");

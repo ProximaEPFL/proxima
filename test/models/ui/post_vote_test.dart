@@ -1,12 +1,12 @@
 import "package:flutter_test/flutter_test.dart";
-import "package:proxima/models/database/vote/upvote_state.dart";
-import "package:proxima/models/ui/post_vote.dart";
+import "package:proxima/models/database/vote/vote_state.dart";
+import "package:proxima/models/ui/votes_details.dart";
 
 void main() {
   group("Post Vote testing", () {
     test("hash overrides correclty", () {
-      const postVote = PostVote(
-        upvoteState: UpvoteState.upvoted,
+      const postVote = VotesDetails(
+        upvoteState: VoteState.upvoted,
         votes: 12,
       );
 
@@ -21,13 +21,13 @@ void main() {
     });
 
     test("equality overrides correctly", () {
-      const postVote = PostVote(
-        upvoteState: UpvoteState.upvoted,
+      const postVote = VotesDetails(
+        upvoteState: VoteState.upvoted,
         votes: 12,
       );
 
-      const postVoteCopy = PostVote(
-        upvoteState: UpvoteState.upvoted,
+      const postVoteCopy = VotesDetails(
+        upvoteState: VoteState.upvoted,
         votes: 12,
       );
 

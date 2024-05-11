@@ -1,6 +1,6 @@
 /// Enum to represent the state of an upvote. A user can either
 /// be not voting, upvoting or downvoting on a post/comment.
-enum UpvoteState {
+enum VoteState {
   none,
   upvoted,
   downvoted;
@@ -9,11 +9,11 @@ enum UpvoteState {
   /// of a post/comment when the user applies this vote.
   int get increment {
     switch (this) {
-      case UpvoteState.none:
+      case VoteState.none:
         return 0;
-      case UpvoteState.upvoted:
+      case VoteState.upvoted:
         return 1;
-      case UpvoteState.downvoted:
+      case VoteState.downvoted:
         return -1;
     }
   }

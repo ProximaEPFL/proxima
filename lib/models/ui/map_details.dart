@@ -2,8 +2,8 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:proxima/views/components/options/map/map_selection_option.dart";
 
 /// Information about how the map should be displayed.
-class MapInfo {
-  const MapInfo({
+class MapDetails {
+  const MapDetails({
     required this.initialLocation,
     required this.selectOption,
   });
@@ -18,7 +18,7 @@ class MapInfo {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is MapInfo &&
+    return other is MapDetails &&
         other.initialLocation == initialLocation &&
         other.selectOption == selectOption;
   }

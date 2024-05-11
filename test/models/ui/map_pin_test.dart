@@ -1,13 +1,13 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
-import "package:proxima/models/ui/map_pin.dart";
+import "package:proxima/models/ui/map_pin_details.dart";
 
 void main() {
   group("Map pin testing", () {
     testFunction() {}
     testFunctionDifferent() {}
     test("hash overrides correctly", () {
-      MapPin mapPin = MapPin(
+      MapPinDetails mapPin = MapPinDetails(
         id: const MarkerId("1"),
         position: const LatLng(0, 0),
         callbackFunction: testFunction,
@@ -27,13 +27,13 @@ void main() {
     test("equality overrides correctly", () {
       //both pin need to have the same method, not just two different methods that have the same logic
 
-      MapPin mapPin = MapPin(
+      MapPinDetails mapPin = MapPinDetails(
         id: const MarkerId("1"),
         position: const LatLng(0, 0),
         callbackFunction: testFunction,
       );
 
-      MapPin mapPinCopy = MapPin(
+      MapPinDetails mapPinCopy = MapPinDetails(
         id: const MarkerId("1"),
         position: const LatLng(0, 0),
         callbackFunction: testFunction,
@@ -43,13 +43,13 @@ void main() {
     });
 
     test("inequality test on id", () {
-      MapPin mapPin = MapPin(
+      MapPinDetails mapPin = MapPinDetails(
         id: const MarkerId("1"),
         position: const LatLng(0, 0),
         callbackFunction: testFunction,
       );
 
-      MapPin mapPinDifferent = MapPin(
+      MapPinDetails mapPinDifferent = MapPinDetails(
         id: const MarkerId("2"),
         position: const LatLng(0, 0),
         callbackFunction: testFunction,
@@ -59,13 +59,13 @@ void main() {
     });
 
     test("inequality test on position", () {
-      MapPin mapPin = MapPin(
+      MapPinDetails mapPin = MapPinDetails(
         id: const MarkerId("1"),
         position: const LatLng(0, 0),
         callbackFunction: testFunction,
       );
 
-      MapPin mapPinDifferent = MapPin(
+      MapPinDetails mapPinDifferent = MapPinDetails(
         id: const MarkerId("1"),
         position: const LatLng(1, 1),
         callbackFunction: testFunction,
@@ -75,13 +75,13 @@ void main() {
     });
 
     test("inequality test on callback function", () {
-      MapPin mapPin = MapPin(
+      MapPinDetails mapPin = MapPinDetails(
         id: const MarkerId("1"),
         position: const LatLng(0, 0),
         callbackFunction: testFunction,
       );
 
-      MapPin mapPinDifferent = MapPin(
+      MapPinDetails mapPinDifferent = MapPinDetails(
         id: const MarkerId("1"),
         position: const LatLng(0, 0),
         callbackFunction: testFunctionDifferent,

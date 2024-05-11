@@ -4,7 +4,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/models/database/vote/upvote_state.dart";
+import "package:proxima/models/database/vote/vote_state.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/comment_upvote_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
@@ -65,7 +65,7 @@ void main() {
       });
 
       test("Comment upvote state is none by default", () async {
-        const expectedUpvoteState = UpvoteState.none;
+        const expectedUpvoteState = VoteState.none;
 
         final actualUpvoteState = await commentUpvoteRepository.getUpvoteState(
           userId,
@@ -76,7 +76,7 @@ void main() {
       });
 
       test("Upvoting a comment correctly", () async {
-        const upvoteState = UpvoteState.upvoted;
+        const upvoteState = VoteState.upvoted;
         await commentUpvoteRepository.setUpvoteState(
           userId,
           commentId,
@@ -111,8 +111,8 @@ void main() {
         for (var i = 0; i < numberOfUsers; i++) {
           final user = users[i];
           final upvoteState = i % moduloDownvote == 0
-              ? UpvoteState.downvoted
-              : UpvoteState.upvoted;
+              ? VoteState.downvoted
+              : VoteState.upvoted;
 
           expectedVoteScore += upvoteState.increment;
 

@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
@@ -18,7 +18,7 @@ import "../services/mock_comment_repository_service.dart";
 final postPage = MaterialApp(
   onGenerateRoute: generateRoute,
   home: PostPage(
-    postOverview: testPosts.first,
+    postDetails: testPosts.first,
   ),
 );
 
@@ -54,11 +54,11 @@ ProviderScope postPageProvider(
   );
 }
 
-ProviderScope customPostOverviewPage(PostOverview post) {
+ProviderScope customPostOverviewPage(PostDetails post) {
   final customPostApp = MaterialApp(
     onGenerateRoute: generateRoute,
     home: PostPage(
-      postOverview: post,
+      postDetails: post,
     ),
   );
 

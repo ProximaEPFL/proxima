@@ -7,7 +7,7 @@ import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/database/vote/upvote_state.dart";
+import "package:proxima/models/database/vote/vote_state.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/upvote_repository_service.dart";
@@ -194,7 +194,7 @@ void main() {
         commentUpvoteRepository.setUpvoteState(
           testingUserFirestoreId,
           commentId,
-          UpvoteState.upvoted,
+          VoteState.upvoted,
         );
 
         await commentRepository.deleteComment(postId, commentId);
@@ -208,7 +208,7 @@ void main() {
           testingUserFirestoreId,
           commentId,
         );
-        expect(upvote, UpvoteState.none);
+        expect(upvote, VoteState.none);
 
         // Check that the comment count was updated correctly
         final postDoc = await postDocument.get();

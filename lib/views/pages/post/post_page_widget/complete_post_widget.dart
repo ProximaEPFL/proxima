@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/views/pages/home/content/feed/post_card/post_header.dart";
 import "package:proxima/views/pages/home/content/feed/post_card/post_votes.dart";
 
@@ -9,7 +9,7 @@ class CompletePostWidget extends StatelessWidget {
   static const postVoteWidgetKey = Key("postVoteWidget");
   static const postUserBarKey = Key("postUserAvatar");
 
-  final PostOverview post;
+  final PostDetails post;
 
   const CompletePostWidget({
     super.key,

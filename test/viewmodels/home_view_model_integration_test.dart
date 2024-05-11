@@ -4,7 +4,7 @@ import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_data.dart";
-import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
@@ -110,7 +110,7 @@ void main() {
 
       // Get the expected post overview
       final expectedPosts = [
-        PostOverview(
+        PostDetails(
           postId: postId,
           title: postData.title,
           description: postData.description,
@@ -206,7 +206,7 @@ void main() {
         );
 
         final postId = postIds[index];
-        final postOverview = PostOverview(
+        final postOverview = PostDetails(
           postId: postId,
           title: data.title,
           description: data.description,

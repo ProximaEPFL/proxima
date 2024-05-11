@@ -3,19 +3,19 @@ import "dart:async";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/database/vote/upvote_state.dart";
-import "package:proxima/models/ui/post_vote.dart";
+import "package:proxima/models/database/vote/vote_state.dart";
+import "package:proxima/models/ui/votes_details.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/post_upvote_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
 /// This view model is used to handle the upvoting and downvoting of a post.
-/// It exposes a [PostVote] object that contains the current vote state and the
+/// It exposes a [VotesDetails] object that contains the current vote state and the
 /// number of votes.
 /// The [PostFirestore] parameter is used to identify the post for which is responsible
 /// this view model.
 ///
-/// To avoid unnecessary database fetches, the [PostVote] state is queried
+/// To avoid unnecessary database fetches, the [VotesDetails] state is queried
 /// from the database only once at build time and then updated locally after the
 /// user triggers an upvote or downvote action.
 ///
@@ -23,9 +23,9 @@ import "package:proxima/viewmodels/login_view_model.dart";
 /// for each post that is displayed on the screen.
 /// Thus, when the post is removed from the screen, the view model is disposed.
 class UpVoteViewModel
-    extends AutoDisposeFamilyAsyncNotifier<PostVote, PostIdFirestore> {
+    extends AutoDisposeFamilyAsyncNotifier<VotesDetails, PostIdFirestore> {
   @override
-  FutureOr<PostVote> build(PostIdFirestore arg) async {
+  FutureOr<VotesDetails> build(PostIdFirestore arg) async {
     final postId = arg;
     final uid = ref.watch(validUidProvider);
 
@@ -38,9 +38,9 @@ class UpVoteViewModel
     // Await the futures in parallel for better responsiveness
     final results = await Future.wait([postFuture, upvoteStateFuture]);
     final post = results[0] as PostFirestore;
-    final upvoteState = results[1] as UpvoteState;
+    final upvoteState = results[1] as VoteState;
 
-    return PostVote(
+    return VotesDetails(
       upvoteState: upvoteState,
       votes: post.data.voteScore,
     );
@@ -48,13 +48,13 @@ class UpVoteViewModel
 
   /// This method is used to perform the upvote action of a post.
   /// If the post is already upvoted, it will remove the upvote.
-  Future<void> triggerUpVote() => _triggerVote(UpvoteState.upvoted);
+  Future<void> triggerUpVote() => _triggerVote(VoteState.upvoted);
 
   /// This method is used to perform the downvote action of a post.
   /// If the post is already downvoted, it will remove the downvote.
-  Future<void> triggerDownVote() => _triggerVote(UpvoteState.downvoted);
+  Future<void> triggerDownVote() => _triggerVote(VoteState.downvoted);
 
-  Future<void> _triggerVote(UpvoteState selectedUpVoteState) async {
+  Future<void> _triggerVote(VoteState selectedUpVoteState) async {
     final postId = arg;
     final uid = ref.watch(validUidProvider);
 
@@ -66,7 +66,7 @@ class UpVoteViewModel
     // If the user trigger the same vote state, we remove the vote.
     // (For instance, double clicking the upvote button should add then remove the upvote)
     final newVoteState = currUpVoteState == selectedUpVoteState
-        ? UpvoteState.none
+        ? VoteState.none
         : selectedUpVoteState;
 
     final newVotes =
@@ -75,7 +75,7 @@ class UpVoteViewModel
     // Here, we update the state manually because we only want to update the state
     // locally without fetching the data from the database again.
     state = AsyncData(
-      PostVote(
+      VotesDetails(
         upvoteState: newVoteState,
         votes: newVotes,
       ),
@@ -86,6 +86,6 @@ class UpVoteViewModel
 }
 
 final postVoteProvider = AsyncNotifierProvider.autoDispose
-    .family<UpVoteViewModel, PostVote, PostIdFirestore>(
+    .family<UpVoteViewModel, VotesDetails, PostIdFirestore>(
   () => UpVoteViewModel(),
 );

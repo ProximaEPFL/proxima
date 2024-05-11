@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/components/feedback/centauri_snack_bar.dart";
@@ -21,16 +21,16 @@ class PostCard extends ConsumerWidget {
   static const postCardCommentsNumberKey = Key("postCardCommentsNumber");
   static const postCardUserKey = Key("postCardUser");
 
-  final PostOverview postOverview;
+  final PostDetails postDetails;
 
   const PostCard({
     super.key,
-    required this.postOverview,
+    required this.postDetails,
   });
 
   void _onPostSelect(
     BuildContext context,
-    PostOverview post,
+    PostDetails post,
     WidgetRef ref,
   ) async {
     Navigator.pushNamed(context, Routes.post.name, arguments: post);
@@ -51,13 +51,13 @@ class PostCard extends ConsumerWidget {
     final postBody = ListTile(
       title: Text(
         key: postCardTitleKey,
-        postOverview.title,
+        postDetails.title,
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
       ),
       subtitle: Text(
         key: postCardDescriptionKey,
-        postOverview.description,
+        postDetails.description,
         overflow: TextOverflow.ellipsis,
         maxLines: 7,
       ),
@@ -70,16 +70,16 @@ class PostCard extends ConsumerWidget {
         children: [
           PostVotes(
             key: postCardVotesKey,
-            postId: postOverview.postId,
+            postId: postDetails.postId,
           ),
           InkWell(
             customBorder: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            onTap: () => _onPostSelect(context, postOverview, ref),
+            onTap: () => _onPostSelect(context, postDetails, ref),
             child: CommentCount(
               key: postCardCommentsNumberKey,
-              count: postOverview.commentNumber,
+              count: postDetails.commentNumber,
             ),
           ),
         ],
@@ -87,7 +87,7 @@ class PostCard extends ConsumerWidget {
     );
 
     late final RoundedRectangleBorder? cardShape;
-    if (postOverview.isChallenge) {
+    if (postDetails.isChallenge) {
       final colorScheme = Theme.of(context).colorScheme;
       cardShape = RoundedRectangleBorder(
         side: BorderSide(color: colorScheme.primary, width: 1.5),
@@ -103,7 +103,7 @@ class PostCard extends ConsumerWidget {
       clipBehavior: Clip.hardEdge,
       shape: cardShape,
       child: InkWell(
-        onTap: () => _onPostSelect(context, postOverview, ref),
+        onTap: () => _onPostSelect(context, postDetails, ref),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -111,8 +111,8 @@ class PostCard extends ConsumerWidget {
               padding: const EdgeInsets.only(left: 16, top: 8),
               child: PostHeader(
                 key: postCardUserKey,
-                posterUsername: postOverview.ownerDisplayName,
-                publicationDate: postOverview.publicationDate,
+                posterUsername: postDetails.ownerDisplayName,
+                publicationDate: postDetails.publicationDate,
               ),
             ),
             postBody,
