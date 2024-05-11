@@ -17,7 +17,7 @@ class LoginPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userRepository = ref.watch(userRepositoryProvider);
+    final userRepository = ref.watch(userRepositoryServiceProvider);
     ref.listen(uidProvider, (_, user) async {
       if (user != null) {
         final exists = await userRepository.doesUserExist(user);

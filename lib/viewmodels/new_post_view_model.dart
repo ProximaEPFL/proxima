@@ -3,7 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/ui/validation/new_post_validation.dart";
 import "package:proxima/services/database/post_repository_service.dart";
-import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
@@ -55,8 +55,8 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostValidation> {
     }
 
     final currPosition =
-        await ref.read(geoLocationServiceProvider).getCurrentPosition();
-    final postRepository = ref.read(postRepositoryProvider);
+        await ref.read(geolocationServiceProvider).getCurrentPosition();
+    final postRepository = ref.read(postRepositoryServiceProvider);
 
     final post = PostData(
       ownerId: currentUser,

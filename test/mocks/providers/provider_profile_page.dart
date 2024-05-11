@@ -1,9 +1,9 @@
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/services/authentication/auth_login_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
-import "package:proxima/services/login_service.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
@@ -31,8 +31,8 @@ ProviderScope profileProviderScope(
     overrides: [
       ...mockEmptyHomeViewModelOverride,
       firebaseAuthProvider.overrideWith(mockFirebaseAuthSignedIn),
-      userRepositoryProvider.overrideWithValue(userRepo),
-      postRepositoryProvider.overrideWithValue(postRepo),
+      userRepositoryServiceProvider.overrideWithValue(userRepo),
+      postRepositoryServiceProvider.overrideWithValue(postRepo),
     ],
     child: child,
   );

@@ -3,11 +3,11 @@ import "package:google_sign_in/google_sign_in.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 /// Login service
-class LoginService {
+class AuthLoginService {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
 
-  LoginService({
+  AuthLoginService({
     required FirebaseAuth firebaseAuth,
     required GoogleSignIn googleSignIn,
   })  : _firebaseAuth = firebaseAuth,
@@ -55,3 +55,11 @@ final googleSignInProvider = Provider<GoogleSignIn>(
 final firebaseAuthProvider = Provider<FirebaseAuth>(
   (ref) => FirebaseAuth.instance,
 );
+
+/// Login Service provider; dependency injection used for testing purposes
+final authLoginServiceProvider = Provider<AuthLoginService>((ref) {
+  return AuthLoginService(
+    firebaseAuth: ref.watch(firebaseAuthProvider),
+    googleSignIn: ref.watch(googleSignInProvider),
+  );
+});

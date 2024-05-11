@@ -4,10 +4,10 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/upvote_repository_service.dart";
 
-final commentUpvoteRepositoryProvider = Provider.family<
+final commentUpvoteRepositoryServiceProvider = Provider.family<
     UpvoteRepositoryService<CommentIdFirestore>,
     PostIdFirestore>((ref, postId) {
-  return UpvoteRepositoryService.commentUpvoteRepository(
+  return UpvoteRepositoryService.commentUpvoteRepositoryService(
     ref.watch(firestoreProvider),
     postId,
   );

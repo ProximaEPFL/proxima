@@ -5,7 +5,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/services/database/firestore_service.dart";
-import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account/create_account_page.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
@@ -53,7 +53,7 @@ void main() {
       ProviderScope(
         overrides: [
           ...firebaseAuthMocksOverrides,
-          geoLocationServiceProvider.overrideWithValue(geoLocationService),
+          geolocationServiceProvider.overrideWithValue(geoLocationService),
           firestoreProvider.overrideWithValue(fakeFireStore),
         ],
         child: const ProximaApp(),

@@ -5,7 +5,7 @@ import "package:mockito/mockito.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
-import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
@@ -35,13 +35,13 @@ void main() {
     setUp(() async {
       container = ProviderContainer(
         overrides: [
-          geoLocationServiceProvider.overrideWithValue(geoLocationService),
+          geolocationServiceProvider.overrideWithValue(geoLocationService),
           uidProvider.overrideWithValue(testingUserFirestoreId),
           firestoreProvider.overrideWithValue(fakeFireStore),
         ],
       );
 
-      userRepo = container.read(userRepositoryProvider);
+      userRepo = container.read(userRepositoryServiceProvider);
     });
 
     test("No challenges are returned when the database is empty", () async {
@@ -194,7 +194,7 @@ void main() {
     setUp(() async {
       container = ProviderContainer(
         overrides: [
-          geoLocationServiceProvider.overrideWithValue(geoLocationService),
+          geolocationServiceProvider.overrideWithValue(geoLocationService),
           uidProvider.overrideWithValue(null),
           firestoreProvider.overrideWithValue(fakeFireStore),
         ],

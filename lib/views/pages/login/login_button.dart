@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/services/authentication/auth_login_service.dart";
 
 class LoginButton extends HookConsumerWidget {
   static const loginButtonKey = Key("login_button");
@@ -15,7 +15,7 @@ class LoginButton extends HookConsumerWidget {
       padding: const EdgeInsets.all(8),
       child: ElevatedButton(
         key: loginButtonKey,
-        onPressed: () => ref.read(loginServiceProvider).signIn(),
+        onPressed: () => ref.read(authLoginServiceProvider).signIn(),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

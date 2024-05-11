@@ -21,8 +21,8 @@ ProviderScope loginPageProvider(FakeFirebaseFirestore fakeFireStore) {
       ...firebaseAuthMocksOverrides,
       ...mockEmptyHomeViewModelOverride,
       ...mockDynamicUserAvatarViewModelTestLoginUserOverride,
-      userRepositoryProvider.overrideWithValue(userRepo),
-      postRepositoryProvider.overrideWithValue(postRepo),
+      userRepositoryServiceProvider.overrideWithValue(userRepo),
+      postRepositoryServiceProvider.overrideWithValue(postRepo),
     ],
     child: const MaterialApp(
       onGenerateRoute: generateRoute, // Ensure generateRoute is accessible

@@ -8,8 +8,8 @@ import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
-import "package:proxima/services/geolocation_service.dart";
-import "package:proxima/services/sorting/post_sorting_service.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
+import "package:proxima/services/sorting/post/post_sorting_service.dart";
 import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
@@ -25,9 +25,9 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
 
   @override
   Future<List<PostDetails>> build() async {
-    final geoLocationService = ref.watch(geoLocationServiceProvider);
-    final postRepository = ref.watch(postRepositoryProvider);
-    final userRepository = ref.watch(userRepositoryProvider);
+    final geoLocationService = ref.watch(geolocationServiceProvider);
+    final postRepository = ref.watch(postRepositoryServiceProvider);
+    final userRepository = ref.watch(userRepositoryServiceProvider);
     final challengeRepositoryService = ref.watch(
       challengeRepositoryServiceProvider,
     );

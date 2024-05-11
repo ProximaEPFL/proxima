@@ -45,7 +45,7 @@ void main() {
 
       // Get the comment upvote repository for the post
       commentUpvoteRepository =
-          container.read(commentUpvoteRepositoryProvider(postId));
+          container.read(commentUpvoteRepositoryServiceProvider(postId));
 
       // Add a comment to the post
       final commentData =
@@ -110,9 +110,8 @@ void main() {
 
         for (var i = 0; i < numberOfUsers; i++) {
           final user = users[i];
-          final upvoteState = i % moduloDownvote == 0
-              ? VoteState.downvoted
-              : VoteState.upvoted;
+          final upvoteState =
+              i % moduloDownvote == 0 ? VoteState.downvoted : VoteState.upvoted;
 
           expectedVoteScore += upvoteState.increment;
 

@@ -2,7 +2,7 @@ import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/services/database/firestore_service.dart";
-import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 
@@ -51,7 +51,7 @@ ProviderScope homePageFakeFirestoreProvider(
       ...loggedInUserOverrides,
       ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
       firestoreProvider.overrideWithValue(firestore),
-      geoLocationServiceProvider.overrideWithValue(geoLocationService),
+      geolocationServiceProvider.overrideWithValue(geoLocationService),
     ],
     child: homePageApp,
   );
@@ -64,7 +64,7 @@ ProviderScope emptyHomePageProviderGPS(
     overrides: [
       ...mockDynamicUserAvatarViewModelTestLoginUserOverride,
       ...mockEmptyHomeViewModelOverride,
-      geoLocationServiceProvider.overrideWithValue(geoLocationService),
+      geolocationServiceProvider.overrideWithValue(geoLocationService),
     ],
     child: homePageApp,
   );

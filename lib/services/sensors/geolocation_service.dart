@@ -4,9 +4,10 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:geolocator/geolocator.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
-class GeoLocationService {
+class GeolocationService {
+  static const _minimalDistanceForUpdate = 5;
+
   final GeolocatorPlatform _geoLocator;
-  static const minimalDistanceForUpdate = 5;
 
   /// Here we use the LocationAccuracy.best setting to get the most accurate location possible. (~0m on IOS, 0-100m on Android)
   /// We do not use the LocationAccuracy.high setting because the accuracy is lower
@@ -20,10 +21,10 @@ class GeoLocationService {
   final LocationSettings locationSettings = AndroidSettings(
     accuracy: LocationAccuracy.best,
     // We set the distance filter to avoid unnecessary updates for small movements.
-    distanceFilter: minimalDistanceForUpdate,
+    distanceFilter: _minimalDistanceForUpdate,
   );
 
-  GeoLocationService({
+  GeolocationService({
     required GeolocatorPlatform geoLocator,
   }) : _geoLocator = geoLocator;
 
@@ -89,13 +90,13 @@ class GeoLocationService {
   }
 }
 
-final geoLocationServiceProvider = Provider<GeoLocationService>(
-  (ref) => GeoLocationService(
+final geolocationServiceProvider = Provider<GeolocationService>(
+  (ref) => GeolocationService(
     geoLocator: GeolocatorPlatform.instance,
   ),
 );
 
-final liveLocationServiceProvider = StreamProvider<GeoPoint?>((ref) {
-  final locationService = ref.watch(geoLocationServiceProvider);
+final livePositionStreamProvider = StreamProvider<GeoPoint?>((ref) {
+  final locationService = ref.watch(geolocationServiceProvider);
   return locationService.getPositionStream();
 });

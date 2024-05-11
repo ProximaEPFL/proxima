@@ -4,7 +4,7 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/challenge_details.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
-import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
 /// This viewmodel is used to fetch the list of challenges that are displayed in
@@ -16,7 +16,7 @@ import "package:proxima/viewmodels/login_view_model.dart";
 class ChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>> {
   @override
   Future<List<ChallengeDetails>> build() async {
-    final geoLocationService = ref.watch(geoLocationServiceProvider);
+    final geoLocationService = ref.watch(geolocationServiceProvider);
     final challengeRepository = ref.watch(challengeRepositoryServiceProvider);
 
     final currentPosition = await geoLocationService.getCurrentPosition();
@@ -27,7 +27,7 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>> {
       currentPosition,
     );
 
-    final postRepository = ref.watch(postRepositoryProvider);
+    final postRepository = ref.watch(postRepositoryServiceProvider);
     final now = DateTime.now();
     final Iterable<Future<ChallengeDetails>> futureUiChallenges =
         firestoreChallenges.map((challenge) async {

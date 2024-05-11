@@ -4,7 +4,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:geolocator/geolocator.dart";
 import "package:mockito/mockito.dart";
-import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
 
 import "../mocks/data/geopoint.dart";
 import "../mocks/services/mock_geolocator_platform.dart";
@@ -13,12 +13,12 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group("GeoLocationService", () {
-    late GeoLocationService geoLocationService;
+    late GeolocationService geoLocationService;
     late MockGeolocatorPlatform mockGeolocator;
 
     setUp(() {
       mockGeolocator = MockGeolocatorPlatform();
-      geoLocationService = GeoLocationService(geoLocator: mockGeolocator);
+      geoLocationService = GeolocationService(geoLocator: mockGeolocator);
     });
 
     test("getCurrentPosition returns GeoPoint", () async {

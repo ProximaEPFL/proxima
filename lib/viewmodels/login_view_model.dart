@@ -2,7 +2,7 @@ import "package:flutter/widgets.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/auth/auth_logged_in_user.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/services/login_service.dart";
+import "package:proxima/services/authentication/auth_login_service.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/navigation/routes.dart";
 
@@ -48,14 +48,6 @@ final validUidProvider = Provider<UserIdFirestore>((ref) {
   }
 
   return user;
-});
-
-/// Login Service provider; dependency injection used for testing purposes
-final loginServiceProvider = Provider<LoginService>((ref) {
-  return LoginService(
-    firebaseAuth: ref.watch(firebaseAuthProvider),
-    googleSignIn: ref.watch(googleSignInProvider),
-  );
 });
 
 /// Registers the widget to navigate to the login page on logout.

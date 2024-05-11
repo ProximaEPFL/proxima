@@ -67,7 +67,7 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountValidation> {
     }
 
     if (await ref
-        .read(userRepositoryProvider)
+        .read(userRepositoryServiceProvider)
         .isUsernameTaken(uniqueUsername)) {
       return "This username is already taken.";
     }
@@ -103,7 +103,7 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountValidation> {
         joinTime: Timestamp.now(),
         centauriPoints: 0,
       );
-      await ref.read(userRepositoryProvider).setUser(uid, userData);
+      await ref.read(userRepositoryServiceProvider).setUser(uid, userData);
       // Here the [newState.valueOrNull] cannot be null because [newState.valueOrNull?.noError]
       // is checked to be true above.
       newState =

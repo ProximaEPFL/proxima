@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/services/authentication/auth_login_service.dart";
 import "package:proxima/viewmodels/create_account_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
@@ -29,7 +30,7 @@ class CreateAccountPage extends HookConsumerWidget {
     return PopScope(
       canPop: false,
       onPopInvoked: (bool didPop) {
-        ref.read(loginServiceProvider).signOut();
+        ref.read(authLoginServiceProvider).signOut();
       },
       child: Scaffold(
         appBar: AppBar(

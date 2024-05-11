@@ -11,7 +11,7 @@ class ProfileViewModel extends AutoDisposeAsyncNotifier<UserProfileDetails> {
   @override
   Future<UserProfileDetails> build() async {
     final user = ref.watch(userProvider).valueOrNull;
-    final userDataBase = ref.watch(userRepositoryProvider);
+    final userDataBase = ref.watch(userRepositoryServiceProvider);
     final uid = ref.watch(validUidProvider);
 
     if (user == null) {

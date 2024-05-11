@@ -3,7 +3,7 @@ import "package:firebase_auth_mocks/firebase_auth_mocks.dart";
 import "package:google_sign_in/google_sign_in.dart";
 import "package:google_sign_in_mocks/google_sign_in_mocks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/services/login_service.dart";
+import "package:proxima/services/authentication/auth_login_service.dart";
 
 import "../data/firebase_auth_user.dart";
 

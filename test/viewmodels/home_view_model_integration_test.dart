@@ -8,7 +8,7 @@ import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
-import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:test/test.dart";
@@ -47,7 +47,7 @@ void main() {
 
       container = ProviderContainer(
         overrides: [
-          geoLocationServiceProvider.overrideWithValue(geoLocationService),
+          geolocationServiceProvider.overrideWithValue(geoLocationService),
           firestoreProvider.overrideWithValue(fakeFireStore),
           uidProvider.overrideWithValue(testingUserFirestoreId),
         ],

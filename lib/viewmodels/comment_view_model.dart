@@ -10,14 +10,14 @@ import "package:proxima/services/database/user_repository_service.dart";
 /// This view model is used to fetch the comments of a post.
 /// It fetches the comments under the post with the id [arg] and returns
 /// a list of [CommentDetails] objects to be displayed.
-class CommentViewModel
-    extends AutoDisposeFamilyAsyncNotifier<List<CommentDetails>, PostIdFirestore> {
+class CommentViewModel extends AutoDisposeFamilyAsyncNotifier<
+    List<CommentDetails>, PostIdFirestore> {
   // Note that we cannot rename `arg` to `postId` as it is a parameter
   // of an override method. Doing so lead to a warning.
   @override
   Future<List<CommentDetails>> build(PostIdFirestore arg) async {
-    final commentRepository = ref.read(commentRepositoryProvider);
-    final userRepository = ref.read(userRepositoryProvider);
+    final commentRepository = ref.read(commentRepositoryServiceProvider);
+    final userRepository = ref.read(userRepositoryServiceProvider);
 
     final commentsFirestore = await commentRepository.getComments(arg);
 

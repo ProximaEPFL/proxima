@@ -8,8 +8,8 @@ import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
-import "package:proxima/services/geolocation_service.dart";
-import "package:proxima/services/sorting/post_sorting_service.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
+import "package:proxima/services/sorting/post/post_sorting_service.dart";
 import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
@@ -41,13 +41,13 @@ void main() {
 
       container = ProviderContainer(
         overrides: [
-          geoLocationServiceProvider.overrideWithValue(
+          geolocationServiceProvider.overrideWithValue(
             geoLocationService,
           ),
-          postRepositoryProvider.overrideWithValue(
+          postRepositoryServiceProvider.overrideWithValue(
             postRepository,
           ),
-          userRepositoryProvider.overrideWithValue(
+          userRepositoryServiceProvider.overrideWithValue(
             userRepository,
           ),
           challengeRepositoryServiceProvider.overrideWithValue(

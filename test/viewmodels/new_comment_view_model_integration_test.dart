@@ -41,7 +41,7 @@ void main() {
         ],
       );
 
-      commentRepository = container.read(commentRepositoryProvider);
+      commentRepository = container.read(commentRepositoryServiceProvider);
 
       // Add a post to the database on which the comments will be added
       final post = FirestorePostGenerator().generatePostAt(userPosition0);

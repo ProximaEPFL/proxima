@@ -1,5 +1,5 @@
 import "package:flutter_test/flutter_test.dart";
-import "package:proxima/services/human_time_service.dart";
+import "package:proxima/services/conversion/human_time_service.dart";
 
 import "../mocks/providers/provider_human_time_service.dart";
 

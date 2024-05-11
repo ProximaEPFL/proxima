@@ -38,8 +38,8 @@ void main() {
 
       container = ProviderContainer(
         overrides: [
-          postRepositoryProvider.overrideWithValue(postRepository),
-          postUpvoteRepositoryProvider.overrideWithValue(voteRepository),
+          postRepositoryServiceProvider.overrideWithValue(postRepository),
+          postUpvoteRepositoryServiceProvider.overrideWithValue(voteRepository),
           uidProvider.overrideWithValue(userId),
         ],
       );
@@ -67,8 +67,8 @@ void main() {
       test("Error is thrown is the user is not logged in", () async {
         // Update the container to have a null user id
         container.updateOverrides([
-          postRepositoryProvider.overrideWithValue(postRepository),
-          postUpvoteRepositoryProvider.overrideWithValue(voteRepository),
+          postRepositoryServiceProvider.overrideWithValue(postRepository),
+          postUpvoteRepositoryServiceProvider.overrideWithValue(voteRepository),
           uidProvider.overrideWithValue(null),
         ]);
 
@@ -237,8 +237,8 @@ void main() {
       test("Throw error if the user is not logged in", () async {
         // Update the container to have a null user id
         container.updateOverrides([
-          postRepositoryProvider.overrideWithValue(postRepository),
-          postUpvoteRepositoryProvider.overrideWithValue(voteRepository),
+          postRepositoryServiceProvider.overrideWithValue(postRepository),
+          postUpvoteRepositoryServiceProvider.overrideWithValue(voteRepository),
           uidProvider.overrideWithValue(null),
         ]);
 

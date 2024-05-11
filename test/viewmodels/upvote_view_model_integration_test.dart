@@ -52,12 +52,12 @@ void main() {
       container = ProviderContainer(
         overrides: [
           firestoreProvider.overrideWithValue(fakeFireStore),
-          postRepositoryProvider.overrideWithValue(postRepository),
+          postRepositoryServiceProvider.overrideWithValue(postRepository),
           uidProvider.overrideWithValue(userId),
         ],
       );
 
-      voteRepository = container.read(postUpvoteRepositoryProvider);
+      voteRepository = container.read(postUpvoteRepositoryServiceProvider);
 
       voteViewModelProvider = postVoteProvider(testingPost.id);
     });

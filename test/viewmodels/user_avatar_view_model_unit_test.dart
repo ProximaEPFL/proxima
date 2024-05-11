@@ -27,7 +27,7 @@ void main() {
       //Prepare the list of providers to override.
       overrideList = [
         firestoreProvider.overrideWithValue(fakeFireStore),
-        userRepositoryProvider.overrideWithValue(userRepo),
+        userRepositoryServiceProvider.overrideWithValue(userRepo),
       ];
     });
 

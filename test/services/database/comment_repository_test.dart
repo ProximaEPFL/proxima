@@ -44,7 +44,7 @@ void main() {
         ],
       );
 
-      commentRepository = container.read(commentRepositoryProvider);
+      commentRepository = container.read(commentRepositoryServiceProvider);
 
       final post = FirestorePostGenerator().generatePostAt(userPosition0);
       postId = post.id;
@@ -63,7 +63,7 @@ void main() {
       commentGenerator = CommentFirestoreGenerator();
       commentDataGenerator = CommentDataGenerator();
 
-      commentUpvoteRepository = UpvoteRepositoryService.commentUpvoteRepository(
+      commentUpvoteRepository = UpvoteRepositoryService.commentUpvoteRepositoryService(
         fakeFirestore,
         postId,
       );

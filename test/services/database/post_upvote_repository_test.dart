@@ -33,11 +33,11 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         firestoreProvider.overrideWithValue(firestore),
-        postRepositoryProvider.overrideWithValue(postRepository),
+        postRepositoryServiceProvider.overrideWithValue(postRepository),
       ],
     );
 
-    postUpvoteRepository = container.read(postUpvoteRepositoryProvider);
+    postUpvoteRepository = container.read(postUpvoteRepositoryServiceProvider);
   });
 
   Future<void> assertPostUpvoteState(

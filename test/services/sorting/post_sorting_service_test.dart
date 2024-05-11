@@ -3,8 +3,8 @@ import "package:collection/collection.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:geolocator/geolocator.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
-import "package:proxima/services/sorting/post_sort_option.dart";
-import "package:proxima/services/sorting/post_sorting_service.dart";
+import "package:proxima/services/sorting/post/post_sort_option.dart";
+import "package:proxima/services/sorting/post/post_sorting_service.dart";
 
 import "../../mocks/data/firestore_post.dart";
 import "../../mocks/data/geopoint.dart";

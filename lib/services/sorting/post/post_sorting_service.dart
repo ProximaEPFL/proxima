@@ -3,7 +3,7 @@ import "package:collection/collection.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/services/sorting/post_sort_option.dart";
+import "package:proxima/services/sorting/post/post_sort_option.dart";
 
 class PostSortingService {
   /// This method sorts the [posts] according to the [option]

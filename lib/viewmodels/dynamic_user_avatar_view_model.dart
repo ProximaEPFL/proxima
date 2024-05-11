@@ -17,7 +17,7 @@ class DynamicUserAvatarViewModel
   Future<String> build(UserIdFirestore? arg) async {
     final userID = arg;
     final currentUID = ref.watch(uidProvider);
-    final userDataBase = ref.watch(userRepositoryProvider);
+    final userDataBase = ref.watch(userRepositoryServiceProvider);
 
     late final UserFirestore userData;
 

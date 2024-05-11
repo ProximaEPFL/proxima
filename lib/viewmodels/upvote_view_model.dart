@@ -29,8 +29,8 @@ class UpVoteViewModel
     final postId = arg;
     final uid = ref.watch(validUidProvider);
 
-    final voteRepository = ref.watch(postUpvoteRepositoryProvider);
-    final postRepository = ref.watch(postRepositoryProvider);
+    final voteRepository = ref.watch(postUpvoteRepositoryServiceProvider);
+    final postRepository = ref.watch(postRepositoryServiceProvider);
 
     final postFuture = postRepository.getPost(postId);
     final upvoteStateFuture = voteRepository.getUpvoteState(uid, postId);
@@ -58,7 +58,7 @@ class UpVoteViewModel
     final postId = arg;
     final uid = ref.watch(validUidProvider);
 
-    final voteRepository = ref.read(postUpvoteRepositoryProvider);
+    final voteRepository = ref.read(postUpvoteRepositoryServiceProvider);
 
     final currPostVote = await future;
     final currUpVoteState = currPostVote.upvoteState;
