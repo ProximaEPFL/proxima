@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_svg/svg.dart";
-import "package:proxima/models/ui/challenge_card_data.dart";
+import "package:proxima/models/ui/challenge_details.dart";
 import "package:proxima/views/helpers/key_value_list_builder.dart";
 
 class ChallengeCard extends StatelessWidget {
@@ -11,7 +11,7 @@ class ChallengeCard extends StatelessWidget {
   static const _challengeGroupAsset = "assets/icons/challenge_group.svg";
   static const _challengeSingleAsset = "assets/icons/challenge_single.svg";
 
-  final ChallengeCardData challenge;
+  final ChallengeDetails challenge;
 
   const ChallengeCard(this.challenge, {super.key});
 

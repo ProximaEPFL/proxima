@@ -1,10 +1,10 @@
 import "package:flutter_test/flutter_test.dart";
-import "package:proxima/models/ui/challenge_card_data.dart";
+import "package:proxima/models/ui/challenge_details.dart";
 
 void main() {
   group("Challenge card data testing", () {
     test("hash overrides correctly", () {
-      const challengeCard = ChallengeCardData.group(
+      const challengeCard = ChallengeDetails.group(
         title: "title",
         distance: 50,
         reward: 100,
@@ -23,12 +23,12 @@ void main() {
     });
 
     test("equality overrides correctly", () {
-      const challengeCardData = ChallengeCardData.group(
+      const challengeCardData = ChallengeDetails.group(
         title: "title",
         distance: 50,
         reward: 100,
       );
-      const challengeCardDataCopy = ChallengeCardData.group(
+      const challengeCardDataCopy = ChallengeDetails.group(
         title: "title",
         distance: 50,
         reward: 100,
