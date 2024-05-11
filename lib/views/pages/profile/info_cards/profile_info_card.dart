@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:proxima/utils/types.dart";
 import "package:proxima/views/components/async/loading_icon_button.dart";
+import "package:proxima/views/helpers/types.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_pop_up.dart";
 
 /// Info card for the profile page (post or comment)

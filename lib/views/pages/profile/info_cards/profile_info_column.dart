@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/utils/types.dart";
+import "package:proxima/views/helpers/types.dart";
 
 /// This widget defines the style of the columns in the profile page,
 /// such as the posts and comments columns
