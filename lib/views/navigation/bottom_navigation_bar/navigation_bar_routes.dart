@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/utils/ui/not_implemented.dart";
+import "package:proxima/views/components/feedback/not_implemented.dart";
 import "package:proxima/views/home_content/challenge/challenge_list.dart";
 import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/home_content/map/map_screen.dart";

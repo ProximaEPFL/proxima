@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:intl/intl.dart";
-import "package:proxima/utils/ui/centauri_snack_bar.dart";
+import "package:proxima/views/components/feedback/centauri_snack_bar.dart";
 import "package:proxima/views/components/user_avatar/user_avatar.dart";
 import "package:proxima/views/home_content/feed/post_card/post_card.dart";
 import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
