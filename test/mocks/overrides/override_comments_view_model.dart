@@ -7,17 +7,16 @@ import "../data/post_comment.dart";
 
 /// A mock implementation of the [CommentViewModel] class.
 /// By default it exposes an empty list of [CommentDetails] and does nothing on refresh.
-class MockCommentsViewModel
-    extends AutoDisposeFamilyAsyncNotifier<List<CommentDetails>, PostIdFirestore>
-    implements CommentsViewModel {
+class MockCommentsViewModel extends AutoDisposeFamilyAsyncNotifier<
+    List<CommentDetails>, PostIdFirestore> implements CommentsViewModel {
   final Future<List<CommentDetails>> Function(PostIdFirestore arg) _build;
   final Future<void> Function() _onRefresh;
 
   MockCommentsViewModel({
     Future<List<CommentDetails>> Function(PostIdFirestore arg)? build,
     Future<void> Function()? onRefresh,
-  })  : _build =
-            build ?? ((PostIdFirestore arg) async => List<CommentDetails>.empty()),
+  })  : _build = build ??
+            ((PostIdFirestore arg) async => List<CommentDetails>.empty()),
         _onRefresh = onRefresh ?? (() async {});
 
   @override

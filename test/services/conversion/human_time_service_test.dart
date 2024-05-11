@@ -3,7 +3,6 @@ import "package:proxima/services/conversion/human_time_service.dart";
 
 import "../../mocks/providers/provider_human_time_service.dart";
 
-
 void main() {
   group("Human Time Service Unit tests", () {
     late HumanTimeService humanTimeService;

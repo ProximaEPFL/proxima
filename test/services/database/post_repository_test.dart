@@ -66,7 +66,8 @@ void main() {
       await CommentFirestoreGenerator()
           .addComments(4, post.id, commentRepository);
 
-      final upvoteRepository = UpvoteRepositoryService.postUpvoteRepositoryService(
+      final upvoteRepository =
+          UpvoteRepositoryService.postUpvoteRepositoryService(
         firestore,
       );
 

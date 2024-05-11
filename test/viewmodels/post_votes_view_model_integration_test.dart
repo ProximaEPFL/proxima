@@ -26,8 +26,8 @@ void main() {
     late PostFirestore testingPost;
     late UserIdFirestore userId;
 
-    late AutoDisposeFamilyAsyncNotifierProvider<PostVotesViewModel, VotesDetails,
-        PostIdFirestore> voteViewModelProvider;
+    late AutoDisposeFamilyAsyncNotifierProvider<PostVotesViewModel,
+        VotesDetails, PostIdFirestore> voteViewModelProvider;
 
     late ProviderContainer container;
 

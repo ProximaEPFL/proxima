@@ -83,7 +83,8 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountValidation> {
     String uniqueUsername,
   ) async {
     state = const AsyncValue.loading();
-    AsyncValue<CreateAccountValidation> newState = await AsyncValue.guard(() async {
+    AsyncValue<CreateAccountValidation> newState =
+        await AsyncValue.guard(() async {
       final pseudoError = validatePseudo(pseudo);
       final uniqueUsernameError = await validateUniqueUsername(uniqueUsername);
 

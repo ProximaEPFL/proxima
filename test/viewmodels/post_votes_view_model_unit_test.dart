@@ -23,8 +23,8 @@ void main() {
     late MockUpvoteRepositoryService<PostIdFirestore> voteRepository;
     late UserIdFirestore userId;
     late PostFirestore testingPost;
-    late AutoDisposeFamilyAsyncNotifierProvider<PostVotesViewModel, VotesDetails,
-        PostIdFirestore> voteViewModelProvider;
+    late AutoDisposeFamilyAsyncNotifierProvider<PostVotesViewModel,
+        VotesDetails, PostIdFirestore> voteViewModelProvider;
 
     late ProviderContainer container;
 

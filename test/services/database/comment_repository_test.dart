@@ -63,7 +63,8 @@ void main() {
       commentGenerator = CommentFirestoreGenerator();
       commentDataGenerator = CommentDataGenerator();
 
-      commentUpvoteRepository = UpvoteRepositoryService.commentUpvoteRepositoryService(
+      commentUpvoteRepository =
+          UpvoteRepositoryService.commentUpvoteRepositoryService(
         fakeFirestore,
         postId,
       );

@@ -9,7 +9,6 @@ import "package:proxima/services/sensors/geolocation_service.dart";
 import "../../mocks/data/geopoint.dart";
 import "../../mocks/services/mock_geolocator_platform.dart";
 
-
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
