@@ -1,11 +1,4 @@
-import "package:cloud_firestore/cloud_firestore.dart";
-import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/services/sorting/post/post_score_functions.dart";
-
-typedef PostScoreFunction = double Function(
-  PostFirestore post,
-  GeoPoint position,
-);
 
 /// This enum is used to describe how to sort posts, notably in the feed.
 enum PostSortOption {

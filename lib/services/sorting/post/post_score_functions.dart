@@ -2,6 +2,11 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:geolocator/geolocator.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 
+typedef PostScoreFunction = double Function(
+  PostFirestore post,
+  GeoPoint position,
+);
+
 /// Increases by 1 every upvote, but decreases by 1 every day
 double hotScore(PostFirestore post, GeoPoint userPosition) {
   return voteScore(post, userPosition) - dayScore(post, userPosition);
