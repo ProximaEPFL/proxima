@@ -4,7 +4,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/models/ui/new_comment_validation.dart";
+import "package:proxima/models/ui/validation/new_comment_validation.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";

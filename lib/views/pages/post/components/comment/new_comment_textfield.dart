@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/models/ui/new_comment_validation.dart";
+import "package:proxima/models/ui/validation/new_comment_validation.dart";
 
 /// The text field in which the user can write a new comment.
 class NewCommentTextField extends StatelessWidget {

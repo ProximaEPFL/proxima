@@ -3,7 +3,7 @@ import "dart:async";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_data.dart";
-import "package:proxima/models/ui/create_account_validation.dart";
+import "package:proxima/models/ui/validation/create_account_validation.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 

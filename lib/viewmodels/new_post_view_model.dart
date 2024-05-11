@@ -1,7 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_data.dart";
-import "package:proxima/models/ui/new_post_validation.dart";
+import "package:proxima/models/ui/validation/new_post_validation.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/geolocation_service.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
