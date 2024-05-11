@@ -149,7 +149,7 @@ void main() {
             .doc(pastPostId.value)
             .set(data.toDbData());
 
-        //Create 40 posts and get the challenges
+        //Create 30 posts and get the challenges
         FirestorePostGenerator generator = FirestorePostGenerator();
         var challenges = await challengeRepository.getChallenges(uid, userPos);
 
