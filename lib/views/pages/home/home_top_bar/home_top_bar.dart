@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/views/components/user_avatar/dynamic_user_avatar.dart";
+import "package:proxima/views/components/content/user_avatar/dynamic_user_avatar.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 /// This widget is the top bar of the home page

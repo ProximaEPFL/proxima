@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/comment_details.dart";
-import "package:proxima/views/pages/home/content/feed/components/post_header.dart";
+import "package:proxima/views/components/content/publication_header.dart";
 
 class CommentPostWidget extends StatelessWidget {
   static const commentWidgetKey = Key("commentWidget");
@@ -20,7 +20,7 @@ class CommentPostWidget extends StatelessWidget {
       key: commentWidgetKey,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        PostHeader(
+        PublicationHeader(
           key: commentUserWidgetKey,
           posterUsername: commentPost.ownerDisplayName,
           publicationDate: commentPost.publicationDate,

@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/viewmodels/dynamic_user_avatar_view_model.dart";
-import "package:proxima/views/components/user_avatar/user_avatar.dart";
+import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 
 /// This widget display a user's avatar given its [uid].
 /// If the [uid] is null, the current user's avatar is displayed.

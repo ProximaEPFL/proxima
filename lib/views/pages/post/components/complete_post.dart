@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/post_details.dart";
-import "package:proxima/views/pages/home/content/feed/components/post_header.dart";
-import "package:proxima/views/pages/home/content/feed/components/post_votes.dart";
+import "package:proxima/views/components/content/post_votes.dart";
+import "package:proxima/views/components/content/publication_header.dart";
 
 class CompletePost extends StatelessWidget {
   static const postTitleKey = Key("postTitle");
@@ -42,7 +42,7 @@ class CompletePost extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 16, top: 8),
-          child: PostHeader(
+          child: PublicationHeader(
             key: postUserBarKey,
             posterUsername: post.ownerDisplayName,
             publicationDate: post.publicationDate,

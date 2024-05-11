@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/views/components/user_avatar/dynamic_user_avatar.dart";
+import "package:proxima/views/components/content/user_avatar/dynamic_user_avatar.dart";
 
 /// The avatar of the current user on the left of the new comment text field.
 class NewCommentUserAvatar extends StatelessWidget {

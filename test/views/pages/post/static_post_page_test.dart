@@ -2,11 +2,11 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:intl/intl.dart";
+import "package:proxima/views/components/content/publication_header.dart";
+import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/components/feedback/centauri_snack_bar.dart";
-import "package:proxima/views/components/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/content/feed/components/post_card.dart";
-import "package:proxima/views/pages/home/content/feed/components/post_header.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/post/components/comment/comment_post_widget.dart";
 import "package:proxima/views/pages/post/components/complete_post.dart";
@@ -153,7 +153,7 @@ void main() {
       final postUserBarDisplayNameTextWidget = tester.widget(
         find.descendant(
           of: postUserBar,
-          matching: find.byKey(PostHeader.displayNameTextKey),
+          matching: find.byKey(PublicationHeader.displayNameTextKey),
         ),
       );
 
@@ -167,7 +167,7 @@ void main() {
       final postUserBarTimestampTextWidget = tester.widget(
         find.descendant(
           of: postUserBar,
-          matching: find.byKey(PostHeader.publicationDateTextKey),
+          matching: find.byKey(PublicationHeader.publicationDateTextKey),
         ),
       );
 
@@ -268,7 +268,7 @@ void main() {
       final Iterable<Text> displayNameWidgets = tester.widgetList<Text>(
         find.descendant(
           of: find.byKey(CommentPostWidget.commentUserWidgetKey),
-          matching: find.byKey(PostHeader.displayNameTextKey),
+          matching: find.byKey(PublicationHeader.displayNameTextKey),
         ),
       );
 

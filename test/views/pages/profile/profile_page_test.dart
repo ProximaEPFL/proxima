@@ -5,7 +5,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
-import "package:proxima/views/components/user_avatar/user_avatar.dart";
+import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
