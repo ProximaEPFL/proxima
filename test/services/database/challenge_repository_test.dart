@@ -155,7 +155,10 @@ void main() {
 
         await generator.addPostsReturnDataOnly(firestore, inChallengeRange, 30);
         challenges = await challengeRepository.getChallenges(uid, userPos);
-        expect(challenges.length, 3);
+        expect(
+          challenges.length,
+          ChallengeRepositoryService.maxActiveChallenges,
+        );
       });
     });
   });
