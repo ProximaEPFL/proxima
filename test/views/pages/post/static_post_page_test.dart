@@ -6,7 +6,7 @@ import "package:proxima/views/components/feedback/centauri_snack_bar.dart";
 import "package:proxima/views/components/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/content/feed/post_card/post_card.dart";
-import "package:proxima/views/pages/home/content/feed/post_card/post_header_widget.dart";
+import "package:proxima/views/pages/home/content/feed/post_card/post_header.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/post/components/comment/new_comment_button.dart";
 import "package:proxima/views/pages/post/components/comment/new_comment_textfield.dart";
@@ -153,7 +153,7 @@ void main() {
       final postUserBarDisplayNameTextWidget = tester.widget(
         find.descendant(
           of: postUserBar,
-          matching: find.byKey(PostHeaderWidget.displayNameTextKey),
+          matching: find.byKey(PostHeader.displayNameTextKey),
         ),
       );
 
@@ -167,7 +167,7 @@ void main() {
       final postUserBarTimestampTextWidget = tester.widget(
         find.descendant(
           of: postUserBar,
-          matching: find.byKey(PostHeaderWidget.publicationDateTextKey),
+          matching: find.byKey(PostHeader.publicationDateTextKey),
         ),
       );
 
@@ -268,7 +268,7 @@ void main() {
       final Iterable<Text> displayNameWidgets = tester.widgetList<Text>(
         find.descendant(
           of: find.byKey(CommentPostWidget.commentUserWidgetKey),
-          matching: find.byKey(PostHeaderWidget.displayNameTextKey),
+          matching: find.byKey(PostHeader.displayNameTextKey),
         ),
       );
 

@@ -6,11 +6,11 @@ import "package:proxima/views/components/user_avatar/user_avatar.dart";
 /// This widget is used to display the info bar in the post card.
 /// It contains the user's profile picture and username
 /// and the publication time of the post.
-class PostHeaderWidget extends ConsumerWidget {
+class PostHeader extends ConsumerWidget {
   static const displayNameTextKey = Key("displayNameText");
   static const publicationDateTextKey = Key("publicationTimeTextKey");
 
-  const PostHeaderWidget({
+  const PostHeader({
     super.key,
     required this.posterUsername,
     required this.publicationDate,
