@@ -1,10 +1,10 @@
 import "package:flutter_test/flutter_test.dart";
-import "package:proxima/models/ui/create_account_model.dart";
+import "package:proxima/models/ui/create_account_validation.dart";
 
 void main() {
   group("Create Account Model testing", () {
     test("hash overrides correctly", () {
-      const createAccount = CreateAccountModel(
+      const createAccount = CreateAccountValidation(
         uniqueUsernameError: "uniqueUsernameError",
         pseudoError: "pseudoError",
         accountCreated: true,
@@ -22,13 +22,13 @@ void main() {
     });
 
     test("equality overrides correctly", () {
-      const createAccount = CreateAccountModel(
+      const createAccount = CreateAccountValidation(
         uniqueUsernameError: "uniqueUsernameError",
         pseudoError: "pseudoError",
         accountCreated: true,
       );
 
-      const createAccountCopy = CreateAccountModel(
+      const createAccountCopy = CreateAccountValidation(
         uniqueUsernameError: "uniqueUsernameError",
         pseudoError: "pseudoError",
         accountCreated: true,

@@ -3,14 +3,14 @@ import "dart:async";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_data.dart";
-import "package:proxima/models/ui/create_account_model.dart";
+import "package:proxima/models/ui/create_account_validation.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
-class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
+class CreateAccountViewModel extends AsyncNotifier<CreateAccountValidation> {
   @override
-  Future<CreateAccountModel> build() async {
-    return const CreateAccountModel();
+  Future<CreateAccountValidation> build() async {
+    return const CreateAccountValidation();
   }
 
   /// Validate a generic [value], either a pseudo or a username,
@@ -83,11 +83,11 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
     String uniqueUsername,
   ) async {
     state = const AsyncValue.loading();
-    AsyncValue<CreateAccountModel> newState = await AsyncValue.guard(() async {
+    AsyncValue<CreateAccountValidation> newState = await AsyncValue.guard(() async {
       final pseudoError = validatePseudo(pseudo);
       final uniqueUsernameError = await validateUniqueUsername(uniqueUsername);
 
-      return CreateAccountModel(
+      return CreateAccountValidation(
         pseudoError: pseudoError,
         uniqueUsernameError: uniqueUsernameError,
       );
@@ -116,6 +116,6 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
 
 /// The provider for the [CreateAccountViewModel]
 final createAccountErrorsProvider =
-    AsyncNotifierProvider<CreateAccountViewModel, CreateAccountModel>(
+    AsyncNotifierProvider<CreateAccountViewModel, CreateAccountValidation>(
   () => CreateAccountViewModel(),
 );
