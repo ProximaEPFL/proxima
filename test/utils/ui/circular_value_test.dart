@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/utils/ui/error_alert.dart";
+import "package:proxima/views/components/async/error_alert.dart";
 
 import "../../mocks/providers/provider_circular_value.dart";
 

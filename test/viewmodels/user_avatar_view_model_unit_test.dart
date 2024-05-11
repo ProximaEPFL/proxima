@@ -27,7 +27,7 @@ void main() {
       //Prepare the list of providers to override.
       overrideList = [
         firestoreProvider.overrideWithValue(fakeFireStore),
-        userRepositoryProvider.overrideWithValue(userRepo),
+        userRepositoryServiceProvider.overrideWithValue(userRepo),
       ];
     });
 
@@ -59,7 +59,7 @@ void main() {
           overrides: [
             ...overrideList,
             //Set current user id.
-            uidProvider.overrideWithValue(availableUsers[0].uid),
+            loggedInUserIdProvider.overrideWithValue(availableUsers[0].uid),
           ],
         );
       });

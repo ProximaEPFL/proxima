@@ -5,7 +5,7 @@ import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 
-class LoginPage extends HookConsumerWidget {
+class LoginPage extends ConsumerWidget {
   static const loginPageKey = Key("login_page");
   static const logoKey = Key("login_logo");
 
@@ -17,8 +17,8 @@ class LoginPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userRepository = ref.watch(userRepositoryProvider);
-    ref.listen(uidProvider, (_, user) async {
+    final userRepository = ref.watch(userRepositoryServiceProvider);
+    ref.listen(loggedInUserIdProvider, (_, user) async {
       if (user != null) {
         final exists = await userRepository.doesUserExist(user);
 

@@ -93,7 +93,7 @@ class CommentRepositoryService {
     final batch = _firestore.batch();
 
     final commentUpvoteRepository =
-        UpvoteRepositoryService.commentUpvoteRepository(
+        UpvoteRepositoryService.commentUpvoteRepositoryService(
       _firestore,
       parentPostId,
     );
@@ -122,7 +122,7 @@ class CommentRepositoryService {
     final commentsRef = _commentsSubCollection(parentPostId);
     final comments = await commentsRef.get();
     final commentUpvoteRepository =
-        UpvoteRepositoryService.commentUpvoteRepository(
+        UpvoteRepositoryService.commentUpvoteRepositoryService(
       _firestore,
       parentPostId,
     );
@@ -169,7 +169,7 @@ class CommentRepositoryService {
   }
 }
 
-final commentRepositoryProvider = Provider<CommentRepositoryService>(
+final commentRepositoryServiceProvider = Provider<CommentRepositoryService>(
   (ref) => CommentRepositoryService(
     firestore: ref.watch(firestoreProvider),
   ),

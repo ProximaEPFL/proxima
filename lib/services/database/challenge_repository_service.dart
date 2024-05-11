@@ -236,8 +236,8 @@ final challengeRepositoryServiceProvider = Provider<ChallengeRepositoryService>(
   (ref) {
     return ChallengeRepositoryService(
       firestore: ref.watch(firestoreProvider),
-      postRepositoryService: ref.watch(postRepositoryProvider),
-      userRepositoryService: ref.watch(userRepositoryProvider),
+      postRepositoryService: ref.watch(postRepositoryServiceProvider),
+      userRepositoryService: ref.watch(userRepositoryServiceProvider),
     );
   },
 );

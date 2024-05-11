@@ -5,8 +5,8 @@ import "package:mockito/mockito.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/views/pages/post/components/comment/new_comment_button.dart";
-import "package:proxima/views/pages/post/components/comment/new_comment_textfield.dart";
+import "package:proxima/views/pages/post/components/new_comment/new_comment_button.dart";
+import "package:proxima/views/pages/post/components/new_comment/new_comment_textfield.dart";
 
 import "../../../mocks/data/comment_data.dart";
 import "../../../mocks/data/firestore_comment.dart";

@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/new_post_view_model.dart";
+import "package:proxima/views/components/async/circular_value.dart";
 
 class NewPostForm extends HookConsumerWidget {
   const NewPostForm({super.key});
@@ -15,7 +15,7 @@ class NewPostForm extends HookConsumerWidget {
   static const _bodyHint = "Body";
   static const _postButtonText = "Post";
 
-  Padding verticallyPadded(Widget child) {
+  Padding _verticallyPadded(Widget child) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
       child: child,
@@ -27,13 +27,13 @@ class NewPostForm extends HookConsumerWidget {
     final titleController = useTextEditingController();
     final bodyController = useTextEditingController();
 
-    ref.listen(newPostStateProvider, (previous, state) {
+    ref.listen(newPostViewModelProvider, (previous, state) {
       if (state.valueOrNull?.posted == true) {
         Navigator.pop(context);
       }
     });
 
-    final asyncState = ref.watch(newPostStateProvider);
+    final asyncState = ref.watch(newPostViewModelProvider);
 
     return CircularValue(
       value: asyncState,
@@ -64,7 +64,7 @@ class NewPostForm extends HookConsumerWidget {
         final postButton = ElevatedButton(
           key: postButtonKey,
           child: const Text(_postButtonText),
-          onPressed: () => ref.read(newPostStateProvider.notifier).addPost(
+          onPressed: () => ref.read(newPostViewModelProvider.notifier).addPost(
                 titleController.text,
                 bodyController.text,
               ),
@@ -87,12 +87,12 @@ class NewPostForm extends HookConsumerWidget {
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            verticallyPadded(titleField),
+            _verticallyPadded(titleField),
             Flexible(
               fit: FlexFit.loose,
-              child: verticallyPadded(bodyField),
+              child: _verticallyPadded(bodyField),
             ),
-            verticallyPadded(buttonRow),
+            _verticallyPadded(buttonRow),
           ],
         );
       },

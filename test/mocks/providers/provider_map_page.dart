@@ -1,9 +1,9 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/services/geolocation_service.dart";
-import "package:proxima/views/home_content/map/map_screen.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/views/navigation/routes.dart";
+import "package:proxima/views/pages/home/content/map/map_screen.dart";
 
 import "../overrides/override_map_view_model.dart";
 import "../overrides/override_pin_view_model.dart";
@@ -15,13 +15,13 @@ const mapPage = MaterialApp(
 );
 
 ProviderScope newMapPageProvider(
-  GeoLocationService geoLocationService,
+  GeolocationService geoLocationService,
   Set<GeoPoint?> geoPoints,
 ) {
   return ProviderScope(
     overrides: [
-      geoLocationServiceProvider.overrideWithValue(geoLocationService),
-      liveLocationServiceProvider
+      geolocationServiceProvider.overrideWithValue(geoLocationService),
+      livePositionStreamProvider
           .overrideWith((ref) => Stream.fromIterable(geoPoints)),
     ],
     child: mapPage,
@@ -36,11 +36,11 @@ ProviderScope newMapPageNoGPS() {
 }
 
 ProviderScope newMapPageWithPins(
-  GeoLocationService geoLocationService,
+  GeolocationService geoLocationService,
 ) {
   return ProviderScope(
     overrides: [
-      geoLocationServiceProvider.overrideWithValue(geoLocationService),
+      geolocationServiceProvider.overrideWithValue(geoLocationService),
       mockPinViewModelOverride,
     ],
     child: mapPage,

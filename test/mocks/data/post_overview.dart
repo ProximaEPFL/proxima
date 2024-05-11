@@ -1,10 +1,10 @@
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/ui/post_overview.dart";
+import "package:proxima/models/ui/post_details.dart";
 
 import "datetime.dart";
 
-final List<PostOverview> testPosts = [
-  PostOverview(
+final List<PostDetails> testPosts = [
+  PostDetails(
     postId: const PostIdFirestore(value: "post_1"),
     title: "First post",
     description: "Lorem ipsum dolor sit amet.",
@@ -14,7 +14,7 @@ final List<PostOverview> testPosts = [
     publicationDate: publicationDate1,
     distance: 20,
   ),
-  PostOverview(
+  PostDetails(
     postId: const PostIdFirestore(value: "post_2"),
     title: "Second post",
     description:
@@ -26,7 +26,7 @@ final List<PostOverview> testPosts = [
     distance: 20,
     isChallenge: true,
   ),
-  PostOverview(
+  PostDetails(
     postId: const PostIdFirestore(value: "post_3"),
     title: "Third post",
     description: "Crazy post",
@@ -39,7 +39,7 @@ final List<PostOverview> testPosts = [
 ];
 
 // Custom post for testing specific date and distances
-final timeDistancePost = PostOverview(
+final timeDistancePost = PostDetails(
   postId: const PostIdFirestore(value: "post_1"),
   title: "title",
   description: "description",

@@ -1,18 +1,18 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/ui/profile_data.dart";
+import "package:proxima/models/ui/user_profile_details.dart";
 import "package:proxima/services/database/user_repository_service.dart";
-import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/views/components/async/circular_value.dart";
 
 /// User profile view model
-class ProfileViewModel extends AutoDisposeAsyncNotifier<ProfileData> {
+class ProfileViewModel extends AutoDisposeAsyncNotifier<UserProfileDetails> {
   ProfileViewModel();
 
   @override
-  Future<ProfileData> build() async {
-    final user = ref.watch(userProvider).valueOrNull;
-    final userDataBase = ref.watch(userRepositoryProvider);
-    final uid = ref.watch(validUidProvider);
+  Future<UserProfileDetails> build() async {
+    final user = ref.watch(authLoggedInUserProvider).valueOrNull;
+    final userDataBase = ref.watch(userRepositoryServiceProvider);
+    final uid = ref.watch(validLoggedInUserIdProvider);
 
     if (user == null) {
       return Future.error(
@@ -22,12 +22,12 @@ class ProfileViewModel extends AutoDisposeAsyncNotifier<ProfileData> {
 
     final userData = await userDataBase.getUser(uid);
 
-    return ProfileData(loginUser: user, firestoreUser: userData);
+    return UserProfileDetails(loginUser: user, firestoreUser: userData);
   }
 }
 
 /// Profile view model of the currently logged in user
-final profileProvider =
-    AutoDisposeAsyncNotifierProvider<ProfileViewModel, ProfileData>(
+final profileViewModelProvider =
+    AutoDisposeAsyncNotifierProvider<ProfileViewModel, UserProfileDetails>(
   () => ProfileViewModel(),
 );

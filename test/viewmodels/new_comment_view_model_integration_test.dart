@@ -4,7 +4,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/models/ui/new_comment_state.dart";
+import "package:proxima/models/ui/validation/new_comment_validation.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
@@ -21,8 +21,8 @@ void main() {
     late CommentDataGenerator commentDataGenerator;
 
     late CommentRepositoryService commentRepository;
-    late AsyncNotifierFamilyProvider<NewCommentViewModel, NewCommentState,
-        PostIdFirestore> newCommentViewModelProvider;
+    late AsyncNotifierFamilyProvider<NewCommentViewModel, NewCommentValidation,
+        PostIdFirestore> newCommentViewModelPostProvider;
 
     late ProviderContainer container;
 
@@ -37,31 +37,31 @@ void main() {
       container = ProviderContainer(
         overrides: [
           firestoreProvider.overrideWithValue(fakeFirestore),
-          uidProvider.overrideWithValue(userId),
+          loggedInUserIdProvider.overrideWithValue(userId),
         ],
       );
 
-      commentRepository = container.read(commentRepositoryProvider);
+      commentRepository = container.read(commentRepositoryServiceProvider);
 
       // Add a post to the database on which the comments will be added
       final post = FirestorePostGenerator().generatePostAt(userPosition0);
       await setPostFirestore(post, fakeFirestore);
       postId = post.id;
 
-      newCommentViewModelProvider = newCommentStateProvider(postId);
+      newCommentViewModelPostProvider = newCommentViewModelProvider(postId);
     });
 
     test("Add a valid comment and reset correctly", () async {
       final validContent = commentDataGenerator.createMockCommentData().content;
 
       final newCommentViewModel =
-          container.read(newCommentViewModelProvider.notifier);
+          container.read(newCommentViewModelPostProvider.notifier);
 
       // Check the state before adding the comment
       final stateBeforeAdd = await newCommentViewModel.future;
       expect(
         stateBeforeAdd,
-        NewCommentState(contentError: null, posted: false),
+        NewCommentValidation(contentError: null, posted: false),
       );
 
       // Add the comment
@@ -95,7 +95,7 @@ void main() {
       final stateAfterAdd = await newCommentViewModel.future;
       expect(
         stateAfterAdd,
-        NewCommentState(contentError: null, posted: true),
+        NewCommentValidation(contentError: null, posted: true),
       );
 
       // Reset the state
@@ -105,7 +105,7 @@ void main() {
       final stateAfterReset = await newCommentViewModel.future;
       expect(
         stateAfterReset,
-        NewCommentState(contentError: null, posted: false),
+        NewCommentValidation(contentError: null, posted: false),
       );
     });
 
@@ -113,13 +113,13 @@ void main() {
       const invalidContent = "";
 
       final newCommentViewModel =
-          container.read(newCommentViewModelProvider.notifier);
+          container.read(newCommentViewModelPostProvider.notifier);
 
       // Check the state before adding the comment
       final stateBeforeAdd = await newCommentViewModel.future;
       expect(
         stateBeforeAdd,
-        NewCommentState(contentError: null, posted: false),
+        NewCommentValidation(contentError: null, posted: false),
       );
 
       // Add the comment
@@ -131,7 +131,7 @@ void main() {
       final stateAfterAdd = await newCommentViewModel.future;
       expect(
         stateAfterAdd,
-        NewCommentState(
+        NewCommentValidation(
           contentError: NewCommentViewModel.contentEmptyError,
           posted: false,
         ),
@@ -143,11 +143,11 @@ void main() {
       final validContent = commentDataGenerator.createMockCommentData().content;
 
       final newCommentViewModel =
-          container.read(newCommentViewModelProvider.notifier);
+          container.read(newCommentViewModelPostProvider.notifier);
 
       container.updateOverrides([
         firestoreProvider.overrideWithValue(fakeFirestore),
-        uidProvider.overrideWithValue(null),
+        loggedInUserIdProvider.overrideWithValue(null),
       ]);
 
       final addResult = await newCommentViewModel.tryAddComment(validContent);

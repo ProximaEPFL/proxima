@@ -2,12 +2,12 @@ import "dart:async";
 
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/ui/map_info.dart";
+import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/viewmodels/map_view_model.dart";
 
-class MockMapViewModel extends AutoDisposeAsyncNotifier<MapInfo>
+class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
     implements MapViewModel {
-  final Future<MapInfo> Function() _build;
+  final Future<MapDetails> Function() _build;
   final Future<void> Function() _onRefresh;
   final void Function(GoogleMapController) _onMapCreated;
   final Set<Circle> _circles;
@@ -15,7 +15,7 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapInfo>
   final Completer<GoogleMapController> _mapController;
 
   MockMapViewModel({
-    Future<MapInfo> Function()? build,
+    Future<MapDetails> Function()? build,
     Future<void> Function()? onRefresh,
     Future<void> Function(LatLng)? animateCamera,
     void Function(GoogleMapController)? onMapCreated,
@@ -31,7 +31,7 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapInfo>
         _mapController = mapController ?? Completer();
 
   @override
-  Future<MapInfo> build() => _build();
+  Future<MapDetails> build() => _build();
 
   @override
   Future<void> refresh() => _onRefresh();
@@ -51,5 +51,5 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapInfo>
 }
 
 final mockNoGPSMapViewModelOverride = [
-  mapProvider.overrideWith(() => MockMapViewModel()),
+  mapViewModelProvider.overrideWith(() => MockMapViewModel()),
 ];

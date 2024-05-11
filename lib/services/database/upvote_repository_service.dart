@@ -7,8 +7,8 @@ import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/models/database/vote/upvote_state.dart";
 import "package:proxima/models/database/vote/vote_firestore.dart";
+import "package:proxima/models/database/vote/vote_state.dart";
 
 /// This repository service is responsible for handling the upvotes of an
 /// arbitrary parent document.
@@ -27,7 +27,7 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
 
   /// Returns an instance of [UpvoteRepositoryService] for up-voting posts that
   /// are stored in the [firestore] database.
-  static UpvoteRepositoryService<PostIdFirestore> postUpvoteRepository(
+  static UpvoteRepositoryService<PostIdFirestore> postUpvoteRepositoryService(
     FirebaseFirestore firestore,
   ) {
     return UpvoteRepositoryService._(
@@ -40,7 +40,8 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
   /// Returns an instance of [UpvoteRepositoryService] for up-voting comments
   /// relating to the post with id [postId]. Everything is stored in the
   /// [firestore] database.
-  static UpvoteRepositoryService<CommentIdFirestore> commentUpvoteRepository(
+  static UpvoteRepositoryService<CommentIdFirestore>
+      commentUpvoteRepositoryService(
     FirebaseFirestore firestore,
     PostIdFirestore postId,
   ) {
@@ -75,7 +76,7 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
   /// This is done atomically, possibly as part of the transaction [transaction].
   /// This only reads and writes nothing to the transaction, so it must be run before any
   /// transaction write (see [FirebaseFirestore::runWithTransaction] documentation).
-  Future<UpvoteState> getUpvoteState(
+  Future<VoteState> getUpvoteState(
     UserIdFirestore userId,
     ParentIdFirestore parentId, {
     Transaction? transaction,
@@ -86,11 +87,11 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
         : await voteStateCollection.get();
 
     if (!voteState.exists) {
-      return UpvoteState.none;
+      return VoteState.none;
     } else {
       return VoteFirestore.fromDbData(voteState.data()!).hasUpvoted
-          ? UpvoteState.upvoted
-          : UpvoteState.downvoted;
+          ? VoteState.upvoted
+          : VoteState.downvoted;
     }
   }
 
@@ -99,7 +100,7 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
   Future<void> setUpvoteState(
     UserIdFirestore userId,
     ParentIdFirestore parentId,
-    UpvoteState newState,
+    VoteState newState,
   ) async {
     return await _firestore.runTransaction((transaction) async {
       final currState = await getUpvoteState(
@@ -117,12 +118,12 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
       // Apply the wanted state.
       increment += newState.increment;
 
-      if (newState == UpvoteState.none) {
+      if (newState == VoteState.none) {
         transaction.delete(_votersCollection(parentId).doc(userId.value));
       } else {
         transaction.set(
           _votersCollection(parentId).doc(userId.value),
-          VoteFirestore(hasUpvoted: newState == UpvoteState.upvoted).toDbData(),
+          VoteFirestore(hasUpvoted: newState == VoteState.upvoted).toDbData(),
         );
       }
 
