@@ -161,8 +161,8 @@ class ChallengeRepositoryService {
 
     // The [whereIn] argument of the where method crashed
     // if the query has more than 30 elements for the real firestore.
-    // So we do the filtering locally rather than using the whereIn method.
-    // This cannot be tested with the mock firestore.
+    // So we do the filtering locally rather than using the whereIn parameter
+    // of the where method.
     final alreadyDonePosts = alreadyDonePostsSnap.docs
         .where((donePost) => possiblePostsStringIds.contains(donePost.id))
         .map((post) => PostIdFirestore(value: post.id))
