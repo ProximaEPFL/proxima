@@ -40,7 +40,8 @@ class PostCard extends ConsumerWidget {
         .read(challengeProvider.notifier)
         .completeChallenge(post.postId);
     if (pointsAwarded != null) {
-      showCentauriPointsSnackBar(pointsAwarded, scaffoldMessengerState);
+      scaffoldMessengerState
+          .showSnackBar(CentauriSnackBar(value: pointsAwarded));
       await ref.read(postOverviewProvider.notifier).refresh();
     }
   }

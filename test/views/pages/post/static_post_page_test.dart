@@ -98,7 +98,7 @@ void main() {
 
           // Wait enough time for the snackbar to be displayed, but
           // not enough for it to disappear
-          await tester.pump(centauriPointsSnackBarDuration * 0.75);
+          await tester.pump(CentauriSnackBar.pointsDuration * 0.75);
 
           // Check if the snackbar is displayed
           final snackBar = find.textContaining("You won");
