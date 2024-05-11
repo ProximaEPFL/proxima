@@ -2,10 +2,10 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/components/user_avatar/user_avatar.dart";
-import "package:proxima/views/home_content/feed/post_card/post_card.dart";
-import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
+import "package:proxima/views/pages/home/content/feed/post_card/post_card.dart";
+import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
 

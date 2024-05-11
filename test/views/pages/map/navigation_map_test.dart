@@ -4,9 +4,9 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/views/components/async/error_alert.dart";
-import "package:proxima/views/home_content/map/map_screen.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
+import "package:proxima/views/pages/home/content/map/map_screen.dart";
 
 import "../../../mocks/data/geopoint.dart";
 import "../../../mocks/providers/provider_homepage.dart";

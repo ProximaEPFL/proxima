@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/comment_post.dart";
-import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
+import "package:proxima/views/pages/home/content/feed/post_card/post_header_widget.dart";
 
 class CommentPostWidget extends StatelessWidget {
   static const commentWidgetKey = Key("commentWidget");

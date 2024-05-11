@@ -3,7 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/map_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/components/options/map/map_selection_option_chips.dart";
-import "package:proxima/views/home_content/map/post_map.dart";
+import "package:proxima/views/pages/home/content/map/post_map.dart";
 
 class MapScreen extends ConsumerWidget {
   const MapScreen({super.key});
@@ -43,9 +43,7 @@ class MapScreen extends ConsumerWidget {
               MapSelectionOptionChips(mapInfo: value),
               const Divider(key: dividerKey),
               //TODO: change the map when clicking on a selection option
-              PostMap(
-                mapInfo: value,
-              ),
+              PostMap(mapInfo: value),
             ],
           ),
         );
