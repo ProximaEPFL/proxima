@@ -9,7 +9,7 @@ import "package:proxima/views/components/user_avatar/user_avatar.dart";
 /// It provides a [onTap] parameter to handle the user's tap,
 /// which adds an InkWell response.
 /// The [radius] parameter is the radius of the avatar.
-class DynamicUserAvatar extends HookConsumerWidget {
+class DynamicUserAvatar extends ConsumerWidget {
   static const _loadingDisplayName = "";
 
   final UserIdFirestore? uid;

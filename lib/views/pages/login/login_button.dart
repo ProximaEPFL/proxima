@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/services/authentication/auth_login_service.dart";
 
-class LoginButton extends HookConsumerWidget {
+class LoginButton extends ConsumerWidget {
   static const loginButtonKey = Key("login_button");
 
   static const _buttonText = "Sign in with Google";

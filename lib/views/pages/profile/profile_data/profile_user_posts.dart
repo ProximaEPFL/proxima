@@ -5,7 +5,7 @@ import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_column.dart";
 
-class ProfileUserPosts extends HookConsumerWidget {
+class ProfileUserPosts extends ConsumerWidget {
   static const postColumnKey = Key("postColumn");
 
   static const noPostsInfoText = "You don't have any post yet.";
@@ -26,8 +26,9 @@ class ProfileUserPosts extends HookConsumerWidget {
               (p) => ProfileInfoCard(
                 title: p.title,
                 content: p.description,
-                onDelete: () =>
-                    ref.read(userPostsViewModelProvider.notifier).deletePost(p.postId),
+                onDelete: () => ref
+                    .read(userPostsViewModelProvider.notifier)
+                    .deletePost(p.postId),
               ),
             )
             .toList();

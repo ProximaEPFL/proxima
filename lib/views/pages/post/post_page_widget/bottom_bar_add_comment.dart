@@ -7,7 +7,7 @@ import "package:proxima/views/pages/post/components/comment/new_comment_button.d
 import "package:proxima/views/pages/post/components/comment/new_comment_textfield.dart";
 import "package:proxima/views/pages/post/components/comment/new_comment_user_avatar.dart";
 
-class BottomBarAddComment extends HookConsumerWidget {
+class BottomBarAddComment extends ConsumerWidget {
   final PostIdFirestore parentPostId;
 
   const BottomBarAddComment({

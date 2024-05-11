@@ -11,7 +11,7 @@ import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart
 
 /// This widget is used to display the profile page
 /// It contains the user info, centauri points, badges, user posts and user comments
-class ProfilePage extends HookConsumerWidget {
+class ProfilePage extends ConsumerWidget {
   static const postTabKey = Key("postTab");
   static const commentTabKey = Key("commentTab");
   static const tabKey = Key("tab");

@@ -1,11 +1,10 @@
 import "package:flutter/material.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/components/user_avatar/dynamic_user_avatar.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 /// This widget is the top bar of the home page
 /// It contains the feed sort option and the user profile picture
-class HomeTopBar extends HookConsumerWidget {
+class HomeTopBar extends StatelessWidget {
   static const homeTopBarKey = Key("homeTopBar");
   static const profilePictureKey = Key("profilePicture");
 
@@ -14,7 +13,7 @@ class HomeTopBar extends HookConsumerWidget {
   const HomeTopBar({super.key, required this.labelText});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final title = Text(
       labelText,
       style: Theme.of(context).textTheme.headlineMedium,

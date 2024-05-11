@@ -8,7 +8,7 @@ import "package:proxima/views/pages/post/post_page_widget/bottom_bar_add_comment
 import "package:proxima/views/pages/post/post_page_widget/comment_list.dart";
 import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
 
-class PostPage extends HookConsumerWidget {
+class PostPage extends ConsumerWidget {
   static const postDistanceKey = Key("postDistance");
   static const completePostWidgetKey = Key("completePostWidget");
   static const commentListWidgetKey = Key("commentListWidget");
@@ -27,7 +27,9 @@ class PostPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ThemeData themeData = Theme.of(context);
 
-    final commentsAsync = ref.watch(commentsViewModelProvider(postDetails.postId));
+    final commentsAsync = ref.watch(
+      commentsViewModelProvider(postDetails.postId),
+    );
 
     // Top app bar content = Title + Distance
     List<Widget> appBarContent = [

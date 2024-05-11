@@ -9,7 +9,7 @@ import "package:proxima/views/pages/home/content/feed/post_card/post_card.dart";
 
 /// This widget is the feed of the home page
 /// It contains the posts
-class PostFeed extends HookConsumerWidget {
+class PostFeed extends ConsumerWidget {
   static const feedSortOptionKey = Key("feedSortOption");
 
   static const refreshButtonKey = Key("refreshButton");

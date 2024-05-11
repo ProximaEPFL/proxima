@@ -5,7 +5,7 @@ import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 
-class LoginPage extends HookConsumerWidget {
+class LoginPage extends ConsumerWidget {
   static const loginPageKey = Key("login_page");
   static const logoKey = Key("login_logo");
 

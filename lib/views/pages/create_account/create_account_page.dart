@@ -9,7 +9,7 @@ import "package:proxima/views/components/layout/scrollable_if_too_high.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/navigation/routes.dart";
 
-class CreateAccountPage extends HookConsumerWidget {
+class CreateAccountPage extends ConsumerWidget {
   static const confirmButtonKey = Key("confirm");
 
   static const uniqueUsernameFieldKey = Key("uniqueUsername");

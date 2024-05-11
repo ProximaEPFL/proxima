@@ -5,7 +5,7 @@ import "package:proxima/viewmodels/comments_view_model.dart";
 import "package:proxima/viewmodels/new_comment_view_model.dart";
 
 /// The button on which the user can click to post a new comment.
-class NewCommentButton extends HookConsumerWidget {
+class NewCommentButton extends ConsumerWidget {
   static const postCommentButtonKey = Key("postCommentButton");
 
   const NewCommentButton({

@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/helpers/types.dart";
 
 enum LoadingState {
@@ -11,7 +10,7 @@ enum LoadingState {
 
 /// An async capable button that displays a progress indicator once it is pressed
 /// and until the future of the callback function completes.
-class LoadingIconButton extends HookConsumerWidget {
+class LoadingIconButton extends HookWidget {
   static const _defaultIconSize = 26.0;
   static const _containerSide = 40.0;
 
@@ -27,7 +26,7 @@ class LoadingIconButton extends HookConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final isLoading = useState(LoadingState.still);
 
     final stillIconButton = IconButton(
