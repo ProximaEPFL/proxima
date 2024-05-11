@@ -8,7 +8,7 @@ import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
 import "../overrides/override_auth_providers.dart";
-import "../overrides/override_home_view_model.dart";
+import "../overrides/override_posts_feed_view_model.dart";
 
 const profilePageApp = MaterialApp(
   onGenerateRoute: generateRoute,

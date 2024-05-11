@@ -19,7 +19,7 @@ import "../mocks/data/post_data.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 
 void main() {
-  // This aims to test the [postOverviewProvider] with the real implementation
+  // This aims to test the [postsFeedViewModelProvider] with the real implementation
   // of the [UserRepositoryService] and [PostRepositoryService] on a fake
   // firestore instance
   group("Post Overview Provider integration testing with firestore", () {
@@ -76,7 +76,8 @@ void main() {
         ), // This is >> 0.1 km away from the (0,0)
       );
 
-      final actualPosts = await container.read(postsFeedViewModelProvider.future);
+      final actualPosts =
+          await container.read(postsFeedViewModelProvider.future);
 
       expect(actualPosts, isEmpty);
     });
@@ -125,7 +126,8 @@ void main() {
         ),
       ];
 
-      final actualPosts = await container.read(postsFeedViewModelProvider.future);
+      final actualPosts =
+          await container.read(postsFeedViewModelProvider.future);
 
       expect(actualPosts, unorderedEquals(expectedPosts));
     });
@@ -206,7 +208,7 @@ void main() {
         );
 
         final postId = postIds[index];
-        final postOverview = PostDetails(
+        final postDetails = PostDetails(
           postId: postId,
           title: data.title,
           description: data.description,
@@ -220,10 +222,11 @@ void main() {
               .round(),
         );
 
-        return postOverview;
+        return postDetails;
       }).toList();
 
-      final actualPosts = await container.read(postsFeedViewModelProvider.future);
+      final actualPosts =
+          await container.read(postsFeedViewModelProvider.future);
 
       expect(actualPosts, unorderedEquals(expectedPosts));
     });

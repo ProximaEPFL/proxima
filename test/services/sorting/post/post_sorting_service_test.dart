@@ -6,8 +6,8 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/services/sorting/post/post_sort_option.dart";
 import "package:proxima/services/sorting/post/post_sorting_service.dart";
 
-import "../../mocks/data/firestore_post.dart";
-import "../../mocks/data/geopoint.dart";
+import "../../../mocks/data/firestore_post.dart";
+import "../../../mocks/data/geopoint.dart";
 
 void expectSorted(Iterable<double> iterable, bool ascending) {
   final factor = ascending ? 1 : -1;

@@ -4,7 +4,8 @@ import "package:proxima/views/pages/create_account/create_account_form.dart";
 import "package:proxima/views/pages/create_account/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 
-import "../../mocks/providers/provider_create_account.dart";
+import "../../../mocks/providers/provider_create_account.dart";
+
 
 void main() {
   Future<(Finder, Finder, Finder)> preparePage(WidgetTester tester) async {

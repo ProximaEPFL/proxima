@@ -137,7 +137,8 @@ void main() {
         (_) async => owner,
       );
 
-      final actualPosts = await container.read(postsFeedViewModelProvider.future);
+      final actualPosts =
+          await container.read(postsFeedViewModelProvider.future);
 
       expect(actualPosts, unorderedEquals(expectedPosts));
     });
@@ -165,7 +166,7 @@ void main() {
         }).toList();
 
         final expectedPosts = posts.map((post) {
-          final postOverview = PostDetails(
+          final postDetails = PostDetails(
             postId: post.id,
             title: post.data.title,
             description: post.data.description,
@@ -176,7 +177,7 @@ void main() {
             distance: 0,
           );
 
-          return postOverview;
+          return postDetails;
         });
 
         // Mock the repository calls
@@ -197,7 +198,8 @@ void main() {
         );
 
         // Check the actual posts
-        final actualPosts = await container.read(postsFeedViewModelProvider.future);
+        final actualPosts =
+            await container.read(postsFeedViewModelProvider.future);
 
         expect(actualPosts, unorderedEquals(expectedPosts));
       },
@@ -228,7 +230,7 @@ void main() {
         }).toList();
 
         final expectedPosts = posts.mapIndexed((index, post) {
-          final postOverview = PostDetails(
+          final postDetails = PostDetails(
             postId: post.id,
             title: post.data.title,
             description: post.data.description,
@@ -239,7 +241,7 @@ void main() {
             distance: 0,
           );
 
-          return postOverview;
+          return postDetails;
         });
 
         // Mock the repository calls
@@ -262,7 +264,8 @@ void main() {
         );
 
         // Check the actual posts
-        final actualPosts = await container.read(postsFeedViewModelProvider.future);
+        final actualPosts =
+            await container.read(postsFeedViewModelProvider.future);
 
         expect(actualPosts, unorderedEquals(expectedPosts));
       },

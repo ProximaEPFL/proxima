@@ -2,9 +2,9 @@ import "package:flutter_test/flutter_test.dart";
 import "package:proxima/views/pages/home/content/challenge/challenge_card.dart";
 import "package:proxima/views/pages/home/content/challenge/challenge_list.dart";
 
-import "../../mocks/data/challenge_list.dart";
-import "../../mocks/providers/provider_challenge.dart";
-import "../../testutils/expect_rich_text.dart";
+import "../../../../mocks/data/challenge_list.dart";
+import "../../../../mocks/providers/provider_challenge.dart";
+import "../../../../testutils/expect_rich_text.dart";
 
 void main() {
   group(

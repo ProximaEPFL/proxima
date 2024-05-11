@@ -8,7 +8,7 @@ import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/post/post_page.dart";
 
 import "../data/post_overview.dart";
-import "../overrides/override_comment_view_model.dart";
+import "../overrides/override_comments_view_model.dart";
 import "../overrides/override_dynamic_user_avatar_view_model.dart";
 import "../overrides/override_firestore.dart";
 import "../overrides/override_human_time.dart";
