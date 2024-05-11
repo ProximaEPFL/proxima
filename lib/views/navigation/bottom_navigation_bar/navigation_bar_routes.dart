@@ -39,7 +39,6 @@ enum NavigationbarRoutes {
       throw Exception("Route must be pushed.");
     }
 
-    // TODO implement other routes
     switch (this) {
       case feed:
         return const PostFeed();
