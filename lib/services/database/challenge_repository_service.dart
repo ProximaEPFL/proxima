@@ -146,20 +146,25 @@ class ChallengeRepositoryService {
     final Iterable<PostIdFirestore> possiblePosts =
         await _inRangeUnsortedPosts(pos, excludedUser);
 
-    // The whereIn argument of the where method crashed
+    // The [whereIn] argument of the where method crashed
     // if the query is empty for the real firestore. This
     // cannot be tested with the mock firestore.
+    // (It is now fixed with the local filtering below, but
+    // we can keep it for the sake of optimization.)
     if (possiblePosts.isEmpty) return;
 
     final Iterable<String> possiblePostsStringIds =
         possiblePosts.map((post) => post.value);
 
     final pastChallengesCollectionRef = _pastChallengesRef(parentRef);
-    final alreadyDonePostsSnap = await pastChallengesCollectionRef
-        .where(FieldPath.documentId, whereIn: possiblePostsStringIds)
-        .get();
+    final alreadyDonePostsSnap = await pastChallengesCollectionRef.get();
 
+    // The [whereIn] argument of the where method crashed
+    // if the query has more than 30 elements for the real firestore.
+    // So we do the filtering locally rather than using the whereIn method.
+    // This cannot be tested with the mock firestore.
     final alreadyDonePosts = alreadyDonePostsSnap.docs
+        .where((donePost) => possiblePostsStringIds.contains(donePost.id))
         .map((post) => PostIdFirestore(value: post.id))
         .toSet();
 
