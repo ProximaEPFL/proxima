@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:proxima/utils/ui/types.dart";
-import "package:proxima/views/components/loading_icon_button.dart";
+import "package:proxima/views/components/async/loading_icon_button.dart";
 
 class ProfileInfoPopUp extends StatelessWidget {
   static const popUpTitleKey = Key("profilePopUpTitle");

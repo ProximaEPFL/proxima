@@ -3,7 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/login_user.dart";
 import "package:proxima/services/login_service.dart";
-import "package:proxima/utils/ui/circular_value.dart";
+import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 /// Firebase authentication change provider

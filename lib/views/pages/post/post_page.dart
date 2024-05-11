@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_overview.dart";
-import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/comment_view_model.dart";
+import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/post/post_page_widget/bottom_bar_add_comment.dart";
 import "package:proxima/views/pages/post/post_page_widget/comment_list.dart";

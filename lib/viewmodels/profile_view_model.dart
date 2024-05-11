@@ -1,8 +1,8 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/profile_data.dart";
 import "package:proxima/services/database/user_repository_service.dart";
-import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/views/components/async/circular_value.dart";
 
 /// User profile view model
 class ProfileViewModel extends AutoDisposeAsyncNotifier<ProfileData> {

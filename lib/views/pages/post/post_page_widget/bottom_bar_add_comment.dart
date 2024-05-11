@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/new_comment_view_model.dart";
+import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/pages/post/components/comment/new_comment_button.dart";
 import "package:proxima/views/pages/post/components/comment/new_comment_textfield.dart";
 import "package:proxima/views/pages/post/components/comment/new_comment_user_avatar.dart";

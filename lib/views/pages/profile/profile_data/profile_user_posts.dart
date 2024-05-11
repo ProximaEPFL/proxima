@@ -1,7 +1,7 @@
 import "package:flutter/widgets.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/utils/ui/circular_value.dart";
 import "package:proxima/viewmodels/user_posts_view_model.dart";
+import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_column.dart";
 

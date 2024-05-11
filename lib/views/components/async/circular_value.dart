@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/utils/ui/error_alert.dart";
+import "package:proxima/views/components/async/error_alert.dart";
 
 /// Utilitiy widget used to display a [CircularProgressIndicator] while waiting
 /// for an [AsyncValue] to complete; and another widget once the data resolves.

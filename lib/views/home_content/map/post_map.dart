@@ -3,10 +3,10 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_info.dart";
 import "package:proxima/services/geolocation_service.dart";
-import "package:proxima/utils/ui/circular_value.dart";
-import "package:proxima/utils/ui/error_alert.dart";
 import "package:proxima/viewmodels/map_pin_view_model.dart";
 import "package:proxima/viewmodels/map_view_model.dart";
+import "package:proxima/views/components/async/circular_value.dart";
+import "package:proxima/views/components/async/error_alert.dart";
 
 /// This widget displays the Google Map
 class PostMap extends ConsumerWidget {
