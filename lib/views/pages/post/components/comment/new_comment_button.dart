@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/viewmodels/comment_view_model.dart";
+import "package:proxima/viewmodels/comments_view_model.dart";
 import "package:proxima/viewmodels/new_comment_view_model.dart";
 
 /// The button on which the user can click to post a new comment.
@@ -20,11 +20,11 @@ class NewCommentButton extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final newCommentViewModel = ref.read(
-      newCommentStateProvider(parentPostId).notifier,
+      newCommentViewModelProvider(parentPostId).notifier,
     );
 
     final commentListViewModel =
-        ref.read(commentListProvider(parentPostId).notifier);
+        ref.read(commentsViewModelProvider(parentPostId).notifier);
 
     return Align(
       alignment: Alignment.center,

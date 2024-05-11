@@ -59,7 +59,7 @@ void main() {
           overrides: [
             ...overrideList,
             //Set current user id.
-            uidProvider.overrideWithValue(availableUsers[0].uid),
+            loggedInUserIdProvider.overrideWithValue(availableUsers[0].uid),
           ],
         );
       });

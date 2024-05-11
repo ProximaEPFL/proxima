@@ -6,7 +6,7 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/services/sorting/post/post_sort_option.dart";
 import "package:proxima/services/sorting/post/post_sorting_service.dart";
 import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
-import "package:proxima/viewmodels/home_view_model.dart";
+import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/options/feed/feed_sort_option_chips.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 
@@ -74,12 +74,15 @@ void main() {
             await tester.pumpAndSettle();
 
             // Expect to be in the correct state
-            expect(container.read(feedSortOptionsProvider), equals(sortOption));
+            expect(
+              container.read(feedSortOptionsViewModelProvider),
+              equals(sortOption),
+            );
 
             // Expect the list to be in correct order
             // We compare the post id values for an easier debugging.
             final actualPostsOverview = await container.read(
-              postOverviewProvider.future,
+              postsFeedViewModelProvider.future,
             );
             final actualPostsId = actualPostsOverview.map(
               (post) => post.postId.value,

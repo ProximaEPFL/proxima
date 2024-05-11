@@ -48,7 +48,7 @@ ProviderScope postPageProvider(
       ...mockEmptyCommentViewModelOverride,
       ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
       commentRepositoryServiceProvider.overrideWithValue(commentRepository),
-      uidProvider.overrideWithValue(userId),
+      loggedInUserIdProvider.overrideWithValue(userId),
     ],
     child: postPage,
   );

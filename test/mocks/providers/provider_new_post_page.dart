@@ -19,7 +19,7 @@ ProviderScope newPostPageProvider(
       ...firebaseMocksOverrides,
       postRepositoryServiceProvider.overrideWithValue(postRepository),
       geolocationServiceProvider.overrideWithValue(geoLocationService),
-      uidProvider.overrideWithValue(testingUserFirestoreId),
+      loggedInUserIdProvider.overrideWithValue(testingUserFirestoreId),
     ],
     child: const MaterialApp(
       title: "New post page",

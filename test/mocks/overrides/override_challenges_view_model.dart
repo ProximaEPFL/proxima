@@ -22,5 +22,5 @@ class MockChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>>
 }
 
 final mockChallengeOverride = [
-  challengeProvider.overrideWith(() => MockChallengeViewModel()),
+  challengeViewModelProvider.overrideWith(() => MockChallengeViewModel()),
 ];

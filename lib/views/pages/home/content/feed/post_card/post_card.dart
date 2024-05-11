@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
-import "package:proxima/viewmodels/home_view_model.dart";
+import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/feedback/centauri_snack_bar.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/content/feed/post_card/comment_count.dart";
@@ -37,12 +37,12 @@ class PostCard extends ConsumerWidget {
     final scaffoldMessengerState = ScaffoldMessenger.of(context);
 
     int? pointsAwarded = await ref
-        .read(challengeProvider.notifier)
+        .read(challengeViewModelProvider.notifier)
         .completeChallenge(post.postId);
     if (pointsAwarded != null) {
       scaffoldMessengerState
           .showSnackBar(CentauriSnackBar(value: pointsAwarded));
-      await ref.read(postOverviewProvider.notifier).refresh();
+      await ref.read(postsFeedViewModelProvider.notifier).refresh();
     }
   }
 

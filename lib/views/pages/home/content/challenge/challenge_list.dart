@@ -9,7 +9,7 @@ class ChallengeList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncChallenges = ref.watch(challengeProvider);
+    final asyncChallenges = ref.watch(challengeViewModelProvider);
 
     Widget emptyChallenge = const Center(
       child: Text("No challenge available here!"),
@@ -19,7 +19,7 @@ class ChallengeList extends ConsumerWidget {
       value: asyncChallenges,
       builder: (context, challenges) {
         return RefreshIndicator(
-          onRefresh: () => ref.read(challengeProvider.notifier).refresh(),
+          onRefresh: () => ref.read(challengeViewModelProvider.notifier).refresh(),
           child: challenges.isEmpty
               ? emptyChallenge
               : ListView(

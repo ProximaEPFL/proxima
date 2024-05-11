@@ -23,10 +23,10 @@ class PostMap extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // This provider is used to get information about the map.
-    final mapNotifier = ref.watch(mapProvider.notifier);
+    final mapNotifier = ref.watch(mapViewModelProvider.notifier);
 
     // This provider is used to get the list of map pins.
-    final mapPinsAsync = ref.watch(mapPinProvider);
+    final mapPinsAsync = ref.watch(mapPinViewModelProvider);
 
     // This provider is used to get the live location of the user.
     final positionValue = ref.watch(livePositionStreamProvider);

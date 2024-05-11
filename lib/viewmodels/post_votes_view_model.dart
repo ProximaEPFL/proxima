@@ -22,12 +22,12 @@ import "package:proxima/viewmodels/login_view_model.dart";
 /// This view model must be AutoDisposed because it is created on the fly
 /// for each post that is displayed on the screen.
 /// Thus, when the post is removed from the screen, the view model is disposed.
-class UpVoteViewModel
+class PostVotesViewModel
     extends AutoDisposeFamilyAsyncNotifier<VotesDetails, PostIdFirestore> {
   @override
   FutureOr<VotesDetails> build(PostIdFirestore arg) async {
     final postId = arg;
-    final uid = ref.watch(validUidProvider);
+    final uid = ref.watch(validLoggedInUserIdProvider);
 
     final voteRepository = ref.watch(postUpvoteRepositoryServiceProvider);
     final postRepository = ref.watch(postRepositoryServiceProvider);
@@ -56,7 +56,7 @@ class UpVoteViewModel
 
   Future<void> _triggerVote(VoteState selectedUpVoteState) async {
     final postId = arg;
-    final uid = ref.watch(validUidProvider);
+    final uid = ref.watch(validLoggedInUserIdProvider);
 
     final voteRepository = ref.read(postUpvoteRepositoryServiceProvider);
 
@@ -85,7 +85,7 @@ class UpVoteViewModel
   }
 }
 
-final postVoteProvider = AsyncNotifierProvider.autoDispose
-    .family<UpVoteViewModel, VotesDetails, PostIdFirestore>(
-  () => UpVoteViewModel(),
+final postVotesProvider = AsyncNotifierProvider.autoDispose
+    .family<PostVotesViewModel, VotesDetails, PostIdFirestore>(
+  () => PostVotesViewModel(),
 );

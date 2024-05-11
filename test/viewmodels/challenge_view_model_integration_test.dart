@@ -36,7 +36,7 @@ void main() {
       container = ProviderContainer(
         overrides: [
           geolocationServiceProvider.overrideWithValue(geoLocationService),
-          uidProvider.overrideWithValue(testingUserFirestoreId),
+          loggedInUserIdProvider.overrideWithValue(testingUserFirestoreId),
           firestoreProvider.overrideWithValue(fakeFireStore),
         ],
       );
@@ -45,7 +45,8 @@ void main() {
     });
 
     test("No challenges are returned when the database is empty", () async {
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       expect(challenges, isEmpty);
     });
 
@@ -64,7 +65,8 @@ void main() {
       final challenge = challengeGenerator.generateChallenge(false, extraTime);
       await setChallenge(fakeFireStore, challenge, testingUserFirestoreId);
 
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       expect(challenges.length, 1);
 
       final uiChallenge = challenges.first;
@@ -94,7 +96,8 @@ void main() {
       final challenge = challengeGenerator.generateChallenge(true, extraTime);
       await setChallenge(fakeFireStore, challenge, testingUserFirestoreId);
 
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       expect(challenges.length, 1);
 
       final uiChallenge = challenges.first;
@@ -135,7 +138,8 @@ void main() {
         testingUserFirestoreId,
       );
 
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       final areChallengesFinished =
           challenges.map((c) => c.isFinished).toList();
 
@@ -162,12 +166,13 @@ void main() {
       await setChallenge(fakeFireStore, challenge, testingUserFirestoreId);
 
       await container
-          .read(challengeProvider.notifier)
+          .read(challengeViewModelProvider.notifier)
           .completeChallenge(challenge.postId);
 
       await Future.delayed(const Duration(milliseconds: 100));
 
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       expect(challenges.length, 1);
 
       final uiChallenge = challenges.first;
@@ -195,7 +200,7 @@ void main() {
       container = ProviderContainer(
         overrides: [
           geolocationServiceProvider.overrideWithValue(geoLocationService),
-          uidProvider.overrideWithValue(null),
+          loggedInUserIdProvider.overrideWithValue(null),
           firestoreProvider.overrideWithValue(fakeFireStore),
         ],
       );
@@ -204,7 +209,7 @@ void main() {
     test("No user only throws debug error", () async {
       expect(
         () async {
-          await container.read(challengeProvider.future);
+          await container.read(challengeViewModelProvider.future);
         },
         throwsA(
           (exception) =>

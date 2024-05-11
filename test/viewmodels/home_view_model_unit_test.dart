@@ -11,8 +11,8 @@ import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/services/sorting/post/post_sorting_service.dart";
 import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
-import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/viewmodels/posts_feed_view_model.dart";
 
 import "../mocks/data/firestore_challenge.dart";
 import "../mocks/data/firestore_post.dart";
@@ -53,7 +53,7 @@ void main() {
           challengeRepositoryServiceProvider.overrideWithValue(
             challengeRepository,
           ),
-          uidProvider.overrideWithValue(testingUserFirestoreId),
+          loggedInUserIdProvider.overrideWithValue(testingUserFirestoreId),
         ],
       );
 
@@ -75,13 +75,13 @@ void main() {
       when(
         postRepository.getNearPosts(
           userPosition0,
-          HomeViewModel.kmPostRadius,
+          PostsFeedViewModel.kmPostRadius,
         ),
       ).thenAnswer(
         (_) async => [],
       );
 
-      final posts = await container.read(postOverviewProvider.future);
+      final posts = await container.read(postsFeedViewModelProvider.future);
 
       expect(posts, isEmpty);
     });
@@ -128,7 +128,7 @@ void main() {
       when(
         postRepository.getNearPosts(
           userPosition0,
-          HomeViewModel.kmPostRadius,
+          PostsFeedViewModel.kmPostRadius,
         ),
       ).thenAnswer(
         (_) async => [post],
@@ -137,7 +137,7 @@ void main() {
         (_) async => owner,
       );
 
-      final actualPosts = await container.read(postOverviewProvider.future);
+      final actualPosts = await container.read(postsFeedViewModelProvider.future);
 
       expect(actualPosts, unorderedEquals(expectedPosts));
     });
@@ -190,14 +190,14 @@ void main() {
         when(
           postRepository.getNearPosts(
             userPosition0,
-            HomeViewModel.kmPostRadius,
+            PostsFeedViewModel.kmPostRadius,
           ),
         ).thenAnswer(
           (_) async => posts,
         );
 
         // Check the actual posts
-        final actualPosts = await container.read(postOverviewProvider.future);
+        final actualPosts = await container.read(postsFeedViewModelProvider.future);
 
         expect(actualPosts, unorderedEquals(expectedPosts));
       },
@@ -255,14 +255,14 @@ void main() {
         when(
           postRepository.getNearPosts(
             userPosition0,
-            HomeViewModel.kmPostRadius,
+            PostsFeedViewModel.kmPostRadius,
           ),
         ).thenAnswer(
           (_) async => posts,
         );
 
         // Check the actual posts
-        final actualPosts = await container.read(postOverviewProvider.future);
+        final actualPosts = await container.read(postsFeedViewModelProvider.future);
 
         expect(actualPosts, unorderedEquals(expectedPosts));
       },
@@ -275,7 +275,7 @@ void main() {
       when(
         postRepository.getNearPosts(
           userPosition0,
-          HomeViewModel.kmPostRadius,
+          PostsFeedViewModel.kmPostRadius,
         ),
       ).thenAnswer(
         (_) async => [],
@@ -283,7 +283,7 @@ void main() {
 
       // Query the posts a first time
       final postBeforeRefresh =
-          await container.read(postOverviewProvider.future);
+          await container.read(postsFeedViewModelProvider.future);
       expect(postBeforeRefresh, []);
 
       // Simulate a new post being added
@@ -319,7 +319,7 @@ void main() {
       when(
         postRepository.getNearPosts(
           userPosition0,
-          HomeViewModel.kmPostRadius,
+          PostsFeedViewModel.kmPostRadius,
         ),
       ).thenAnswer(
         (_) async => [post],
@@ -329,11 +329,11 @@ void main() {
       );
 
       // Refresh the posts
-      await container.read(postOverviewProvider.notifier).refresh();
+      await container.read(postsFeedViewModelProvider.notifier).refresh();
 
       // Check the actual posts
       final postAfterRefresh =
-          await container.read(postOverviewProvider.future);
+          await container.read(postsFeedViewModelProvider.future);
 
       expect(postAfterRefresh, unorderedEquals(expectedPosts));
     });
@@ -347,15 +347,15 @@ void main() {
       when(
         postRepository.getNearPosts(
           userPosition0,
-          HomeViewModel.kmPostRadius,
+          PostsFeedViewModel.kmPostRadius,
         ),
       ).thenThrow(Exception(expectedErrorMessage));
 
       // Refresh the posts
-      await container.read(postOverviewProvider.notifier).refresh();
+      await container.read(postsFeedViewModelProvider.notifier).refresh();
 
       // Check the actual posts
-      final asyncPosts = container.read(postOverviewProvider);
+      final asyncPosts = container.read(postsFeedViewModelProvider);
 
       expect(
         asyncPosts,
@@ -391,7 +391,7 @@ void main() {
       when(
         postRepository.getNearPosts(
           userPosition0,
-          HomeViewModel.kmPostRadius,
+          PostsFeedViewModel.kmPostRadius,
         ),
       ).thenAnswer(
         (_) async => posts,
@@ -404,11 +404,11 @@ void main() {
         );
       }
 
-      final sortOption = container.read(feedSortOptionsProvider);
+      final sortOption = container.read(feedSortOptionsViewModelProvider);
 
       // No challenge
       final actualPostsNoChallenge = await container.read(
-        postOverviewProvider.future,
+        postsFeedViewModelProvider.future,
       );
       final sortedPostsNoChallenge = PostSortingService().sort(
         posts,
@@ -433,10 +433,10 @@ void main() {
       ).thenAnswer(
         (_) async => challenges,
       );
-      await container.read(postOverviewProvider.notifier).refresh();
+      await container.read(postsFeedViewModelProvider.notifier).refresh();
 
       final actualPosts = await container.read(
-        postOverviewProvider.future,
+        postsFeedViewModelProvider.future,
       );
 
       final sortedPosts = PostSortingService().sort(

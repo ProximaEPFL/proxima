@@ -14,11 +14,11 @@ class MapScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mapInfo = ref.watch(mapProvider);
+    final mapInfo = ref.watch(mapViewModelProvider);
 
     final refreshButton = ElevatedButton(
       key: refreshButtonKey,
-      onPressed: () => ref.read(mapProvider.notifier).refresh(),
+      onPressed: () => ref.read(mapViewModelProvider.notifier).refresh(),
       child: const Text("Refresh"),
     );
 

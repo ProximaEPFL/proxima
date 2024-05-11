@@ -16,7 +16,7 @@ class FeedSortOptionChips extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedOption = ref.watch(feedSortOptionsProvider);
+    final selectedOption = ref.watch(feedSortOptionsViewModelProvider);
 
     final sortOptions = PostSortOption.values
         .map(
@@ -27,7 +27,7 @@ class FeedSortOptionChips extends ConsumerWidget {
             onSelected: (bool selected) {
               if (selected) {
                 ref
-                    .read(feedSortOptionsProvider.notifier)
+                    .read(feedSortOptionsViewModelProvider.notifier)
                     .setSortOption(sortOption);
               }
             },

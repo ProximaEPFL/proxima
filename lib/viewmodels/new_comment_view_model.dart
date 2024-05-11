@@ -60,7 +60,7 @@ class NewCommentViewModel
   }
 
   Future<NewCommentValidation> _tryAddComment(String content) async {
-    final currentUserId = ref.read(uidProvider);
+    final currentUserId = ref.read(loggedInUserIdProvider);
     final commentRepository = ref.read(commentRepositoryServiceProvider);
 
     if (currentUserId == null) {
@@ -95,7 +95,7 @@ class NewCommentViewModel
   }
 }
 
-final newCommentStateProvider = AsyncNotifierProvider.family<
+final newCommentViewModelProvider = AsyncNotifierProvider.family<
     NewCommentViewModel, NewCommentValidation, PostIdFirestore>(
   () => NewCommentViewModel(),
 );

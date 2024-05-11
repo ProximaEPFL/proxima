@@ -1,7 +1,7 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/comment_details.dart";
-import "package:proxima/viewmodels/comment_view_model.dart";
+import "package:proxima/viewmodels/comments_view_model.dart";
 
 import "../data/post_comment.dart";
 
@@ -9,7 +9,7 @@ import "../data/post_comment.dart";
 /// By default it exposes an empty list of [CommentDetails] and does nothing on refresh.
 class MockCommentViewModel
     extends AutoDisposeFamilyAsyncNotifier<List<CommentDetails>, PostIdFirestore>
-    implements CommentViewModel {
+    implements CommentsViewModel {
   final Future<List<CommentDetails>> Function(PostIdFirestore arg) _build;
   final Future<void> Function() _onRefresh;
 
@@ -28,13 +28,13 @@ class MockCommentViewModel
 }
 
 final mockEmptyCommentViewModelOverride = [
-  commentListProvider.overrideWith(
+  commentsViewModelProvider.overrideWith(
     () => MockCommentViewModel(),
   ),
 ];
 
 final mockNonEmptyCommentViewModelOverride = [
-  commentListProvider.overrideWith(
+  commentsViewModelProvider.overrideWith(
     () => MockCommentViewModel(
       build: (PostIdFirestore arg) async => testComments,
     ),

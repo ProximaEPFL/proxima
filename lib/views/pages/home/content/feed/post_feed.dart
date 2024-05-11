@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_details.dart";
-import "package:proxima/viewmodels/home_view_model.dart";
+import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/components/options/feed/feed_sort_option_chips.dart";
 import "package:proxima/views/navigation/routes.dart";
@@ -21,7 +21,7 @@ class PostFeed extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncPosts = ref.watch(postOverviewProvider);
+    final asyncPosts = ref.watch(postsFeedViewModelProvider);
 
     final newPostButton = InkWell(
       onTap: () {
@@ -35,7 +35,7 @@ class PostFeed extends HookConsumerWidget {
     );
     final refreshButton = ElevatedButton(
       key: refreshButtonKey,
-      onPressed: () => ref.read(postOverviewProvider.notifier).refresh(),
+      onPressed: () => ref.read(postsFeedViewModelProvider.notifier).refresh(),
       child: const Text("Refresh"),
     );
     final emptyHelper = Center(
@@ -80,7 +80,7 @@ class PostFeed extends HookConsumerWidget {
               final postsList = PostList(
                 posts: posts,
                 onRefresh: () =>
-                    ref.read(postOverviewProvider.notifier).refresh(),
+                    ref.read(postsFeedViewModelProvider.notifier).refresh(),
               );
 
               return posts.isEmpty ? emptyHelper : postsList;

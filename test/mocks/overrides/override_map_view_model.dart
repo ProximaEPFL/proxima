@@ -51,5 +51,5 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
 }
 
 final mockNoGPSMapViewModelOverride = [
-  mapProvider.overrideWith(() => MockMapViewModel()),
+  mapViewModelProvider.overrideWith(() => MockMapViewModel()),
 ];

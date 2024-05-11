@@ -9,8 +9,8 @@ import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
-import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:test/test.dart";
 
 import "../mocks/data/firestore_user.dart";
@@ -49,7 +49,7 @@ void main() {
         overrides: [
           geolocationServiceProvider.overrideWithValue(geoLocationService),
           firestoreProvider.overrideWithValue(fakeFireStore),
-          uidProvider.overrideWithValue(testingUserFirestoreId),
+          loggedInUserIdProvider.overrideWithValue(testingUserFirestoreId),
         ],
       );
 
@@ -59,7 +59,7 @@ void main() {
     });
 
     test("No posts are returned when the database is empty", () async {
-      final posts = await container.read(postOverviewProvider.future);
+      final posts = await container.read(postsFeedViewModelProvider.future);
 
       expect(posts, isEmpty);
     });
@@ -76,7 +76,7 @@ void main() {
         ), // This is >> 0.1 km away from the (0,0)
       );
 
-      final actualPosts = await container.read(postOverviewProvider.future);
+      final actualPosts = await container.read(postsFeedViewModelProvider.future);
 
       expect(actualPosts, isEmpty);
     });
@@ -125,7 +125,7 @@ void main() {
         ),
       ];
 
-      final actualPosts = await container.read(postOverviewProvider.future);
+      final actualPosts = await container.read(postsFeedViewModelProvider.future);
 
       expect(actualPosts, unorderedEquals(expectedPosts));
     });
@@ -140,7 +140,7 @@ void main() {
       );
 
       expect(
-        container.read(postOverviewProvider.future),
+        container.read(postsFeedViewModelProvider.future),
         throwsA(
           isA<Exception>().having(
             (error) => error.toString(),
@@ -223,7 +223,7 @@ void main() {
         return postOverview;
       }).toList();
 
-      final actualPosts = await container.read(postOverviewProvider.future);
+      final actualPosts = await container.read(postsFeedViewModelProvider.future);
 
       expect(actualPosts, unorderedEquals(expectedPosts));
     });

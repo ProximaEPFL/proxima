@@ -16,7 +16,7 @@ class ProfileUserPosts extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userPosts = ref.watch(userPostsProvider);
+    final userPosts = ref.watch(userPostsViewModelProvider);
 
     return CircularValue(
       value: userPosts,
@@ -27,14 +27,14 @@ class ProfileUserPosts extends HookConsumerWidget {
                 title: p.title,
                 content: p.description,
                 onDelete: () =>
-                    ref.read(userPostsProvider.notifier).deletePost(p.postId),
+                    ref.read(userPostsViewModelProvider.notifier).deletePost(p.postId),
               ),
             )
             .toList();
 
         return ProfileInfoColumn(
           key: postColumnKey,
-          onRefresh: ref.read(userPostsProvider.notifier).refresh,
+          onRefresh: ref.read(userPostsViewModelProvider.notifier).refresh,
           itemList: posts,
           emptyInfoText: noPostsInfoText,
         );

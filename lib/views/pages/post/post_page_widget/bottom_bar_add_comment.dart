@@ -18,11 +18,11 @@ class BottomBarAddComment extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final newCommentViewModel = ref.read(
-      newCommentStateProvider(parentPostId).notifier,
+      newCommentViewModelProvider(parentPostId).notifier,
     );
 
     final asyncNewCommentState = ref.watch(
-      newCommentStateProvider(parentPostId),
+      newCommentViewModelProvider(parentPostId),
     );
 
     final contentController = newCommentViewModel.contentController;

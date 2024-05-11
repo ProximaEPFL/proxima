@@ -9,7 +9,7 @@ import "package:proxima/models/ui/votes_details.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/post_upvote_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
-import "package:proxima/viewmodels/upvote_view_model.dart";
+import "package:proxima/viewmodels/post_votes_view_model.dart";
 
 import "../mocks/data/firestore_post.dart";
 import "../mocks/data/firestore_user.dart";
@@ -23,7 +23,7 @@ void main() {
     late MockUpvoteRepositoryService<PostIdFirestore> voteRepository;
     late UserIdFirestore userId;
     late PostFirestore testingPost;
-    late AutoDisposeFamilyAsyncNotifierProvider<UpVoteViewModel, VotesDetails,
+    late AutoDisposeFamilyAsyncNotifierProvider<PostVotesViewModel, VotesDetails,
         PostIdFirestore> voteViewModelProvider;
 
     late ProviderContainer container;
@@ -34,13 +34,13 @@ void main() {
       userId = testingUserFirestoreId;
       testingPost =
           FirestorePostGenerator().createUserPost(userId, userPosition0);
-      voteViewModelProvider = postVoteProvider(testingPost.id);
+      voteViewModelProvider = postVotesProvider(testingPost.id);
 
       container = ProviderContainer(
         overrides: [
           postRepositoryServiceProvider.overrideWithValue(postRepository),
           postUpvoteRepositoryServiceProvider.overrideWithValue(voteRepository),
-          uidProvider.overrideWithValue(userId),
+          loggedInUserIdProvider.overrideWithValue(userId),
         ],
       );
     });
@@ -69,7 +69,7 @@ void main() {
         container.updateOverrides([
           postRepositoryServiceProvider.overrideWithValue(postRepository),
           postUpvoteRepositoryServiceProvider.overrideWithValue(voteRepository),
-          uidProvider.overrideWithValue(null),
+          loggedInUserIdProvider.overrideWithValue(null),
         ]);
 
         expect(
@@ -239,7 +239,7 @@ void main() {
         container.updateOverrides([
           postRepositoryServiceProvider.overrideWithValue(postRepository),
           postUpvoteRepositoryServiceProvider.overrideWithValue(voteRepository),
-          uidProvider.overrideWithValue(null),
+          loggedInUserIdProvider.overrideWithValue(null),
         ]);
 
         expect(

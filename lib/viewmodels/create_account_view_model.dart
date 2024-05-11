@@ -95,7 +95,7 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountValidation> {
 
     // Create the account before applying the new state
     if (newState.valueOrNull?.noError == true) {
-      final uid = ref.read(validUidProvider);
+      final uid = ref.read(validLoggedInUserIdProvider);
 
       final userData = UserData(
         username: uniqueUsername,
@@ -115,7 +115,7 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountValidation> {
 }
 
 /// The provider for the [CreateAccountViewModel]
-final createAccountErrorsProvider =
+final createAccountViewModelProvider =
     AsyncNotifierProvider<CreateAccountViewModel, CreateAccountValidation>(
   () => CreateAccountViewModel(),
 );

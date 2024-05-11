@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_details.dart";
-import "package:proxima/viewmodels/comment_view_model.dart";
+import "package:proxima/viewmodels/comments_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/post/post_page_widget/bottom_bar_add_comment.dart";
@@ -27,7 +27,7 @@ class PostPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ThemeData themeData = Theme.of(context);
 
-    final commentsAsync = ref.watch(commentListProvider(postDetails.postId));
+    final commentsAsync = ref.watch(commentsViewModelProvider(postDetails.postId));
 
     // Top app bar content = Title + Distance
     List<Widget> appBarContent = [
@@ -68,7 +68,7 @@ class PostPage extends HookConsumerWidget {
         child: Center(
           child: RefreshIndicator(
             onRefresh: ref
-                .read(commentListProvider(postDetails.postId).notifier)
+                .read(commentsViewModelProvider(postDetails.postId).notifier)
                 .refresh,
             child: ListView(
               children: bodyChildren,

@@ -18,8 +18,8 @@ import "package:proxima/viewmodels/login_view_model.dart";
 /// (postId: [PostIdFirestore], postDetails: [PostDetails]) objects to be displayed.
 /// These represent the overview data to be displayed associated to the corresponding post id.
 /// Note: this viewmodel also provides the data for the post page
-class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
-  HomeViewModel();
+class PostsFeedViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
+  PostsFeedViewModel();
 
   static const kmPostRadius = 0.1;
 
@@ -33,7 +33,7 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
     );
 
     final postSortingService = ref.watch(postSortingServiceProvider);
-    final sortOption = ref.watch(feedSortOptionsProvider);
+    final sortOption = ref.watch(feedSortOptionsViewModelProvider);
 
     final position = await geoLocationService.getCurrentPosition();
 
@@ -42,7 +42,7 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
       kmPostRadius,
     );
     final challengesFuture = challengeRepositoryService.getChallenges(
-      ref.read(uidProvider)!,
+      ref.read(loggedInUserIdProvider)!,
       position,
     );
 
@@ -114,7 +114,7 @@ class HomeViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
   }
 }
 
-final postOverviewProvider =
-    AutoDisposeAsyncNotifierProvider<HomeViewModel, List<PostDetails>>(
-  () => HomeViewModel(),
+final postsFeedViewModelProvider =
+    AutoDisposeAsyncNotifierProvider<PostsFeedViewModel, List<PostDetails>>(
+  () => PostsFeedViewModel(),
 );

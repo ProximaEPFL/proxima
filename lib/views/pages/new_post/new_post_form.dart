@@ -27,13 +27,13 @@ class NewPostForm extends HookConsumerWidget {
     final titleController = useTextEditingController();
     final bodyController = useTextEditingController();
 
-    ref.listen(newPostStateProvider, (previous, state) {
+    ref.listen(newPostViewModelProvider, (previous, state) {
       if (state.valueOrNull?.posted == true) {
         Navigator.pop(context);
       }
     });
 
-    final asyncState = ref.watch(newPostStateProvider);
+    final asyncState = ref.watch(newPostViewModelProvider);
 
     return CircularValue(
       value: asyncState,
@@ -64,7 +64,7 @@ class NewPostForm extends HookConsumerWidget {
         final postButton = ElevatedButton(
           key: postButtonKey,
           child: const Text(_postButtonText),
-          onPressed: () => ref.read(newPostStateProvider.notifier).addPost(
+          onPressed: () => ref.read(newPostViewModelProvider.notifier).addPost(
                 titleController.text,
                 bodyController.text,
               ),

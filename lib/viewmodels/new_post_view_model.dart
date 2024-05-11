@@ -4,8 +4,8 @@ import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/ui/validation/new_post_validation.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
-import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/viewmodels/posts_feed_view_model.dart";
 
 class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostValidation> {
   static const _titleError = "Please enter a title";
@@ -47,7 +47,7 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostValidation> {
   }
 
   Future<NewPostValidation> _addPost(String title, String description) async {
-    final currentUser = ref.read(validUidProvider);
+    final currentUser = ref.read(validLoggedInUserIdProvider);
 
     if (!validate(title, description)) {
       // not loading or error since validation failed and wrote to the state
@@ -70,7 +70,7 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostValidation> {
     await postRepository.addPost(post, currPosition);
 
     // Refresh the home feed after post creation
-    ref.read(postOverviewProvider.notifier).refresh();
+    ref.read(postsFeedViewModelProvider.notifier).refresh();
 
     return NewPostValidation(
       titleError: null,
@@ -80,7 +80,7 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostValidation> {
   }
 }
 
-final newPostStateProvider =
+final newPostViewModelProvider =
     AsyncNotifierProvider.autoDispose<NewPostViewModel, NewPostValidation>(
   () => NewPostViewModel(),
 );

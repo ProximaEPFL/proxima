@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/vote/vote_state.dart";
-import "package:proxima/viewmodels/upvote_view_model.dart";
+import "package:proxima/viewmodels/post_votes_view_model.dart";
 
 /// This widget is used to display the votes of a post.
 /// It contains two buttons to upvote and downvote the post and the number of votes.
@@ -16,8 +16,8 @@ class PostVotes extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncPostVote = ref.watch(postVoteProvider(postId));
-    final upvoteNotifier = ref.read(postVoteProvider(postId).notifier);
+    final asyncPostVote = ref.watch(postVotesProvider(postId));
+    final upvoteNotifier = ref.read(postVotesProvider(postId).notifier);
 
     final votes = asyncPostVote.valueOrNull?.votes ?? 0;
     final upvoteState =

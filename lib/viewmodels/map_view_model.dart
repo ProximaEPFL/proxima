@@ -4,7 +4,7 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
-import "package:proxima/viewmodels/home_view_model.dart";
+import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_option.dart";
 
 class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
@@ -29,7 +29,7 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
       Circle(
         circleId: const CircleId("1"),
         center: target,
-        radius: HomeViewModel.kmPostRadius * 1000,
+        radius: PostsFeedViewModel.kmPostRadius * 1000,
         fillColor: Colors.black26,
         strokeWidth: 0,
       ),
@@ -55,6 +55,7 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   }
 }
 
-final mapProvider = AsyncNotifierProvider.autoDispose<MapViewModel, MapDetails>(
+final mapViewModelProvider =
+    AsyncNotifierProvider.autoDispose<MapViewModel, MapDetails>(
   () => MapViewModel(),
 );

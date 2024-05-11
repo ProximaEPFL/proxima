@@ -25,7 +25,7 @@ class ProfilePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncUserData = ref.watch(profileProvider);
+    final asyncUserData = ref.watch(profileViewModelProvider);
 
     final itemListBadge = <Widget>[];
     final itemListComments = <Widget>[];

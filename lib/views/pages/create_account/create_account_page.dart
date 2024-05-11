@@ -21,7 +21,7 @@ class CreateAccountPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     navigateToLoginPageOnLogout(context, ref);
 
-    ref.listen(createAccountErrorsProvider, (previous, error) {
+    ref.listen(createAccountViewModelProvider, (previous, error) {
       if (error.valueOrNull?.accountCreated == true) {
         Navigator.pushReplacementNamed(context, Routes.home.name);
       }
@@ -51,7 +51,7 @@ class _CreateAccountPageContent extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncErrors = ref.watch(createAccountErrorsProvider);
+    final asyncErrors = ref.watch(createAccountViewModelProvider);
     final pseudoController = useTextEditingController();
     final uniqueUsernameController = useTextEditingController();
 
@@ -93,7 +93,7 @@ class _CreateAccountPageContent extends HookConsumerWidget {
                 key: CreateAccountPage.confirmButtonKey,
                 onPressed: () {
                   ref
-                      .read(createAccountErrorsProvider.notifier)
+                      .read(createAccountViewModelProvider.notifier)
                       .createAccountIfValid(
                         pseudoController.text,
                         uniqueUsernameController.text,

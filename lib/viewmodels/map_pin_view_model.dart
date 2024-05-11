@@ -10,6 +10,7 @@ class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
 }
 
 // This provider is used to store the list of map pins that are displayed in the map page.
-final mapPinProvider = AsyncNotifierProvider<MapPinViewModel, List<MapPinDetails>>(
+final mapPinViewModelProvider =
+    AsyncNotifierProvider<MapPinViewModel, List<MapPinDetails>>(
   () => MapPinViewModel(),
 );

@@ -22,7 +22,7 @@ void main() {
 
     late CommentRepositoryService commentRepository;
     late AsyncNotifierFamilyProvider<NewCommentViewModel, NewCommentValidation,
-        PostIdFirestore> newCommentViewModelProvider;
+        PostIdFirestore> newCommentViewModelPostProvider;
 
     late ProviderContainer container;
 
@@ -37,7 +37,7 @@ void main() {
       container = ProviderContainer(
         overrides: [
           firestoreProvider.overrideWithValue(fakeFirestore),
-          uidProvider.overrideWithValue(userId),
+          loggedInUserIdProvider.overrideWithValue(userId),
         ],
       );
 
@@ -48,14 +48,14 @@ void main() {
       await setPostFirestore(post, fakeFirestore);
       postId = post.id;
 
-      newCommentViewModelProvider = newCommentStateProvider(postId);
+      newCommentViewModelPostProvider = newCommentViewModelProvider(postId);
     });
 
     test("Add a valid comment and reset correctly", () async {
       final validContent = commentDataGenerator.createMockCommentData().content;
 
       final newCommentViewModel =
-          container.read(newCommentViewModelProvider.notifier);
+          container.read(newCommentViewModelPostProvider.notifier);
 
       // Check the state before adding the comment
       final stateBeforeAdd = await newCommentViewModel.future;
@@ -113,7 +113,7 @@ void main() {
       const invalidContent = "";
 
       final newCommentViewModel =
-          container.read(newCommentViewModelProvider.notifier);
+          container.read(newCommentViewModelPostProvider.notifier);
 
       // Check the state before adding the comment
       final stateBeforeAdd = await newCommentViewModel.future;
@@ -143,11 +143,11 @@ void main() {
       final validContent = commentDataGenerator.createMockCommentData().content;
 
       final newCommentViewModel =
-          container.read(newCommentViewModelProvider.notifier);
+          container.read(newCommentViewModelPostProvider.notifier);
 
       container.updateOverrides([
         firestoreProvider.overrideWithValue(fakeFirestore),
-        uidProvider.overrideWithValue(null),
+        loggedInUserIdProvider.overrideWithValue(null),
       ]);
 
       final addResult = await newCommentViewModel.tryAddComment(validContent);

@@ -16,7 +16,7 @@ class MockPinViewModel extends AsyncNotifier<List<MapPinDetails>>
   Future<List<MapPinDetails>> build() => _build();
 }
 
-final mockPinViewModelOverride = mapPinProvider.overrideWith(
+final mockPinViewModelOverride = mapPinViewModelProvider.overrideWith(
   () => MockPinViewModel(
     build: () async => MapPinGenerator.generateMapPins(5),
   ),

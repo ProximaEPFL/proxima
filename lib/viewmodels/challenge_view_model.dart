@@ -20,7 +20,7 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>> {
     final challengeRepository = ref.watch(challengeRepositoryServiceProvider);
 
     final currentPosition = await geoLocationService.getCurrentPosition();
-    final currentUser = ref.watch(validUidProvider);
+    final currentUser = ref.watch(validLoggedInUserIdProvider);
 
     final firestoreChallenges = await challengeRepository.getChallenges(
       currentUser,
@@ -78,7 +78,7 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>> {
   /// The future completes as soon as the boolean is known, the viewmodel might
   /// take longer to update (it is not awaited on).
   Future<int?> completeChallenge(PostIdFirestore pid) async {
-    final currentUser = ref.read(validUidProvider);
+    final currentUser = ref.read(validLoggedInUserIdProvider);
     final challengeRepository = ref.read(challengeRepositoryServiceProvider);
 
     final pointsAwarded =
@@ -95,7 +95,7 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>> {
   }
 }
 
-final challengeProvider =
+final challengeViewModelProvider =
     AsyncNotifierProvider<ChallengeViewModel, List<ChallengeDetails>>(
   () => ChallengeViewModel(),
 );

@@ -11,7 +11,7 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/post_upvote_repository_service.dart";
 import "package:proxima/services/database/upvote_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
-import "package:proxima/viewmodels/upvote_view_model.dart";
+import "package:proxima/viewmodels/post_votes_view_model.dart";
 
 import "../mocks/data/firestore_post.dart";
 import "../mocks/data/firestore_user.dart";
@@ -26,7 +26,7 @@ void main() {
     late PostFirestore testingPost;
     late UserIdFirestore userId;
 
-    late AutoDisposeFamilyAsyncNotifierProvider<UpVoteViewModel, VotesDetails,
+    late AutoDisposeFamilyAsyncNotifierProvider<PostVotesViewModel, VotesDetails,
         PostIdFirestore> voteViewModelProvider;
 
     late ProviderContainer container;
@@ -53,13 +53,13 @@ void main() {
         overrides: [
           firestoreProvider.overrideWithValue(fakeFireStore),
           postRepositoryServiceProvider.overrideWithValue(postRepository),
-          uidProvider.overrideWithValue(userId),
+          loggedInUserIdProvider.overrideWithValue(userId),
         ],
       );
 
       voteRepository = container.read(postUpvoteRepositoryServiceProvider);
 
-      voteViewModelProvider = postVoteProvider(testingPost.id);
+      voteViewModelProvider = postVotesProvider(testingPost.id);
     });
 
     test("Upvote correctly updates the state and vote count on the database",

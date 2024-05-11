@@ -10,9 +10,9 @@ class ProfileViewModel extends AutoDisposeAsyncNotifier<UserProfileDetails> {
 
   @override
   Future<UserProfileDetails> build() async {
-    final user = ref.watch(userProvider).valueOrNull;
+    final user = ref.watch(authLoggedInUserProvider).valueOrNull;
     final userDataBase = ref.watch(userRepositoryServiceProvider);
-    final uid = ref.watch(validUidProvider);
+    final uid = ref.watch(validLoggedInUserIdProvider);
 
     if (user == null) {
       return Future.error(
@@ -27,7 +27,7 @@ class ProfileViewModel extends AutoDisposeAsyncNotifier<UserProfileDetails> {
 }
 
 /// Profile view model of the currently logged in user
-final profileProvider =
+final profileViewModelProvider =
     AutoDisposeAsyncNotifierProvider<ProfileViewModel, UserProfileDetails>(
   () => ProfileViewModel(),
 );

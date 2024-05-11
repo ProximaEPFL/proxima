@@ -15,7 +15,7 @@ class FeedSortOptionsViewModel extends Notifier<PostSortOption> {
   }
 }
 
-final feedSortOptionsProvider =
+final feedSortOptionsViewModelProvider =
     NotifierProvider<FeedSortOptionsViewModel, PostSortOption>(
   () => FeedSortOptionsViewModel(),
 );

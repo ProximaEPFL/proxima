@@ -8,7 +8,7 @@ import "package:proxima/models/ui/comment_details.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
-import "package:proxima/viewmodels/comment_view_model.dart";
+import "package:proxima/viewmodels/comments_view_model.dart";
 
 import "../mocks/data/comment_data.dart";
 import "../mocks/data/firestore_post.dart";
@@ -22,7 +22,7 @@ void main() {
 
     late UserRepositoryService userRepository;
     late CommentRepositoryService commentRepository;
-    late AutoDisposeFamilyAsyncNotifierProvider<CommentViewModel,
+    late AutoDisposeFamilyAsyncNotifierProvider<CommentsViewModel,
         List<CommentDetails>, PostIdFirestore> commentViewModelProvider;
     late ProviderContainer container;
 
@@ -45,7 +45,7 @@ void main() {
       await setPostFirestore(post, fakeFirestore);
       postId = post.id;
 
-      commentViewModelProvider = commentListProvider(postId);
+      commentViewModelProvider = commentsViewModelProvider(postId);
     });
 
     group("display of comments", () {
