@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/utils/firebase/firebase_options.dart";
+import "package:proxima/utils/firebase_options.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 void main() async {
