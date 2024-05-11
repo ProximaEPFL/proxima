@@ -5,7 +5,7 @@ import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/home_view_model.dart";
 import "package:proxima/views/components/feedback/centauri_snack_bar.dart";
 import "package:proxima/views/navigation/routes.dart";
-import "package:proxima/views/pages/home/content/feed/post_card/comment_widget.dart";
+import "package:proxima/views/pages/home/content/feed/post_card/comment_count.dart";
 import "package:proxima/views/pages/home/content/feed/post_card/post_header_widget.dart";
 import "package:proxima/views/pages/home/content/feed/post_card/votes_widget.dart";
 
@@ -77,9 +77,9 @@ class PostCard extends ConsumerWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             onTap: () => _onPostSelect(context, postOverview, ref),
-            child: CommentWidget(
+            child: CommentCount(
               key: postCardCommentsNumberKey,
-              commentNumber: postOverview.commentNumber,
+              count: postOverview.commentNumber,
             ),
           ),
         ],
