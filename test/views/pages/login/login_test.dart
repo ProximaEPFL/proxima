@@ -6,7 +6,7 @@ import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
-import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
+import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/profile/components/logout_button.dart";
@@ -139,7 +139,7 @@ void main() {
       final homePage = find.byType(HomePage);
       expect(homePage, findsOneWidget);
 
-      final profileButton = find.byKey(AppTopBar.profilePictureKey);
+      final profileButton = find.byKey(HomeTopBar.profilePictureKey);
       expect(profileButton, findsOneWidget);
 
       await tester.tap(profileButton);

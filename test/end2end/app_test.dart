@@ -12,7 +12,7 @@ import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/home/content/map/map_screen.dart";
 import "package:proxima/views/pages/home/content/map/post_map.dart";
 import "package:proxima/views/pages/home/home_page.dart";
-import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
+import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
@@ -110,7 +110,7 @@ Future<void> createAccountToHome(WidgetTester tester) async {
 Future<void> homeToProfilePage(WidgetTester tester) async {
   expect(find.byType(HomePage), findsOneWidget);
 
-  final profilePicture = find.byKey(AppTopBar.profilePictureKey);
+  final profilePicture = find.byKey(HomeTopBar.profilePictureKey);
   expect(profilePicture, findsOneWidget);
   await tester.tap(profilePicture);
   await tester.pumpAndSettle();
@@ -220,7 +220,7 @@ Future<void> createPost(WidgetTester tester) async {
   expect(find.text(postDescription), findsOneWidget);
 
   // Check that the post is displayed in profile page
-  final profilePicture = find.byKey(AppTopBar.profilePictureKey);
+  final profilePicture = find.byKey(HomeTopBar.profilePictureKey);
   await tester.tap(profilePicture);
   await tester.pumpAndSettle();
   expect(find.text(postTitle), findsOneWidget);

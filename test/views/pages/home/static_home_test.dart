@@ -7,7 +7,7 @@ import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom
 import "package:proxima/views/pages/home/content/feed/post_card/post_card.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/home/home_page.dart";
-import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
+import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 
 import "../../../mocks/data/post_overview.dart";
 import "../../../mocks/providers/provider_homepage.dart";
@@ -34,11 +34,11 @@ void main() {
       expect(homePage, findsOneWidget);
 
       // Check that the top bar is displayed
-      final topBar = find.byKey(AppTopBar.homeTopBarKey);
+      final topBar = find.byKey(HomeTopBar.homeTopBarKey);
       expect(topBar, findsOneWidget);
 
       //Check profile picture is displayed
-      final profilePicture = find.byKey(AppTopBar.profilePictureKey);
+      final profilePicture = find.byKey(HomeTopBar.profilePictureKey);
       expect(profilePicture, findsOneWidget);
 
       //Check user initial is displayed in the app bar

@@ -7,7 +7,7 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/views/components/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
-import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
+import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/profile/components/profile_badge.dart";
 import "package:proxima/views/pages/profile/components/user_account.dart";
 import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
@@ -264,11 +264,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // Check that the top bar is displayed
-      final topBar = find.byKey(AppTopBar.homeTopBarKey);
+      final topBar = find.byKey(HomeTopBar.homeTopBarKey);
       expect(topBar, findsOneWidget);
 
       //Check profile picture is displayed
-      final profilePicture = find.byKey(AppTopBar.profilePictureKey);
+      final profilePicture = find.byKey(HomeTopBar.profilePictureKey);
       expect(profilePicture, findsOneWidget);
 
       // Tap on the profile picture
@@ -289,7 +289,7 @@ void main() {
       const increment = 10;
 
       // Navigate to profile
-      await tester.tap(find.byKey(AppTopBar.profilePictureKey));
+      await tester.tap(find.byKey(HomeTopBar.profilePictureKey));
       await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
       // Check correct centauri points
@@ -305,7 +305,7 @@ void main() {
           .set(expectedUser.data.withPointsAddition(increment).toDbData());
 
       // Navigate back to profile page
-      await tester.tap(find.byKey(AppTopBar.profilePictureKey));
+      await tester.tap(find.byKey(HomeTopBar.profilePictureKey));
       await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
       // Check update centauri points
