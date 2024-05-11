@@ -1,9 +1,8 @@
-// TODO (model team) convert to freezed
-class LoginUser {
+class AuthLoggedInUser {
   final String id;
   final String? email;
 
-  const LoginUser({
+  const AuthLoggedInUser({
     required this.id,
     required this.email,
   });

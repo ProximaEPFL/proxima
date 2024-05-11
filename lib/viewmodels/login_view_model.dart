@@ -1,19 +1,19 @@
 import "package:flutter/widgets.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/auth/auth_logged_in_user.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/models/login_user.dart";
 import "package:proxima/services/login_service.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/navigation/routes.dart";
 
 /// Firebase authentication change provider
-final userProvider = StreamProvider<LoginUser?>((ref) {
+final userProvider = StreamProvider<AuthLoggedInUser?>((ref) {
   return ref.watch(firebaseAuthProvider).authStateChanges().map((user) {
     if (user == null) {
       return null;
     }
 
-    return LoginUser(id: user.uid, email: user.email);
+    return AuthLoggedInUser(id: user.uid, email: user.email);
   });
 });
 

@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/post_overview.dart";
 import "package:proxima/views/pages/home/content/feed/post_card/post_header.dart";
-import "package:proxima/views/pages/home/content/feed/post_card/votes_widget.dart";
+import "package:proxima/views/pages/home/content/feed/post_card/post_votes.dart";
 
 class CompletePostWidget extends StatelessWidget {
   static const postTitleKey = Key("postTitle");
