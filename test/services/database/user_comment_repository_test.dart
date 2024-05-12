@@ -1,7 +1,9 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/models/database/user_comment/user_comment_data.dart";
 import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/user_comment_repository_service.dart";
@@ -18,6 +20,7 @@ void main() {
     late UserFirestore user;
     late UserCommentFirestoreGenerator userCommentGenerator;
     late UserCommentDataGenerator userCommentDataGenerator;
+    late CollectionReference<Map<String, dynamic>> userCommentsCollection;
 
     setUp(() async {
       fakeFirestore = FakeFirebaseFirestore();
@@ -35,6 +38,10 @@ void main() {
 
       userCommentGenerator = UserCommentFirestoreGenerator();
       userCommentDataGenerator = UserCommentDataGenerator();
+      userCommentsCollection = fakeFirestore
+          .collection(UserFirestore.collectionName)
+          .doc(user.uid.value)
+          .collection(UserCommentFirestore.userCommentSubCollectionName);
     });
 
     group("getting user comments", () {
@@ -56,6 +63,26 @@ void main() {
             await userCommentRepository.getUserComments(user.uid);
 
         expect(fetchedUserComments, unorderedEquals(userComments));
+      });
+
+      test("should throw an error if a document has missing fields", () async {
+        final userCommentData =
+            userCommentDataGenerator.createMockUserCommentData();
+
+        final userCommentId = await userCommentRepository.addUserComment(
+          user.uid,
+          userCommentData,
+        );
+
+        // Delete the comment id field
+        await userCommentsCollection
+            .doc(userCommentId.value)
+            .update({UserCommentData.commentIdField: FieldValue.delete()});
+
+        expect(
+          () => userCommentRepository.getUserComments(user.uid),
+          throwsA(isA<Exception>()),
+        );
       });
     });
 
