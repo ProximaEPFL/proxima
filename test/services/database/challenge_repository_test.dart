@@ -150,11 +150,12 @@ void main() {
             .set(data.toDbData());
 
         //Create 30 posts and get the challenges
-        FirestorePostGenerator generator = FirestorePostGenerator();
-        var challenges = await challengeRepository.getChallenges(uid, userPos);
-
+        final generator = FirestorePostGenerator();
         await generator.addPostsReturnDataOnly(firestore, inChallengeRange, 30);
-        challenges = await challengeRepository.getChallenges(uid, userPos);
+
+        final challenges =
+            await challengeRepository.getChallenges(uid, userPos);
+
         expect(
           challenges.length,
           ChallengeRepositoryService.maxActiveChallenges,
