@@ -27,17 +27,17 @@ class LoadingIconButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = useState(LoadingIconButtonState.still);
+    final isLoading = useState(LoadingState.still);
 
     final stillIconButton = IconButton(
       icon: Icon(icon, size: iconSize),
       onPressed: () async {
-        isLoading.value = LoadingIconButtonState.pending;
+        isLoading.value = LoadingState.pending;
         await onClick();
 
         // Check that the widget was not already disposed
         if (context.mounted) {
-          isLoading.value = LoadingIconButtonState.completed;
+          isLoading.value = LoadingState.completed;
         }
       },
     );
@@ -59,9 +59,9 @@ class LoadingIconButton extends HookWidget {
       width: _containerSide,
       height: _containerSide,
       child: switch (isLoading.value) {
-        LoadingIconButtonState.still => stillIconButton,
-        LoadingIconButtonState.pending => loading,
-        LoadingIconButtonState.completed => checkButton,
+        LoadingState.still => stillIconButton,
+        LoadingState.pending => loading,
+        LoadingState.completed => checkButton,
       },
     );
   }
