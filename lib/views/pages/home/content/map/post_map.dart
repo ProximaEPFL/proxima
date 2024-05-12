@@ -3,9 +3,9 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
+import "package:proxima/viewmodels/map_markers_view_model.dart";
 import "package:proxima/viewmodels/map_pin_view_model.dart";
 import "package:proxima/viewmodels/map_view_model.dart";
-import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/components/async/error_alert.dart";
 
 /// This widget displays the Google Map
@@ -24,6 +24,9 @@ class PostMap extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // This provider is used to get information about the map.
     final mapNotifier = ref.watch(mapViewModelProvider.notifier);
+
+    // This provider is used to keep track of the markers on the map.
+    final mapMarkersNotifier = ref.watch(mapMarkersViewModelProvider.notifier);
 
     // This provider is used to get the list of map pins.
     final mapPinsAsync = ref.watch(mapPinViewModelProvider);
@@ -46,40 +49,40 @@ class PostMap extends ConsumerWidget {
       loading: () => (),
     );
 
-    return CircularValue(
-      value: mapPinsAsync,
-      builder: (context, mapPins) {
-        final markers = mapPins
-            .map(
-              (pin) => Marker(
-                markerId: pin.id,
-                position: pin.position,
-                onTap: pin.callbackFunction,
-              ),
-            )
-            .toSet();
-
-        return Expanded(
-          child: GoogleMap(
-            key: postMapKey,
-            mapType: MapType.normal,
-            myLocationButtonEnabled: true,
-            myLocationEnabled: true,
-            zoomGesturesEnabled: true,
-            zoomControlsEnabled: true,
-            scrollGesturesEnabled: true,
-            rotateGesturesEnabled: false,
-            tiltGesturesEnabled: false,
-            initialCameraPosition: CameraPosition(
-              target: mapInfo.initialLocation,
-              zoom: initialZoomLevel,
-            ),
-            circles: mapNotifier.circles,
-            markers: markers,
-            onMapCreated: mapNotifier.onMapCreated,
-          ),
-        );
+    mapPinsAsync.when(
+      data: (pinList) {
+        mapMarkersNotifier.redrawMarkers(pinList);
       },
+      error: (error, _) {
+        //Pop up an error dialog if an error occurs
+        final dialog = ErrorAlert(error: error);
+
+        WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+          showDialog(context: context, builder: dialog.build);
+        });
+      },
+      loading: () => (),
+    );
+
+    return Expanded(
+      child: GoogleMap(
+        key: postMapKey,
+        mapType: MapType.normal,
+        myLocationButtonEnabled: true,
+        myLocationEnabled: true,
+        zoomGesturesEnabled: true,
+        zoomControlsEnabled: true,
+        scrollGesturesEnabled: true,
+        rotateGesturesEnabled: false,
+        tiltGesturesEnabled: false,
+        initialCameraPosition: CameraPosition(
+          target: mapInfo.initialLocation,
+          zoom: initialZoomLevel,
+        ),
+        circles: mapNotifier.circles,
+        markers: mapMarkersNotifier.markers,
+        onMapCreated: mapNotifier.onMapCreated,
+      ),
     );
   }
 }
