@@ -24,7 +24,7 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   // Getter for the circles
   Set<Circle> get circles => _circles;
 
-  Future<void> redrawCircle(LatLng target) async {
+  void redrawCircle(LatLng target) {
     _circles.clear();
     _circles.add(
       Circle(
