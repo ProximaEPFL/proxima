@@ -46,9 +46,13 @@ class PostsFeedViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
       position,
     );
 
-    List<PostFirestore> postsFirestore = await postsFirestoreFuture;
-
-    final List<ChallengeFirestore> challenges = await challengesFuture;
+    final results = await Future.wait([
+      postsFirestoreFuture,
+      challengesFuture,
+    ]);
+    List<PostFirestore> postsFirestore = results[0] as List<PostFirestore>;
+    final List<ChallengeFirestore> challenges =
+        results[1] as List<ChallengeFirestore>;
 
     final uncompletedChallenges = challenges.whereNot(
       (challenge) => challenge.data.isCompleted,
