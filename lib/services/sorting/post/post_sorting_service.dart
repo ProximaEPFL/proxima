@@ -30,27 +30,22 @@ class PostSortingService {
     }
 
     late final Comparator<PostFirestore> comparator;
-    if (putOnTop.isEmpty) {
-      // This is a slight optimisation that allows the function
-      // to have the expected complexity when putOnTop is empty
-      // (though having putOnTop non empty does not change the asymptotic
-      // complexity of the function if it is a hash set/of constant size)
-      comparator = defaultComparator;
-    } else {
-      comparator = (a, b) {
-        final putOnTopA = putOnTop.contains(a.id);
-        final putOnTopB = putOnTop.contains(b.id);
 
-        if (putOnTopA && !putOnTopB) {
-          // a is considered smaller
-          return -1;
-        } else if (!putOnTopA && putOnTopB) {
-          return 1;
-        }
+    putOnTop.isEmpty
+        ? comparator = defaultComparator
+        : comparator = (a, b) {
+            final putOnTopA = putOnTop.contains(a.id);
+            final putOnTopB = putOnTop.contains(b.id);
 
-        return defaultComparator(a, b);
-      };
-    }
+            if (putOnTopA && !putOnTopB) {
+              // a is considered smaller
+              return -1;
+            } else if (!putOnTopA && putOnTopB) {
+              return 1;
+            }
+
+            return defaultComparator(a, b);
+          };
 
     return posts.sorted(comparator);
   }
