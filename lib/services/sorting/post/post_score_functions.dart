@@ -8,8 +8,8 @@ typedef PostScoreFunction = double Function(
 );
 
 /// Increases by 1 every upvote, but decreases by 1 every day
-double hotScore(PostFirestore post, GeoPoint _) {
-  return voteScore(post, _) - dayScore(post, _);
+double hotScore(PostFirestore post, GeoPoint userPosition) {
+  return voteScore(post, userPosition) - dayScore(post, userPosition);
 }
 
 /// Increase by 1 every upvote
