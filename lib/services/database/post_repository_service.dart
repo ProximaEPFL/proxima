@@ -23,7 +23,7 @@ class PostRepositoryService {
         _collectionRef = firestore.collection(PostFirestore.collectionName),
         _commentRepository = CommentRepositoryService(firestore: firestore),
         _upvoteRepository =
-            UpvoteRepositoryService.postUpvoteRepository(firestore);
+            UpvoteRepositoryService.postUpvoteRepositoryService(firestore);
 
   /// This method creates a new post that has for data [postData]
   /// and that is located at [position] and adds it to the database
@@ -124,7 +124,7 @@ class PostRepositoryService {
   }
 }
 
-final postRepositoryProvider = Provider<PostRepositoryService>(
+final postRepositoryServiceProvider = Provider<PostRepositoryService>(
   (ref) => PostRepositoryService(
     firestore: ref.watch(firestoreProvider),
   ),

@@ -3,14 +3,14 @@ import "dart:async";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_data.dart";
-import "package:proxima/models/ui/create_account_model.dart";
+import "package:proxima/models/ui/validation/create_account_validation.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
-class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
+class CreateAccountViewModel extends AsyncNotifier<CreateAccountValidation> {
   @override
-  Future<CreateAccountModel> build() async {
-    return const CreateAccountModel();
+  Future<CreateAccountValidation> build() async {
+    return const CreateAccountValidation();
   }
 
   /// Validate a generic [value], either a pseudo or a username,
@@ -67,7 +67,7 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
     }
 
     if (await ref
-        .read(userRepositoryProvider)
+        .read(userRepositoryServiceProvider)
         .isUsernameTaken(uniqueUsername)) {
       return "This username is already taken.";
     }
@@ -83,11 +83,12 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
     String uniqueUsername,
   ) async {
     state = const AsyncValue.loading();
-    AsyncValue<CreateAccountModel> newState = await AsyncValue.guard(() async {
+    AsyncValue<CreateAccountValidation> newState =
+        await AsyncValue.guard(() async {
       final pseudoError = validatePseudo(pseudo);
       final uniqueUsernameError = await validateUniqueUsername(uniqueUsername);
 
-      return CreateAccountModel(
+      return CreateAccountValidation(
         pseudoError: pseudoError,
         uniqueUsernameError: uniqueUsernameError,
       );
@@ -95,7 +96,7 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
 
     // Create the account before applying the new state
     if (newState.valueOrNull?.noError == true) {
-      final uid = ref.read(validUidProvider);
+      final uid = ref.read(validLoggedInUserIdProvider);
 
       final userData = UserData(
         username: uniqueUsername,
@@ -103,7 +104,7 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
         joinTime: Timestamp.now(),
         centauriPoints: 0,
       );
-      await ref.read(userRepositoryProvider).setUser(uid, userData);
+      await ref.read(userRepositoryServiceProvider).setUser(uid, userData);
       // Here the [newState.valueOrNull] cannot be null because [newState.valueOrNull?.noError]
       // is checked to be true above.
       newState =
@@ -115,7 +116,7 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountModel> {
 }
 
 /// The provider for the [CreateAccountViewModel]
-final createAccountErrorsProvider =
-    AsyncNotifierProvider<CreateAccountViewModel, CreateAccountModel>(
+final createAccountViewModelProvider =
+    AsyncNotifierProvider<CreateAccountViewModel, CreateAccountValidation>(
   () => CreateAccountViewModel(),
 );

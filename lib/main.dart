@@ -1,13 +1,13 @@
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:google_fonts/google_fonts.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/utils/firebase/firebase_options.dart";
-import "package:proxima/views/navigation/routes.dart";
+import "package:proxima/utils/firebase_options.dart";
+import "package:proxima/views/proxima_app.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -21,28 +21,4 @@ void main() async {
       child: ProximaApp(),
     ),
   );
-}
-
-class ProximaApp extends StatelessWidget {
-  const ProximaApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final Brightness brightness = MediaQuery.platformBrightnessOf(context);
-
-    return MaterialApp(
-      title: "Proxima",
-      onGenerateRoute: generateRoute,
-      initialRoute: Routes.login.name,
-      theme: ThemeData(
-        useMaterial3: true,
-        // Define the default brightness and colors.
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.indigo,
-          brightness: brightness,
-        ),
-        fontFamily: GoogleFonts.poppins().fontFamily,
-      ),
-    );
-  }
 }

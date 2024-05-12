@@ -65,7 +65,7 @@ class UserRepositoryService {
   }
 }
 
-final userRepositoryProvider = Provider<UserRepositoryService>(
+final userRepositoryServiceProvider = Provider<UserRepositoryService>(
   (ref) => UserRepositoryService(
     firestore: ref.watch(firestoreProvider),
   ),

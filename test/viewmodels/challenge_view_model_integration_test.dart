@@ -5,10 +5,10 @@ import "package:mockito/mockito.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
-import "package:proxima/services/geolocation_service.dart";
-import "package:proxima/utils/ui/circular_value.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/views/components/async/circular_value.dart";
 
 import "../mocks/data/firestore_challenge.dart";
 import "../mocks/data/firestore_post.dart";
@@ -35,17 +35,18 @@ void main() {
     setUp(() async {
       container = ProviderContainer(
         overrides: [
-          geoLocationServiceProvider.overrideWithValue(geoLocationService),
-          uidProvider.overrideWithValue(testingUserFirestoreId),
+          geolocationServiceProvider.overrideWithValue(geoLocationService),
+          loggedInUserIdProvider.overrideWithValue(testingUserFirestoreId),
           firestoreProvider.overrideWithValue(fakeFireStore),
         ],
       );
 
-      userRepo = container.read(userRepositoryProvider);
+      userRepo = container.read(userRepositoryServiceProvider);
     });
 
     test("No challenges are returned when the database is empty", () async {
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       expect(challenges, isEmpty);
     });
 
@@ -64,7 +65,8 @@ void main() {
       final challenge = challengeGenerator.generateChallenge(false, extraTime);
       await setChallenge(fakeFireStore, challenge, testingUserFirestoreId);
 
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       expect(challenges.length, 1);
 
       final uiChallenge = challenges.first;
@@ -94,7 +96,8 @@ void main() {
       final challenge = challengeGenerator.generateChallenge(true, extraTime);
       await setChallenge(fakeFireStore, challenge, testingUserFirestoreId);
 
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       expect(challenges.length, 1);
 
       final uiChallenge = challenges.first;
@@ -135,7 +138,8 @@ void main() {
         testingUserFirestoreId,
       );
 
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       final areChallengesFinished =
           challenges.map((c) => c.isFinished).toList();
 
@@ -162,12 +166,13 @@ void main() {
       await setChallenge(fakeFireStore, challenge, testingUserFirestoreId);
 
       await container
-          .read(challengeProvider.notifier)
+          .read(challengeViewModelProvider.notifier)
           .completeChallenge(challenge.postId);
 
       await Future.delayed(const Duration(milliseconds: 100));
 
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       expect(challenges.length, 1);
 
       final uiChallenge = challenges.first;
@@ -194,8 +199,8 @@ void main() {
     setUp(() async {
       container = ProviderContainer(
         overrides: [
-          geoLocationServiceProvider.overrideWithValue(geoLocationService),
-          uidProvider.overrideWithValue(null),
+          geolocationServiceProvider.overrideWithValue(geoLocationService),
+          loggedInUserIdProvider.overrideWithValue(null),
           firestoreProvider.overrideWithValue(fakeFireStore),
         ],
       );
@@ -204,7 +209,7 @@ void main() {
     test("No user only throws debug error", () async {
       expect(
         () async {
-          await container.read(challengeProvider.future);
+          await container.read(challengeViewModelProvider.future);
         },
         throwsA(
           (exception) =>

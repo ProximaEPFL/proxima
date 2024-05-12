@@ -1,5 +1,5 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/services/human_time_service.dart";
+import "package:proxima/services/conversion/human_time_service.dart";
 
 final constantTestingTime = DateTime.utc(2000);
 

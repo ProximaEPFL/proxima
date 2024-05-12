@@ -1,35 +1,35 @@
 import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/ui/challenge_card_data.dart";
+import "package:proxima/models/ui/challenge_details.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
-import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
 /// This viewmodel is used to fetch the list of challenges that are displayed in
 /// the challenge feed. It fetches the challenges from the database and sorts
 /// them by putting the finished challenges at the end of the list. It transforms
-/// the challenges into [ChallengeCardData] objects to be displayed, by getting
+/// the challenges into [ChallengeDetails] objects to be displayed, by getting
 /// the posts from the post repository and calculating the distances as well as
 /// remaining time.
-class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
+class ChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>> {
   @override
-  Future<List<ChallengeCardData>> build() async {
-    final geoLocationService = ref.watch(geoLocationServiceProvider);
+  Future<List<ChallengeDetails>> build() async {
+    final geoLocationService = ref.watch(geolocationServiceProvider);
     final challengeRepository = ref.watch(challengeRepositoryServiceProvider);
 
     final currentPosition = await geoLocationService.getCurrentPosition();
-    final currentUser = ref.watch(validUidProvider);
+    final currentUser = ref.watch(validLoggedInUserIdProvider);
 
     final firestoreChallenges = await challengeRepository.getChallenges(
       currentUser,
       currentPosition,
     );
 
-    final postRepository = ref.watch(postRepositoryProvider);
+    final postRepository = ref.watch(postRepositoryServiceProvider);
     final now = DateTime.now();
-    final Iterable<Future<ChallengeCardData>> futureUiChallenges =
+    final Iterable<Future<ChallengeDetails>> futureUiChallenges =
         firestoreChallenges.map((challenge) async {
       final post = await postRepository.getPost(challenge.postId);
       final timeLeft = challenge.data.expiresOn.toDate().difference(now);
@@ -39,14 +39,14 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
             .distanceBetweenInKm(geopoint: post.location.geoPoint);
         final int distanceM = (distanceKm * 1000).toInt();
 
-        return ChallengeCardData.solo(
+        return ChallengeDetails.solo(
           title: post.data.title,
           distance: distanceM,
           timeLeft: timeLeft.inHours,
           reward: ChallengeRepositoryService.soloChallengeReward,
         );
       } else {
-        return ChallengeCardData.soloFinished(
+        return ChallengeDetails.soloFinished(
           title: post.data.title,
           timeLeft: timeLeft.inHours,
           reward: ChallengeRepositoryService.soloChallengeReward,
@@ -78,7 +78,7 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
   /// The future completes as soon as the boolean is known, the viewmodel might
   /// take longer to update (it is not awaited on).
   Future<int?> completeChallenge(PostIdFirestore pid) async {
-    final currentUser = ref.read(validUidProvider);
+    final currentUser = ref.read(validLoggedInUserIdProvider);
     final challengeRepository = ref.read(challengeRepositoryServiceProvider);
 
     final pointsAwarded =
@@ -95,7 +95,7 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>> {
   }
 }
 
-final challengeProvider =
-    AsyncNotifierProvider<ChallengeViewModel, List<ChallengeCardData>>(
+final challengeViewModelProvider =
+    AsyncNotifierProvider<ChallengeViewModel, List<ChallengeDetails>>(
   () => ChallengeViewModel(),
 );

@@ -1,14 +1,14 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/ui/challenge_card_data.dart";
+import "package:proxima/models/ui/challenge_details.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 
 import "../data/challenge_list.dart";
 
-class MockChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>>
+class MockChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>>
     implements ChallengeViewModel {
   @override
-  Future<List<ChallengeCardData>> build() async {
+  Future<List<ChallengeDetails>> build() async {
     return mockChallengeList;
   }
 
@@ -22,5 +22,5 @@ class MockChallengeViewModel extends AsyncNotifier<List<ChallengeCardData>>
 }
 
 final mockChallengeOverride = [
-  challengeProvider.overrideWith(() => MockChallengeViewModel()),
+  challengeViewModelProvider.overrideWith(() => MockChallengeViewModel()),
 ];

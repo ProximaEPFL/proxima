@@ -1,33 +1,33 @@
-import "package:proxima/models/ui/comment_post.dart";
+import "package:proxima/models/ui/comment_details.dart";
 
 import "datetime.dart";
 
-final List<CommentPost> testComments = [
-  CommentPost(
+final List<CommentDetails> testComments = [
+  CommentDetails(
     content:
         "I totally agree! It's the little things in life that make all the difference.",
     ownerDisplayName: "SunnySkyWalker",
     publicationDate: publicationDate1,
   ),
-  CommentPost(
+  CommentDetails(
     content:
         "Just what I needed to read today. Sometimes, simplicity is key to happiness.",
     ownerDisplayName: "BookishBee",
     publicationDate: publicationDate1,
   ),
-  CommentPost(
+  CommentDetails(
     content:
         "Love this reminder! I try to start each day with a grateful heart.",
     ownerDisplayName: "MilesOfSmiles",
     publicationDate: publicationDate1,
   ),
-  CommentPost(
+  CommentDetails(
     content:
         "Couldn't agree more! Walking my dog and enjoying nature always lifts my mood.",
     ownerDisplayName: "SimpleJoys247",
     publicationDate: publicationDate1,
   ),
-  CommentPost(
+  CommentDetails(
     content:
         "This is so true. Just being outdoors makes me feel at peace and genuinely happy.",
     ownerDisplayName: "HappyHiker42",
@@ -35,27 +35,27 @@ final List<CommentPost> testComments = [
   ),
 ];
 
-final List<CommentPost> unequalComments = [
-  CommentPost(
+final List<CommentDetails> unequalComments = [
+  CommentDetails(
     content: "content1",
     ownerDisplayName: "username1",
     publicationDate: publicationDate1,
   ),
   // Different content
-  CommentPost(
+  CommentDetails(
     content: "content2",
     ownerDisplayName: "username1",
     publicationDate: publicationDate1,
   ),
   // Different ownerDisplayName
-  CommentPost(
+  CommentDetails(
     content: "content1",
     ownerDisplayName: "username2",
     publicationDate: publicationDate1,
   ),
 
   // Different publicationTime
-  CommentPost(
+  CommentDetails(
     content: "content1",
     ownerDisplayName: "username1",
     publicationDate: publicationDate1.add(const Duration(days: 1)),

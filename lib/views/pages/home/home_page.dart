@@ -4,7 +4,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
-import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
+import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 
 class HomePage extends HookConsumerWidget {
   const HomePage({super.key});
@@ -17,7 +17,7 @@ class HomePage extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: AppTopBar(
+        title: HomeTopBar(
           labelText:
               NavigationbarRoutes.values[currentPageIndex.value].pageLabel(),
         ),

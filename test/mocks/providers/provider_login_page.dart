@@ -8,7 +8,7 @@ import "package:proxima/views/pages/login/login_page.dart";
 
 import "../overrides/override_auth_providers.dart";
 import "../overrides/override_dynamic_user_avatar_view_model.dart";
-import "../overrides/override_home_view_model.dart";
+import "../overrides/override_posts_feed_view_model.dart";
 
 ProviderScope loginPageProvider(FakeFirebaseFirestore fakeFireStore) {
   final userRepo = UserRepositoryService(firestore: fakeFireStore);
@@ -21,8 +21,8 @@ ProviderScope loginPageProvider(FakeFirebaseFirestore fakeFireStore) {
       ...firebaseAuthMocksOverrides,
       ...mockEmptyHomeViewModelOverride,
       ...mockDynamicUserAvatarViewModelTestLoginUserOverride,
-      userRepositoryProvider.overrideWithValue(userRepo),
-      postRepositoryProvider.overrideWithValue(postRepo),
+      userRepositoryServiceProvider.overrideWithValue(userRepo),
+      postRepositoryServiceProvider.overrideWithValue(postRepo),
     ],
     child: const MaterialApp(
       onGenerateRoute: generateRoute, // Ensure generateRoute is accessible
