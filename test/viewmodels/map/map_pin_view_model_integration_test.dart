@@ -14,7 +14,7 @@ import "../../mocks/data/geopoint.dart";
 import "../../mocks/services/mock_geolocator_platform.dart";
 
 void main() {
-  group("Map Pin View Model unit testing", () {
+  group("Map Pin View Model integration testing", () {
     late FakeFirebaseFirestore fakeFireStore;
     late PostRepositoryService postRepository;
     late MockGeolocatorPlatform mockGeolocator;
