@@ -18,18 +18,17 @@ class LoginPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userRepository = ref.watch(userRepositoryServiceProvider);
-    ref.listen(loggedInUserIdProvider, (_, user) async {
+    ref.listen(loggedInUserIdProvider, (_, user) {
       if (user != null) {
-        final exists = await userRepository.doesUserExist(user);
-
-        //Ensure that the page is still mounted before navigating
-        if (!context.mounted) return;
-
-        if (exists) {
-          Navigator.pushReplacementNamed(context, Routes.home.name);
-        } else {
-          Navigator.pushReplacementNamed(context, Routes.createAccount.name);
-        }
+        userRepository.doesUserExist(user).then((exists) {
+          //Ensure that the page is still mounted before navigating
+          if (!context.mounted) return;
+          if (exists) {
+            Navigator.pushReplacementNamed(context, Routes.home.name);
+          } else {
+            Navigator.pushReplacementNamed(context, Routes.createAccount.name);
+          }
+        });
       }
     });
 
