@@ -189,6 +189,8 @@ void main() {
             expect(pinList.length, 1);
 
             // Check that the pin is the pin associated to the post at [postPositions[i]]
+            // We need to decompose the pins because every [callbackFunction] created are different
+            // so we cannot test equality on MapPinDetails directly
             expect(
               pinList[0].id,
               MarkerId(generatedPosts[i].id.value),
