@@ -25,6 +25,7 @@ class PostSortingService {
           .compareTo(option.scoreFunction(postB, position));
       // Multiplying by -1 reverses the order
       final sign = option.sortIncreasing ? 1 : -1;
+
       return sign * order;
     }
 

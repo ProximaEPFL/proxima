@@ -74,6 +74,7 @@ class ChallengeRepositoryService {
       ChallengeData.isCompletedField: true,
     });
     await _userRepositoryService.addPoints(uid, soloChallengeReward);
+
     return soloChallengeReward;
   }
 

@@ -59,6 +59,7 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>> {
       if (a.isFinished == b.isFinished) {
         return 0;
       }
+
       return b.isFinished ? -1 : 1;
     }); // sort the list so that finished challenges appear last
 
@@ -91,6 +92,7 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>> {
       // can change if we have a problem
       refresh();
     }
+
     return pointsAwarded;
   }
 }

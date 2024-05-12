@@ -49,6 +49,7 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
         .collection(PostFirestore.collectionName)
         .doc(postId.value)
         .collection(CommentFirestore.subCollectionName);
+
     return UpvoteRepositoryService._(
       firestore: firestore,
       parentCollection: parentCollection,

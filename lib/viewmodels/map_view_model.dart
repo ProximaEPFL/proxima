@@ -12,6 +12,7 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   Future<MapDetails> build() async {
     final actualLocation =
         await ref.read(geolocationServiceProvider).getCurrentPosition();
+
     return MapDetails(
       initialLocation:
           LatLng(actualLocation.latitude, actualLocation.longitude),
