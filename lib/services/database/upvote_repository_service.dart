@@ -87,13 +87,13 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
         ? await transaction.get(voteStateCollection)
         : await voteStateCollection.get();
 
-    VoteState getActualState() {
-      return VoteFirestore.fromDbData(voteState.data()!).hasUpvoted
-          ? VoteState.upvoted
-          : VoteState.downvoted;
+    if (!voteState.exists) {
+      return VoteState.none;
     }
 
-    return voteState.exists ? getActualState() : VoteState.none;
+    return VoteFirestore.fromDbData(voteState.data()!).hasUpvoted
+        ? VoteState.upvoted
+        : VoteState.downvoted;
   }
 
   /// Sets the upvote state of the user with id [userId] on the parent with id [parentId]
