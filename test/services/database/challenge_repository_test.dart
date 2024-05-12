@@ -135,12 +135,12 @@ void main() {
       // the user.
       test("Challenge getter when more than 30 available posts works",
           () async {
-        //Create a post that will be used as a completed past challenge.
+        // Create a post that will be used as a completed past challenge.
         final pastPost = PostDataGenerator.generatePostData(1).first;
         final pastPostId =
             await postRepository.addPost(pastPost, inChallengeRange);
 
-        //Set the post as a past challenge
+        // Set the post as a past challenge
         final data = ChallengeGenerator.generate();
         await firestore
             .collection(UserFirestore.collectionName)
@@ -149,7 +149,7 @@ void main() {
             .doc(pastPostId.value)
             .set(data.toDbData());
 
-        //Create 30 posts and get the challenges
+        // Create 30 posts and get the challenges
         final generator = FirestorePostGenerator();
         await generator.addPostsReturnDataOnly(firestore, inChallengeRange, 30);
 
