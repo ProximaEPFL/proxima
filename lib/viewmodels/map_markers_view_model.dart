@@ -2,7 +2,8 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
 
-// The view model to create and store the markers on the map
+// This view model is used to create and store
+// the markers of the map given a list of [MapPinDetails].
 class MapMarkersViewModel extends Notifier<void> {
   @override
   void build() {}
