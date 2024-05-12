@@ -7,10 +7,11 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
-import "package:proxima/views/components/options/map/map_selection_options.dart";
 import "package:proxima/views/components/options/map/map_selection_option_chips.dart";
+import "package:proxima/views/components/options/map/map_selection_options.dart";
 import "package:proxima/views/pages/home/content/map/map_screen.dart";
 import "package:proxima/views/pages/home/content/map/post_map.dart";
+
 import "../../../mocks/data/map_pin.dart";
 import "../../../mocks/providers/provider_map_page.dart";
 import "../../../mocks/services/mock_geolocator_platform.dart";
