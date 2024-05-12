@@ -24,22 +24,12 @@ class UserCommentFirestore {
       throw Exception("User comment document does not exist");
     }
 
-    try {
-      final data = docSnap.data() as Map<String, dynamic>;
+    final data = docSnap.data() as Map<String, dynamic>;
 
-      return UserCommentFirestore(
-        id: UserCommentIdFirestore(value: docSnap.id),
-        data: UserCommentData.fromDbData(data),
-      );
-    } catch (e) {
-      if (e is TypeError) {
-        throw FormatException(
-          "Cannot parse user comment document: ${e.toString()}",
-        );
-      } else {
-        rethrow;
-      }
-    }
+    return UserCommentFirestore(
+      id: UserCommentIdFirestore(value: docSnap.id),
+      data: UserCommentData.fromDbData(data),
+    );
   }
 
   @override
