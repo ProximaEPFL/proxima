@@ -9,9 +9,9 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 
-import "../mocks/data/firestore_post.dart";
-import "../mocks/data/geopoint.dart";
-import "../mocks/services/mock_geolocator_platform.dart";
+import "../../mocks/data/firestore_post.dart";
+import "../../mocks/data/geopoint.dart";
+import "../../mocks/services/mock_geolocator_platform.dart";
 
 void main() {
   group("Map Pin View Model unit testing", () {
