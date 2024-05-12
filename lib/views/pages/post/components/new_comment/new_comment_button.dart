@@ -26,25 +26,27 @@ class NewCommentButton extends ConsumerWidget {
     final commentListViewModel =
         ref.read(commentsViewModelProvider(parentPostId).notifier);
 
+    tryAddComment() async {
+      final commentPosted = await newCommentViewModel.tryAddComment(
+        commentContentController.text,
+      );
+
+      // If the comment was posted, refresh the comment list
+      // and reset the new comment view model
+      if (commentPosted) {
+        await commentListViewModel.refresh();
+        await newCommentViewModel.reset();
+        commentContentController.clear();
+        FocusManager.instance.primaryFocus?.unfocus();
+      }
+    }
+
     return Align(
       alignment: Alignment.center,
       child: IconButton(
         key: postCommentButtonKey,
         icon: const Icon(Icons.send),
-        onPressed: () async {
-          final commentPosted = await newCommentViewModel.tryAddComment(
-            commentContentController.text,
-          );
-
-          // If the comment was posted, refresh the comment list
-          // and reset the new comment view model
-          if (commentPosted) {
-            await commentListViewModel.refresh();
-            await newCommentViewModel.reset();
-            commentContentController.clear();
-            FocusManager.instance.primaryFocus?.unfocus();
-          }
-        },
+        onPressed: () => tryAddComment(),
       ),
     );
   }
