@@ -54,10 +54,10 @@ class UserCommentReposittoryService {
   Future<void> deleteUserComment(
     UserIdFirestore userId,
     UserCommentIdFirestore userCommentId,
-  ) {
+  ) async {
     final userCommentCollection = _userCommentCollection(userId);
 
-    return userCommentCollection.doc(userCommentId.value).delete();
+    await userCommentCollection.doc(userCommentId.value).delete();
   }
 }
 
