@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/viewmodels/map_view_model.dart";
+import "package:proxima/viewmodels/map/map_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/components/options/map/map_selection_option_chips.dart";
 import "package:proxima/views/pages/home/content/map/post_map.dart";

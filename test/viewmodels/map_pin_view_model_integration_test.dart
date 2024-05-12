@@ -7,7 +7,7 @@ import "package:mockito/mockito.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
-import "package:proxima/viewmodels/map_pin_view_model.dart";
+import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 
 import "../mocks/data/firestore_post.dart";
 import "../mocks/data/geopoint.dart";

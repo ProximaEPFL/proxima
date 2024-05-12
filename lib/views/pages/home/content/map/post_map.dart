@@ -3,9 +3,9 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
-import "package:proxima/viewmodels/map_markers_view_model.dart";
-import "package:proxima/viewmodels/map_pin_view_model.dart";
-import "package:proxima/viewmodels/map_view_model.dart";
+import "package:proxima/viewmodels/map/map_markers_view_model.dart";
+import "package:proxima/viewmodels/map/map_pin_view_model.dart";
+import "package:proxima/viewmodels/map/map_view_model.dart";
 import "package:proxima/views/components/async/error_alert.dart";
 
 /// This widget displays the Google Map

@@ -1,7 +1,7 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:mockito/mockito.dart";
-import "package:proxima/viewmodels/map_view_model.dart";
+import "package:proxima/viewmodels/map/map_view_model.dart";
 
 class MockGoogleMapController extends Mock implements GoogleMapController {}
 
