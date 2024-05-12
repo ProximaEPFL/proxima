@@ -4,6 +4,7 @@ import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 
 import "../data/map_pin.dart";
 
+// A mock implementation of the [MapPinViewModel] class.
 class MockPinViewModel extends AsyncNotifier<List<MapPinDetails>>
     implements MapPinViewModel {
   final Future<List<MapPinDetails>> Function() _build;
