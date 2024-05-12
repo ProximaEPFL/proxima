@@ -130,7 +130,7 @@ void main() {
     });
 
     group("Regression tests", () {
-      //It seems that if you don't have any pastChallenges the mocked firestore
+      // It seems that if you don't have any pastChallenges the mocked firestore
       // will don't do any check on the query, so we need to add a pastChallenge to
       // the user.
       test("Challenge getter when more than 30 available posts works",
