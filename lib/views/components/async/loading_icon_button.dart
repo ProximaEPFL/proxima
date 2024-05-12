@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:proxima/views/helpers/types.dart";
 
-enum LoadingState {
+enum LoadingIconButtonState {
   still,
   pending,
   completed,
@@ -27,17 +27,17 @@ class LoadingIconButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = useState(LoadingState.still);
+    final isLoading = useState(LoadingIconButtonState.still);
 
     final stillIconButton = IconButton(
       icon: Icon(icon, size: iconSize),
       onPressed: () async {
-        isLoading.value = LoadingState.pending;
+        isLoading.value = LoadingIconButtonState.pending;
         await onClick();
 
         // Check that the widget was not already disposed
         if (context.mounted) {
-          isLoading.value = LoadingState.completed;
+          isLoading.value = LoadingIconButtonState.completed;
         }
       },
     );
@@ -59,9 +59,9 @@ class LoadingIconButton extends HookWidget {
       width: _containerSide,
       height: _containerSide,
       child: switch (isLoading.value) {
-        LoadingState.still => stillIconButton,
-        LoadingState.pending => loading,
-        LoadingState.completed => checkButton,
+        LoadingIconButtonState.still => stillIconButton,
+        LoadingIconButtonState.pending => loading,
+        LoadingIconButtonState.completed => checkButton,
       },
     );
   }
