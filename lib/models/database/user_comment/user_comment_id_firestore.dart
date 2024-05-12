@@ -1,5 +1,7 @@
 import "package:proxima/models/database/firestore/id_firestore.dart";
 
+/// Represents the id of a comment from the user in Firestore.
+/// /!\ This is not the same id as the id of a comment under a post. /!\
 class UserCommentIdFirestore implements IdFirestore {
   @override
   final String value;

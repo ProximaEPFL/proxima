@@ -2,7 +2,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:proxima/models/database/user_comment/user_comment_data.dart";
 import "package:proxima/models/database/user_comment/user_comment_id_firestore.dart";
 
-/// This class represent a comment that the user made on a post with id [parentPostId].
+/// This class represents a comment from the user in firestore.
 class UserCommentFirestore {
   static const String userCommentSubCollectionName = "userComments";
 
