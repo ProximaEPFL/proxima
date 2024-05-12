@@ -14,7 +14,7 @@ class UserCommentReposittoryService {
     required FirebaseFirestore firestore,
   }) : _firestore = firestore;
 
-  CollectionReference getUserCommentCollection(UserIdFirestore userId) =>
+  CollectionReference _userCommentCollection(UserIdFirestore userId) =>
       _firestore
           .collection(UserFirestore.collectionName)
           .doc(userId.value)
@@ -22,8 +22,9 @@ class UserCommentReposittoryService {
 
   /// Get the references to the user's comments.
   Future<List<UserCommentFirestore>> getUserComments(
-      UserIdFirestore userId) async {
-    final userCommentCollection = getUserCommentCollection(userId);
+    UserIdFirestore userId,
+  ) async {
+    final userCommentCollection = _userCommentCollection(userId);
 
     final userCommentQuery = await userCommentCollection.get();
 
@@ -40,7 +41,7 @@ class UserCommentReposittoryService {
     UserIdFirestore userId,
     UserCommentData userCommentData,
   ) async {
-    final userCommentCollection = getUserCommentCollection(userId);
+    final userCommentCollection = _userCommentCollection(userId);
 
     final docRef = await userCommentCollection.add(userCommentData.toDbData());
 
@@ -52,7 +53,7 @@ class UserCommentReposittoryService {
     UserIdFirestore userId,
     UserCommentIdFirestore userCommentId,
   ) {
-    final userCommentCollection = getUserCommentCollection(userId);
+    final userCommentCollection = _userCommentCollection(userId);
 
     return userCommentCollection.doc(userCommentId.value).delete();
   }

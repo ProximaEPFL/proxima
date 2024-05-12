@@ -34,7 +34,8 @@ class UserCommentData {
     } catch (e) {
       if (e is TypeError) {
         throw FormatException(
-            "Cannot parse user comment document: ${e.toString()}");
+          "Cannot parse user comment document: ${e.toString()}",
+        );
       } else {
         rethrow;
       }
