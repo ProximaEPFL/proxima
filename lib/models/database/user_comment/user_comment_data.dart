@@ -16,7 +16,7 @@ class UserCommentData {
   final String content;
   static const String contentField = "content";
 
-  UserCommentData({
+  const UserCommentData({
     required this.commentId,
     required this.parentPostId,
     required this.content,

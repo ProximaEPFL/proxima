@@ -4,7 +4,7 @@ class UserCommentIdFirestore implements IdFirestore {
   @override
   final String value;
 
-  UserCommentIdFirestore({required this.value});
+  const UserCommentIdFirestore({required this.value});
 
   @override
   bool operator ==(Object other) {

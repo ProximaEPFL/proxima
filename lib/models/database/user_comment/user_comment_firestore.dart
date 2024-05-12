@@ -12,7 +12,7 @@ class UserCommentFirestore {
 
   final UserCommentData data;
 
-  UserCommentFirestore({
+  const UserCommentFirestore({
     required this.id,
     required this.data,
   });
