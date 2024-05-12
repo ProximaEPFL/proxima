@@ -153,9 +153,6 @@ class ChallengeRepositoryService {
     // we can keep it for the sake of optimization.)
     if (possiblePosts.isEmpty) return;
 
-    final Iterable<String> possiblePostsStringIds =
-        possiblePosts.map((post) => post.value);
-
     final pastChallengesCollectionRef = _pastChallengesRef(parentRef);
     final alreadyDonePostsSnap = await pastChallengesCollectionRef.get();
 
@@ -164,8 +161,8 @@ class ChallengeRepositoryService {
     // So we do the filtering locally rather than using the whereIn parameter
     // of the where method.
     final alreadyDonePosts = alreadyDonePostsSnap.docs
-        .where((donePost) => possiblePostsStringIds.contains(donePost.id))
         .map((post) => PostIdFirestore(value: post.id))
+        .where((donePost) => possiblePosts.contains(donePost))
         .toSet();
 
     final postIt = possiblePosts.iterator;
