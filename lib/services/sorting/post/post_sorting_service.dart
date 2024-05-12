@@ -31,21 +31,23 @@ class PostSortingService {
 
     late final Comparator<PostFirestore> comparator;
 
+    int evaluateComparator(PostFirestore a, PostFirestore b) {
+      final putOnTopA = putOnTop.contains(a.id);
+      final putOnTopB = putOnTop.contains(b.id);
+
+      if (putOnTopA && !putOnTopB) {
+        // a is considered smaller
+        return -1;
+      } else if (!putOnTopA && putOnTopB) {
+        return 1;
+      }
+
+      return defaultComparator(a, b);
+    }
+
     putOnTop.isEmpty
         ? comparator = defaultComparator
-        : comparator = (a, b) {
-            final putOnTopA = putOnTop.contains(a.id);
-            final putOnTopB = putOnTop.contains(b.id);
-
-            if (putOnTopA && !putOnTopB) {
-              // a is considered smaller
-              return -1;
-            } else if (!putOnTopA && putOnTopB) {
-              return 1;
-            }
-
-            return defaultComparator(a, b);
-          };
+        : comparator = evaluateComparator;
 
     return posts.sorted(comparator);
   }
