@@ -11,7 +11,7 @@ class LogoutButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
       key: logoutButtonKey,
-      onPressed: () => ref.read(authLoginServiceProvider).signOut,
+      onPressed: ref.read(authLoginServiceProvider).signOut,
       icon: const Icon(Icons.logout),
     );
   }
