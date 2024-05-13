@@ -47,3 +47,8 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+
+# Command to generate the icons: `dart run flutter_launcher_icons`
+flutter_launcher_icons:
+  android: true
+  image_path: "assets/images/proxima_white.jpg"
