@@ -186,7 +186,7 @@ void main() {
             );
             // Check that we only have a single pin
             var pinList = await container.read(mapPinViewModelProvider.future);
-            expect(pinList.length, 1);
+            expect(pinList, hasLength(1));
 
             // Check that the pin is the pin associated to the post at [postPositions[i]]
             // We need to decompose the pins because every [callbackFunction] created are different
