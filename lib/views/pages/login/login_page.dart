@@ -35,15 +35,28 @@ class LoginPage extends ConsumerWidget {
 
     final theme = Theme.of(context);
 
+    final logoBorder = BorderRadius.circular(28);
     final logoImage = Flexible(
       // Adjust the flex factor to control how much space the logo takes
       flex: 2,
       child: Container(
-        padding: const EdgeInsets.all(24),
-        child: ClipRRect(
-          key: logoKey,
-          borderRadius: BorderRadius.circular(28),
-          child: Image.asset(_logoAsset, fit: BoxFit.contain),
+        padding: const EdgeInsets.all(28),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: logoBorder,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 10,
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            key: logoKey,
+            borderRadius: logoBorder,
+            child: Image.asset(_logoAsset, fit: BoxFit.contain),
+          ),
         ),
       ),
     );
