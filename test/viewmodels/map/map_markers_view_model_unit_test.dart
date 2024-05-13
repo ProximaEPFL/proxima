@@ -29,7 +29,7 @@ void main() {
       final pins = MapPinGenerator.generateMapPins(5);
 
       // Store the pins (Create the markers)
-      mapMarkersNotifier.redrawMarkers(pins);
+      mapMarkersNotifier.updateMarkers(pins);
 
       // Create expected markers
       final expectedMarkers = pins
@@ -70,7 +70,7 @@ void main() {
             .toList();
 
         // Store pins
-        mapMarkersNotifier.redrawMarkers(storedPins);
+        mapMarkersNotifier.updateMarkers(storedPins);
 
         // Create expected markers
         final expectedMarkers = storedPins
