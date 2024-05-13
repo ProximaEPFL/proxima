@@ -10,14 +10,14 @@ import "package:proxima/viewmodels/posts_feed_view_model.dart";
 class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
   @override
   Future<List<MapPinDetails>> build() async {
-    final postrepository = ref.watch(postRepositoryServiceProvider);
+    final postRepository = ref.watch(postRepositoryServiceProvider);
     final position = await ref.watch(livePositionStreamProvider.future);
 
     if (position == null) {
       return List.empty();
     }
 
-    final nearPosts = await postrepository.getNearPosts(
+    final nearPosts = await postRepository.getNearPosts(
       position,
       PostsFeedViewModel.kmPostRadius,
     );
