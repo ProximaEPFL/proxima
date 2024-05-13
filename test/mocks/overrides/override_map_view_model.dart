@@ -3,8 +3,9 @@ import "dart:async";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_details.dart";
-import "package:proxima/viewmodels/map_view_model.dart";
+import "package:proxima/viewmodels/map/map_view_model.dart";
 
+// A mock implementation of the [MapViewModel] class.
 class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
     implements MapViewModel {
   final Future<MapDetails> Function() _build;
