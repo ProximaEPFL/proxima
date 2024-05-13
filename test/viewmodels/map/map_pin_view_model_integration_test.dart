@@ -160,16 +160,12 @@ void main() {
               locationSettings: geoLocationService.locationSettings,
             ),
           ).thenAnswer(
-            (_) => Stream.fromIterable([
-              getSimplePosition(
-                postPositions[0].latitude,
-                postPositions[0].longitude,
+            (_) => Stream.fromIterable(
+              postPositions.map(
+                (geoPoint) =>
+                    getSimplePosition(geoPoint.latitude, geoPoint.longitude),
               ),
-              getSimplePosition(
-                postPositions[1].latitude,
-                postPositions[1].longitude,
-              ),
-            ]),
+            ),
           );
 
           for (int i = 0; i < 2; i++) {
