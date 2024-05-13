@@ -37,7 +37,7 @@ class PostVotes extends ConsumerWidget {
       style: const ButtonStyle(
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
-      onPressed: () => upvoteNotifier.triggerUpVote,
+      onPressed: upvoteNotifier.triggerUpVote,
     );
 
     final downvote = IconButton(
@@ -51,7 +51,7 @@ class PostVotes extends ConsumerWidget {
       style: const ButtonStyle(
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
-      onPressed: () => upvoteNotifier.triggerDownVote,
+      onPressed: upvoteNotifier.triggerDownVote,
     );
 
     final voteCount = Padding(

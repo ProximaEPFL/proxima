@@ -31,9 +31,9 @@ class LoadingIconButton extends HookWidget {
 
     final stillIconButton = IconButton(
       icon: Icon(icon, size: iconSize),
-      onPressed: () {
+      onPressed: () async {
         isLoading.value = LoadingState.pending;
-        onClick();
+        await onClick();
         // Check that the widget was not already disposed
         if (context.mounted) {
           isLoading.value = LoadingState.completed;

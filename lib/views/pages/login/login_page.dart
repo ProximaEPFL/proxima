@@ -19,7 +19,7 @@ class LoginPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userRepository = ref.watch(userRepositoryServiceProvider);
 
-    checkLogInStatus(_, user) async {
+    ref.listen(loggedInUserIdProvider, (_, user) async {
       if (user != null) {
         final exists = await userRepository.doesUserExist(user);
 
@@ -32,9 +32,7 @@ class LoginPage extends ConsumerWidget {
           Navigator.pushReplacementNamed(context, Routes.createAccount.name);
         }
       }
-    }
-
-    ref.listen(loggedInUserIdProvider, (_, user) => checkLogInStatus(_, user));
+    });
 
     final theme = Theme.of(context);
 
