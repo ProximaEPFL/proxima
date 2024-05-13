@@ -5,7 +5,6 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/services/database/firestore_service.dart";
-import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 
@@ -16,7 +15,6 @@ import "../../mocks/services/mock_geolocator_platform.dart";
 void main() {
   group("Map Pin View Model integration testing", () {
     late FakeFirebaseFirestore fakeFireStore;
-    late PostRepositoryService postRepository;
     late MockGeolocatorPlatform mockGeolocator;
     late GeolocationService geoLocationService;
     late ProviderContainer container;
@@ -24,7 +22,6 @@ void main() {
 
     setUp(() async {
       fakeFireStore = FakeFirebaseFirestore();
-      postRepository = PostRepositoryService(firestore: fakeFireStore);
       mockGeolocator = MockGeolocatorPlatform();
       geoLocationService = GeolocationService(geoLocator: mockGeolocator);
       postGenerator = FirestorePostGenerator();
@@ -37,7 +34,6 @@ void main() {
       container = ProviderContainer(
         overrides: [
           firestoreProvider.overrideWithValue(fakeFireStore),
-          postRepositoryServiceProvider.overrideWithValue(postRepository),
           geolocationServiceProvider.overrideWithValue(geoLocationService),
         ],
       );
