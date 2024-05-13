@@ -17,7 +17,7 @@ void main() {
       final markers =
           container.read(mapMarkersViewModelProvider.notifier).markers;
 
-      expect(markers, Set.identity());
+      expect(markers, isEmpty);
     });
 
     test("Check correct tranformation to markers", () {
