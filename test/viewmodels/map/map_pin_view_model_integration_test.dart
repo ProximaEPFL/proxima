@@ -20,12 +20,14 @@ void main() {
     late MockGeolocatorPlatform mockGeolocator;
     late GeolocationService geoLocationService;
     late ProviderContainer container;
+    late FirestorePostGenerator postGenerator;
 
     setUp(() async {
       fakeFireStore = FakeFirebaseFirestore();
       postRepository = PostRepositoryService(firestore: fakeFireStore);
       mockGeolocator = MockGeolocatorPlatform();
       geoLocationService = GeolocationService(geoLocator: mockGeolocator);
+      postGenerator = FirestorePostGenerator();
 
       when(mockGeolocator.isLocationServiceEnabled())
           .thenAnswer((_) async => true);
@@ -77,7 +79,6 @@ void main() {
       test(
           "Posts available in range and out of range, returns only pins associated to in range posts",
           () async {
-        final postGenerator = FirestorePostGenerator();
         // Generate 10 random positions around the user but in range to be able to see them
         // and 15 random positions out of range.
         const postsInRange = 10;
@@ -133,7 +134,6 @@ void main() {
           final postPositions =
               GeoPointGenerator.generatePositions(userPosition0, 1, 1);
 
-          final postGenerator = FirestorePostGenerator();
           postPositions
               .map((position) => postGenerator.generatePostAt(position));
 
