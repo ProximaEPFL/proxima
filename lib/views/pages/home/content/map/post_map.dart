@@ -50,9 +50,7 @@ class PostMap extends ConsumerWidget {
     );
 
     mapPinsAsync.when(
-      data: (pinList) {
-        mapMarkersNotifier.updateMarkers(pinList);
-      },
+      data: mapMarkersNotifier.updateMarkers,
       error: (error, _) {
         //Pop up an error dialog if an error occurs
         final dialog = ErrorAlert(error: error);
