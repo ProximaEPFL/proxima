@@ -71,7 +71,7 @@ void main() {
       test("No posts available returns empty pin list", () async {
         final pinList = await container.read(mapPinViewModelProvider.future);
 
-        expect(pinList, List.empty());
+        expect(pinList, isEmpty);
       });
 
       test(
