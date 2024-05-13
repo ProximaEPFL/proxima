@@ -11,7 +11,7 @@ class MapMarkersViewModel extends Notifier<void> {
   final Set<Marker> _markers = {};
   // Getter for the markers
   Set<Marker> get markers => _markers;
-
+// This method will update the markers stored in the view model
   void redrawMarkers(List<MapPinDetails> pinList) {
     _markers.clear();
     for (final pin in pinList) {
