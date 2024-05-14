@@ -58,11 +58,23 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
     state = await AsyncValue.guard(() => build());
   }
 
-  static const _initialZoomLevel = 17.5;
+  static const _initialZoomLevel = 17.0;
 
   double get initialZoom => _initialZoomLevel;
 
+  // This boolean is used to determine if the camera should follow the user
+  bool _followUser = true;
+
+  void enableFollowUser() {
+    _followUser = true;
+  }
+
+  void disableFollowUser() {
+    _followUser = false;
+  }
+
   Future<void> moveCamera(LatLng target) async {
+    if (!_followUser) return;
     final GoogleMapController controller = await _mapController.future;
     // reset zoom to initial
     // center camera on target

@@ -33,9 +33,12 @@ class PostMap extends ConsumerWidget {
     // This provider is used to get the live location of the user.
     final positionValue = ref.watch(livePositionStreamProvider);
 
+    // This will redraw the circle and update camera when the user's position changes.
     positionValue.when(
       data: (data) {
-        mapNotifier.redrawCircle(LatLng(data!.latitude, data.longitude));
+        LatLng userPosition = LatLng(data!.latitude, data.longitude);
+        mapNotifier.redrawCircle(userPosition);
+        mapNotifier.moveCamera(userPosition);
       },
       error: (error, _) {
         //Pop up an error dialog if an error occurs
@@ -63,8 +66,10 @@ class PostMap extends ConsumerWidget {
 
     final fab = FloatingActionButton(
       onPressed: () {
+        // Center the camera on the user's position and follow
         positionValue.whenData((geoPoint) {
           LatLng userPosition = LatLng(geoPoint!.latitude, geoPoint.longitude);
+          mapNotifier.enableFollowUser();
           mapNotifier.moveCamera(userPosition);
         });
       },
