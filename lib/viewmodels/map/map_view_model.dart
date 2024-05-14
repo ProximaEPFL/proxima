@@ -7,6 +7,8 @@ import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_option.dart";
 
+// This view model is responsible for managing the actual location
+// of the user on the map and the displayed circles.
 class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   @override
   Future<MapDetails> build() async {
