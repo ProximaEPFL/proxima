@@ -6,6 +6,8 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/utils/firebase_options.dart";
 import "package:proxima/views/proxima_app.dart";
 
+const _splashWait = Duration(milliseconds: 600);
+
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
@@ -19,6 +21,8 @@ void main() async {
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+
+  await Future.delayed(_splashWait);
 
   // Hide splash screen
   FlutterNativeSplash.remove();

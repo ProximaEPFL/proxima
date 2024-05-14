@@ -11,7 +11,7 @@ class LoginPage extends ConsumerWidget {
 
   static const tagLineText = "Discover the world,\n one post at a time.";
 
-  static const _logoAsset = "assets/images/proxima_white.jpg";
+  static const _logoAsset = "assets/images/proxima_white.png";
 
   const LoginPage({super.key});
 
