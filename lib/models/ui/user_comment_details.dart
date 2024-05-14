@@ -6,9 +6,9 @@ import "package:proxima/models/database/user_comment/user_comment_id_firestore.d
 @immutable
 class UserCommentDetails {
   final UserCommentIdFirestore userCommentId;
-  final String description;
-  final PostIdFirestore parentPostId;
   final CommentIdFirestore commentId;
+  final PostIdFirestore parentPostId;
+  final String description;
 
   const UserCommentDetails({
     required this.commentId,
@@ -21,13 +21,17 @@ class UserCommentDetails {
   bool operator ==(Object other) {
     return other is UserCommentDetails &&
         other.commentId == commentId &&
-        other.description == description;
+        other.description == description &&
+        other.parentPostId == parentPostId &&
+        other.userCommentId == userCommentId;
   }
 
   @override
   int get hashCode {
     return Object.hash(
+      userCommentId,
       commentId,
+      parentPostId,
       description,
     );
   }
