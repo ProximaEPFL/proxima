@@ -96,9 +96,14 @@ class PostMap extends ConsumerWidget {
     );
 
     return Expanded(
-      child: Scaffold(
-        body: googleMap,
-        floatingActionButton: fab,
+      child: Listener(
+        onPointerDown: (e) {
+          mapNotifier.disableFollowUser();
+        },
+        child: Scaffold(
+          body: googleMap,
+          floatingActionButton: fab,
+        ),
       ),
     );
   }
