@@ -29,7 +29,7 @@ jobs:
         run: |
           mkdir android/app/keystore
           echo $B64_RELEASE_KEYSTORE | base64 --decode --ignore-garbage > android/app/keystore/release.jks
-          echo $RELEASE_KEYSTORE_PROPERTIES > android/app/key.properties
+          echo $RELEASE_KEYSTORE_PROPERTIES > android/key.properties
 
       - name: Flutter Build APK
         run: ./scripts/build
