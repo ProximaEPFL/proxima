@@ -1,6 +1,9 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/comment/comment_id_firestore.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user_comment/user_comment_id_firestore.dart";
 import "package:proxima/models/ui/user_comment_details.dart";
+import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/user_comment_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
@@ -12,14 +15,17 @@ class UserCommentViewModel extends AutoDisposeAsyncNotifier<UserCommentsState> {
 
   @override
   Future<UserCommentsState> build() async {
-    final commentRepository = ref.watch(userCommentRepositoryServiceProvider);
+    final userCommentRepository =
+        ref.watch(userCommentRepositoryServiceProvider);
     final user = ref.watch(validLoggedInUserIdProvider);
 
-    final commentsFirestore = await commentRepository.getUserComments(user);
+    final commentsFirestore = await userCommentRepository.getUserComments(user);
     final comments = commentsFirestore.map((comment) {
       final userComment = UserCommentDetails(
-        commentId: comment.id,
+        userCommentId: comment.id,
         description: comment.data.content,
+        parentPostId: comment.data.parentPostId,
+        commentId: comment.data.commentId,
       );
       return userComment;
     }).toList();
@@ -29,13 +35,23 @@ class UserCommentViewModel extends AutoDisposeAsyncNotifier<UserCommentsState> {
 
   /// Delete the comment with the given [commentId] from the database
   /// and refresh the state of this viewmodel (list of user comments).
-  Future<void> deleteComment(UserCommentIdFirestore comment) async {
-    final commentRepository = ref.watch(userCommentRepositoryServiceProvider);
+  Future<void> deleteComment(
+    UserCommentIdFirestore userComment,
+    PostIdFirestore postId,
+    CommentIdFirestore commentId,
+  ) async {
+    final userCommentRepository =
+        ref.watch(userCommentRepositoryServiceProvider);
+    final commentRepository = ref.watch(commentRepositoryServiceProvider);
     final user = ref.watch(validLoggedInUserIdProvider);
-    await commentRepository.deleteUserComment(user, comment);
+    await userCommentRepository.deleteUserComment(user, userComment);
 
     // Not awaited, will show loading for user (faster user feedback)
     refresh();
+
+    // Delete the comment from the post
+    await commentRepository.deleteComment(postId, commentId);
+
     // Refresh the home feed after post deletion
     ref.read(postsFeedViewModelProvider.notifier).refresh();
   }
