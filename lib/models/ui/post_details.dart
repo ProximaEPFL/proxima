@@ -1,5 +1,6 @@
 import "package:flutter/foundation.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
 
 @immutable
 class PostDetails {
@@ -9,6 +10,7 @@ class PostDetails {
   final int voteScore;
   final int commentNumber;
   final String ownerDisplayName;
+  final UserIdFirestore ownerUid;
   final DateTime publicationDate;
   final int distance; // in meters
   final bool isChallenge;
@@ -20,6 +22,7 @@ class PostDetails {
     required this.voteScore,
     required this.commentNumber,
     required this.ownerDisplayName,
+    required this.ownerUid,
     required this.publicationDate,
     required this.distance,
     this.isChallenge = false,
@@ -36,6 +39,7 @@ class PostDetails {
         other.voteScore == voteScore &&
         other.commentNumber == commentNumber &&
         other.ownerDisplayName == ownerDisplayName &&
+        other.ownerUid == ownerUid &&
         other.publicationDate == publicationDate &&
         other.distance == distance &&
         other.isChallenge == isChallenge;
@@ -50,6 +54,7 @@ class PostDetails {
       voteScore,
       commentNumber,
       ownerDisplayName,
+      ownerUid,
       publicationDate,
       distance,
       isChallenge,

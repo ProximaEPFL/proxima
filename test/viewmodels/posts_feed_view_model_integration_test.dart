@@ -117,6 +117,7 @@ void main() {
           description: postData.description,
           voteScore: postData.voteScore,
           ownerDisplayName: owner.data.displayName,
+          ownerUid: owner.uid,
           commentNumber: postData.commentCount,
           publicationDate: postData.publicationTime.toDate(),
           distance: (const GeoFirePoint(userPosition)
@@ -214,6 +215,7 @@ void main() {
           description: data.description,
           voteScore: data.voteScore,
           ownerDisplayName: owner.data.displayName,
+          ownerUid: owner.uid,
           commentNumber: data.commentCount,
           publicationDate: data.publicationTime.toDate(),
           distance: (const GeoFirePoint(userPosition0)
