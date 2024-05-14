@@ -48,3 +48,8 @@ class UserCommentViewModel extends AutoDisposeAsyncNotifier<UserCommentsState> {
     state = await AsyncValue.guard(() => build());
   }
 }
+
+final userCommentsViewModelProvider =
+    AutoDisposeAsyncNotifierProvider<UserCommentViewModel, UserCommentsState>(
+  () => UserCommentViewModel(),
+);
