@@ -9,6 +9,7 @@ import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 /// It contains the user's profile picture and username
 /// and the publication time of the post.
 class PublicationHeader extends ConsumerWidget {
+  static const avatarKey = Key("avatarKey");
   static const displayNameTextKey = Key("displayNameText");
   static const publicationDateTextKey = Key("publicationTimeTextKey");
 
@@ -84,6 +85,7 @@ class PublicationHeader extends ConsumerWidget {
           ),
           radius: 12,
           onTap: () => onTap(context),
+          key: avatarKey,
         ),
         const SizedBox(width: 8),
         posterName,

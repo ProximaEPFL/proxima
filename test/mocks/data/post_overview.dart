@@ -10,8 +10,10 @@ final List<PostDetails> testPosts = [
     description: "Lorem ipsum dolor sit amet.",
     voteScore: 100,
     commentNumber: 5,
+    // the display name must not be contained in the username, and inversely,
+    // to simplify testing
     ownerDisplayName: "Proxima",
-    ownerUsername: "ProximaUsername",
+    ownerUsername: "Elephant",
     ownerCentauriPoints: 32,
     publicationDate: publicationDate1,
     distance: 20,
