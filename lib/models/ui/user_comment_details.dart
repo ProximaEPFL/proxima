@@ -3,25 +3,25 @@ import "package:proxima/models/database/user_comment/user_comment_id_firestore.d
 
 @immutable
 class UserCommentDetails {
-  final UserCommentIdFirestore postId;
+  final UserCommentIdFirestore commentId;
   final String description;
 
   const UserCommentDetails({
-    required this.postId,
+    required this.commentId,
     required this.description,
   });
 
   @override
   bool operator ==(Object other) {
     return other is UserCommentDetails &&
-        other.postId == postId &&
+        other.commentId == commentId &&
         other.description == description;
   }
 
   @override
   int get hashCode {
     return Object.hash(
-      postId,
+      commentId,
       description,
     );
   }

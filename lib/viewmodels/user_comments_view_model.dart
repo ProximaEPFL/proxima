@@ -18,7 +18,7 @@ class UserCommentViewModel extends AutoDisposeAsyncNotifier<UserCommentsState> {
     final commentsFirestore = await commentRepository.getUserComments(user);
     final comments = commentsFirestore.map((comment) {
       final userComment = UserCommentDetails(
-        postId: comment.id,
+        commentId: comment.id,
         description: comment.data.content,
       );
       return userComment;
