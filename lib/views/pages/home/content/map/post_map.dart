@@ -11,7 +11,6 @@ import "package:proxima/views/components/async/error_alert.dart";
 /// This widget displays the Google Map
 class PostMap extends ConsumerWidget {
   final MapDetails mapInfo;
-  static const initialZoomLevel = 17.5;
 
   static const postMapKey = Key("postMap");
 
@@ -62,24 +61,39 @@ class PostMap extends ConsumerWidget {
       loading: () => (),
     );
 
+    final fab = FloatingActionButton(
+      onPressed: () {
+        positionValue.whenData((geoPoint) {
+          LatLng userPosition = LatLng(geoPoint!.latitude, geoPoint.longitude);
+          mapNotifier.moveCamera(userPosition);
+        });
+      },
+      child: const Icon(Icons.my_location),
+    );
+
+    final googleMap = GoogleMap(
+      key: postMapKey,
+      mapType: MapType.normal,
+      myLocationButtonEnabled: false,
+      myLocationEnabled: true,
+      zoomGesturesEnabled: true,
+      zoomControlsEnabled: false,
+      scrollGesturesEnabled: true,
+      rotateGesturesEnabled: false,
+      tiltGesturesEnabled: false,
+      initialCameraPosition: CameraPosition(
+        target: mapInfo.initialLocation,
+        zoom: mapNotifier.initialZoom,
+      ),
+      circles: mapNotifier.circles,
+      markers: mapMarkersNotifier.markers,
+      onMapCreated: mapNotifier.onMapCreated,
+    );
+
     return Expanded(
-      child: GoogleMap(
-        key: postMapKey,
-        mapType: MapType.normal,
-        myLocationButtonEnabled: true,
-        myLocationEnabled: true,
-        zoomGesturesEnabled: true,
-        zoomControlsEnabled: true,
-        scrollGesturesEnabled: true,
-        rotateGesturesEnabled: false,
-        tiltGesturesEnabled: false,
-        initialCameraPosition: CameraPosition(
-          target: mapInfo.initialLocation,
-          zoom: initialZoomLevel,
-        ),
-        circles: mapNotifier.circles,
-        markers: mapMarkersNotifier.markers,
-        onMapCreated: mapNotifier.onMapCreated,
+      child: Scaffold(
+        body: googleMap,
+        floatingActionButton: fab,
       ),
     );
   }

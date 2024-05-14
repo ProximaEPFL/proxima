@@ -57,6 +57,19 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => build());
   }
+
+  static const _initialZoomLevel = 17.5;
+
+  double get initialZoom => _initialZoomLevel;
+
+  Future<void> moveCamera(LatLng target) async {
+    final GoogleMapController controller = await _mapController.future;
+    // reset zoom to initial
+    // center camera on target
+    final CameraPosition cameraPosition =
+        CameraPosition(target: target, zoom: _initialZoomLevel);
+    controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+  }
 }
 
 final mapViewModelProvider =
