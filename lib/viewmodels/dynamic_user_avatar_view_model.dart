@@ -1,7 +1,5 @@
 import "dart:async";
-import "dart:ui";
 
-import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_data.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
@@ -20,22 +18,25 @@ class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
   DynamicUserAvatarViewModel();
 
   static const _chalReward = ChallengeRepositoryService.soloChallengeReward;
-
-  static final centauriToColor = LinearSegmentedColormap({
-    0 * _chalReward: const Color.fromARGB(255, 79, 73, 255),
-    10 * _chalReward: const Color.fromARGB(255, 20, 146, 20),
-    50 * _chalReward: const Color.fromARGB(255, 135, 199, 31),
-    100 * _chalReward: const Color.fromARGB(255, 209, 206, 9),
-    500 * _chalReward: const Color.fromARGB(255, 220, 146, 17),
-    1000 * _chalReward: const Color.fromARGB(255, 216, 31, 31),
-    5000 * _chalReward: const Color.fromARGB(255, 175, 10, 117),
-    10000 * _chalReward: const Color.fromARGB(255, 175, 10, 158),
-  });
+  static const _challengesStops = [
+    // sqrt(10) ~= 3, which is the approximate step between each stop
+    0,
+    10, // ~ 3 days of daily challenge
+    30,
+    100,
+    300, // ~ 3 months of daily challenge
+    1000,
+    3000, // ~ 3 years of daily challenge
+    10000,
+  ];
+  static final centauriToHSVColor = LinearSegmentedHSVColormap.uniform(
+    _challengesStops.map((nChallenges) => nChallenges * _chalReward).toList(),
+  );
 
   static UserAvatarDetails userDataToDetails(UserData userData) {
     return UserAvatarDetails(
       displayName: userData.displayName,
-      backgroundColor: centauriToColor(userData.centauriPoints),
+      backgroundColor: centauriToHSVColor(userData.centauriPoints).toColor(),
     );
   }
 

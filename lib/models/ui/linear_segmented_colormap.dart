@@ -1,12 +1,11 @@
-import "dart:ui";
-
 import "package:collection/collection.dart";
+import "package:flutter/painting.dart";
 
-class LinearSegmentedColormap {
+class LinearSegmentedHSVColormap {
   late final List<int> stops;
-  late final List<Color> colors;
+  late final List<HSVColor> colors;
 
-  LinearSegmentedColormap(Map<int, Color> colorsStops) {
+  LinearSegmentedHSVColormap(Map<int, HSVColor> colorsStops) {
     final unsortedEntries = colorsStops.entries;
     final sortedEntries = unsortedEntries.sorted(
       // We sort by stop value (the key of the map)
@@ -20,7 +19,24 @@ class LinearSegmentedColormap {
     assert(stops.isNotEmpty, "There must be at least one color stop");
   }
 
-  Color call(int value) {
+  factory LinearSegmentedHSVColormap.uniform(
+    List<int> stops, {
+    double hueStart = 0,
+    double hueEnd = 330,
+    double saturation = 0.8,
+    double value = 0.5,
+  }) {
+    assert(stops.length >= 2, "There must be at least two color stops");
+    final colors = stops.mapIndexed((i, _) {
+      final hue = hueStart + (hueEnd - hueStart) * i / (stops.length - 1);
+      return HSVColor.fromAHSV(1, hue, saturation, value);
+    });
+
+    final colorStops = Map.fromIterables(stops, colors);
+    return LinearSegmentedHSVColormap(colorStops);
+  }
+
+  HSVColor call(int value) {
     final indices = List.generate(stops.length, (index) => index);
     final lowerBoundIdx = indices.lastWhereOrNull(
       (index) => stops[index] <= value,
@@ -40,7 +56,7 @@ class LinearSegmentedColormap {
     final interpolationFactor = (value - stops[lowerBoundIdx]) /
         (stops[upperBoundIdx] - stops[lowerBoundIdx]);
 
-    return Color.lerp(
+    return HSVColor.lerp(
       colors[lowerBoundIdx],
       colors[upperBoundIdx],
       interpolationFactor,
