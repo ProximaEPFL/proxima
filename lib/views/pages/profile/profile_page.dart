@@ -3,10 +3,10 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
-import "package:proxima/views/pages/profile/components/info_cards/profile_info_column.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_row.dart";
 import "package:proxima/views/pages/profile/components/profile_app_bar.dart";
 import "package:proxima/views/pages/profile/components/profile_badge.dart";
+import "package:proxima/views/pages/profile/components/profile_data/profile_user_comments.dart";
 import "package:proxima/views/pages/profile/components/profile_data/profile_user_posts.dart";
 
 /// This widget is used to display the profile page
@@ -53,11 +53,6 @@ class ProfilePage extends ConsumerWidget {
       itemList: itemListBadge,
     );
 
-    final comments = ProfileInfoColumn(
-      key: commentColumnKey,
-      itemList: itemListComments,
-    );
-
     const tabsTitle = TabBar(
       key: tabKey,
       tabs: [
@@ -66,11 +61,11 @@ class ProfilePage extends ConsumerWidget {
       ],
     );
 
-    final tabsContent = Expanded(
+    const tabsContent = Expanded(
       child: TabBarView(
         children: [
-          const ProfileUserPosts(),
-          comments,
+          ProfileUserPosts(),
+          ProfileUserComments(),
         ],
       ),
     );
