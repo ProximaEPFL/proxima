@@ -1,6 +1,8 @@
 import "package:collection/collection.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/painting.dart";
 
+@immutable
 class LinearSegmentedHSVColormap {
   late final List<int> stops;
   late final List<HSVColor> colors;
