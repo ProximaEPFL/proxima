@@ -1,6 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:geolocator/geolocator.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
@@ -11,6 +10,7 @@ import "package:proxima/views/components/options/map/map_selection_option.dart";
 import "package:proxima/views/components/options/map/map_selection_option_chips.dart";
 import "package:proxima/views/pages/home/content/map/map_screen.dart";
 import "package:proxima/views/pages/home/content/map/post_map.dart";
+
 import "../../../mocks/data/map_pin.dart";
 import "../../../mocks/providers/provider_map_page.dart";
 import "../../../mocks/services/mock_geolocator_platform.dart";
@@ -84,6 +84,13 @@ void main() {
         find.byKey(PostMap.postMapKey),
         findsOneWidget,
       );
+    });
+
+    testWidgets("Display FAB", (tester) async {
+      await tester.pumpWidget(mapWidget);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(FloatingActionButton), findsOneWidget);
     });
   });
 
