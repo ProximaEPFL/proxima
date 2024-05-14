@@ -2,11 +2,21 @@ import "package:collection/collection.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/painting.dart";
 
+/// A linear segmented HSV colormap, just like python's matplotlib.colors.LinearSegmentedColormap.
+/// It is given a map of stops and colors, and it can interpolate between them. For instance,
+/// if we know have the stop 50 with colour blue and the stop 100 with colour red, asking the value
+/// at 75 will yield purple.
+/// Any value below all the stops will yield colour of the smallest stop, and any value above all the stops
+/// will yield the colour of the largest stop.
 @immutable
 class LinearSegmentedHSVColormap {
   late final List<int> stops;
   late final List<HSVColor> colors;
 
+  /// Creates a linear segmented HSV colormap.
+  /// [colorStops] is a map of stops and colours (the colour that we want
+  /// to have at each stop). At other values, the colour is interpolated.
+  /// There must be at least one color stop.
   LinearSegmentedHSVColormap(Map<int, HSVColor> colorsStops) {
     final unsortedEntries = colorsStops.entries;
     final sortedEntries = unsortedEntries.sorted(
@@ -21,6 +31,11 @@ class LinearSegmentedHSVColormap {
     assert(stops.isNotEmpty, "There must be at least one color stop");
   }
 
+  /// Creates a linear segmented HSV colormap with a uniform distribution of colors.
+  /// [stops] is a list of values that define the stops of the colormap. Their corresponding
+  /// colors are interpolated between [hueStart] and [hueEnd] (in degrees), with a fixed
+  /// [saturation] and [value]. The distance between each stop colour is constant.
+  /// There must be at least two colour stops.
   factory LinearSegmentedHSVColormap.uniform(
     List<int> stops, {
     double hueStart = 0,
@@ -38,6 +53,8 @@ class LinearSegmentedHSVColormap {
     return LinearSegmentedHSVColormap(colorStops);
   }
 
+  /// Returns the color at the given value. See the class documentation
+  /// for more details.
   HSVColor call(int value) {
     final indices = List.generate(stops.length, (index) => index);
     final lowerBoundIdx = indices.lastWhereOrNull(
