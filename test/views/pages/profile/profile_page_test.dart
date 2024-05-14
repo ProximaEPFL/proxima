@@ -45,7 +45,7 @@ void main() {
         .set(expectedUser.data.toDbData());
 
     setPostFirestore(
-      postsGenerator.createUserPost(testingUserFirestoreId, userPosition1),
+      fakePost,
       fakeFireStore,
     );
 
