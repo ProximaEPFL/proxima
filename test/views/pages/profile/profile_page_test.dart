@@ -5,6 +5,9 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/models/database/user_comment/user_comment_data.dart";
+import "package:proxima/services/database/comment_repository_service.dart";
+import "package:proxima/services/database/user_comment_repository_service.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
@@ -16,6 +19,7 @@ import "package:proxima/views/pages/profile/components/profile_data/profile_user
 import "package:proxima/views/pages/profile/components/user_account.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
+import "../../../mocks/data/comment_data.dart";
 import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/data/geopoint.dart";
@@ -47,6 +51,34 @@ void main() {
     setPostFirestore(
       fakePost,
       fakeFireStore,
+    );
+
+    //get the comment repository service to add comments
+    final commentRepo = CommentRepositoryService(
+      firestore: fakeFireStore,
+    );
+
+    final commentDataGenerator = CommentDataGenerator();
+
+    final mockComment = commentDataGenerator.createMockCommentData();
+
+    final commentId = await commentRepo.addComment(
+      fakePost.id,
+      mockComment,
+    );
+
+    //get the user comment repository service to add comments
+    final userCommentRepo = UserCommentReposittoryService(
+      firestore: fakeFireStore,
+    );
+
+    await userCommentRepo.addUserComment(
+      expectedUser.uid,
+      UserCommentData(
+        content: "This is a comment",
+        parentPostId: fakePost.id,
+        commentId: commentId,
+      ),
     );
 
     mockedProfilePage = profileProviderScope(fakeFireStore, profilePageApp);
