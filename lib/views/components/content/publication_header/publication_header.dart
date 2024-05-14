@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/user_avatar_details.dart";
 import "package:proxima/services/conversion/human_time_service.dart";
+import "package:proxima/views/components/content/publication_header/user_profile_pop_up.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 
 /// This widget is used to display the info bar in the post card.
@@ -23,6 +24,17 @@ class PublicationHeader extends ConsumerWidget {
   final String posterUsername;
   final int posterCentauriPoints;
   final DateTime publicationDate;
+
+  void onTap(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => UserProfilePopUp(
+        displayName: posterDisplayName,
+        username: posterUsername,
+        centauriPoints: posterCentauriPoints,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -68,9 +80,13 @@ class PublicationHeader extends ConsumerWidget {
             userCentauriPoints: posterCentauriPoints,
           ),
           radius: 12,
+          onTap: () => onTap(context),
         ),
         const SizedBox(width: 8),
-        posterName,
+        InkWell(
+          child: posterName,
+          onTap: () => onTap(context),
+        ),
         divider,
         publicationTime,
       ],
