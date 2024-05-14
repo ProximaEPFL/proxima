@@ -42,9 +42,8 @@ class ProfilePage extends ConsumerWidget {
         ProfileInfoCard(
           content:
               "Here is a FAKE data comment on a super post that talks about something that is super cool and is located in a super spot that is very cosy and nice",
-          onDelete: () {
+          onDelete: () async {
             // TODO handle comment deletion
-            return Future<void>.value();
           },
         ),
       );
