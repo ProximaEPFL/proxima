@@ -27,6 +27,7 @@ jobs:
           B64_RELEASE_KEYSTORE: ${{ secrets.B64_RELEASE_KEYSTORE }}
           RELEASE_KEYSTORE_PROPERTIES: ${{ secrets.RELEASE_KEYSTORE_PROPERTIES }}
         run: |
+          mkdir android/app/keystore
           echo $B64_RELEASE_KEYSTORE | base64 --decode > android/app/keystore/release.jks
           echo $RELEASE_KEYSTORE_PROPERTIES > android/app/key.properties
 
