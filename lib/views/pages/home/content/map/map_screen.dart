@@ -5,7 +5,7 @@ import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/components/options/map/map_selection_option_chips.dart";
 import "package:proxima/views/pages/home/content/map/post_map.dart";
 
-// This widget displays a map with chips to select the map.
+/// This widget displays a map with chips to select the type of map.
 class MapScreen extends ConsumerWidget {
   const MapScreen({super.key});
 
@@ -17,6 +17,7 @@ class MapScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final mapInfo = ref.watch(mapViewModelProvider);
 
+    // Refresh button to refresh the map in case of error
     final refreshButton = ElevatedButton(
       key: refreshButtonKey,
       onPressed: () => ref.read(mapViewModelProvider.notifier).refresh(),
