@@ -5,7 +5,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_data.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/models/ui/linear_segmented_colormap.dart";
+import "package:proxima/models/ui/linear_segmented_hsv_colormap.dart";
 import "package:proxima/models/ui/user_avatar_details.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
