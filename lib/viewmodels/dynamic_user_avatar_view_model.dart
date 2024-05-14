@@ -1,5 +1,7 @@
 import "dart:async";
+import "dart:ui";
 
+import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_data.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
@@ -33,10 +35,15 @@ class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
     _challengesStops.map((nChallenges) => nChallenges * _chalReward).toList(),
   );
 
+  static Color centauriToColor(int? centauriPoints) {
+    if (centauriPoints == null) return Colors.transparent;
+    return centauriToHSVColor(centauriPoints).toColor();
+  }
+
   static UserAvatarDetails userDataToDetails(UserData userData) {
     return UserAvatarDetails(
       displayName: userData.displayName,
-      backgroundColor: centauriToHSVColor(userData.centauriPoints).toColor(),
+      userCentauriPoints: userData.centauriPoints,
     );
   }
 

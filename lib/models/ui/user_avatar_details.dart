@@ -1,29 +1,27 @@
-import "dart:ui";
-
 import "package:flutter/foundation.dart";
 
 @immutable
 class UserAvatarDetails {
   final String displayName;
-  final Color? backgroundColor;
+  final int? userCentauriPoints;
 
   const UserAvatarDetails({
     required this.displayName,
-    required this.backgroundColor,
+    required this.userCentauriPoints,
   });
 
   @override
   bool operator ==(Object other) {
     return other is UserAvatarDetails &&
         other.displayName == displayName &&
-        other.backgroundColor == backgroundColor;
+        other.userCentauriPoints == userCentauriPoints;
   }
 
   @override
   int get hashCode {
     return Object.hash(
       displayName,
-      backgroundColor,
+      userCentauriPoints,
     );
   }
 }

@@ -1,7 +1,7 @@
-import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/ui/user_avatar_details.dart";
+import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/viewmodels/dynamic_user_avatar_view_model.dart";
 
 import "../data/firebase_auth_user.dart";
@@ -17,7 +17,7 @@ class MockDynamicUserAvatarViewModel
   }) : _build = build ??
             ((_) async => const UserAvatarDetails(
                   displayName: "",
-                  backgroundColor: Colors.transparent,
+                  userCentauriPoints: null,
                 ));
 
   @override
@@ -29,7 +29,7 @@ final mockDynamicUserAvatarViewModelTestLoginUserOverride = [
     () => MockDynamicUserAvatarViewModel(
       build: (userUID) async => UserAvatarDetails(
         displayName: testingLoginUser.displayName!,
-        backgroundColor: Colors.transparent,
+        userCentauriPoints: ChallengeRepositoryService.soloChallengeReward * 50,
       ),
     ),
   ),
@@ -40,7 +40,7 @@ final mockDynamicUserAvatarViewModelEmptyDisplayNameOverride = [
     () => MockDynamicUserAvatarViewModel(
       build: (userUID) async => const UserAvatarDetails(
         displayName: "",
-        backgroundColor: Colors.transparent,
+        userCentauriPoints: null,
       ),
     ),
   ),

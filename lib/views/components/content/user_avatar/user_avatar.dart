@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/user_avatar_details.dart";
+import "package:proxima/viewmodels/dynamic_user_avatar_view_model.dart";
 
 /// A widget that displays the user's avatar.
 /// It provides a [onTap] parameter to handle the user's tap,
@@ -27,7 +28,9 @@ class UserAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: radius,
-      backgroundColor: details.backgroundColor,
+      backgroundColor: DynamicUserAvatarViewModel.centauriToColor(
+        details.userCentauriPoints,
+      ),
       child: Stack(
         children: [
           Center(

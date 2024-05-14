@@ -11,8 +11,10 @@ import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 /// which adds an InkWell response.
 /// The [radius] parameter is the radius of the avatar.
 class DynamicUserAvatar extends ConsumerWidget {
-  static const _loadingDetails =
-      UserAvatarDetails(displayName: "", backgroundColor: Colors.transparent);
+  static const _loadingDetails = UserAvatarDetails(
+    displayName: "",
+    userCentauriPoints: null,
+  );
 
   final UserIdFirestore? uid;
   final double radius;
