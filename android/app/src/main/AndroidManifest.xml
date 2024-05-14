@@ -30,9 +30,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <!-- The Google map API key is public for now for simplicity but will be made private 
-        when issue #159 (https://github.com/ProximaEPFL/proxima/issues/159) is 
-        resolved.) -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_KEY}" />
