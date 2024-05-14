@@ -48,11 +48,14 @@ class PublicationHeader extends ConsumerWidget {
     );
 
     final posterName = Flexible(
-      child: Text(
-        posterDisplayName,
-        key: displayNameTextKey,
-        softWrap: false,
-        overflow: TextOverflow.fade,
+      child: InkWell(
+        onTap: () => onTap(context),
+        child: Text(
+          posterDisplayName,
+          key: displayNameTextKey,
+          softWrap: false,
+          overflow: TextOverflow.fade,
+        ),
       ),
     );
 
@@ -83,10 +86,7 @@ class PublicationHeader extends ConsumerWidget {
           onTap: () => onTap(context),
         ),
         const SizedBox(width: 8),
-        InkWell(
-          child: posterName,
-          onTap: () => onTap(context),
-        ),
+        posterName,
         divider,
         publicationTime,
       ],
