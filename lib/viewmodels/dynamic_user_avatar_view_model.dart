@@ -18,6 +18,8 @@ class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
     UserAvatarDetails, UserIdFirestore?> {
   DynamicUserAvatarViewModel();
 
+  /// Stops for the colormap used to color the user's avatar based on their centauri points.
+  /// The stops are defined as the number of challenges completed.
   static const _challengesStops = [
     // sqrt(10) ~= 3, which is the approximate step between each stop
     0,
@@ -30,6 +32,10 @@ class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
     10000,
   ];
 
+  /// Converts some amount of [centauriPoints] to a color, based on a uniform
+  /// [LinearSegmentedHSVColormap] (defined by _challengesStop). [brightness]
+  /// defines the value and saturation of the colormap.
+  /// If [centauriPoints] is null, the color is transparent.
   static Color centauriToColor(int? centauriPoints, Brightness brightness) {
     if (centauriPoints == null) return Colors.transparent;
 
@@ -52,6 +58,7 @@ class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
     return colorMap(centauriPoints).toColor();
   }
 
+  /// Converts a [UserData] object, [userData], to a [UserAvatarDetails] object.
   static UserAvatarDetails userDataToDetails(UserData userData) {
     return UserAvatarDetails(
       displayName: userData.displayName,
