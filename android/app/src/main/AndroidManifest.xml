@@ -35,7 +35,7 @@
         resolved.) -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBp0pAND5nl9u0YanI9W11MXYTVLs5FoX0" />
+            android:value="${MAPS_KEY}" />
 
     </application>
     <!-- Required to query activities that can process text, see:
