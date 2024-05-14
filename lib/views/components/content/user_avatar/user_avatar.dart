@@ -30,6 +30,7 @@ class UserAvatar extends StatelessWidget {
       radius: radius,
       backgroundColor: DynamicUserAvatarViewModel.centauriToColor(
         details.userCentauriPoints,
+        Theme.of(context).brightness,
       ),
       child: Stack(
         children: [

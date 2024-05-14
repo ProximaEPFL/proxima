@@ -19,7 +19,6 @@ class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
     UserAvatarDetails, UserIdFirestore?> {
   DynamicUserAvatarViewModel();
 
-  static const _chalReward = ChallengeRepositoryService.soloChallengeReward;
   static const _challengesStops = [
     // sqrt(10) ~= 3, which is the approximate step between each stop
     0,
@@ -31,13 +30,27 @@ class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
     3000, // ~ 3 years of daily challenge
     10000,
   ];
-  static final centauriToHSVColor = LinearSegmentedHSVColormap.uniform(
-    _challengesStops.map((nChallenges) => nChallenges * _chalReward).toList(),
-  );
 
-  static Color centauriToColor(int? centauriPoints) {
+  static Color centauriToColor(int? centauriPoints, Brightness brightness) {
     if (centauriPoints == null) return Colors.transparent;
-    return centauriToHSVColor(centauriPoints).toColor();
+
+    final hsvValue = switch (brightness) {
+      Brightness.light => 0.9,
+      Brightness.dark => 0.5,
+    };
+    final hsvSaturation = switch (brightness) {
+      Brightness.light => 0.4,
+      Brightness.dark => 0.8,
+    };
+
+    const chalReward = ChallengeRepositoryService.soloChallengeReward;
+    final colorMap = LinearSegmentedHSVColormap.uniform(
+      _challengesStops.map((nChallenges) => nChallenges * chalReward).toList(),
+      value: hsvValue,
+      saturation: hsvSaturation,
+    );
+
+    return colorMap(centauriPoints).toColor();
   }
 
   static UserAvatarDetails userDataToDetails(UserData userData) {
