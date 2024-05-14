@@ -1,4 +1,5 @@
 import "package:flutter/foundation.dart";
+import "package:proxima/models/database/user/user_data.dart";
 
 /// A class that stores data for a user avatar UI.
 @immutable
@@ -15,6 +16,14 @@ class UserAvatarDetails {
     required this.displayName,
     required this.userCentauriPoints,
   });
+
+  /// Converts a [UserData] object, [userData], to a [UserAvatarDetails] object.
+  factory UserAvatarDetails.fromUserData(UserData userData) {
+    return UserAvatarDetails(
+      displayName: userData.displayName,
+      userCentauriPoints: userData.centauriPoints,
+    );
+  }
 
   @override
   bool operator ==(Object other) {

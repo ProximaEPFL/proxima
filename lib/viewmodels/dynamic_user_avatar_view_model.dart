@@ -2,7 +2,6 @@ import "dart:async";
 
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/database/user/user_data.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/ui/linear_segmented_hsv_colormap.dart";
@@ -58,14 +57,6 @@ class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
     return colorMap(centauriPoints).toColor();
   }
 
-  /// Converts a [UserData] object, [userData], to a [UserAvatarDetails] object.
-  static UserAvatarDetails userDataToDetails(UserData userData) {
-    return UserAvatarDetails(
-      displayName: userData.displayName,
-      userCentauriPoints: userData.centauriPoints,
-    );
-  }
-
   @override
   Future<UserAvatarDetails> build(UserIdFirestore? arg) async {
     final userID = arg;
@@ -84,7 +75,7 @@ class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
       user = await userDataBase.getUser(userID);
     }
 
-    return userDataToDetails(user.data);
+    return UserAvatarDetails.fromUserData(user.data);
   }
 }
 
