@@ -6,7 +6,9 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_data.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
+import "package:proxima/models/ui/linear_segmented_colormap.dart";
 import "package:proxima/models/ui/user_avatar_details.dart";
+import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
@@ -17,10 +19,23 @@ class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
     UserAvatarDetails, UserIdFirestore?> {
   DynamicUserAvatarViewModel();
 
+  static const _chalReward = ChallengeRepositoryService.soloChallengeReward;
+
+  static final centauriToColor = LinearSegmentedColormap({
+    0 * _chalReward: const Color.fromARGB(255, 79, 73, 255),
+    10 * _chalReward: const Color.fromARGB(255, 20, 146, 20),
+    50 * _chalReward: const Color.fromARGB(255, 135, 199, 31),
+    100 * _chalReward: const Color.fromARGB(255, 209, 206, 9),
+    500 * _chalReward: const Color.fromARGB(255, 220, 146, 17),
+    1000 * _chalReward: const Color.fromARGB(255, 216, 31, 31),
+    5000 * _chalReward: const Color.fromARGB(255, 175, 10, 117),
+    10000 * _chalReward: const Color.fromARGB(255, 175, 10, 158),
+  });
+
   static UserAvatarDetails userDataToDetails(UserData userData) {
     return UserAvatarDetails(
       displayName: userData.displayName,
-      backgroundColor: Colors.transparent,
+      backgroundColor: centauriToColor(userData.centauriPoints),
     );
   }
 
