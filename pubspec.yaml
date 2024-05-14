@@ -56,4 +56,3 @@ flutter_launcher_icons:
 # Command to generate the splash screen: `dart run flutter_native_splash:create`
 flutter_native_splash:
   color: "#FFFEFE"  # logo background color
-  image: assets/images/proxima_white.jpg
