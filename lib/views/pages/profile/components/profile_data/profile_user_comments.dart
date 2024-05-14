@@ -28,7 +28,10 @@ class ProfileUserComments extends ConsumerWidget {
                 onDelete: () => ref
                     .read(userCommentsViewModelProvider.notifier)
                     .deleteComment(
-                        p.userCommentId, p.parentPostId, p.commentId),
+                      p.userCommentId,
+                      p.parentPostId,
+                      p.commentId,
+                    ),
               ),
             )
             .toList();
