@@ -14,6 +14,8 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
   final Set<Circle> _circles;
   final Future<void> Function(LatLng) _redrawCircle;
   final Completer<GoogleMapController> _mapController;
+  bool _followUser = true;
+  final double _initialZoomLevel = 17.0;
 
   MockMapViewModel({
     Future<MapDetails> Function()? build,
@@ -49,6 +51,27 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
 
   @override
   Completer<GoogleMapController> get mapController => _mapController;
+
+  @override
+  void disableFollowUser() {
+    _followUser = false;
+  }
+
+  @override
+  void enableFollowUser() {
+    _followUser = true;
+  }
+
+  @override
+  double get initialZoom => _initialZoomLevel;
+
+  @override
+  Future<void> moveCamera(LatLng target) async {
+    if (!_followUser) return;
+    final GoogleMapController controller = await _mapController.future;
+    controller
+        .animateCamera(CameraUpdate.newLatLngZoom(target, _initialZoomLevel));
+  }
 }
 
 final mockNoGPSMapViewModelOverride = [
