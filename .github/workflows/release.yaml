@@ -30,7 +30,7 @@ jobs:
       - name: Import API Keys
         env:
           API_KEYS: ${{ secrets.API_KEYS }}
-        run: echo $API_KEYS > api_keys.json
+        run: echo "$API_KEYS" > api_keys.json
 
       - name: Flutter Build APK
         run: ./scripts/build

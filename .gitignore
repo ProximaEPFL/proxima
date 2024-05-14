@@ -54,4 +54,4 @@ linux/
 ios/
 
 # api keys
-api-keys.json
+api_keys.json
