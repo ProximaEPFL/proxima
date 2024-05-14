@@ -10,6 +10,7 @@ void main() {
       final expectedHash = Object.hash(
         commentPost.content,
         commentPost.ownerDisplayName,
+        commentPost.ownerUid,
         commentPost.publicationDate,
       );
 
