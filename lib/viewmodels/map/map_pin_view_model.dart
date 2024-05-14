@@ -27,7 +27,9 @@ class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
       return MapPinDetails(
         id: MarkerId(post.id.value),
         position: LatLng(postPosition.latitude, postPosition.longitude),
-        callbackFunction: () {},
+        callbackFunction: () {
+          //The callback function does nothing in this case
+        },
       );
     }).toList();
 
