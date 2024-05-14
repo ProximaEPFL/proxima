@@ -11,19 +11,19 @@ class UserCommentDetails {
   final String description;
 
   const UserCommentDetails({
-    required this.commentId,
-    required this.description,
-    required this.parentPostId,
     required this.userCommentId,
+    required this.commentId,
+    required this.parentPostId,
+    required this.description,
   });
 
   @override
   bool operator ==(Object other) {
     return other is UserCommentDetails &&
+        other.userCommentId == userCommentId &&
         other.commentId == commentId &&
-        other.description == description &&
         other.parentPostId == parentPostId &&
-        other.userCommentId == userCommentId;
+        other.description == description;
   }
 
   @override
