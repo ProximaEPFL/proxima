@@ -1,19 +1,18 @@
 import "package:flutter/foundation.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
-import "package:proxima/models/database/user/user_id_firestore.dart";
 
 @immutable
 class CommentDetails {
   final String content;
   final String ownerDisplayName;
-  final UserIdFirestore ownerUid;
+  final int ownerCentauriPoints;
   final DateTime publicationDate;
 
   const CommentDetails({
     required this.content,
     required this.ownerDisplayName,
-    required this.ownerUid,
+    required this.ownerCentauriPoints,
     required this.publicationDate,
   });
 
@@ -24,7 +23,7 @@ class CommentDetails {
     return other is CommentDetails &&
         other.content == content &&
         other.ownerDisplayName == ownerDisplayName &&
-        other.ownerUid == ownerUid &&
+        other.ownerCentauriPoints == ownerCentauriPoints &&
         other.publicationDate == publicationDate;
   }
 
@@ -33,7 +32,7 @@ class CommentDetails {
     return Object.hash(
       content,
       ownerDisplayName,
-      ownerUid,
+      ownerCentauriPoints,
       publicationDate,
     );
   }
@@ -49,7 +48,7 @@ class CommentDetails {
     return CommentDetails(
       content: commentData.content,
       ownerDisplayName: ownerData.displayName,
-      ownerUid: owner.uid,
+      ownerCentauriPoints: ownerData.centauriPoints,
       publicationDate: DateTime.fromMillisecondsSinceEpoch(
         commentData.publicationTime.millisecondsSinceEpoch,
       ),

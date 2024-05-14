@@ -23,7 +23,7 @@ class CommentPostWidget extends StatelessWidget {
         PublicationHeader(
           key: commentUserWidgetKey,
           posterUsername: commentPost.ownerDisplayName,
-          posterUid: commentPost.ownerUid,
+          posterCentauriPoints: commentPost.ownerCentauriPoints,
           publicationDate: commentPost.publicationDate,
         ),
         Padding(

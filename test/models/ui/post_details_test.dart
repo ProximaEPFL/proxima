@@ -14,7 +14,7 @@ void main() {
         postDetails.voteScore,
         postDetails.commentNumber,
         postDetails.ownerDisplayName,
-        postDetails.ownerUid,
+        postDetails.ownerCentauriPoints,
         postDetails.publicationDate,
         postDetails.distance,
         postDetails.isChallenge,

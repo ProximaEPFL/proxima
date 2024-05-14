@@ -45,7 +45,7 @@ class CompletePost extends StatelessWidget {
           child: PublicationHeader(
             key: postUserBarKey,
             posterUsername: post.ownerDisplayName,
-            posterUid: post.ownerUid,
+            posterCentauriPoints: post.ownerCentauriPoints,
             publicationDate: post.publicationDate,
           ),
         ),
