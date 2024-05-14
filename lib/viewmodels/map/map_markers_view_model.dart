@@ -7,7 +7,7 @@ import "package:proxima/models/ui/map_pin_details.dart";
 class MapMarkersViewModel extends Notifier<void> {
   @override
   void build() {
-    //Nothing is done here
+    return;
   }
 
   final Set<Marker> _markers = {};
