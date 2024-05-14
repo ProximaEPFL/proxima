@@ -13,11 +13,13 @@ class PublicationHeader extends ConsumerWidget {
 
   const PublicationHeader({
     super.key,
+    required this.posterDisplayName,
     required this.posterUsername,
     required this.posterCentauriPoints,
     required this.publicationDate,
   });
 
+  final String posterDisplayName;
   final String posterUsername;
   final int posterCentauriPoints;
   final DateTime publicationDate;
@@ -35,7 +37,7 @@ class PublicationHeader extends ConsumerWidget {
 
     final posterName = Flexible(
       child: Text(
-        posterUsername,
+        posterDisplayName,
         key: displayNameTextKey,
         softWrap: false,
         overflow: TextOverflow.fade,
@@ -62,7 +64,7 @@ class PublicationHeader extends ConsumerWidget {
       children: [
         UserAvatar(
           details: UserAvatarDetails(
-            displayName: posterUsername,
+            displayName: posterDisplayName,
             userCentauriPoints: posterCentauriPoints,
           ),
           radius: 12,

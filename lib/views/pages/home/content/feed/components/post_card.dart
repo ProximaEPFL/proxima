@@ -111,7 +111,8 @@ class PostCard extends ConsumerWidget {
               padding: const EdgeInsets.only(left: 16, top: 8),
               child: PublicationHeader(
                 key: postCardUserKey,
-                posterUsername: postDetails.ownerDisplayName,
+                posterUsername: postDetails.ownerUsername,
+                posterDisplayName: postDetails.ownerDisplayName,
                 posterCentauriPoints: postDetails.ownerCentauriPoints,
                 publicationDate: postDetails.publicationDate,
               ),

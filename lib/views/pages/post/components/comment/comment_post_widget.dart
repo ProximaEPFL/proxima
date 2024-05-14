@@ -22,7 +22,8 @@ class CommentPostWidget extends StatelessWidget {
       children: [
         PublicationHeader(
           key: commentUserWidgetKey,
-          posterUsername: commentPost.ownerDisplayName,
+          posterDisplayName: commentPost.ownerDisplayName,
+          posterUsername: commentPost.ownerUsername,
           posterCentauriPoints: commentPost.ownerCentauriPoints,
           publicationDate: commentPost.publicationDate,
         ),

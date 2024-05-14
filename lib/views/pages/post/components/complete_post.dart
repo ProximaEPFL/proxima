@@ -44,7 +44,8 @@ class CompletePost extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16, top: 8),
           child: PublicationHeader(
             key: postUserBarKey,
-            posterUsername: post.ownerDisplayName,
+            posterDisplayName: post.ownerDisplayName,
+            posterUsername: post.ownerUsername,
             posterCentauriPoints: post.ownerCentauriPoints,
             publicationDate: post.publicationDate,
           ),
