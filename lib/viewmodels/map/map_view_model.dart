@@ -1,4 +1,5 @@
 import "dart:async";
+
 import "package:flutter/material.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -7,8 +8,8 @@ import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_option.dart";
 
-// This view model is responsible for managing the actual location
-// of the user on the map and the displayed circles.
+/// This view model is responsible for managing the actual location
+/// of the user on the map and the displayed circles.
 class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   @override
   Future<MapDetails> build() async {
@@ -22,6 +23,7 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   }
 
   final Set<Circle> _circles = {};
+
   // Getter for the circles
   Set<Circle> get circles => _circles;
 

@@ -24,6 +24,7 @@ class MapScreen extends ConsumerWidget {
       child: const Text("Refresh"),
     );
 
+    // Fallback widget in case of error
     final fallback = Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
