@@ -3,10 +3,12 @@ import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/comment/comment_firestore.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/services/database/comment/post_comment_repository_service.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
+import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
 
 class MockCommentRepositoryService extends Mock
-    implements PostCommentRepositoryService {
+    implements CommentRepositoryService {
   @override
   Future<CommentIdFirestore> addComment(
     PostIdFirestore? parentPostId,
@@ -22,6 +24,7 @@ class MockCommentRepositoryService extends Mock
   Future<void> deleteComment(
     PostIdFirestore? parentPostId,
     CommentIdFirestore? commentId,
+    UserIdFirestore? userId,
   ) {
     return super.noSuchMethod(
       Invocation.method(#deleteComment, [parentPostId, commentId]),
@@ -30,10 +33,22 @@ class MockCommentRepositoryService extends Mock
   }
 
   @override
-  Future<List<CommentFirestore>> getComments(PostIdFirestore? parentPostId) {
+  Future<List<CommentFirestore>> getPostComments(
+    PostIdFirestore? parentPostId,
+  ) {
     return super.noSuchMethod(
       Invocation.method(#getComments, [parentPostId]),
       returnValue: Future.value(List<CommentFirestore>.empty()),
+    );
+  }
+
+  @override
+  Future<List<UserCommentFirestore>> getUserComments(
+    UserIdFirestore? userId,
+  ) {
+    return super.noSuchMethod(
+      Invocation.method(#getUserComments, [userId]),
+      returnValue: Future.value(List<UserCommentFirestore>.empty()),
     );
   }
 }
