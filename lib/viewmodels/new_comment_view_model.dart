@@ -86,7 +86,7 @@ class NewCommentViewModel
       voteScore: 0,
     );
 
-    // Note: The addition of the comment unedr the post and the comment under the
+    // Note: The addition of the comment under the post and the comment under the
     // the user document are not done atomically.
     // This is because integrating atomicity would require a complex refactor
     // that does not add much value to the application.
