@@ -15,25 +15,25 @@ import "package:proxima/services/database/firestore_service.dart";
 /// It will allow to add, delete and retrieve comments from the firestore database.
 /// And it will handle the references between the comments and the users.
 class CommentRepositoryService {
-  final PostCommentRepositoryService _postRepository;
-  final UserCommentRepositoryService _userRepository;
+  final PostCommentRepositoryService _postCommentRepo;
+  final UserCommentRepositoryService _userCommentRepo;
 
   CommentRepositoryService({
     required FirebaseFirestore firestore,
-  })  : _postRepository = PostCommentRepositoryService(firestore: firestore),
-        _userRepository = UserCommentRepositoryService(firestore: firestore);
+  })  : _postCommentRepo = PostCommentRepositoryService(firestore: firestore),
+        _userCommentRepo = UserCommentRepositoryService(firestore: firestore);
 
   /// This method returns the comments of the post with id [parentPostId]
   Future<List<CommentFirestore>> getPostComments(
     PostIdFirestore parentPostId,
   ) =>
-      _postRepository.getComments(parentPostId);
+      _postCommentRepo.getComments(parentPostId);
 
   /// This method returns the comments of the user with id [userId]
   Future<List<UserCommentFirestore>> getUserComments(
     UserIdFirestore userId,
   ) =>
-      _userRepository.getUserComments(userId);
+      _userCommentRepo.getUserComments(userId);
 
   // Note: The addition/deletion of the comment under the post and the comment under the
   // the user document are not done atomically.
@@ -49,7 +49,7 @@ class CommentRepositoryService {
     PostIdFirestore parentPostId,
     CommentData commentData,
   ) async {
-    final commentId = await _postRepository.addComment(
+    final commentId = await _postCommentRepo.addComment(
       parentPostId,
       commentData,
     );
@@ -62,7 +62,7 @@ class CommentRepositoryService {
     final userComment =
         UserCommentFirestore(id: commentId, data: userCommentData);
 
-    await _userRepository.addUserComment(commentData.ownerId, userComment);
+    await _userCommentRepo.addUserComment(commentData.ownerId, userComment);
 
     return commentId;
   }
@@ -76,9 +76,9 @@ class CommentRepositoryService {
     CommentIdFirestore commentId,
     UserIdFirestore ownerId,
   ) async {
-    await _postRepository.deleteComment(parentPostId, commentId);
+    await _postCommentRepo.deleteComment(parentPostId, commentId);
 
-    await _userRepository.deleteUserComment(
+    await _userCommentRepo.deleteUserComment(
       ownerId,
       commentId,
     );
