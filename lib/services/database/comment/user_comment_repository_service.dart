@@ -1,14 +1,10 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/models/database/user_comment/user_comment_data.dart";
 import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
-import "package:proxima/models/database/user_comment/user_comment_id_firestore.dart";
-import "package:proxima/services/database/firestore_service.dart";
 
 /// This class is responsible for managing the user's comments in the firestore database.
-/// This is the class to be used for displaying the user's comments on the profile page.
 class UserCommentRepositoryService {
   final FirebaseFirestore _firestore;
 
@@ -22,7 +18,7 @@ class UserCommentRepositoryService {
           .doc(userId.value)
           .collection(UserCommentFirestore.userCommentSubCollectionName);
 
-  /// Get the references to the user's comments.
+  /// Get the references to the user's comments whose id is [userId].
   Future<List<UserCommentFirestore>> getUserComments(
     UserIdFirestore userId,
   ) async {
@@ -37,33 +33,27 @@ class UserCommentRepositoryService {
     return userComments;
   }
 
-  /// Add a reference [UserCommentData] in the user's document to keep
-  /// track of the comment that the user made.
-  Future<UserCommentIdFirestore> addUserComment(
+  /// Add a reference [userComment] in the user's document to keep
+  /// track of the comment that the user with id [userId] made.
+  Future<void> addUserComment(
     UserIdFirestore userId,
-    UserCommentData userCommentData,
+    UserCommentFirestore userComment,
   ) async {
     final userCommentCollection = _userCommentCollection(userId);
 
-    final docRef = await userCommentCollection.add(userCommentData.toDbData());
-
-    return UserCommentIdFirestore(value: docRef.id);
+    await userCommentCollection
+        .doc(userComment.id.value)
+        .set(userComment.data.toDbData());
   }
 
-  /// Delete the reference to the comment that the user made.
+  /// Delete the reference to the comment with id [commentId] that the user
+  /// with id [userId] made.
   Future<void> deleteUserComment(
     UserIdFirestore userId,
-    UserCommentIdFirestore userCommentId,
+    CommentIdFirestore commentId,
   ) async {
     final userCommentCollection = _userCommentCollection(userId);
 
-    await userCommentCollection.doc(userCommentId.value).delete();
+    await userCommentCollection.doc(commentId.value).delete();
   }
 }
-
-final userCommentRepositoryServiceProvider =
-    Provider<UserCommentRepositoryService>(
-  (ref) => UserCommentRepositoryService(
-    firestore: ref.watch(firestoreProvider),
-  ),
-);

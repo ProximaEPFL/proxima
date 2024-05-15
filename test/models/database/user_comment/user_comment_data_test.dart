@@ -16,7 +16,6 @@ void main() {
           userCommentDataGenerator.createMockUserCommentData();
 
       final expectedHash = Object.hash(
-        userCommentData.commentId,
         userCommentData.parentPostId,
         userCommentData.content,
       );
@@ -31,15 +30,13 @@ void main() {
       final otherUserCommentData = UserCommentData(
         parentPostId: userCommentData.parentPostId,
         content: userCommentData.content,
-        commentId: userCommentData.commentId,
       );
       expect(userCommentData, otherUserCommentData);
     });
 
     test("fromDbData throw error when missing fields", () {
-      // The data is missing the commentId field
+      // The data is missing the content field
       final data = <String, dynamic>{
-        UserCommentData.contentField: "content",
         UserCommentData.parentPostIdField: "parent_post_id",
       };
 

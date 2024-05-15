@@ -1,19 +1,23 @@
 import "package:flutter_test/flutter_test.dart";
+import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/database/user_comment/user_comment_data.dart";
 import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
-import "package:proxima/models/database/user_comment/user_comment_id_firestore.dart";
-import "package:proxima/services/database/user_comment_repository_service.dart";
+import "package:proxima/services/database/comment/user_comment_repository_service.dart";
 
 import "user_comment_data.dart";
 
+/// This class is responsible for generating mock [UserCommentFirestore] instances.
 class UserCommentFirestoreGenerator {
-  int _userCommentId = 0;
+  int _commentId = 0;
   final UserCommentDataGenerator _userCommentDataGenerator;
 
   UserCommentFirestoreGenerator({int seed = 0})
       : _userCommentDataGenerator = UserCommentDataGenerator(seed: seed);
 
+  /// Add [number] of user comments for the user with id [userId] to the firestore database.
+  /// It will use the [userCommentRepository] to add the comments.
+  /// It will return the list of user comments that were added.
   Future<List<UserCommentFirestore>> addComments(
     int number,
     UserIdFirestore userId,
@@ -22,26 +26,27 @@ class UserCommentFirestoreGenerator {
     final userComments = <UserCommentFirestore>[];
 
     for (var i = 0; i < number; i++) {
-      final userCommentData =
-          _userCommentDataGenerator.createMockUserCommentData();
-      final userCommentId =
-          await userCommentRepository.addUserComment(userId, userCommentData);
-      userComments
-          .add(UserCommentFirestore(id: userCommentId, data: userCommentData));
+      final userComment = createMockUserComment();
+      userComments.add(
+        UserCommentFirestore(id: userComment.id, data: userComment.data),
+      );
+
+      await userCommentRepository.addUserComment(userId, userComments.last);
     }
 
     return userComments;
   }
 
+  /// Create a random mock [UserCommentFirestore] instance.
+  /// The [commentId] and [data] can be provided to avoid randomness.
   UserCommentFirestore createMockUserComment({
-    UserCommentIdFirestore? userCommentId,
+    CommentIdFirestore? commentId,
     UserCommentData? data,
   }) {
-    _userCommentId += 1;
+    _commentId += 1;
 
     return UserCommentFirestore(
-      id: userCommentId ??
-          UserCommentIdFirestore(value: "userCommentId_$_userCommentId"),
+      id: commentId ?? CommentIdFirestore(value: "commentId_$_commentId"),
       data: data ?? _userCommentDataGenerator.createMockUserCommentData(),
     );
   }
