@@ -117,6 +117,7 @@ void main() {
           voteScore: post.data.voteScore,
           commentNumber: post.data.commentCount,
           ownerDisplayName: owner.data.displayName,
+          ownerCentauriPoints: owner.data.centauriPoints,
           publicationDate: post.data.publicationTime.toDate(),
           distance: 0,
         ),
@@ -173,6 +174,7 @@ void main() {
             voteScore: post.data.voteScore,
             commentNumber: post.data.commentCount,
             ownerDisplayName: owner.data.displayName,
+            ownerCentauriPoints: owner.data.centauriPoints,
             publicationDate: post.data.publicationTime.toDate(),
             distance: 0,
           );
@@ -237,6 +239,7 @@ void main() {
             voteScore: post.data.voteScore,
             commentNumber: post.data.commentCount,
             ownerDisplayName: owners[index].data.displayName,
+            ownerCentauriPoints: owners[index].data.centauriPoints,
             publicationDate: post.data.publicationTime.toDate(),
             distance: 0,
           );
@@ -314,6 +317,7 @@ void main() {
           voteScore: post.data.voteScore,
           commentNumber: post.data.commentCount,
           ownerDisplayName: owner.data.displayName,
+          ownerCentauriPoints: owner.data.centauriPoints,
           publicationDate: post.data.publicationTime.toDate(),
           distance: 0,
         ),
