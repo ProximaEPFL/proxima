@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/ui/user_avatar_details.dart";
 import "package:proxima/services/conversion/human_time_service.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 
@@ -13,10 +14,12 @@ class PublicationHeader extends ConsumerWidget {
   const PublicationHeader({
     super.key,
     required this.posterUsername,
+    required this.posterCentauriPoints,
     required this.publicationDate,
   });
 
   final String posterUsername;
+  final int posterCentauriPoints;
   final DateTime publicationDate;
 
   @override
@@ -57,7 +60,13 @@ class PublicationHeader extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        UserAvatar(displayName: posterUsername, radius: 12),
+        UserAvatar(
+          details: UserAvatarDetails(
+            displayName: posterUsername,
+            userCentauriPoints: posterCentauriPoints,
+          ),
+          radius: 12,
+        ),
         const SizedBox(width: 8),
         posterName,
         divider,
