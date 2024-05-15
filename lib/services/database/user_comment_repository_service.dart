@@ -9,10 +9,10 @@ import "package:proxima/services/database/firestore_service.dart";
 
 /// This class is responsible for managing the user's comments in the firestore database.
 /// This is the class to be used for displaying the user's comments on the profile page.
-class UserCommentReposittoryService {
+class UserCommentRepositoryService {
   final FirebaseFirestore _firestore;
 
-  UserCommentReposittoryService({
+  UserCommentRepositoryService({
     required FirebaseFirestore firestore,
   }) : _firestore = firestore;
 
@@ -62,8 +62,8 @@ class UserCommentReposittoryService {
 }
 
 final userCommentRepositoryServiceProvider =
-    Provider<UserCommentReposittoryService>(
-  (ref) => UserCommentReposittoryService(
+    Provider<UserCommentRepositoryService>(
+  (ref) => UserCommentRepositoryService(
     firestore: ref.watch(firestoreProvider),
   ),
 );
