@@ -68,7 +68,7 @@ void main() {
     );
 
     //get the user comment repository service to add comments
-    final userCommentRepo = UserCommentReposittoryService(
+    final userCommentRepo = UserCommentRepositoryService(
       firestore: fakeFireStore,
     );
 
@@ -230,7 +230,7 @@ void main() {
       expect(noInfoCardComment, findsNothing);
 
       //check that the comment was deleted from the comment repository
-      final userCommentRepo = UserCommentReposittoryService(
+      final userCommentRepo = UserCommentRepositoryService(
         firestore: fakeFireStore,
       );
 
