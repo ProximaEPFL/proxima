@@ -1,10 +1,8 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
-import "package:proxima/services/database/firestore_service.dart";
 
 /// This class is responsible for managing the user's comments in the firestore database.
 class UserCommentRepositoryService {
@@ -59,10 +57,3 @@ class UserCommentRepositoryService {
     await userCommentCollection.doc(commentId.value).delete();
   }
 }
-
-final userCommentRepositoryServiceProvider =
-    Provider<UserCommentRepositoryService>(
-  (ref) => UserCommentRepositoryService(
-    firestore: ref.watch(firestoreProvider),
-  ),
-);
