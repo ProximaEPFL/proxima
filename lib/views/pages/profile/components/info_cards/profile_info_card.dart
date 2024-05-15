@@ -33,14 +33,16 @@ class ProfileInfoCard extends StatelessWidget {
           )
         : null;
 
+    final subtitle = Text(
+      content,
+      style: themeData.textTheme.bodySmall,
+      maxLines: title == null ? 3 : 2,
+      overflow: TextOverflow.ellipsis,
+    );
+
     final cardContent = ListTile(
-      title: potentialTitle,
-      subtitle: Text(
-        content,
-        style: themeData.textTheme.bodySmall,
-        maxLines: title == null ? 3 : 2,
-        overflow: TextOverflow.ellipsis,
-      ),
+      title: potentialTitle ?? subtitle,
+      subtitle: potentialTitle == null ? null : subtitle,
       trailing: DeleteButton(
         key: deleteButtonCardKey,
         onClick: onDelete,
