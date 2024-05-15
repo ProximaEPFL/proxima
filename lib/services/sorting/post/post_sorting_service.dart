@@ -29,7 +29,7 @@ class PostSortingService {
       return sign * order;
     }
 
-    int evaluateComparator(PostFirestore a, PostFirestore b) {
+    int putOnTopComparator(PostFirestore a, PostFirestore b) {
       final putOnTopA = putOnTop.contains(a.id);
       final putOnTopB = putOnTop.contains(b.id);
 
@@ -44,7 +44,7 @@ class PostSortingService {
     }
 
     final comparator =
-        putOnTop.isEmpty ? defaultComparator : evaluateComparator;
+        putOnTop.isEmpty ? defaultComparator : putOnTopComparator;
 
     return posts.sorted(comparator);
   }
