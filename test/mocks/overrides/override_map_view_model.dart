@@ -14,7 +14,11 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
   final Set<Circle> _circles;
   final Future<void> Function(LatLng) _redrawCircle;
   final Completer<GoogleMapController> _mapController;
-  bool _followUser = true;
+
+  final void Function() _disableFollowUser;
+  final void Function() _enableFollowUser;
+  final Future<void> Function(LatLng) _moveCamera;
+
   final double _initialZoomLevel = 17.0;
 
   MockMapViewModel({
@@ -25,13 +29,19 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
     Future<void> Function(LatLng)? redrawCircle,
     Set<Circle>? circles,
     Completer<GoogleMapController>? mapController,
+    void Function()? disableFollowUser,
+    void Function()? enableFollowUser,
+    void Function(LatLng)? moveCamera,
   })  : _build = build ??
             (() async => throw Exception("Location services are disabled.")),
         _onRefresh = onRefresh ?? (() async {}),
         _onMapCreated = onMapCreated ?? ((_) {}),
         _circles = circles ?? {},
         _redrawCircle = redrawCircle ?? ((_) async {}),
-        _mapController = mapController ?? Completer();
+        _mapController = mapController ?? Completer(),
+        _disableFollowUser = disableFollowUser ?? (() {}),
+        _enableFollowUser = enableFollowUser ?? (() {}),
+        _moveCamera = animateCamera ?? ((_) async {});
 
   @override
   Future<MapDetails> build() => _build();
@@ -53,25 +63,13 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
   Completer<GoogleMapController> get mapController => _mapController;
 
   @override
-  void disableFollowUser() {
-    _followUser = false;
-  }
+  void disableFollowUser() => _disableFollowUser();
 
   @override
-  void enableFollowUser() {
-    _followUser = true;
-  }
+  void enableFollowUser() => _enableFollowUser();
 
   @override
-  double get initialZoom => _initialZoomLevel;
-
-  @override
-  Future<void> moveCamera(LatLng target) async {
-    if (!_followUser) return;
-    final GoogleMapController controller = await _mapController.future;
-    controller
-        .animateCamera(CameraUpdate.newLatLngZoom(target, _initialZoomLevel));
-  }
+  Future<void> moveCamera(LatLng target) => _moveCamera(target);
 }
 
 final mockNoGPSMapViewModelOverride = [
