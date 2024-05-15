@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
-        android:label="proxima"
+        android:label="Proxima"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -30,8 +30,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <!-- The Google map API key is public for now for simplicity but will be made private 
-        when issue #159 (https://github.com/ProximaEPFL/proxima/issues/159) is 
+        <!-- The Google map API key is public for now for simplicity but will be made private
+        when issue #159 (https://github.com/ProximaEPFL/proxima/issues/159) is
         resolved.) -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
