@@ -46,6 +46,7 @@ class PostsFeedViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
       position,
     );
 
+    // Wait for both futures to complete for optimisation
     final results = await Future.wait([
       postsFirestoreFuture,
       challengesFuture,
