@@ -19,8 +19,6 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
   final void Function() _enableFollowUser;
   final Future<void> Function(LatLng) _moveCamera;
 
-  final double _initialZoomLevel = 17.0;
-
   MockMapViewModel({
     Future<MapDetails> Function()? build,
     Future<void> Function()? onRefresh,
