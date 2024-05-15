@@ -43,6 +43,10 @@ class PostSortingService {
       return defaultComparator(a, b);
     }
 
+    // This is a slight optimisation that allows the function
+    // to have the expected complexity when putOnTop is empty
+    // (though having putOnTop non empty does not change the asymptotic
+    // complexity of the function if it is a hash set/of constant size)
     final comparator =
         putOnTop.isEmpty ? defaultComparator : putOnTopComparator;
 
