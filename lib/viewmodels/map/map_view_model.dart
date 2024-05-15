@@ -65,17 +65,25 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   // This boolean is used to determine if the camera should follow the user
   bool _followUser = true;
 
-  void enableFollowUser() => _followUser = true;
+  /// Enable the camera to follow the user
+  void enableFollowUser() {
+    _followUser = true;
+  }
 
-  void disableFollowUser() => _followUser = false;
+  /// Disable the camera from following the user
+  void disableFollowUser() {
+    _followUser = false;
+  }
 
-  Future<void> moveCamera(LatLng target) async {
+  /// Move the camera to the target location
+  /// Only moves the camera if the follow user is enabled
+  Future<void> moveCamera(LatLng userPosition) async {
     if (!_followUser) return;
     final GoogleMapController controller = await _mapController.future;
     // reset zoom to initial
     // center camera on target
     final CameraPosition cameraPosition =
-        CameraPosition(target: target, zoom: _initialZoomLevel);
+        CameraPosition(target: userPosition, zoom: _initialZoomLevel);
     controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 }
