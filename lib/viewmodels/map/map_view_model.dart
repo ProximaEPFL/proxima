@@ -5,7 +5,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
-import "package:proxima/views/components/options/map/map_selection_option.dart";
+import "package:proxima/views/components/options/map/map_selection_options.dart";
 
 // This view model is responsible for managing the actual location
 // of the user on the map and the displayed circles.
@@ -14,6 +14,7 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   Future<MapDetails> build() async {
     final actualLocation =
         await ref.read(geolocationServiceProvider).getCurrentPosition();
+
     return MapDetails(
       initialLocation:
           LatLng(actualLocation.latitude, actualLocation.longitude),
@@ -25,7 +26,7 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   // Getter for the circles
   Set<Circle> get circles => _circles;
 
-  Future<void> redrawCircle(LatLng target) async {
+  void redrawCircle(LatLng target) {
     _circles.clear();
     _circles.add(
       Circle(
