@@ -98,9 +98,17 @@ class PostMap extends ConsumerWidget {
     return Expanded(
       child: Listener(
         onPointerDown: (_) => mapNotifier.disableFollowUser(),
-        child: Scaffold(
-          body: googleMap,
-          floatingActionButton: followButton,
+        child: Stack(
+          children: [
+            googleMap,
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: followButton,
+              ),
+            ),
+          ],
         ),
       ),
     );
