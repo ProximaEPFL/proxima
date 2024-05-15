@@ -2,7 +2,6 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 
 /// This class represents the data required to display a user's comment
 /// on the user's profile page.
-/// It also contains the necessary data to retrieve the comment under the post.
 class UserCommentData {
   // The id of the post that the user commented on.
   final PostIdFirestore parentPostId;
