@@ -58,9 +58,7 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
     state = await AsyncValue.guard(() => build());
   }
 
-  static const _initialZoomLevel = 17.0;
-
-  double get initialZoom => _initialZoomLevel;
+  static const initialZoomLevel = 17.0;
 
   // This boolean is used to determine if the camera should follow the user
   bool _followUser = true;
@@ -83,7 +81,7 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
     // reset zoom to initial
     // center camera on target
     final CameraPosition cameraPosition =
-        CameraPosition(target: userPosition, zoom: _initialZoomLevel);
+        CameraPosition(target: userPosition, zoom: initialZoomLevel);
     controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 }
