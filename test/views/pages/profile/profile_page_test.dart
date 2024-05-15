@@ -5,9 +5,8 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
-import "package:proxima/models/database/user_comment/user_comment_data.dart";
-import "package:proxima/services/database/comment_repository_service.dart";
-import "package:proxima/services/database/user_comment_repository_service.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
+import "package:proxima/services/database/comment/user_comment_repository_service.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
@@ -60,25 +59,12 @@ void main() {
 
     final commentDataGenerator = CommentDataGenerator();
 
-    final mockComment = commentDataGenerator.createMockCommentData();
+    final mockComment =
+        commentDataGenerator.createMockCommentData(ownerId: expectedUser.uid);
 
-    final commentId = await commentRepo.addComment(
+    await commentRepo.addComment(
       fakePost.id,
       mockComment,
-    );
-
-    //get the user comment repository service to add comments
-    final userCommentRepo = UserCommentRepositoryService(
-      firestore: fakeFireStore,
-    );
-
-    await userCommentRepo.addUserComment(
-      expectedUser.uid,
-      UserCommentData(
-        content: "This is a comment",
-        parentPostId: fakePost.id,
-        commentId: commentId,
-      ),
     );
 
     mockedProfilePage = profileProviderScope(fakeFireStore, profilePageApp);
