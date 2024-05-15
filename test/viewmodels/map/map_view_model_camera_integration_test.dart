@@ -50,7 +50,7 @@ void main() {
       // Set the initial position
       when(
         mockGeolocator.getCurrentPosition(
-          locationSettings: geoLocationService.locationSettings,
+          locationSettings: geolocationService.locationSettings,
         ),
       ).thenAnswer(
         (_) async => getSimplePosition(
