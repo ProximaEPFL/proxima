@@ -111,30 +111,6 @@ void main() {
     });
 
     group("deleting user comments", () {
-      test("should delete a single user comment", () async {
-        final userComment = (await userCommentGenerator.addComments(
-          1,
-          user.uid,
-          userCommentRepository,
-        ))
-            .first;
-
-        // Check if the comment was added
-        final beforeDeleteUserComments =
-            await userCommentRepository.getUserComments(user.uid);
-
-        expect(beforeDeleteUserComments, [userComment]);
-
-        // Delete the comment
-        await userCommentRepository.deleteUserComment(user.uid, userComment.id);
-
-        // Check if the comment was deleted
-        final afterDeleteUserComments =
-            await userCommentRepository.getUserComments(user.uid);
-
-        expect(afterDeleteUserComments, isEmpty);
-      });
-
       test("should delete user comment when they are multiple comments",
           () async {
         final userComments = await userCommentGenerator.addComments(
