@@ -2,7 +2,8 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:intl/intl.dart";
-import "package:proxima/views/components/content/publication_header.dart";
+import "package:proxima/views/components/content/publication_header/publication_header.dart";
+import "package:proxima/views/components/content/publication_header/user_profile_pop_up.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/components/feedback/centauri_snack_bar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
@@ -295,5 +296,73 @@ void main() {
 
       expect(actualCommentContents, expectedCommentContents);
     });
+  });
+
+  group("Profile pop-up", () {
+    Future<void> tapOn(WidgetTester tester, Finder toTapOn) async {
+      await tester.pumpWidget(emptyPostPageWidget);
+      await tester.pumpAndSettle();
+
+      expect(toTapOn, findsOneWidget);
+
+      await tester.tap(toTapOn);
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets("Pop-up is displayed when clicking on avatar", (tester) async {
+      final avatar = find.byKey(PublicationHeader.avatarKey);
+      await tapOn(tester, avatar);
+
+      final profilePopUp = find.byType(UserProfilePopUp);
+      expect(profilePopUp, findsOneWidget);
+    });
+
+    testWidgets(
+      "Pop-up is displayed when clicking on user display name",
+      (tester) async {
+        final displayName = find.byKey(PublicationHeader.displayNameTextKey);
+        await tapOn(tester, displayName);
+
+        final profilePopUp = find.byType(UserProfilePopUp);
+        expect(profilePopUp, findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      "Pop-up contains the correct user information",
+      (tester) async {
+        final avatar = find.byKey(PublicationHeader.avatarKey).first;
+        await tapOn(tester, avatar);
+
+        final profilePopUp = find.byType(UserProfilePopUp);
+        final post = testPosts.first;
+
+        // Consider the descendants only to be sure it is displyed on the pop-up,
+        // not somewhere else on the post page.
+        final username = find.descendant(
+          of: profilePopUp,
+          matching: find.textContaining(post.ownerUsername, findRichText: true),
+        );
+        expect(username, findsOneWidget);
+
+        final displayName = find.descendant(
+          of: profilePopUp,
+          matching: find.textContaining(
+            post.ownerDisplayName,
+            findRichText: true,
+          ),
+        );
+        expect(displayName, findsOneWidget);
+
+        final centauriPoints = find.descendant(
+          of: profilePopUp,
+          matching: find.textContaining(
+            post.ownerCentauriPoints.toString(),
+            findRichText: true,
+          ),
+        );
+        expect(centauriPoints, findsOneWidget);
+      },
+    );
   });
 }

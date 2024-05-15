@@ -92,6 +92,7 @@ class PostsFeedViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
         title: post.data.title,
         description: post.data.description,
         voteScore: post.data.voteScore,
+        ownerUsername: owner.data.username,
         ownerDisplayName: owner.data.displayName,
         ownerCentauriPoints: owner.data.centauriPoints,
         commentNumber: post.data.commentCount,
