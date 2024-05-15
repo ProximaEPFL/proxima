@@ -1,12 +1,10 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user_comment/user_comment_data.dart";
 import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
 import "package:proxima/services/database/comment/user_comment_repository_service.dart";
-import "package:proxima/services/database/firestore_service.dart";
 
 import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/data/firestore_user_comment.dart";
@@ -23,14 +21,9 @@ void main() {
     setUp(() async {
       fakeFirestore = FakeFirebaseFirestore();
 
-      final container = ProviderContainer(
-        overrides: [
-          firestoreProvider.overrideWithValue(fakeFirestore),
-        ],
+      userCommentRepository = UserCommentRepositoryService(
+        firestore: fakeFirestore,
       );
-
-      userCommentRepository =
-          container.read(userCommentRepositoryServiceProvider);
 
       user = (await FirestoreUserGenerator.addUsers(fakeFirestore, 1)).first;
 
