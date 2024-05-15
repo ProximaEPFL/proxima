@@ -33,7 +33,8 @@ class UserCommentViewModel extends AutoDisposeAsyncNotifier<UserCommentsState> {
     return comments;
   }
 
-  /// Delete the comment with the given [commentId] from the database
+  /// Delete the comment with the given [commentId] from the user comment database,
+  /// then delete the comment from the post with the given [postId] and [commentId]
   /// and refresh the state of this viewmodel (list of user comments).
   Future<void> deleteComment(
     UserCommentIdFirestore userComment,
