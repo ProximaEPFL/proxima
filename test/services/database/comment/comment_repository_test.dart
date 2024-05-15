@@ -107,6 +107,24 @@ void main() {
       expect(actualUserComments, [expectedUserComment]);
     });
 
+    /// Utility function to check that the post and user comments are not empty
+    Future<void> checkPostAndUserCommentsNotEmpty() async {
+      final postComments = await commentRepo.getPostComments(post.id);
+      final userComments = await commentRepo.getUserComments(user.uid);
+
+      expect(postComments, isNotEmpty);
+      expect(userComments, isNotEmpty);
+    }
+
+    /// Utility function to check that the post and user comments are empty
+    Future<void> checkPostAndUserCommentsEmpty() async {
+      final postComments = await commentRepo.getPostComments(post.id);
+      final userComments = await commentRepo.getUserComments(user.uid);
+
+      expect(postComments, isEmpty);
+      expect(userComments, isEmpty);
+    }
+
     test("should delete a comment", () async {
       // Add a comment
       final commentData =
@@ -115,23 +133,32 @@ void main() {
       final commentId = await commentRepo.addComment(post.id, commentData);
 
       // Check that it was added correctly
-      final postCommentsBeforeDelete =
-          await commentRepo.getPostComments(post.id);
-      final userCommentsBeforeDelete =
-          await commentRepo.getUserComments(user.uid);
-
-      expect(postCommentsBeforeDelete, isNotEmpty);
-      expect(userCommentsBeforeDelete, isNotEmpty);
+      await checkPostAndUserCommentsNotEmpty();
 
       // Delete the comment
       await commentRepo.deleteComment(post.id, commentId, user.uid);
 
       // Check that it was deleted correctly
-      final actualPostComments = await commentRepo.getPostComments(post.id);
-      final actualUserComments = await commentRepo.getUserComments(user.uid);
+      await checkPostAndUserCommentsEmpty();
+    });
 
-      expect(actualPostComments, isEmpty);
-      expect(actualUserComments, isEmpty);
+    test("should delete all the comments", () async {
+      // Add a comment
+      final commentData =
+          postCommentDataGenerator.createMockCommentData(ownerId: user.uid);
+
+      await commentRepo.addComment(post.id, commentData);
+
+      // Check that it was added correctly
+      await checkPostAndUserCommentsNotEmpty();
+
+      // Delete all the comments
+      final batch = fakeFirestore.batch();
+      await commentRepo.deleteAllComments(post.id, batch);
+      await batch.commit();
+
+      // Check that it was deleted correctly
+      await checkPostAndUserCommentsEmpty();
     });
   });
 }
