@@ -1,7 +1,6 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_firestore.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/post/post_data.dart";
@@ -9,7 +8,6 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/vote/vote_state.dart";
 import "package:proxima/services/database/comment/post_comment_repository_service.dart";
-import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/upvote_repository_service.dart";
 
 import "../../../mocks/data/comment_data.dart";
@@ -35,16 +33,8 @@ void main() {
     setUp(() async {
       fakeFirestore = FakeFirebaseFirestore();
 
-      // We get the comment repository from the provider container
-      // because it allows to check that the provider constructs
-      // the repository correctly
-      final container = ProviderContainer(
-        overrides: [
-          firestoreProvider.overrideWithValue(fakeFirestore),
-        ],
-      );
-
-      commentRepository = container.read(postCommentRepositoryServiceProvider);
+      commentRepository =
+          PostCommentRepositoryService(firestore: fakeFirestore);
 
       final post = FirestorePostGenerator().generatePostAt(userPosition0);
       postId = post.id;
