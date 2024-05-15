@@ -35,8 +35,8 @@ class PostMap extends ConsumerWidget {
 
     // This will redraw the circle and update camera when the user's position changes.
     positionValue.when(
-      data: (data) {
-        LatLng userPosition = LatLng(data!.latitude, data.longitude);
+      data: (geoPoint) {
+        LatLng userPosition = LatLng(geoPoint!.latitude, geoPoint.longitude);
         mapNotifier.redrawCircle(userPosition);
         mapNotifier.moveCamera(userPosition);
       },
