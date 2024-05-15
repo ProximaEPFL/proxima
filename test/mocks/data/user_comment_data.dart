@@ -10,12 +10,7 @@ class UserCommentDataGenerator {
   UserCommentDataGenerator({int seed = 0}) : _random = Random(seed);
 
   List<UserCommentData> generateUserCommentData(int count) {
-    return List.generate(count, (i) {
-      return UserCommentData(
-        parentPostId: PostIdFirestore(value: "parent_post_id_$i"),
-        content: "content_$i",
-      );
-    });
+    return List.generate(count, (_) => createMockUserCommentData());
   }
 
   UserCommentData createMockUserCommentData({
