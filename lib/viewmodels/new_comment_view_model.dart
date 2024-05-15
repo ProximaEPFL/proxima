@@ -6,6 +6,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user_comment/user_comment_data.dart";
+import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
 import "package:proxima/models/ui/validation/new_comment_validation.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
 import "package:proxima/services/database/user_comment_repository_service.dart";
@@ -95,12 +96,14 @@ class NewCommentViewModel
     final commentId = await commentRepository.addComment(postId, commentData);
 
     final userCommentData = UserCommentData(
-      commentId: commentId,
       parentPostId: postId,
       content: content,
     );
 
-    await userCommentRepository.addUserComment(currentUserId, userCommentData);
+    await userCommentRepository.addUserComment(
+      currentUserId,
+      UserCommentFirestore(id: commentId, data: userCommentData),
+    );
 
     state = AsyncData(
       NewCommentValidation(

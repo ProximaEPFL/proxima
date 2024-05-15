@@ -1,14 +1,14 @@
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/user_comment/user_comment_data.dart";
-import "package:proxima/models/database/user_comment/user_comment_id_firestore.dart";
 
 /// This class represents a comment from the user in firestore.
 class UserCommentFirestore {
   static const String userCommentSubCollectionName = "userComments";
 
-  // The id of the firestore document that keeps the reference to the comment.
-  // Not the id of the comment itself.
-  final UserCommentIdFirestore id;
+  // The id of the referenced comment
+  // This is also the id of the document in firestore
+  final CommentIdFirestore id;
 
   final UserCommentData data;
 
@@ -27,7 +27,7 @@ class UserCommentFirestore {
     final data = docSnap.data() as Map<String, dynamic>;
 
     return UserCommentFirestore(
-      id: UserCommentIdFirestore(value: docSnap.id),
+      id: CommentIdFirestore(value: docSnap.id),
       data: UserCommentData.fromDbData(data),
     );
   }

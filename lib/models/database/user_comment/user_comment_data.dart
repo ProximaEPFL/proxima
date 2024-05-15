@@ -1,14 +1,9 @@
-import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 
 /// This class represents the data required to display a user's comment
 /// on the user's profile page.
 /// It also contains the necessary data to retrieve the comment under the post.
 class UserCommentData {
-  // The id of the comment under the post.
-  final CommentIdFirestore commentId;
-  static const String commentIdField = "commentId";
-
   // The id of the post that the user commented on.
   final PostIdFirestore parentPostId;
   static const String parentPostIdField = "parentPostId";
@@ -20,7 +15,6 @@ class UserCommentData {
   static const String contentField = "content";
 
   const UserCommentData({
-    required this.commentId,
     required this.parentPostId,
     required this.content,
   });
@@ -30,7 +24,6 @@ class UserCommentData {
   factory UserCommentData.fromDbData(Map<String, dynamic> data) {
     try {
       return UserCommentData(
-        commentId: CommentIdFirestore(value: data[commentIdField]),
         parentPostId: PostIdFirestore(value: data[parentPostIdField]),
         content: data[contentField],
       );
@@ -49,7 +42,6 @@ class UserCommentData {
   /// to be stored in firestore
   Map<String, dynamic> toDbData() {
     return {
-      commentIdField: commentId.value,
       parentPostIdField: parentPostId.value,
       contentField: content,
     };
@@ -58,11 +50,10 @@ class UserCommentData {
   @override
   bool operator ==(Object other) {
     return other is UserCommentData &&
-        other.commentId == commentId &&
         other.parentPostId == parentPostId &&
         other.content == content;
   }
 
   @override
-  int get hashCode => Object.hash(commentId, parentPostId, content);
+  int get hashCode => Object.hash(parentPostId, content);
 }

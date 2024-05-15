@@ -10,7 +10,6 @@ import "package:proxima/services/database/user_comment_repository_service.dart";
 
 import "../../mocks/data/firestore_user.dart";
 import "../../mocks/data/firestore_user_comment.dart";
-import "../../mocks/data/user_comment_data.dart";
 
 void main() {
   group("Testing user comments repository", () {
@@ -19,7 +18,6 @@ void main() {
 
     late UserFirestore user;
     late UserCommentFirestoreGenerator userCommentGenerator;
-    late UserCommentDataGenerator userCommentDataGenerator;
     late CollectionReference<Map<String, dynamic>> userCommentsCollection;
 
     setUp(() async {
@@ -37,7 +35,6 @@ void main() {
       user = (await FirestoreUserGenerator.addUsers(fakeFirestore, 1)).first;
 
       userCommentGenerator = UserCommentFirestoreGenerator();
-      userCommentDataGenerator = UserCommentDataGenerator();
       userCommentsCollection = fakeFirestore
           .collection(UserFirestore.collectionName)
           .doc(user.uid.value)
@@ -66,18 +63,16 @@ void main() {
       });
 
       test("should throw an error if a document has missing fields", () async {
-        final userCommentData =
-            userCommentDataGenerator.createMockUserCommentData();
-
-        final userCommentId = await userCommentRepository.addUserComment(
+        final userComment = (await userCommentGenerator.addComments(
+          1,
           user.uid,
-          userCommentData,
-        );
+          userCommentRepository,
+        ))[0];
 
-        // Delete the comment id field
+        // Delete the comment content field
         await userCommentsCollection
-            .doc(userCommentId.value)
-            .update({UserCommentData.commentIdField: FieldValue.delete()});
+            .doc(userComment.id.value)
+            .update({UserCommentData.contentField: FieldValue.delete()});
 
         expect(
           () => userCommentRepository.getUserComments(user.uid),
@@ -88,25 +83,18 @@ void main() {
 
     group("adding user comments", () {
       test("should add a user comment", () async {
-        final userCommentData =
-            userCommentDataGenerator.createMockUserCommentData();
+        final userComment = userCommentGenerator.createMockUserComment();
 
         // Add the user comment
-        final userCommentId = await userCommentRepository.addUserComment(
+        await userCommentRepository.addUserComment(
           user.uid,
-          userCommentData,
-        );
-
-        // Check if the comment was added
-        final expectedUserComment = UserCommentFirestore(
-          id: userCommentId,
-          data: userCommentData,
+          userComment,
         );
 
         final fetchedUserComments =
             await userCommentRepository.getUserComments(user.uid);
 
-        expect(fetchedUserComments, [expectedUserComment]);
+        expect(fetchedUserComments, [userComment]);
       });
     });
 

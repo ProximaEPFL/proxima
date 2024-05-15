@@ -14,7 +14,6 @@ class UserCommentDataGenerator {
       return UserCommentData(
         parentPostId: PostIdFirestore(value: "parent_post_id_$i"),
         content: "content_$i",
-        commentId: CommentIdFirestore(value: "comment_id_$i"),
       );
     });
   }
@@ -28,8 +27,6 @@ class UserCommentDataGenerator {
       parentPostId: parentPostId ??
           PostIdFirestore(value: "parent_post_id_${_random.nextInt(100)}"),
       content: content ?? "content_${_random.nextInt(100)}",
-      commentId: commentId ??
-          CommentIdFirestore(value: "comment_id_${_random.nextInt(100)}"),
     );
   }
 }

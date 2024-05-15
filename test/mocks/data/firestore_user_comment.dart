@@ -1,14 +1,14 @@
 import "package:flutter_test/flutter_test.dart";
+import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/database/user_comment/user_comment_data.dart";
 import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
-import "package:proxima/models/database/user_comment/user_comment_id_firestore.dart";
 import "package:proxima/services/database/user_comment_repository_service.dart";
 
 import "user_comment_data.dart";
 
 class UserCommentFirestoreGenerator {
-  int _userCommentId = 0;
+  int _commentId = 0;
   final UserCommentDataGenerator _userCommentDataGenerator;
 
   UserCommentFirestoreGenerator({int seed = 0})
@@ -22,26 +22,26 @@ class UserCommentFirestoreGenerator {
     final userComments = <UserCommentFirestore>[];
 
     for (var i = 0; i < number; i++) {
-      final userCommentData =
-          _userCommentDataGenerator.createMockUserCommentData();
-      final userCommentId =
-          await userCommentRepository.addUserComment(userId, userCommentData);
-      userComments
-          .add(UserCommentFirestore(id: userCommentId, data: userCommentData));
+      final userComment = createMockUserComment();
+      userComments.add(
+        UserCommentFirestore(id: userComment.id, data: userComment.data),
+      );
+
+      await userCommentRepository.addUserComment(userId, userComments.last);
     }
 
     return userComments;
   }
 
   UserCommentFirestore createMockUserComment({
-    UserCommentIdFirestore? userCommentId,
+    CommentIdFirestore? userCommentId,
     UserCommentData? data,
   }) {
-    _userCommentId += 1;
+    _commentId += 1;
 
     return UserCommentFirestore(
       id: userCommentId ??
-          UserCommentIdFirestore(value: "userCommentId_$_userCommentId"),
+          CommentIdFirestore(value: "userCommentId_$_commentId"),
       data: data ?? _userCommentDataGenerator.createMockUserCommentData(),
     );
   }
