@@ -224,6 +224,19 @@ void main() {
       //Check that the profile page is displayed
       final profilePage = find.byType(ProfilePage);
       expect(profilePage, findsOneWidget);
+
+      //check that the comment is deleted
+      final noInfoCardComment = find.byKey(ProfileInfoCard.infoCardKey);
+      expect(noInfoCardComment, findsNothing);
+
+      //check that the comment was deleted from the comment repository
+      final userCommentRepo = UserCommentReposittoryService(
+        firestore: fakeFireStore,
+      );
+
+      final userComments =
+          await userCommentRepo.getUserComments(expectedUser.uid);
+      expect(userComments, isEmpty);
     });
 
     testWidgets("Tab working as expected", (tester) async {
