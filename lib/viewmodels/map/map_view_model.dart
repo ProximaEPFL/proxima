@@ -76,7 +76,7 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
 
   /// Move the camera to the target location
   /// Only moves the camera if the follow user is enabled
-  Future<void> moveCamera(LatLng userPosition) async {
+  Future<void> updateCamera(LatLng userPosition) async {
     if (!_followUser) return;
     final GoogleMapController controller = await _mapController.future;
     // reset zoom to initial

@@ -67,7 +67,7 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
   void enableFollowUser() => _enableFollowUser();
 
   @override
-  Future<void> moveCamera(LatLng target) => _moveCamera(target);
+  Future<void> updateCamera(LatLng target) => _moveCamera(target);
 }
 
 final mockNoGPSMapViewModelOverride = [

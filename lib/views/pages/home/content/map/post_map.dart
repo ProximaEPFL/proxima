@@ -38,7 +38,7 @@ class PostMap extends ConsumerWidget {
       data: (geoPoint) {
         LatLng userPosition = LatLng(geoPoint!.latitude, geoPoint.longitude);
         mapNotifier.redrawCircle(userPosition);
-        mapNotifier.moveCamera(userPosition);
+        mapNotifier.updateCamera(userPosition);
       },
       error: (error, _) {
         //Pop up an error dialog if an error occurs
@@ -70,7 +70,7 @@ class PostMap extends ConsumerWidget {
         positionValue.whenData((geoPoint) {
           LatLng userPosition = LatLng(geoPoint!.latitude, geoPoint.longitude);
           mapNotifier.enableFollowUser();
-          mapNotifier.moveCamera(userPosition);
+          mapNotifier.updateCamera(userPosition);
         });
       },
       child: const Icon(Icons.my_location),
