@@ -36,7 +36,7 @@ class CommentsViewModel extends AutoDisposeFamilyAsyncNotifier<
         orElse: () => throw Exception("Owner not found"),
       );
 
-      return CommentDetails.from(commentFirestore.data, owner.data);
+      return CommentDetails.from(commentFirestore.data, owner);
     }).toList();
 
     // Sort the comments from the newest to the oldest

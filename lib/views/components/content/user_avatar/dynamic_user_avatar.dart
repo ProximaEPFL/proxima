@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
+import "package:proxima/models/ui/user_avatar_details.dart";
 import "package:proxima/viewmodels/dynamic_user_avatar_view_model.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 
@@ -10,7 +11,10 @@ import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 /// which adds an InkWell response.
 /// The [radius] parameter is the radius of the avatar.
 class DynamicUserAvatar extends ConsumerWidget {
-  static const _loadingDisplayName = "";
+  static const _loadingDetails = UserAvatarDetails(
+    displayName: "",
+    userCentauriPoints: null,
+  );
 
   final UserIdFirestore? uid;
   final double radius;
@@ -25,18 +29,18 @@ class DynamicUserAvatar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final displayNameAsyncValue = ref.watch(
+    final detailsAsyncValue = ref.watch(
       dynamicUserAvatarViewModelProvider(uid),
     );
 
-    return displayNameAsyncValue.when(
-      data: (displayName) => UserAvatar(
-        displayName: displayName,
+    return detailsAsyncValue.when(
+      data: (details) => UserAvatar(
+        details: details,
         radius: radius,
         onTap: onTap,
       ),
       loading: () => UserAvatar(
-        displayName: _loadingDisplayName,
+        details: _loadingDetails,
         radius: radius,
         onTap: onTap,
       ),

@@ -23,10 +23,13 @@ class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
     );
     final pinList = nearPosts.map((post) {
       final postPosition = post.location.geoPoint;
+
       return MapPinDetails(
         id: MarkerId(post.id.value),
         position: LatLng(postPosition.latitude, postPosition.longitude),
-        callbackFunction: () {},
+        callbackFunction: () {
+          return;
+        },
       );
     }).toList();
 

@@ -18,6 +18,7 @@ class KeyValueListBuilder {
     if (content.isNotEmpty) {
       content.add(const TextSpan(text: "\n"));
     }
+
     return this;
   }
 
@@ -31,6 +32,7 @@ class KeyValueListBuilder {
         style: style?.copyWith(fontWeight: FontWeight.bold),
       ),
     );
+
     return this;
   }
 
@@ -38,6 +40,7 @@ class KeyValueListBuilder {
   KeyValueListBuilder addLine(String line) {
     _newLine();
     content.add(TextSpan(text: line));
+
     return this;
   }
 

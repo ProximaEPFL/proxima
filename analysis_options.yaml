@@ -21,8 +21,8 @@ dart_code_metrics:
     - "test/**"
     - "*.g.dart"
   rules:
+    - avoid-passing-async-when-sync-expected: false
     - avoid-dynamic
-    - avoid-passing-async-when-sync-expected
     - avoid-redundant-async
     - avoid-unnecessary-type-assertions
     - avoid-unnecessary-type-casts

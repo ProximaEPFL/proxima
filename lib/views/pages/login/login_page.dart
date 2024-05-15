@@ -11,13 +11,14 @@ class LoginPage extends ConsumerWidget {
 
   static const tagLineText = "Discover the world,\n one post at a time.";
 
-  static const _logoAsset = "assets/images/proxima_logo.jpeg";
+  static const _logoAsset = "assets/images/proxima_white.png";
 
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userRepository = ref.watch(userRepositoryServiceProvider);
+
     ref.listen(loggedInUserIdProvider, (_, user) async {
       if (user != null) {
         final exists = await userRepository.doesUserExist(user);
@@ -35,15 +36,28 @@ class LoginPage extends ConsumerWidget {
 
     final theme = Theme.of(context);
 
+    final logoBorder = BorderRadius.circular(28);
     final logoImage = Flexible(
       // Adjust the flex factor to control how much space the logo takes
       flex: 2,
       child: Container(
-        padding: const EdgeInsets.all(24),
-        child: ClipRRect(
-          key: logoKey,
-          borderRadius: BorderRadius.circular(28),
-          child: Image.asset(_logoAsset, fit: BoxFit.contain),
+        padding: const EdgeInsets.all(28),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: logoBorder,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 10,
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            key: logoKey,
+            borderRadius: logoBorder,
+            child: Image.asset(_logoAsset, fit: BoxFit.contain),
+          ),
         ),
       ),
     );

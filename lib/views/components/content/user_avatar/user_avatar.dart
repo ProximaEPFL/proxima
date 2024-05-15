@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import "package:proxima/models/ui/user_avatar_details.dart";
+import "package:proxima/viewmodels/dynamic_user_avatar_view_model.dart";
 
 /// A widget that displays the user's avatar.
 /// It provides a [onTap] parameter to handle the user's tap,
@@ -9,12 +11,12 @@ class UserAvatar extends StatelessWidget {
 
   const UserAvatar({
     super.key,
-    required this.displayName,
+    required this.details,
     required this.radius,
     this.onTap,
   });
 
-  final String displayName;
+  final UserAvatarDetails details;
   final double radius;
   final VoidCallback? onTap;
 
@@ -26,6 +28,10 @@ class UserAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: radius,
+      backgroundColor: DynamicUserAvatarViewModel.centauriToColor(
+        details.userCentauriPoints,
+        Theme.of(context).brightness,
+      ),
       child: Stack(
         children: [
           Center(
@@ -34,7 +40,9 @@ class UserAvatar extends StatelessWidget {
               // Display the first letter of the [displayName] parameter (user's initial).
               // If the display name is empty, display an empty string (because
               // it causes an error if it is empty).
-              displayName.isEmpty ? "" : displayName.substring(0, 1),
+              details.displayName.isEmpty
+                  ? ""
+                  : details.displayName.substring(0, 1),
             ),
           ),
           Material(

@@ -6,7 +6,9 @@ import "package:proxima/models/ui/map_pin_details.dart";
 /// the markers of the map given a list of [MapPinDetails].
 class MapMarkersViewModel extends Notifier<void> {
   @override
-  void build() {}
+  void build() {
+    return;
+  }
 
   final Set<Marker> _markers = {};
 
