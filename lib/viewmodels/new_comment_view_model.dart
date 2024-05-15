@@ -5,11 +5,8 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/database/user_comment/user_comment_data.dart";
-import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
 import "package:proxima/models/ui/validation/new_comment_validation.dart";
 import "package:proxima/services/database/comment_repository_service.dart";
-import "package:proxima/services/database/user_comment_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
 /// The view model for adding a new comment to a post whose
@@ -65,8 +62,6 @@ class NewCommentViewModel
   Future<NewCommentValidation> _tryAddComment(String content) async {
     final currentUserId = ref.read(loggedInUserIdProvider);
     final commentRepository = ref.read(commentRepositoryServiceProvider);
-    final userCommentRepository =
-        ref.read(userCommentRepositoryServiceProvider);
 
     if (currentUserId == null) {
       throw Exception("User must be logged in before creating a comment");
@@ -87,23 +82,7 @@ class NewCommentViewModel
       voteScore: 0,
     );
 
-    // Note: The addition of the comment under the post and the comment under the
-    // the user document are not done atomically.
-    // This is because integrating atomicity would require a complex refactor
-    // that does not add much value to the application.
-    // In the worst case, the link between the comment and the user is lost,
-    // but the database is still consistent and won't crash the application.
-    final commentId = await commentRepository.addComment(postId, commentData);
-
-    final userCommentData = UserCommentData(
-      parentPostId: postId,
-      content: content,
-    );
-
-    await userCommentRepository.addUserComment(
-      currentUserId,
-      UserCommentFirestore(id: commentId, data: userCommentData),
-    );
+    await commentRepository.addComment(postId, commentData);
 
     state = AsyncData(
       NewCommentValidation(
