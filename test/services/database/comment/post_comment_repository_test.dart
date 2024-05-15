@@ -8,20 +8,20 @@ import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/vote/vote_state.dart";
-import "package:proxima/services/database/comment_repository_service.dart";
+import "package:proxima/services/database/comment/post_comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/upvote_repository_service.dart";
 
-import "../../mocks/data/comment_data.dart";
-import "../../mocks/data/firestore_comment.dart";
-import "../../mocks/data/firestore_post.dart";
-import "../../mocks/data/firestore_user.dart";
-import "../../mocks/data/geopoint.dart";
+import "../../../mocks/data/comment_data.dart";
+import "../../../mocks/data/firestore_comment.dart";
+import "../../../mocks/data/firestore_post.dart";
+import "../../../mocks/data/firestore_user.dart";
+import "../../../mocks/data/geopoint.dart";
 
 void main() {
-  group("Testing comment repository", () {
+  group("Testing post comment repository", () {
     late FakeFirebaseFirestore fakeFirestore;
-    late CommentRepositoryService commentRepository;
+    late PostCommentRepositoryService commentRepository;
 
     late PostIdFirestore postId;
     late CollectionReference<Map<String, dynamic>> commentsSubCollection;

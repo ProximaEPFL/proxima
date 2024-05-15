@@ -6,7 +6,7 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/services/database/comment_repository_service.dart";
+import "package:proxima/services/database/comment/post_comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/upvote_repository_service.dart";
 
@@ -14,14 +14,14 @@ import "package:proxima/services/database/upvote_repository_service.dart";
 class PostRepositoryService {
   final FirebaseFirestore _firestore;
   final CollectionReference<Map<String, dynamic>> _collectionRef;
-  final CommentRepositoryService _commentRepository;
+  final PostCommentRepositoryService _commentRepository;
   final UpvoteRepositoryService<PostIdFirestore> _upvoteRepository;
 
   PostRepositoryService({
     required FirebaseFirestore firestore,
   })  : _firestore = firestore,
         _collectionRef = firestore.collection(PostFirestore.collectionName),
-        _commentRepository = CommentRepositoryService(firestore: firestore),
+        _commentRepository = PostCommentRepositoryService(firestore: firestore),
         _upvoteRepository =
             UpvoteRepositoryService.postUpvoteRepositoryService(firestore);
 

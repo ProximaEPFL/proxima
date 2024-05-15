@@ -11,10 +11,10 @@ import "package:proxima/services/database/upvote_repository_service.dart";
 
 /// This class is a service that allows to interact with the comments
 /// of the posts in the firestore database.
-class CommentRepositoryService {
+class PostCommentRepositoryService {
   final FirebaseFirestore _firestore;
 
-  CommentRepositoryService({
+  PostCommentRepositoryService({
     required FirebaseFirestore firestore,
   }) : _firestore = firestore;
 
@@ -169,8 +169,8 @@ class CommentRepositoryService {
   }
 }
 
-final commentRepositoryServiceProvider = Provider<CommentRepositoryService>(
-  (ref) => CommentRepositoryService(
+final commentRepositoryServiceProvider = Provider<PostCommentRepositoryService>(
+  (ref) => PostCommentRepositoryService(
     firestore: ref.watch(firestoreProvider),
   ),
 );

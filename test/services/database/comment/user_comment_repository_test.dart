@@ -5,11 +5,11 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user_comment/user_comment_data.dart";
 import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
+import "package:proxima/services/database/comment/user_comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
-import "package:proxima/services/database/user_comment_repository_service.dart";
 
-import "../../mocks/data/firestore_user.dart";
-import "../../mocks/data/firestore_user_comment.dart";
+import "../../../mocks/data/firestore_user.dart";
+import "../../../mocks/data/firestore_user_comment.dart";
 
 void main() {
   group("Testing user comments repository", () {
