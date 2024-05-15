@@ -15,7 +15,7 @@ import "../../mocks/data/user_comment_data.dart";
 void main() {
   group("Testing user comments repository", () {
     late FakeFirebaseFirestore fakeFirestore;
-    late UserCommentReposittoryService userCommentRepository;
+    late UserCommentRepositoryService userCommentRepository;
 
     late UserFirestore user;
     late UserCommentFirestoreGenerator userCommentGenerator;

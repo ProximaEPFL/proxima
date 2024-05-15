@@ -17,7 +17,7 @@ class UserCommentFirestoreGenerator {
   Future<List<UserCommentFirestore>> addComments(
     int number,
     UserIdFirestore userId,
-    UserCommentReposittoryService userCommentRepository,
+    UserCommentRepositoryService userCommentRepository,
   ) async {
     final userComments = <UserCommentFirestore>[];
 
