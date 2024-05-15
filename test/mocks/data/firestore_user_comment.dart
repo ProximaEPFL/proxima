@@ -7,6 +7,7 @@ import "package:proxima/services/database/user_comment_repository_service.dart";
 
 import "user_comment_data.dart";
 
+/// This class is responsible for generating mock [UserCommentFirestore] instances.
 class UserCommentFirestoreGenerator {
   int _commentId = 0;
   final UserCommentDataGenerator _userCommentDataGenerator;
@@ -14,6 +15,9 @@ class UserCommentFirestoreGenerator {
   UserCommentFirestoreGenerator({int seed = 0})
       : _userCommentDataGenerator = UserCommentDataGenerator(seed: seed);
 
+  /// Add [number] of user comments for the user with id [userId] to the firestore database.
+  /// It will use the [userCommentRepository] to add the comments.
+  /// It will return the list of user comments that were added.
   Future<List<UserCommentFirestore>> addComments(
     int number,
     UserIdFirestore userId,
@@ -33,15 +37,16 @@ class UserCommentFirestoreGenerator {
     return userComments;
   }
 
+  /// Create a random mock [UserCommentFirestore] instance.
+  /// The [commentId] and [data] can be provided to avoid randomness.
   UserCommentFirestore createMockUserComment({
-    CommentIdFirestore? userCommentId,
+    CommentIdFirestore? commentId,
     UserCommentData? data,
   }) {
     _commentId += 1;
 
     return UserCommentFirestore(
-      id: userCommentId ??
-          CommentIdFirestore(value: "userCommentId_$_commentId"),
+      id: commentId ?? CommentIdFirestore(value: "commentId_$_commentId"),
       data: data ?? _userCommentDataGenerator.createMockUserCommentData(),
     );
   }
