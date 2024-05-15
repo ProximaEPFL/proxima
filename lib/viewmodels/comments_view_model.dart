@@ -4,7 +4,7 @@ import "package:collection/collection.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/comment_details.dart";
-import "package:proxima/services/database/comment/post_comment_repository_service.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 
 /// This view model is used to fetch the comments of a post.
@@ -16,10 +16,10 @@ class CommentsViewModel extends AutoDisposeFamilyAsyncNotifier<
   // of an override method. Doing so lead to a warning.
   @override
   Future<List<CommentDetails>> build(PostIdFirestore arg) async {
-    final commentRepository = ref.read(postCommentRepositoryServiceProvider);
+    final commentRepository = ref.read(commentRepositoryServiceProvider);
     final userRepository = ref.read(userRepositoryServiceProvider);
 
-    final commentsFirestore = await commentRepository.getComments(arg);
+    final commentsFirestore = await commentRepository.getPostComments(arg);
 
     final commentOwnersId =
         commentsFirestore.map((comment) => comment.data.ownerId).toSet();
