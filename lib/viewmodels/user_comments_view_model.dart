@@ -33,11 +33,11 @@ class UserCommentViewModel extends AutoDisposeAsyncNotifier<UserCommentsState> {
     return comments;
   }
 
-  /// Delete the comment with the given [commentId] from the user comment database,
+  /// Delete the comment with the given [userCommentId] from the user comment database,
   /// then delete the comment from the post with the given [postId] and [commentId]
   /// and refresh the state of this viewmodel (list of user comments).
   Future<void> deleteComment(
-    UserCommentIdFirestore userComment,
+    UserCommentIdFirestore userCommentId,
     PostIdFirestore postId,
     CommentIdFirestore commentId,
   ) async {
@@ -45,7 +45,7 @@ class UserCommentViewModel extends AutoDisposeAsyncNotifier<UserCommentsState> {
         ref.watch(userCommentRepositoryServiceProvider);
     final commentRepository = ref.watch(commentRepositoryServiceProvider);
     final user = ref.watch(validLoggedInUserIdProvider);
-    await userCommentRepository.deleteUserComment(user, userComment);
+    await userCommentRepository.deleteUserComment(user, userCommentId);
 
     // Not awaited, will show loading for user (faster user feedback)
     refresh();
