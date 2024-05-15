@@ -35,8 +35,8 @@ class CommentRepositoryService {
   ) =>
       _userCommentRepo.getUserComments(userId);
 
-  // Note: The addition/deletion of the comment under the post and the comment under the
-  // the user document are not done atomically.
+  // Note: The addition/deletion/allDeletion of the comment under the post and the comment under the
+  // the user document are not done fully atomically.
   // This is because integrating atomicity would require a complex refactor
   // that does not add much value to the application.
   // In the worst case, the link between the comment and the user is lost,
@@ -82,6 +82,29 @@ class CommentRepositoryService {
       ownerId,
       commentId,
     );
+  }
+
+  /// This method will delete all the comments under the post with id [parentPostId].
+  /// It will also delete all the references to the comments from the owners.
+  /// The post comments are deleted in a batch [batch].
+  Future<void> deleteAllComments(
+    PostIdFirestore parentPostId,
+    WriteBatch batch,
+  ) async {
+    final comments = await getPostComments(parentPostId);
+
+    // The user comments are deleted in parallel
+    final userCommentsDeletion = comments.map((comment) async {
+      await _userCommentRepo.deleteUserComment(
+        comment.data.ownerId,
+        comment.id,
+      );
+    });
+
+    await Future.wait(userCommentsDeletion);
+
+    // The post comments are deleted in a batch
+    await _postCommentRepo.deleteAllComments(parentPostId, batch);
   }
 }
 
