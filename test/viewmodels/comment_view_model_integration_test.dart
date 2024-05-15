@@ -39,7 +39,7 @@ void main() {
       );
 
       userRepository = container.read(userRepositoryServiceProvider);
-      commentRepository = container.read(commentRepositoryServiceProvider);
+      commentRepository = container.read(postCommentRepositoryServiceProvider);
 
       final post = FirestorePostGenerator().generatePostAt(userPosition0);
       await setPostFirestore(post, fakeFirestore);

@@ -169,7 +169,8 @@ class PostCommentRepositoryService {
   }
 }
 
-final commentRepositoryServiceProvider = Provider<PostCommentRepositoryService>(
+final postCommentRepositoryServiceProvider =
+    Provider<PostCommentRepositoryService>(
   (ref) => PostCommentRepositoryService(
     firestore: ref.watch(firestoreProvider),
   ),

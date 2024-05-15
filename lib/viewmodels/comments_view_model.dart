@@ -16,7 +16,7 @@ class CommentsViewModel extends AutoDisposeFamilyAsyncNotifier<
   // of an override method. Doing so lead to a warning.
   @override
   Future<List<CommentDetails>> build(PostIdFirestore arg) async {
-    final commentRepository = ref.read(commentRepositoryServiceProvider);
+    final commentRepository = ref.read(postCommentRepositoryServiceProvider);
     final userRepository = ref.read(userRepositoryServiceProvider);
 
     final commentsFirestore = await commentRepository.getComments(arg);

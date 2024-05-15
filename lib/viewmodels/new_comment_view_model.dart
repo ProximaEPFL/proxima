@@ -61,7 +61,7 @@ class NewCommentViewModel
 
   Future<NewCommentValidation> _tryAddComment(String content) async {
     final currentUserId = ref.read(loggedInUserIdProvider);
-    final commentRepository = ref.read(commentRepositoryServiceProvider);
+    final commentRepository = ref.read(postCommentRepositoryServiceProvider);
 
     if (currentUserId == null) {
       throw Exception("User must be logged in before creating a comment");

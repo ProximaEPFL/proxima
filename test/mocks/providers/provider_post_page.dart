@@ -47,7 +47,7 @@ ProviderScope postPageProvider(
       ...firebaseMocksOverrides,
       ...mockEmptyCommentViewModelOverride,
       ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
-      commentRepositoryServiceProvider.overrideWithValue(commentRepository),
+      postCommentRepositoryServiceProvider.overrideWithValue(commentRepository),
       loggedInUserIdProvider.overrideWithValue(userId),
     ],
     child: postPage,
