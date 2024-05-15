@@ -64,7 +64,7 @@ class PostMap extends ConsumerWidget {
       loading: () => (),
     );
 
-    final fab = FloatingActionButton(
+    final followButton = FloatingActionButton(
       onPressed: () {
         // Center the camera on the user's position and follow
         positionValue.whenData((geoPoint) {
@@ -100,7 +100,7 @@ class PostMap extends ConsumerWidget {
         onPointerDown: (_) => mapNotifier.disableFollowUser(),
         child: Scaffold(
           body: googleMap,
-          floatingActionButton: fab,
+          floatingActionButton: followButton,
         ),
       ),
     );
