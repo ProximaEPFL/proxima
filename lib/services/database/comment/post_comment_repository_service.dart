@@ -1,12 +1,10 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/comment/comment_firestore.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/upvote_repository_service.dart";
 
 /// This class is a service that allows to interact with the comments
@@ -168,10 +166,3 @@ class PostCommentRepositoryService {
     batch.delete(commentRef);
   }
 }
-
-final postCommentRepositoryServiceProvider =
-    Provider<PostCommentRepositoryService>(
-  (ref) => PostCommentRepositoryService(
-    firestore: ref.watch(firestoreProvider),
-  ),
-);
