@@ -4,7 +4,7 @@ import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/content/post_votes.dart";
-import "package:proxima/views/components/content/publication_header.dart";
+import "package:proxima/views/components/content/publication_header/publication_header.dart";
 import "package:proxima/views/components/feedback/centauri_snack_bar.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/content/feed/components/comment_count.dart";
@@ -111,7 +111,8 @@ class PostCard extends ConsumerWidget {
               padding: const EdgeInsets.only(left: 16, top: 8),
               child: PublicationHeader(
                 key: postCardUserKey,
-                posterUsername: postDetails.ownerDisplayName,
+                posterUsername: postDetails.ownerUsername,
+                posterDisplayName: postDetails.ownerDisplayName,
                 posterCentauriPoints: postDetails.ownerCentauriPoints,
                 publicationDate: postDetails.publicationDate,
               ),
