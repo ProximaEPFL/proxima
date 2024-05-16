@@ -3,6 +3,7 @@ import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_firestore.dart";
+import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
@@ -293,6 +294,33 @@ void main() {
             expect(actualPostComments.contains(postComment), isTrue);
           }
         }
+      });
+
+      test(
+          "should thrown an error and do nothing if the comment does not exist",
+          () async {
+        final (expectedComments, _) =
+            await commentGenerator.addComments(5, post.id, commentRepo);
+
+        const commentId = CommentIdFirestore(value: "non_existent_comment_id");
+
+        expect(
+          () async => await commentRepo.deleteComment(
+            post.id,
+            commentId,
+            testingUserFirestoreId,
+          ),
+          throwsA(isA<Exception>()),
+        );
+
+        // Check that no comments were deleted
+        final actualComments = await commentRepo.getPostComments(post.id);
+        expect(actualComments, unorderedEquals(expectedComments));
+
+        // Check that the comment count was not updated
+        final postDoc = await postDocument.get();
+        final commentCount = PostFirestore.fromDb(postDoc).data.commentCount;
+        expect(commentCount, equals(5));
       });
     });
 
