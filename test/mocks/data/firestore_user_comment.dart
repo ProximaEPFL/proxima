@@ -23,17 +23,12 @@ class UserCommentFirestoreGenerator {
     UserIdFirestore userId,
     UserCommentRepositoryService userCommentRepository,
   ) async {
-    final userComments = <UserCommentFirestore>[];
-
-    for (var i = 0; i < number; i++) {
-      final userComment = createMockUserComment();
-      userComments.add(
-        UserCommentFirestore(id: userComment.id, data: userComment.data),
-      );
-
-      await userCommentRepository.addUserComment(userId, userComments.last);
-    }
-
+    final userComments = List.generate(number, (_) => createMockUserComment());
+    await Future.wait(
+      userComments.map(
+        (comment) => userCommentRepository.addUserComment(userId, comment),
+      ),
+    );
     return userComments;
   }
 
