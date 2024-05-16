@@ -2,7 +2,9 @@ import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/comment/comment_firestore.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/services/database/comment/post_comment_repository_service.dart";
+import "package:proxima/models/database/user_comment/user_comment_data.dart";
+import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
 
 import "comment_data.dart";
 
@@ -13,20 +15,27 @@ class CommentFirestoreGenerator {
   CommentFirestoreGenerator({int seed = 0})
       : _commentDataGenerator = CommentDataGenerator(seed: seed);
 
-  Future<List<CommentFirestore>> addComments(
+  Future<(List<CommentFirestore>, List<UserCommentFirestore>)> addComments(
     int number,
     PostIdFirestore postId,
-    PostCommentRepositoryService commentRepository,
+    CommentRepositoryService commentRepository,
   ) async {
-    final comments = <CommentFirestore>[];
+    final postComments = <CommentFirestore>[];
+    final userComments = <UserCommentFirestore>[];
 
     for (var i = 0; i < number; i++) {
       final commentData = _commentDataGenerator.createMockCommentData();
       final commentId = await commentRepository.addComment(postId, commentData);
-      comments.add(CommentFirestore(id: commentId, data: commentData));
+      postComments.add(CommentFirestore(id: commentId, data: commentData));
+
+      final userCommentData =
+          UserCommentData(parentPostId: postId, content: commentData.content);
+      final userComment =
+          UserCommentFirestore(id: commentId, data: userCommentData);
+      userComments.add(userComment);
     }
 
-    return comments;
+    return (postComments, userComments);
   }
 
   CommentFirestore createMockComment({

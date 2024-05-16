@@ -9,7 +9,6 @@ import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user_comment/user_comment_data.dart";
 import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
 import "package:proxima/services/database/comment/comment_repository_service.dart";
-import "package:proxima/services/database/comment/post_comment_repository_service.dart";
 import "package:proxima/services/database/comment/user_comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 
@@ -24,7 +23,6 @@ void main() {
   group("Testing comment repository", () {
     late FakeFirebaseFirestore fakeFirestore;
 
-    late PostCommentRepositoryService postCommentRepo;
     late UserCommentRepositoryService userCommentRepo;
     late CommentRepositoryService commentRepo;
 
@@ -33,7 +31,7 @@ void main() {
     late List<UserFirestore> users; // all the users of the db
     late UserFirestore user; // the user we use to test
 
-    late CommentFirestoreGenerator postCommentGenerator;
+    late CommentFirestoreGenerator commentGenerator;
     late CommentDataGenerator postCommentDataGenerator;
 
     late UserCommentFirestoreGenerator userCommentGenerator;
@@ -44,7 +42,6 @@ void main() {
     setUp(() async {
       fakeFirestore = FakeFirebaseFirestore();
 
-      postCommentRepo = PostCommentRepositoryService(firestore: fakeFirestore);
       userCommentRepo = UserCommentRepositoryService(firestore: fakeFirestore);
 
       final container = ProviderContainer(
@@ -71,7 +68,7 @@ void main() {
       await setUsersFirestore(fakeFirestore, users);
       user = users.first;
 
-      postCommentGenerator = CommentFirestoreGenerator();
+      commentGenerator = CommentFirestoreGenerator();
       postCommentDataGenerator = CommentDataGenerator();
 
       userCommentGenerator = UserCommentFirestoreGenerator();
@@ -85,16 +82,16 @@ void main() {
 
     group("getting post comments", () {
       test("should get the comments under a post", () async {
-        final postComments = await postCommentGenerator.addComments(
+        final (postComments, _) = await commentGenerator.addComments(
           3,
           post.id,
-          postCommentRepo,
+          commentRepo,
         );
         // Add comments under the other post
-        await postCommentGenerator.addComments(
+        await commentGenerator.addComments(
           3,
           posts.last.id,
-          postCommentRepo,
+          commentRepo,
         );
 
         final actualComments = await commentRepo.getPostComments(post.id);
