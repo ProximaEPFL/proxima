@@ -2,7 +2,7 @@
 
 set -e
 
-flutter build apk --release --dart-define-from-file=api_keys.json --verbose
+flutter build apk --release --dart-define-from-file=api_keys.json
 
 VERSION=$(grep 'version:' pubspec.yaml | awk '{print $2}')
 mv "build/app/outputs/flutter-apk/app-release.apk" "build/Proxima-v$VERSION.apk"
