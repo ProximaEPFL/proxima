@@ -7,7 +7,7 @@ import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/map/map_view_model.dart";
 
 import "../../mocks/data/geopoint.dart";
-import "../../mocks/data/latLng.dart";
+import "../../mocks/data/latlng.dart";
 import "../../mocks/services/mock_geo_location_service.dart";
 import "../../mocks/services/mock_google_map_controller.dart";
 

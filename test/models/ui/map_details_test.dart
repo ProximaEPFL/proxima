@@ -2,7 +2,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
 
-import "../../mocks/data/latLng.dart";
+import "../../mocks/data/latlng.dart";
 
 void main() {
   group("hash and == works", () {
