@@ -9,21 +9,18 @@ import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user_comment/user_comment_data.dart";
 import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
 import "package:proxima/services/database/comment/comment_repository_service.dart";
-import "package:proxima/services/database/comment/user_comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 
 import "../../../mocks/data/comment_data.dart";
 import "../../../mocks/data/firestore_comment.dart";
 import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
-import "../../../mocks/data/firestore_user_comment.dart";
 import "../../../mocks/data/geopoint.dart";
 
 void main() {
   group("Testing comment repository", () {
     late FakeFirebaseFirestore fakeFirestore;
 
-    late UserCommentRepositoryService userCommentRepo;
     late CommentRepositoryService commentRepo;
 
     late List<PostFirestore> posts; // all the posts of the db
@@ -34,15 +31,11 @@ void main() {
     late CommentFirestoreGenerator commentGenerator;
     late CommentDataGenerator postCommentDataGenerator;
 
-    late UserCommentFirestoreGenerator userCommentGenerator;
-
     late DocumentReference<Map<String, dynamic>> postDocument;
     late CollectionReference<Map<String, dynamic>> postCommentCollection;
 
     setUp(() async {
       fakeFirestore = FakeFirebaseFirestore();
-
-      userCommentRepo = UserCommentRepositoryService(firestore: fakeFirestore);
 
       final container = ProviderContainer(
         overrides: [
@@ -70,8 +63,6 @@ void main() {
 
       commentGenerator = CommentFirestoreGenerator();
       postCommentDataGenerator = CommentDataGenerator();
-
-      userCommentGenerator = UserCommentFirestoreGenerator();
 
       postDocument = fakeFirestore
           .collection(PostFirestore.collectionName)
@@ -119,16 +110,18 @@ void main() {
 
     group("getting user comments", () {
       test("should get the comments made by a user", () async {
-        final userComments = await userCommentGenerator.addComments(
+        final (_, userComments) = await commentGenerator.addCommentsForUser(
           3,
           user.uid,
-          userCommentRepo,
+          commentRepo,
+          fakeFirestore,
         );
         // Add comments made by the other user
-        await userCommentGenerator.addComments(
+        await commentGenerator.addCommentsForUser(
           3,
           users.last.uid,
-          userCommentRepo,
+          commentRepo,
+          fakeFirestore,
         );
 
         final actualComments = await commentRepo.getUserComments(user.uid);
