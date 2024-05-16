@@ -227,38 +227,41 @@ void main() {
     }
 
     group("deleting comments", () {
-      test("should delete a comment when there are multiple comments", () async {
-        const nbUsers = 5;
-        late List<UserFirestore> users;
-        late List<CommentFirestore> postComments;
+      test(
+        "should delete a comment when there are multiple comments",
+        () async {
+          const nbUsers = 5;
+          late List<UserFirestore> users;
+          late List<CommentFirestore> postComments;
 
-        (users, postComments) = await addCommentsForUsers(nbUsers);
+          (users, postComments) = await addCommentsForUsers(nbUsers);
 
-        // Delete the comment modulo 2
-        for (final (i, user) in users.indexed) {
-          final comment = postComments[i];
+          // Delete the comment modulo 2
+          for (final (i, user) in users.indexed) {
+            final comment = postComments[i];
 
-          if (i % 2 == 0) {
-            await commentRepo.deleteComment(post.id, comment.id, user.uid);
+            if (i % 2 == 0) {
+              await commentRepo.deleteComment(post.id, comment.id, user.uid);
+            }
           }
-        }
 
-        final actualPostComments = await commentRepo.getPostComments(post.id);
+          final actualPostComments = await commentRepo.getPostComments(post.id);
 
-        // Check that the right user and post comments were deleted
-        for (final (i, user) in users.indexed) {
-          final userComments = await commentRepo.getUserComments(user.uid);
-          final postComment = postComments[i];
+          // Check that the right user and post comments were deleted
+          for (final (i, user) in users.indexed) {
+            final userComments = await commentRepo.getUserComments(user.uid);
+            final postComment = postComments[i];
 
-          if (i % 2 == 0) {
-            expect(userComments, isEmpty);
-            expect(actualPostComments.contains(postComment), isFalse);
-          } else {
-            expect(userComments, isNotEmpty);
-            expect(actualPostComments.contains(postComment), isTrue);
+            if (i % 2 == 0) {
+              expect(userComments, isEmpty);
+              expect(actualPostComments.contains(postComment), isFalse);
+            } else {
+              expect(userComments, isNotEmpty);
+              expect(actualPostComments.contains(postComment), isTrue);
+            }
           }
-        }
-      });
+        },
+      );
 
       test(
           "should thrown an error and do nothing if the comment does not exist",
