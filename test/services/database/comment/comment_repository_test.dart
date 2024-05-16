@@ -246,16 +246,17 @@ void main() {
     group("deleting comments", () {
       test("should delete a comment", () async {
         // Add a comment
-        final commentData =
-            postCommentDataGenerator.createMockCommentData(ownerId: user.uid);
-
-        final commentId = await commentRepo.addComment(post.id, commentData);
+        final (comment, _) = await commentGenerator.addComment(
+          post.id,
+          user.uid,
+          commentRepo,
+        );
 
         // Check that it was added correctly
         await checkPostAndUserCommentsNotEmpty();
 
         // Delete the comment
-        await commentRepo.deleteComment(post.id, commentId, user.uid);
+        await commentRepo.deleteComment(post.id, comment.id, user.uid);
 
         // Check that it was deleted correctly
         await checkPostAndUserCommentsEmpty();
