@@ -28,8 +28,10 @@ void main() {
     late UserCommentRepositoryService userCommentRepo;
     late CommentRepositoryService commentRepo;
 
-    late UserFirestore user;
-    late PostFirestore post;
+    late List<PostFirestore> posts; // all the posts of the db
+    late PostFirestore post; // the post we use to test
+    late List<UserFirestore> users; // all the users of the db
+    late UserFirestore user; // the user we use to test
 
     late CommentFirestoreGenerator postCommentGenerator;
     late CommentDataGenerator postCommentDataGenerator;
@@ -53,9 +55,21 @@ void main() {
 
       commentRepo = container.read(commentRepositoryServiceProvider);
 
-      user = await FirestoreUserGenerator.addUser(fakeFirestore);
-      post = FirestorePostGenerator().createUserPost(user.uid, userPosition0);
-      await setPostFirestore(post, fakeFirestore);
+      posts = await FirestorePostGenerator().addPosts(
+        fakeFirestore,
+        userPosition0,
+        2,
+      );
+      post = posts.first;
+      // All users have the same data, but this is ok.
+      users = posts
+          .map(
+            (post) =>
+                UserFirestore(uid: post.data.ownerId, data: testingUserData),
+          )
+          .toList();
+      await setUsersFirestore(fakeFirestore, users);
+      user = users.first;
 
       postCommentGenerator = CommentFirestoreGenerator();
       postCommentDataGenerator = CommentDataGenerator();
@@ -74,6 +88,12 @@ void main() {
         final postComments = await postCommentGenerator.addComments(
           3,
           post.id,
+          postCommentRepo,
+        );
+        // Add comments under the other post
+        await postCommentGenerator.addComments(
+          3,
+          posts.last.id,
           postCommentRepo,
         );
 
@@ -105,6 +125,12 @@ void main() {
         final userComments = await userCommentGenerator.addComments(
           3,
           user.uid,
+          userCommentRepo,
+        );
+        // Add comments made by the other user
+        await userCommentGenerator.addComments(
+          3,
+          users.last.uid,
           userCommentRepo,
         );
 
