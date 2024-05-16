@@ -46,12 +46,10 @@ class CommentFirestoreGenerator {
     for (var i = 0; i < number; i++) {
       final commentData = _commentDataGenerator.createMockCommentData();
       final commentId = await commentRepository.addComment(postId, commentData);
-      postComments.add(CommentFirestore(id: commentId, data: commentData));
+      final comment = CommentFirestore(id: commentId, data: commentData);
+      postComments.add(comment);
 
-      final userCommentData =
-          UserCommentData(parentPostId: postId, content: commentData.content);
-      final userComment =
-          UserCommentFirestore(id: commentId, data: userCommentData);
+      final userComment = _toUserComment(comment, postId);
       userComments.add(userComment);
     }
 
@@ -78,12 +76,10 @@ class CommentFirestoreGenerator {
       final commentId =
           await commentRepository.addComment(post.id, commentData);
 
-      postComments.add(CommentFirestore(id: commentId, data: commentData));
+      final comment = CommentFirestore(id: commentId, data: commentData);
+      postComments.add(comment);
 
-      final userCommentData =
-          UserCommentData(parentPostId: post.id, content: commentData.content);
-      final userComment =
-          UserCommentFirestore(id: commentId, data: userCommentData);
+      final userComment = _toUserComment(comment, post.id);
       userComments.add(userComment);
     }
 
