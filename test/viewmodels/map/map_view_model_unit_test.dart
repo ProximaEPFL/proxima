@@ -34,25 +34,48 @@ void main() {
     expect(mapViewModel.mapController.isCompleted, true);
   });
 
-  test("On Camera move", () async {
-    //create a new instance of the map view model
-    final mapViewModel = MapViewModel();
+  group("Camera", () {
+    test("Camera follows user by default", () async {
+      //create a new instance of the map view model
+      final mapViewModel = MapViewModel();
 
-    final mockGoogleMapController = MockGoogleMapController();
+      final mockGoogleMapController = MockGoogleMapController();
 
-    //create a new instance of the map controller
-    mapViewModel.onMapCreated(mockGoogleMapController);
+      //create a new instance of the map controller
+      mapViewModel.onMapCreated(mockGoogleMapController);
+      when(mockGoogleMapController.animateCamera(any)).thenAnswer((_) async {});
 
-    //new position for the camera
-    const newLocation = LatLng(1, 1);
+      //new position for the camera
+      const newLocation = LatLng(1, 1);
 
-    //move the camera
-    await mapViewModel.updateCamera(newLocation);
+      //move the camera
+      await mapViewModel.updateCamera(newLocation);
 
-    when(mockGoogleMapController.animateCamera(any)).thenAnswer((_) async {});
+      //check if the map controller is moved to the new location
+      verify(mockGoogleMapController.animateCamera(any)).called(1);
+    });
 
-    //check if the camera is moved to the new location
-    final newCameraPosition = CameraPosition(target: newLocation, zoom: 17);
-    verify(mockGoogleMapController.animateCamera(any)).called(1);
+    test("Camera does not follow user when disabled", () async {
+      //create a new instance of the map view model
+      final mapViewModel = MapViewModel();
+
+      final mockGoogleMapController = MockGoogleMapController();
+
+      //create a new instance of the map controller
+      mapViewModel.onMapCreated(mockGoogleMapController);
+      when(mockGoogleMapController.animateCamera(any)).thenAnswer((_) async {});
+
+      //disable the camera
+      mapViewModel.disableFollowUser();
+
+      //new position for the camera
+      const newLocation = LatLng(1, 1);
+
+      //move the camera
+      await mapViewModel.updateCamera(newLocation);
+
+      //check if the map controller is not moved to the new location
+      verifyNever(mockGoogleMapController.animateCamera(any));
+    });
   });
 }
