@@ -14,6 +14,7 @@ jobs:
         with:
           channel: stable
           flutter-version-file: pubspec.yaml
+          cache: true
 
       - name: Install Flutter Dependencies
         run: |
