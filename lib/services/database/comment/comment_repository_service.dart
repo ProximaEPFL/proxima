@@ -37,16 +37,15 @@ class CommentRepositoryService {
   ) =>
       _userCommentRepo.getUserComments(userId);
 
-  // Note: The addition/deletion/allDeletion of the comment under the post and the comment under the
-  // the user document are not done fully atomically.
-  // This is because integrating atomicity would require a complex refactor
-  // that does not add much value to the application.
-  // In the worst case, the link between the comment and the user is lost,
-  // but the database is still consistent and won't crash the application.
-
   /// This method will add the comment with data [commentData] to the
   /// post with id [parentPostId].
   /// It will also add a reference to the comment in the user document of the owner.
+  /// Important remark: The addition (and deletion and allDeletion) of the comment
+  /// under the post and the comment under the the user document are not done fully
+  /// atomically. This is because integrating atomicity would require a complex refactor
+  /// that does not add much value to the application. In the worst case, the link
+  /// between the comment and the user is lost, but the database is still consistent
+  /// and won't crash the application.
   Future<CommentIdFirestore> addComment(
     PostIdFirestore parentPostId,
     CommentData commentData,
@@ -73,6 +72,8 @@ class CommentRepositoryService {
   /// post with id [parentPostId].
   /// It will also delete the reference to the comment from the owner whose
   /// id is [ownerId].
+  /// Important remark: This is not done atomically. See [addComment]'s
+  /// documentation for more details.
   Future<void> deleteComment(
     PostIdFirestore parentPostId,
     CommentIdFirestore commentId,
@@ -95,6 +96,8 @@ class CommentRepositoryService {
   /// This method will delete all the comments under the post with id [parentPostId].
   /// It will also delete all the references to the comments from the owners.
   /// The post comments are deleted in a batch [batch].
+  /// Important remark: This is not done atomically. See [addComment]'s
+  /// documentation for more details.
   Future<void> deleteAllComments(
     PostIdFirestore parentPostId,
     WriteBatch batch,
