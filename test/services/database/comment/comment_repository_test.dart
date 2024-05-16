@@ -296,7 +296,19 @@ void main() {
         const nbUsers = 5;
         late List<UserFirestore> users;
 
+        // All users have a comment under the post
         (users, _) = await addCommentsForUsers(nbUsers);
+        // The first user has a post in the other post
+        final (_, expectedFirstUserComment) = await commentGenerator.addComment(
+          otherPost.id,
+          users.first.uid,
+          commentRepo,
+        );
+
+        final firstUserComments = await commentRepo.getUserComments(
+          users.first.uid,
+        );
+        expect(firstUserComments, hasLength(2));
 
         final batch = fakeFirestore.batch();
         await commentRepo.deleteAllComments(post.id, batch);
@@ -306,7 +318,13 @@ void main() {
         final actualPostComments = await commentRepo.getPostComments(post.id);
         expect(actualPostComments, isEmpty);
 
-        for (user in users) {
+        // The first user is the only one with a comment left
+        final actualFirstUserComments = await commentRepo.getUserComments(
+          users.first.uid,
+        );
+        expect(actualFirstUserComments, equals([expectedFirstUserComment]));
+
+        for (user in users.skip(1)) {
           final userComments = await commentRepo.getUserComments(user.uid);
           expect(userComments, isEmpty);
         }
