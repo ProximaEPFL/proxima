@@ -196,24 +196,6 @@ void main() {
       });
     });
 
-    /// Utility function to check that the post and user comments are not empty
-    Future<void> checkPostAndUserCommentsNotEmpty() async {
-      final postComments = await commentRepo.getPostComments(post.id);
-      final userComments = await commentRepo.getUserComments(user.uid);
-
-      expect(postComments, isNotEmpty);
-      expect(userComments, isNotEmpty);
-    }
-
-    /// Utility function to check that the post and user comments are empty
-    Future<void> checkPostAndUserCommentsEmpty() async {
-      final postComments = await commentRepo.getPostComments(post.id);
-      final userComments = await commentRepo.getUserComments(user.uid);
-
-      expect(postComments, isEmpty);
-      expect(userComments, isEmpty);
-    }
-
     /// Utility function to add comments for multiple users
     /// This will create [nbUsers] users and add a comment for each of them
     /// to the [post].
