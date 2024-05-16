@@ -213,6 +213,9 @@ void main() {
       expect(userComments, isEmpty);
     }
 
+    /// Utility function to add comments for multiple users
+    /// This will create [nbUsers] users and add a comment for each of them
+    /// to the [post].
     Future<(List<UserFirestore>, List<CommentFirestore>)> addCommentsForUsers(
       int nbUsers,
     ) async {
@@ -221,12 +224,13 @@ void main() {
       final postComments = <CommentFirestore>[];
 
       for (user in users) {
-        final commentData =
-            postCommentDataGenerator.createMockCommentData(ownerId: user.uid);
+        final (comment, _) = await commentGenerator.addComment(
+          post.id,
+          user.uid,
+          commentRepo,
+        );
 
-        final commentId = await commentRepo.addComment(post.id, commentData);
-
-        postComments.add(CommentFirestore(id: commentId, data: commentData));
+        postComments.add(comment);
       }
 
       // Check that the user comments have been added
