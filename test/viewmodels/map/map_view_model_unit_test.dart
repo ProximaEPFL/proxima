@@ -1,17 +1,33 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
+import "package:proxima/models/ui/map_details.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/map/map_view_model.dart";
 
+import "../../mocks/data/geopoint.dart";
+import "../../mocks/services/mock_geo_location_service.dart";
 import "../../mocks/services/mock_google_map_controller.dart";
 
 void main() {
   late MockGoogleMapController mockGoogleMapController;
   late MapViewModel mapViewModel;
+  late ProviderContainer container;
+  late MockGeolocationService mockGeolocationService;
 
   setUp(() {
     mockGoogleMapController = MockGoogleMapController();
-    mapViewModel = MapViewModel();
+    mockGeolocationService = MockGeolocationService();
+
+    container = ProviderContainer(
+      overrides: [
+        geolocationServiceProvider.overrideWithValue(mockGeolocationService),
+        mapViewModelProvider.overrideWith(() => MapViewModel()),
+      ],
+    );
+
+    mapViewModel = container.read(mapViewModelProvider.notifier);
   });
   //test the redraw circle method
   test("Redraw circle", () {
@@ -72,5 +88,27 @@ void main() {
       await mapViewModel.updateCamera(newLocation);
       verify(mockGoogleMapController.animateCamera(any)).called(1);
     });
+  });
+
+  test("Refresh updates state with new location", () async {
+    // Mock position value
+    const userPosition = userPosition1;
+
+    when(mockGeolocationService.getCurrentPosition())
+        .thenAnswer((_) async => userPosition);
+
+    // Call the refresh method
+    await mapViewModel.refresh();
+
+    // Verify the state is updated with the new location
+    final newState = container.read(mapViewModelProvider);
+    expect(newState, isInstanceOf<AsyncData<MapDetails>>());
+    expect(
+      newState.value!.initialLocation,
+      LatLng(userPosition.latitude, userPosition.longitude),
+    );
+
+    // Verify that the mockGeolocationService was called twice
+    verify(mockGeolocationService.getCurrentPosition()).called(greaterThan(0));
   });
 }
