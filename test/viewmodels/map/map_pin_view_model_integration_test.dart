@@ -16,14 +16,14 @@ void main() {
   group("Map Pin View Model integration testing", () {
     late FakeFirebaseFirestore fakeFireStore;
     late MockGeolocatorPlatform mockGeolocator;
-    late GeolocationService geoLocationService;
+    late GeolocationService geolocationService;
     late ProviderContainer container;
     late FirestorePostGenerator postGenerator;
 
     setUp(() async {
       fakeFireStore = FakeFirebaseFirestore();
       mockGeolocator = MockGeolocatorPlatform();
-      geoLocationService = GeolocationService(geoLocator: mockGeolocator);
+      geolocationService = GeolocationService(geoLocator: mockGeolocator);
       postGenerator = FirestorePostGenerator();
 
       when(mockGeolocator.isLocationServiceEnabled())
@@ -34,7 +34,7 @@ void main() {
       container = ProviderContainer(
         overrides: [
           firestoreProvider.overrideWithValue(fakeFireStore),
-          geolocationServiceProvider.overrideWithValue(geoLocationService),
+          geolocationServiceProvider.overrideWithValue(geolocationService),
         ],
       );
     });
@@ -48,7 +48,7 @@ void main() {
           );
           when(
             mockGeolocator.getCurrentPosition(
-              locationSettings: geoLocationService.locationSettings,
+              locationSettings: geolocationService.locationSettings,
             ),
           ).thenAnswer(
             (_) async => position,
@@ -56,7 +56,7 @@ void main() {
 
           when(
             mockGeolocator.getPositionStream(
-              locationSettings: geoLocationService.locationSettings,
+              locationSettings: geolocationService.locationSettings,
             ),
           ).thenAnswer(
             (_) => Stream.fromIterable([
@@ -141,7 +141,7 @@ void main() {
           // Set the initial position
           when(
             mockGeolocator.getCurrentPosition(
-              locationSettings: geoLocationService.locationSettings,
+              locationSettings: geolocationService.locationSettings,
             ),
           ).thenAnswer(
             (_) async => getSimplePosition(
@@ -153,7 +153,7 @@ void main() {
           // Set the moving position
           when(
             mockGeolocator.getPositionStream(
-              locationSettings: geoLocationService.locationSettings,
+              locationSettings: geolocationService.locationSettings,
             ),
           ).thenAnswer(
             (_) => Stream.fromIterable(
@@ -168,7 +168,7 @@ void main() {
             // Change the current position for consistency
             when(
               mockGeolocator.getCurrentPosition(
-                locationSettings: geoLocationService.locationSettings,
+                locationSettings: geolocationService.locationSettings,
               ),
             ).thenAnswer(
               (_) async => getSimplePosition(

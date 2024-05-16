@@ -15,6 +15,16 @@ class UserCommentFirestoreGenerator {
   UserCommentFirestoreGenerator({int seed = 0})
       : _userCommentDataGenerator = UserCommentDataGenerator(seed: seed);
 
+  /// Add a comment for the user with id [userId]
+  /// It will use the [userCommentRepository] to add the comment
+  /// It returns the added comment
+  Future<UserCommentFirestore> addComment(
+    UserIdFirestore userId,
+    UserCommentRepositoryService userCommentRepository,
+  ) async {
+    return (await addComments(1, userId, userCommentRepository)).first;
+  }
+
   /// Add [number] of user comments for the user with id [userId] to the firestore database.
   /// It will use the [userCommentRepository] to add the comments.
   /// It will return the list of user comments that were added.
@@ -23,17 +33,12 @@ class UserCommentFirestoreGenerator {
     UserIdFirestore userId,
     UserCommentRepositoryService userCommentRepository,
   ) async {
-    final userComments = <UserCommentFirestore>[];
-
-    for (var i = 0; i < number; i++) {
-      final userComment = createMockUserComment();
-      userComments.add(
-        UserCommentFirestore(id: userComment.id, data: userComment.data),
-      );
-
-      await userCommentRepository.addUserComment(userId, userComments.last);
-    }
-
+    final userComments = List.generate(number, (_) => createMockUserComment());
+    await Future.wait(
+      userComments.map(
+        (comment) => userCommentRepository.addUserComment(userId, comment),
+      ),
+    );
     return userComments;
   }
 
@@ -47,7 +52,7 @@ class UserCommentFirestoreGenerator {
 
     return UserCommentFirestore(
       id: commentId ?? CommentIdFirestore(value: "commentId_$_commentId"),
-      data: data ?? _userCommentDataGenerator.createMockUserCommentData(),
+      data: data ?? _userCommentDataGenerator.generateUserCommentData(),
     );
   }
 }

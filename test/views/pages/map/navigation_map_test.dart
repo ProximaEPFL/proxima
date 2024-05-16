@@ -15,11 +15,11 @@ import "../../../mocks/services/mock_geo_location_service.dart";
 
 void main() {
   late ProviderScope mapPageNoGPSWidget;
-  late MockGeoLocationService geoLocationService;
+  late MockGeolocationService geoLocationService;
   late ProviderScope homePageGPSWidget;
 
   setUp(() async {
-    geoLocationService = MockGeoLocationService();
+    geoLocationService = MockGeolocationService();
     mapPageNoGPSWidget = newMapPageNoGPS();
     homePageGPSWidget = emptyHomePageProviderGPS(geoLocationService);
   });

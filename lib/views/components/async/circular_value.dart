@@ -30,7 +30,7 @@ class CircularValue<T> extends StatelessWidget {
     this.fallbackBuilder = _defaultFallback,
   });
 
-  static Widget _defaultFallback(BuildContext context, Object error) =>
+  static Widget _defaultFallback(BuildContext _, Object __) =>
       const SizedBox.shrink();
 
   @override

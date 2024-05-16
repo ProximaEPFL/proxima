@@ -47,12 +47,12 @@ class PostsFeedViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
     );
 
     // Wait for both futures to complete for optimisation
-    final List<dynamic> results = await Future.wait([
+    final results = await Future.wait([
       postsFirestoreFuture,
       challengesFuture,
     ]);
-    List<PostFirestore> postsFirestore = results[0];
-    final List<ChallengeFirestore> challenges = results[1];
+    var postsFirestore = results[0] as List<PostFirestore>;
+    final challenges = results[1] as List<ChallengeFirestore>;
 
     final uncompletedChallenges = challenges.whereNot(
       (challenge) => challenge.data.isCompleted,
@@ -92,7 +92,9 @@ class PostsFeedViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
         title: post.data.title,
         description: post.data.description,
         voteScore: post.data.voteScore,
+        ownerUsername: owner.data.username,
         ownerDisplayName: owner.data.displayName,
+        ownerCentauriPoints: owner.data.centauriPoints,
         commentNumber: post.data.commentCount,
         publicationDate: post.data.publicationTime.toDate(),
         distance: distance,

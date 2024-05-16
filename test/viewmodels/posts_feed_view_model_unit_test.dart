@@ -26,7 +26,7 @@ import "../mocks/services/mock_user_repository_service.dart";
 
 void main() {
   group("Post Overview Provider unit testing", () {
-    late MockGeoLocationService geoLocationService;
+    late MockGeolocationService geoLocationService;
     late PostRepositoryService postRepository;
     late UserRepositoryService userRepository;
     late ChallengeRepositoryService challengeRepository;
@@ -34,7 +34,7 @@ void main() {
     late ProviderContainer container;
 
     setUp(() {
-      geoLocationService = MockGeoLocationService();
+      geoLocationService = MockGeolocationService();
       postRepository = MockPostRepositoryService();
       userRepository = MockUserRepositoryService();
       challengeRepository = MockChallengeRepositoryService();
@@ -117,6 +117,8 @@ void main() {
           voteScore: post.data.voteScore,
           commentNumber: post.data.commentCount,
           ownerDisplayName: owner.data.displayName,
+          ownerUsername: owner.data.username,
+          ownerCentauriPoints: owner.data.centauriPoints,
           publicationDate: post.data.publicationTime.toDate(),
           distance: 0,
         ),
@@ -173,6 +175,8 @@ void main() {
             voteScore: post.data.voteScore,
             commentNumber: post.data.commentCount,
             ownerDisplayName: owner.data.displayName,
+            ownerUsername: owner.data.username,
+            ownerCentauriPoints: owner.data.centauriPoints,
             publicationDate: post.data.publicationTime.toDate(),
             distance: 0,
           );
@@ -237,6 +241,8 @@ void main() {
             voteScore: post.data.voteScore,
             commentNumber: post.data.commentCount,
             ownerDisplayName: owners[index].data.displayName,
+            ownerUsername: owners[index].data.username,
+            ownerCentauriPoints: owners[index].data.centauriPoints,
             publicationDate: post.data.publicationTime.toDate(),
             distance: 0,
           );
@@ -314,6 +320,8 @@ void main() {
           voteScore: post.data.voteScore,
           commentNumber: post.data.commentCount,
           ownerDisplayName: owner.data.displayName,
+          ownerUsername: owner.data.username,
+          ownerCentauriPoints: owner.data.centauriPoints,
           publicationDate: post.data.publicationTime.toDate(),
           distance: 0,
         ),

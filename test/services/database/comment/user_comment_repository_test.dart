@@ -56,11 +56,10 @@ void main() {
       });
 
       test("should throw an error if a document has missing fields", () async {
-        final userComment = (await userCommentGenerator.addComments(
-          1,
+        final userComment = await userCommentGenerator.addComment(
           user.uid,
           userCommentRepository,
-        ))[0];
+        );
 
         // Delete the comment content field
         await userCommentsCollection
