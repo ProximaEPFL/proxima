@@ -5,7 +5,7 @@ import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/database/vote/vote_state.dart";
-import "package:proxima/services/database/comment/post_comment_repository_service.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/services/database/comment_upvote_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
@@ -20,7 +20,7 @@ void main() {
   group("Testing comment upvote repository", () {
     late FakeFirebaseFirestore firestore;
     late PostRepositoryService postRepository;
-    late PostCommentRepositoryService commentRepository;
+    late CommentRepositoryService commentRepository;
     late UpvoteRepositoryService<CommentIdFirestore> commentUpvoteRepository;
     late CommentDataGenerator commentDataGenerator;
 
@@ -30,7 +30,7 @@ void main() {
     setUp(() async {
       firestore = FakeFirebaseFirestore();
       postRepository = PostRepositoryService(firestore: firestore);
-      commentRepository = PostCommentRepositoryService(firestore: firestore);
+      commentRepository = CommentRepositoryService(firestore: firestore);
       commentDataGenerator = CommentDataGenerator();
 
       final container = ProviderContainer(
@@ -84,7 +84,7 @@ void main() {
         );
 
         // Check that the votescore of the comment is updated
-        final comments = await commentRepository.getComments(postId);
+        final comments = await commentRepository.getPostComments(postId);
         final comment = comments.first;
 
         expect(comment.data.voteScore, 1);
@@ -123,7 +123,7 @@ void main() {
         }
 
         // Check that the votescore of the comment is updated
-        final comments = await commentRepository.getComments(postId);
+        final comments = await commentRepository.getPostComments(postId);
         final comment = comments.first;
 
         expect(comment.data.voteScore, expectedVoteScore);
