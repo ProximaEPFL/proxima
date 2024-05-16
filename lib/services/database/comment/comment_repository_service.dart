@@ -97,12 +97,12 @@ class CommentRepositoryService {
     final comments = await getPostComments(parentPostId);
 
     // The user comments are deleted in parallel
-    final userCommentsDeletion = comments.map((comment) async {
-      await _userCommentRepo.deleteUserComment(
+    final userCommentsDeletion = comments.map(
+      (comment) => _userCommentRepo.deleteUserComment(
         comment.data.ownerId,
         comment.id,
-      );
-    });
+      ),
+    );
 
     await Future.wait(userCommentsDeletion);
 
