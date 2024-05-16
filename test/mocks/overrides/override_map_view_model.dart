@@ -5,7 +5,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/viewmodels/map/map_view_model.dart";
 
-// A mock implementation of the [MapViewModel] class.
+/// A mock implementation of the [MapViewModel] class.
 class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
     implements MapViewModel {
   final Future<MapDetails> Function() _build;
@@ -15,6 +15,10 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
   final Future<void> Function(LatLng) _redrawCircle;
   final Completer<GoogleMapController> _mapController;
 
+  final void Function() _disableFollowUser;
+  final void Function() _enableFollowUser;
+  final Future<void> Function(LatLng) _moveCamera;
+
   MockMapViewModel({
     Future<MapDetails> Function()? build,
     Future<void> Function()? onRefresh,
@@ -23,13 +27,19 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
     Future<void> Function(LatLng)? redrawCircle,
     Set<Circle>? circles,
     Completer<GoogleMapController>? mapController,
+    void Function()? disableFollowUser,
+    void Function()? enableFollowUser,
+    void Function(LatLng)? moveCamera,
   })  : _build = build ??
             (() async => throw Exception("Location services are disabled.")),
         _onRefresh = onRefresh ?? (() async {}),
         _onMapCreated = onMapCreated ?? ((_) {}),
         _circles = circles ?? {},
         _redrawCircle = redrawCircle ?? ((_) async {}),
-        _mapController = mapController ?? Completer();
+        _mapController = mapController ?? Completer(),
+        _disableFollowUser = disableFollowUser ?? (() {}),
+        _enableFollowUser = enableFollowUser ?? (() {}),
+        _moveCamera = animateCamera ?? ((_) async {});
 
   @override
   Future<MapDetails> build() => _build();
@@ -49,6 +59,15 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
 
   @override
   Completer<GoogleMapController> get mapController => _mapController;
+
+  @override
+  void disableFollowUser() => _disableFollowUser();
+
+  @override
+  void enableFollowUser() => _enableFollowUser();
+
+  @override
+  Future<void> updateCamera(LatLng target) => _moveCamera(target);
 }
 
 final mockNoGPSMapViewModelOverride = [

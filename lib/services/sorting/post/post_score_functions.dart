@@ -4,7 +4,7 @@ import "package:proxima/models/database/post/post_firestore.dart";
 
 typedef PostScoreFunction = double Function(
   PostFirestore post,
-  GeoPoint position,
+  GeoPoint userPosition,
 );
 
 /// Increases by 1 every upvote, but decreases by 1 every day
@@ -13,7 +13,7 @@ double hotScore(PostFirestore post, GeoPoint userPosition) {
 }
 
 /// Increase by 1 every upvote
-double voteScore(PostFirestore post, GeoPoint userPosition) {
+double voteScore(PostFirestore post, GeoPoint _) {
   return post.data.voteScore.toDouble();
 }
 
@@ -22,15 +22,17 @@ double voteScore(PostFirestore post, GeoPoint userPosition) {
 /// it to -postDate since the same constant added to all scores (currentDate)
 /// does not matter. See [PostSortOption] constructor documentation for more
 /// details.
-double dayScore(PostFirestore post, GeoPoint userPosition) {
+double dayScore(PostFirestore post, GeoPoint _) {
   final timeInMs = post.data.publicationTime.millisecondsSinceEpoch;
   final timeInDays = timeInMs / (1000.0 * 60.0 * 60.0 * 24);
+
   return -timeInDays;
 }
 
 /// Increases by 1 every meters
 double distanceScore(PostFirestore post, GeoPoint userPosition) {
   final postPosition = post.location.geoPoint;
+
   return Geolocator.distanceBetween(
     userPosition.latitude,
     userPosition.longitude,

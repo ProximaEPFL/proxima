@@ -5,8 +5,8 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 
-// This view model is used to fetch the list of map pins that
-// needs to be displayed in the map page.
+/// This view model is used to fetch the list of map pins that
+/// needs to be displayed in the map page.
 class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
   @override
   Future<List<MapPinDetails>> build() async {
@@ -23,10 +23,13 @@ class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
     );
     final pinList = nearPosts.map((post) {
       final postPosition = post.location.geoPoint;
+
       return MapPinDetails(
         id: MarkerId(post.id.value),
         position: LatLng(postPosition.latitude, postPosition.longitude),
-        callbackFunction: () {},
+        callbackFunction: () {
+          return;
+        },
       );
     }).toList();
 

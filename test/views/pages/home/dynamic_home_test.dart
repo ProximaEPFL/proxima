@@ -20,13 +20,13 @@ void main() {
   const position = userPosition0;
 
   late FakeFirebaseFirestore firestore;
-  late MockGeoLocationService geoLocationService;
+  late MockGeolocationService geoLocationService;
   late ProviderScope homepageWidget;
   late List<PostFirestore> posts;
 
   setUp(() async {
     firestore = FakeFirebaseFirestore();
-    geoLocationService = MockGeoLocationService();
+    geoLocationService = MockGeolocationService();
     homepageWidget = homePageFakeFirestoreProvider(
       firestore,
       geoLocationService,

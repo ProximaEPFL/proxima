@@ -5,7 +5,7 @@ import "package:proxima/services/sensors/geolocation_service.dart";
 
 import "../data/geopoint.dart";
 
-class MockGeoLocationService extends Mock implements GeolocationService {
+class MockGeolocationService extends Mock implements GeolocationService {
   @override
   Future<GeoPoint> getCurrentPosition() {
     return super.noSuchMethod(

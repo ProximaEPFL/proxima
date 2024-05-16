@@ -9,6 +9,8 @@ class PostDetails {
   final int voteScore;
   final int commentNumber;
   final String ownerDisplayName;
+  final String ownerUsername;
+  final int ownerCentauriPoints;
   final DateTime publicationDate;
   final int distance; // in meters
   final bool isChallenge;
@@ -20,6 +22,8 @@ class PostDetails {
     required this.voteScore,
     required this.commentNumber,
     required this.ownerDisplayName,
+    required this.ownerUsername,
+    required this.ownerCentauriPoints,
     required this.publicationDate,
     required this.distance,
     this.isChallenge = false,
@@ -36,6 +40,8 @@ class PostDetails {
         other.voteScore == voteScore &&
         other.commentNumber == commentNumber &&
         other.ownerDisplayName == ownerDisplayName &&
+        other.ownerUsername == ownerUsername &&
+        other.ownerCentauriPoints == ownerCentauriPoints &&
         other.publicationDate == publicationDate &&
         other.distance == distance &&
         other.isChallenge == isChallenge;
@@ -50,6 +56,8 @@ class PostDetails {
       voteScore,
       commentNumber,
       ownerDisplayName,
+      ownerUsername,
+      ownerCentauriPoints,
       publicationDate,
       distance,
       isChallenge,
