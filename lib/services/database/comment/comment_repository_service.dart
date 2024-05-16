@@ -76,12 +76,15 @@ class CommentRepositoryService {
     CommentIdFirestore commentId,
     UserIdFirestore ownerId,
   ) async {
-    await _postCommentRepo.deleteComment(parentPostId, commentId);
+    final deleteCommentFuture =
+        _postCommentRepo.deleteComment(parentPostId, commentId);
 
-    await _userCommentRepo.deleteUserComment(
+    final deleteUserCommentFuture = _userCommentRepo.deleteUserComment(
       ownerId,
       commentId,
     );
+
+    await Future.wait([deleteCommentFuture, deleteUserCommentFuture]);
   }
 
   /// This method will delete all the comments under the post with id [parentPostId].
