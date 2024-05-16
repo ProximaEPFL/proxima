@@ -1,10 +1,8 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
-import "package:proxima/services/database/firestore_service.dart";
 
 /// This class is responsible for managing the user's comments in the firestore database.
 class UserCommentRepositoryService {
@@ -50,19 +48,14 @@ class UserCommentRepositoryService {
 
   /// Delete the reference to the comment with id [commentId] that the user
   /// with id [userId] made.
-  Future<void> deleteUserComment(
+  /// The deletion is not performed directly but added to the write batch [batch]
+  void deleteUserComment(
     UserIdFirestore userId,
     CommentIdFirestore commentId,
-  ) async {
-    final userCommentCollection = _userCommentCollection(userId);
+    WriteBatch batch,
+  ) {
+    final commentToDelete = _userCommentCollection(userId).doc(commentId.value);
 
-    await userCommentCollection.doc(commentId.value).delete();
+    batch.delete(commentToDelete);
   }
 }
-
-final userCommentRepositoryServiceProvider =
-    Provider<UserCommentRepositoryService>(
-  (ref) => UserCommentRepositoryService(
-    firestore: ref.watch(firestoreProvider),
-  ),
-);
