@@ -7,6 +7,7 @@ import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/map/map_view_model.dart";
 
 import "../../mocks/data/geopoint.dart";
+import "../../mocks/data/latLng.dart";
 import "../../mocks/services/mock_geo_location_service.dart";
 import "../../mocks/services/mock_google_map_controller.dart";
 
@@ -15,6 +16,7 @@ void main() {
   late MapViewModel mapViewModel;
   late ProviderContainer container;
   late MockGeolocationService mockGeolocationService;
+  const newLocation = latLngLocation1;
 
   setUp(() {
     mockGoogleMapController = MockGoogleMapController();
@@ -31,9 +33,6 @@ void main() {
   });
   //test the redraw circle method
   test("Redraw circle", () {
-    //new position for the circle
-    const newLocation = LatLng(1, 1);
-
     //redraw the circle
     mapViewModel.redrawCircle(newLocation);
 
@@ -55,9 +54,6 @@ void main() {
       mapViewModel.onMapCreated(mockGoogleMapController);
       when(mockGoogleMapController.animateCamera(any)).thenAnswer((_) async {});
 
-      //new position for the camera
-      const newLocation = LatLng(1, 1);
-
       //move the camera
       await mapViewModel.updateCamera(newLocation);
 
@@ -73,9 +69,6 @@ void main() {
 
       //disable the camera
       mapViewModel.disableFollowUser();
-
-      //new position for the camera
-      const newLocation = LatLng(1, 1);
 
       //move the camera
       await mapViewModel.updateCamera(newLocation);
