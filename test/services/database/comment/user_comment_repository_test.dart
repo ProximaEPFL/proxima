@@ -108,10 +108,15 @@ void main() {
         final commentToDelete = userComments.first;
 
         // Delete the comment
-        await userCommentRepository.deleteUserComment(
+        final batch = fakeFirestore.batch();
+
+        userCommentRepository.deleteUserComment(
           user.uid,
           commentToDelete.id,
+          batch,
         );
+
+        await batch.commit();
 
         // Check if the comment was deleted
         final expectedComments =

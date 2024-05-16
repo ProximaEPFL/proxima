@@ -15,12 +15,14 @@ import "package:proxima/services/database/firestore_service.dart";
 /// It will allow to add, delete and retrieve comments from the firestore database.
 /// And it will handle the references between the comments and the users.
 class CommentRepositoryService {
+  final FirebaseFirestore _firestore;
   final PostCommentRepositoryService _postCommentRepo;
   final UserCommentRepositoryService _userCommentRepo;
 
   CommentRepositoryService({
     required FirebaseFirestore firestore,
-  })  : _postCommentRepo = PostCommentRepositoryService(firestore: firestore),
+  })  : _firestore = firestore,
+        _postCommentRepo = PostCommentRepositoryService(firestore: firestore),
         _userCommentRepo = UserCommentRepositoryService(firestore: firestore);
 
   /// This method returns the comments of the post with id [parentPostId]
@@ -79,10 +81,13 @@ class CommentRepositoryService {
     final deleteCommentFuture =
         _postCommentRepo.deleteComment(parentPostId, commentId);
 
-    final deleteUserCommentFuture = _userCommentRepo.deleteUserComment(
+    final batch = _firestore.batch();
+    _userCommentRepo.deleteUserComment(
       ownerId,
       commentId,
+      batch,
     );
+    final deleteUserCommentFuture = batch.commit();
 
     await Future.wait([deleteCommentFuture, deleteUserCommentFuture]);
   }
@@ -97,14 +102,13 @@ class CommentRepositoryService {
     final comments = await getPostComments(parentPostId);
 
     // The user comments are deleted in parallel
-    final userCommentsDeletion = comments.map(
-      (comment) => _userCommentRepo.deleteUserComment(
+    for (final comment in comments) {
+      _userCommentRepo.deleteUserComment(
         comment.data.ownerId,
         comment.id,
-      ),
-    );
-
-    await Future.wait(userCommentsDeletion);
+        batch,
+      );
+    }
 
     // The post comments are deleted in a batch
     await _postCommentRepo.deleteAllComments(parentPostId, batch);
