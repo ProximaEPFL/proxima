@@ -86,8 +86,8 @@ void main() {
       );
     });
 
-    testWidgets("Display FAB", (tester) async {
-      await tester.pumpWidget(mapWidget);
+    testWidgets("Display Follow Button", (tester) async {
+      await tester.pumpWidget(mapWidgetWithPins);
       await tester.pumpAndSettle();
 
       final followButton = find.byKey(PostMap.followButtonKey);
