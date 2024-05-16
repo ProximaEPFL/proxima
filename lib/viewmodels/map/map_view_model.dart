@@ -65,14 +65,10 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   bool _followUser = true;
 
   /// Enable the camera to follow the user
-  void enableFollowUser() {
-    _followUser = true;
-  }
+  void enableFollowUser() => _followUser = true;
 
   /// Disable the camera from following the user
-  void disableFollowUser() {
-    _followUser = false;
-  }
+  void disableFollowUser() => _followUser = false;
 
   /// Move the camera to the target location
   /// Only moves the camera if the follow user is enabled
