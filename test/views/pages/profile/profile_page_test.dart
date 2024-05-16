@@ -6,7 +6,6 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/services/database/comment/comment_repository_service.dart";
-import "package:proxima/services/database/comment/user_comment_repository_service.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
@@ -32,6 +31,7 @@ void main() {
   late CollectionReference<Map<String, dynamic>> userCollection;
   late ProviderScope mockedProfilePage;
   late PostFirestore fakePost;
+  late CommentRepositoryService commentRepo;
 
   final expectedUser = testingUserFirestore;
 
@@ -53,7 +53,7 @@ void main() {
     );
 
     //get the comment repository service to add comments
-    final commentRepo = CommentRepositoryService(
+    commentRepo = CommentRepositoryService(
       firestore: fakeFireStore,
     );
 
@@ -215,13 +215,7 @@ void main() {
       final noInfoCardComment = find.byKey(ProfileInfoCard.infoCardKey);
       expect(noInfoCardComment, findsNothing);
 
-      //check that the comment was deleted from the comment repository
-      final userCommentRepo = UserCommentRepositoryService(
-        firestore: fakeFireStore,
-      );
-
-      final userComments =
-          await userCommentRepo.getUserComments(expectedUser.uid);
+      final userComments = await commentRepo.getUserComments(expectedUser.uid);
       expect(userComments, isEmpty);
     });
 
