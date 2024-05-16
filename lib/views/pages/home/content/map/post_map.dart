@@ -13,6 +13,7 @@ class PostMap extends ConsumerWidget {
   final MapDetails mapInfo;
 
   static const postMapKey = Key("postMap");
+  static const followButtonKey = Key("followButton");
 
   const PostMap({
     super.key,
@@ -65,6 +66,7 @@ class PostMap extends ConsumerWidget {
     );
 
     final followButton = FloatingActionButton(
+      key: followButtonKey,
       onPressed: () {
         // Center the camera on the user's position and follow
         positionValue.whenData((geoPoint) {

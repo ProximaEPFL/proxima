@@ -90,7 +90,9 @@ void main() {
       await tester.pumpWidget(mapWidget);
       await tester.pumpAndSettle();
 
-      expect(find.byType(FloatingActionButton), findsOneWidget);
+      final followButton = find.byKey(PostMap.followButtonKey);
+      expect(followButton, findsOneWidget);
+      await tester.tap(followButton);
     });
   });
 
