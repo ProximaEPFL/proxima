@@ -21,10 +21,10 @@ void main() {
 
     late CommentRepositoryService commentRepo;
 
-    late List<PostFirestore> posts; // all the posts of the db
     late PostFirestore post; // the post we use to test
-    late List<UserFirestore> users; // all the users of the db
+    late PostFirestore otherPost; // some other post
     late UserFirestore user; // the user we use to test
+    late UserFirestore otherUser; // some other user
 
     late CommentFirestoreGenerator commentGenerator;
     late CommentDataGenerator postCommentDataGenerator;
@@ -43,14 +43,15 @@ void main() {
 
       commentRepo = container.read(commentRepositoryServiceProvider);
 
-      posts = await FirestorePostGenerator().addPosts(
+      final posts = await FirestorePostGenerator().addPosts(
         fakeFirestore,
         userPosition0,
         2,
       );
       post = posts.first;
+      otherPost = posts.last;
       // All users have the same data, but this is ok.
-      users = posts
+      final users = posts
           .map(
             (post) =>
                 UserFirestore(uid: post.data.ownerId, data: testingUserData),
@@ -58,6 +59,7 @@ void main() {
           .toList();
       await setUsersFirestore(fakeFirestore, users);
       user = users.first;
+      otherUser = users.last;
 
       commentGenerator = CommentFirestoreGenerator();
       postCommentDataGenerator = CommentDataGenerator();
@@ -79,7 +81,7 @@ void main() {
         // Add comments under the other post
         await commentGenerator.addComments(
           3,
-          posts.last.id,
+          otherPost.id,
           commentRepo,
         );
 
@@ -117,7 +119,7 @@ void main() {
         // Add comments made by the other user
         await commentGenerator.addCommentsForUser(
           3,
-          users.last.uid,
+          otherUser.uid,
           commentRepo,
           fakeFirestore,
         );
@@ -139,18 +141,18 @@ void main() {
         final (postCommentUser0Post0, userCommentUser0Post0) =
             await commentGenerator.addComment(post.id, user.uid, commentRepo);
         final (_, userCommentUser0Post1) = await commentGenerator.addComment(
-          posts.last.id,
+          otherPost.id,
           user.uid,
           commentRepo,
         );
         final (postCommentUser1Post0, _) = await commentGenerator.addComment(
           post.id,
-          users.last.uid,
+          otherUser.uid,
           commentRepo,
         );
         await commentGenerator.addComment(
-          posts.last.id,
-          users.last.uid,
+          otherPost.id,
+          otherUser.uid,
           commentRepo,
         );
 
