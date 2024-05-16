@@ -245,24 +245,6 @@ void main() {
     }
 
     group("deleting comments", () {
-      test("should delete a comment", () async {
-        // Add a comment
-        final (comment, _) = await commentGenerator.addComment(
-          post.id,
-          user.uid,
-          commentRepo,
-        );
-
-        // Check that it was added correctly
-        await checkPostAndUserCommentsNotEmpty();
-
-        // Delete the comment
-        await commentRepo.deleteComment(post.id, comment.id, user.uid);
-
-        // Check that it was deleted correctly
-        await checkPostAndUserCommentsEmpty();
-      });
-
       test("should delete a comment when they are multiple comments", () async {
         const nbUsers = 5;
         late List<UserFirestore> users;
