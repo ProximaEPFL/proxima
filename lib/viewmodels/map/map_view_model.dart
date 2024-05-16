@@ -59,6 +59,7 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
     state = await AsyncValue.guard(() => build());
   }
 
+  /// This is the initial zoom level of the map
   static const initialZoomLevel = 17.0;
 
   // This boolean is used to determine if the camera should follow the user
