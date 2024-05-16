@@ -47,7 +47,7 @@ class UserCommentFirestoreGenerator {
 
     return UserCommentFirestore(
       id: commentId ?? CommentIdFirestore(value: "commentId_$_commentId"),
-      data: data ?? _userCommentDataGenerator.createMockUserCommentData(),
+      data: data ?? _userCommentDataGenerator.generateUserCommentData(),
     );
   }
 }

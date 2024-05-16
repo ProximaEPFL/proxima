@@ -10,13 +10,13 @@ class UserCommentDataGenerator {
   UserCommentDataGenerator({int seed = 0}) : _random = Random(seed);
 
   /// Generate a list of [UserCommentData] instances with random data.
-  List<UserCommentData> generateUserCommentData(int count) {
-    return List.generate(count, (_) => createMockUserCommentData());
+  List<UserCommentData> generateUserCommentDatas(int count) {
+    return List.generate(count, (_) => generateUserCommentData());
   }
 
   /// Create a random mock [UserCommentData] instance.
   /// The [parentPostId] and [content] can be provided to avoid randomness.
-  UserCommentData createMockUserCommentData({
+  UserCommentData generateUserCommentData({
     PostIdFirestore? parentPostId,
     String? content,
   }) {
