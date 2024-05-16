@@ -22,6 +22,11 @@ jobs:
           flutter --version
           flutter pub get
 
+      - name: Import API Keys
+        env:
+          API_KEYS: ${{ secrets.API_KEYS }}
+        run: echo "$API_KEYS" > api_keys.json
+
       - name: Import Release Certificate
         env:
           B64_RELEASE_KEYSTORE: ${{ secrets.B64_RELEASE_KEYSTORE }}

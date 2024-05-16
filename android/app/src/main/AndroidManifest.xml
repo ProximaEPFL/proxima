@@ -30,12 +30,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <!-- The Google map API key is public for now for simplicity but will be made private
-        when issue #159 (https://github.com/ProximaEPFL/proxima/issues/159) is
-        resolved.) -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBp0pAND5nl9u0YanI9W11MXYTVLs5FoX0" />
+            android:value="${MAPS_KEY}" />
 
     </application>
     <!-- Required to query activities that can process text, see:
