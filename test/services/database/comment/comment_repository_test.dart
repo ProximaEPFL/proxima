@@ -53,7 +53,7 @@ void main() {
 
       commentRepo = container.read(commentRepositoryServiceProvider);
 
-      user = (await FirestoreUserGenerator.addUsers(fakeFirestore, 1)).first;
+      user = await FirestoreUserGenerator.addUser(fakeFirestore);
       post = FirestorePostGenerator().createUserPost(user.uid, userPosition0);
       await setPostFirestore(post, fakeFirestore);
 
