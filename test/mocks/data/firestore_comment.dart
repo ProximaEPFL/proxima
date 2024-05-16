@@ -26,7 +26,8 @@ class CommentFirestoreGenerator {
     UserIdFirestore userId,
     CommentRepositoryService commentRepository,
   ) async {
-    final commentData = _commentDataGenerator.createMockCommentData();
+    final commentData =
+        _commentDataGenerator.createMockCommentData(ownerId: userId);
     final commentId = await commentRepository.addComment(postId, commentData);
 
     final comment = CommentFirestore(id: commentId, data: commentData);
