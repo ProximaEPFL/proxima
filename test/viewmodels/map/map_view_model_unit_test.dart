@@ -108,7 +108,7 @@ void main() {
       LatLng(userPosition.latitude, userPosition.longitude),
     );
 
-    // Verify that the mockGeolocationService was called twice
-    verify(mockGeolocationService.getCurrentPosition()).called(greaterThan(0));
+    // Verify that the mockGeolocationService was called twice, once for the initial location and once for the refresh
+    verify(mockGeolocationService.getCurrentPosition()).called(2);
   });
 }
