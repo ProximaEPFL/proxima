@@ -6,8 +6,6 @@ import "package:proxima/models/database/comment/comment_firestore.dart";
 import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
-import "package:proxima/models/database/user_comment/user_comment_data.dart";
-import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
 import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 
@@ -137,32 +135,40 @@ void main() {
     });
 
     group("adding comments", () {
-      test("should add a comment", () async {
-        final commentData =
-            postCommentDataGenerator.createMockCommentData(ownerId: user.uid);
-
-        final commentId = await commentRepo.addComment(post.id, commentData);
-
-        // Get the expected comment
-        final expectedPostComment = CommentFirestore(
-          id: commentId,
-          data: commentData,
+      test("should add comments", () async {
+        final (postCommentUser0Post0, userCommentUser0Post0) =
+            await commentGenerator.addComment(post.id, user.uid, commentRepo);
+        final (_, userCommentUser0Post1) = await commentGenerator.addComment(
+          posts.last.id,
+          user.uid,
+          commentRepo,
+        );
+        final (postCommentUser1Post0, _) = await commentGenerator.addComment(
+          post.id,
+          users.last.uid,
+          commentRepo,
+        );
+        await commentGenerator.addComment(
+          posts.last.id,
+          users.last.uid,
+          commentRepo,
         );
 
-        final expectedUserComment = UserCommentFirestore(
-          id: commentId,
-          data: UserCommentData(
-            parentPostId: post.id,
-            content: commentData.content,
-          ),
-        );
-
-        // Get the actual comments
+        // Check the post comments are correct
+        final expectedPostComments = [
+          postCommentUser0Post0,
+          postCommentUser1Post0,
+        ];
         final actualPostComments = await commentRepo.getPostComments(post.id);
-        final actualUserComments = await commentRepo.getUserComments(user.uid);
+        expect(actualPostComments, unorderedEquals(expectedPostComments));
 
-        expect(actualPostComments, [expectedPostComment]);
-        expect(actualUserComments, [expectedUserComment]);
+        // Check the user comments are correct
+        final expectedUserComments = [
+          userCommentUser0Post0,
+          userCommentUser0Post1,
+        ];
+        final actualUserComments = await commentRepo.getUserComments(user.uid);
+        expect(actualUserComments, unorderedEquals(expectedUserComments));
       });
 
       test(
