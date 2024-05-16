@@ -227,7 +227,7 @@ void main() {
     }
 
     group("deleting comments", () {
-      test("should delete a comment when they are multiple comments", () async {
+      test("should delete a comment when there are multiple comments", () async {
         const nbUsers = 5;
         late List<UserFirestore> users;
         late List<CommentFirestore> postComments;
