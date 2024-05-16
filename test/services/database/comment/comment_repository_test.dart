@@ -1,13 +1,14 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_firestore.dart";
+import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user_comment/user_comment_data.dart";
 import "package:proxima/models/database/user_comment/user_comment_firestore.dart";
 import "package:proxima/services/database/comment/comment_repository_service.dart";
-import "package:proxima/services/database/comment/post_comment_repository_service.dart";
 import "package:proxima/services/database/comment/user_comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 
@@ -22,22 +23,25 @@ void main() {
   group("Testing comment repository", () {
     late FakeFirebaseFirestore fakeFirestore;
 
-    late PostCommentRepositoryService postCommentRepo;
     late UserCommentRepositoryService userCommentRepo;
     late CommentRepositoryService commentRepo;
 
-    late UserFirestore user;
-    late PostFirestore post;
+    late List<PostFirestore> posts; // all the posts of the db
+    late PostFirestore post; // the post we use to test
+    late List<UserFirestore> users; // all the users of the db
+    late UserFirestore user; // the user we use to test
 
-    late CommentFirestoreGenerator postCommentGenerator;
+    late CommentFirestoreGenerator commentGenerator;
     late CommentDataGenerator postCommentDataGenerator;
 
     late UserCommentFirestoreGenerator userCommentGenerator;
 
+    late DocumentReference<Map<String, dynamic>> postDocument;
+    late CollectionReference<Map<String, dynamic>> postCommentCollection;
+
     setUp(() async {
       fakeFirestore = FakeFirebaseFirestore();
 
-      postCommentRepo = PostCommentRepositoryService(firestore: fakeFirestore);
       userCommentRepo = UserCommentRepositoryService(firestore: fakeFirestore);
 
       final container = ProviderContainer(
@@ -48,63 +52,146 @@ void main() {
 
       commentRepo = container.read(commentRepositoryServiceProvider);
 
-      user = (await FirestoreUserGenerator.addUsers(fakeFirestore, 1)).first;
-      post = FirestorePostGenerator().createUserPost(user.uid, userPosition0);
-      await setPostFirestore(post, fakeFirestore);
+      posts = await FirestorePostGenerator().addPosts(
+        fakeFirestore,
+        userPosition0,
+        2,
+      );
+      post = posts.first;
+      // All users have the same data, but this is ok.
+      users = posts
+          .map(
+            (post) =>
+                UserFirestore(uid: post.data.ownerId, data: testingUserData),
+          )
+          .toList();
+      await setUsersFirestore(fakeFirestore, users);
+      user = users.first;
 
-      postCommentGenerator = CommentFirestoreGenerator();
+      commentGenerator = CommentFirestoreGenerator();
       postCommentDataGenerator = CommentDataGenerator();
 
       userCommentGenerator = UserCommentFirestoreGenerator();
+
+      postDocument = fakeFirestore
+          .collection(PostFirestore.collectionName)
+          .doc(post.id.value);
+      postCommentCollection =
+          postDocument.collection(CommentFirestore.subCollectionName);
     });
 
-    test("should get the comments under a post", () async {
-      final postComments = await postCommentGenerator.addComments(
-        3,
-        post.id,
-        postCommentRepo,
-      );
+    group("getting post comments", () {
+      test("should get the comments under a post", () async {
+        final (postComments, _) = await commentGenerator.addComments(
+          3,
+          post.id,
+          commentRepo,
+        );
+        // Add comments under the other post
+        await commentGenerator.addComments(
+          3,
+          posts.last.id,
+          commentRepo,
+        );
 
-      final actualComments = await commentRepo.getPostComments(post.id);
+        final actualComments = await commentRepo.getPostComments(post.id);
 
-      expect(actualComments, unorderedEquals(postComments));
+        expect(actualComments, unorderedEquals(postComments));
+      });
+
+      test("should return an empty list if there are no comments", () async {
+        final comments = await commentRepo.getPostComments(post.id);
+
+        expect(comments, isEmpty);
+      });
+
+      test("should throw an error if the comment has missing field", () async {
+        await postCommentCollection.doc("comment_id").set({
+          "missing_field": "missing_field",
+        });
+
+        expect(
+          () async => await commentRepo.getPostComments(post.id),
+          throwsA(isA<FormatException>()),
+        );
+      });
     });
 
-    test("should get the comments made by a user", () async {
-      final userComments =
-          await userCommentGenerator.addComments(3, user.uid, userCommentRepo);
+    group("getting user comments", () {
+      test("should get the comments made by a user", () async {
+        final userComments = await userCommentGenerator.addComments(
+          3,
+          user.uid,
+          userCommentRepo,
+        );
+        // Add comments made by the other user
+        await userCommentGenerator.addComments(
+          3,
+          users.last.uid,
+          userCommentRepo,
+        );
 
-      final actualComments = await commentRepo.getUserComments(user.uid);
+        final actualComments = await commentRepo.getUserComments(user.uid);
 
-      expect(actualComments, unorderedEquals(userComments));
+        expect(actualComments, unorderedEquals(userComments));
+      });
+
+      test("should return an empty list if the user has no comments", () async {
+        final userComments = await commentRepo.getUserComments(user.uid);
+
+        expect(userComments, isEmpty);
+      });
     });
 
-    test("should add a comment", () async {
-      final commentData =
-          postCommentDataGenerator.createMockCommentData(ownerId: user.uid);
+    group("adding comments", () {
+      test("should add a comment", () async {
+        final commentData =
+            postCommentDataGenerator.createMockCommentData(ownerId: user.uid);
 
-      final commentId = await commentRepo.addComment(post.id, commentData);
+        final commentId = await commentRepo.addComment(post.id, commentData);
 
-      // Get the expected comment
-      final expectedPostComment = CommentFirestore(
-        id: commentId,
-        data: commentData,
-      );
+        // Get the expected comment
+        final expectedPostComment = CommentFirestore(
+          id: commentId,
+          data: commentData,
+        );
 
-      final expectedUserComment = UserCommentFirestore(
-        id: commentId,
-        data: UserCommentData(
-          parentPostId: post.id,
-          content: commentData.content,
-        ),
-      );
+        final expectedUserComment = UserCommentFirestore(
+          id: commentId,
+          data: UserCommentData(
+            parentPostId: post.id,
+            content: commentData.content,
+          ),
+        );
 
-      // Get the actual comments
-      final actualPostComments = await commentRepo.getPostComments(post.id);
-      final actualUserComments = await commentRepo.getUserComments(user.uid);
+        // Get the actual comments
+        final actualPostComments = await commentRepo.getPostComments(post.id);
+        final actualUserComments = await commentRepo.getUserComments(user.uid);
 
-      expect(actualPostComments, [expectedPostComment]);
-      expect(actualUserComments, [expectedUserComment]);
+        expect(actualPostComments, [expectedPostComment]);
+        expect(actualUserComments, [expectedUserComment]);
+      });
+
+      test(
+          "should initialize the comment count of a post to 1 when the commentCount field doesn't exist and a post is added",
+          () async {
+        // Remove the comment count field
+        await postDocument
+            .update({PostData.commentCountField: FieldValue.delete()});
+
+        final commentData = postCommentDataGenerator.createMockCommentData();
+
+        await commentRepo.addComment(
+          post.id,
+          commentData,
+        );
+
+        // Check that the comment count was updated correctly
+        final postDoc = await postDocument.get();
+        final actualPost = PostFirestore.fromDb(postDoc);
+
+        expect(actualPost.data.commentCount, equals(1));
+      });
     });
 
     /// Utility function to check that the post and user comments are not empty
@@ -125,40 +212,104 @@ void main() {
       expect(userComments, isEmpty);
     }
 
-    test("should delete a comment", () async {
-      // Add a comment
-      final commentData =
-          postCommentDataGenerator.createMockCommentData(ownerId: user.uid);
+    Future<(List<UserFirestore>, List<CommentFirestore>)> addCommentsForUsers(
+      int nbUsers,
+    ) async {
+      final users =
+          await FirestoreUserGenerator.addUsers(fakeFirestore, nbUsers);
+      final postComments = <CommentFirestore>[];
 
-      final commentId = await commentRepo.addComment(post.id, commentData);
+      for (user in users) {
+        final commentData =
+            postCommentDataGenerator.createMockCommentData(ownerId: user.uid);
 
-      // Check that it was added correctly
-      await checkPostAndUserCommentsNotEmpty();
+        final commentId = await commentRepo.addComment(post.id, commentData);
 
-      // Delete the comment
-      await commentRepo.deleteComment(post.id, commentId, user.uid);
+        postComments.add(CommentFirestore(id: commentId, data: commentData));
+      }
 
-      // Check that it was deleted correctly
-      await checkPostAndUserCommentsEmpty();
+      // Check that the user comments have been added
+      for (user in users) {
+        final userComments = await commentRepo.getUserComments(user.uid);
+
+        expect(userComments, isNotEmpty);
+      }
+
+      return (users, postComments);
+    }
+
+    group("deleting comments", () {
+      test("should delete a comment", () async {
+        // Add a comment
+        final commentData =
+            postCommentDataGenerator.createMockCommentData(ownerId: user.uid);
+
+        final commentId = await commentRepo.addComment(post.id, commentData);
+
+        // Check that it was added correctly
+        await checkPostAndUserCommentsNotEmpty();
+
+        // Delete the comment
+        await commentRepo.deleteComment(post.id, commentId, user.uid);
+
+        // Check that it was deleted correctly
+        await checkPostAndUserCommentsEmpty();
+      });
+
+      test("should delete a comment when they are multiple comments", () async {
+        const nbUsers = 5;
+        late List<UserFirestore> users;
+        late List<CommentFirestore> postComments;
+
+        (users, postComments) = await addCommentsForUsers(nbUsers);
+
+        // Delete the comment modulo 2
+        for (final (i, user) in users.indexed) {
+          final comment = postComments[i];
+
+          if (i % 2 == 0) {
+            await commentRepo.deleteComment(post.id, comment.id, user.uid);
+          }
+        }
+
+        final actualPostComments = await commentRepo.getPostComments(post.id);
+
+        // Check that the right user and post comments were deleted
+        for (final (i, user) in users.indexed) {
+          final userComments = await commentRepo.getUserComments(user.uid);
+          final postComment = postComments[i];
+
+          if (i % 2 == 0) {
+            expect(userComments, isEmpty);
+            expect(actualPostComments.contains(postComment), isFalse);
+          } else {
+            expect(userComments, isNotEmpty);
+            expect(actualPostComments.contains(postComment), isTrue);
+          }
+        }
+      });
     });
 
-    test("should delete all the comments", () async {
-      // Add a comment
-      final commentData =
-          postCommentDataGenerator.createMockCommentData(ownerId: user.uid);
+    group("deleting all comments", () {
+      test("should delete all the comments", () async {
+        const nbUsers = 5;
+        late List<UserFirestore> users;
 
-      await commentRepo.addComment(post.id, commentData);
+        (users, _) = await addCommentsForUsers(nbUsers);
 
-      // Check that it was added correctly
-      await checkPostAndUserCommentsNotEmpty();
+        final batch = fakeFirestore.batch();
+        await commentRepo.deleteAllComments(post.id, batch);
+        await batch.commit();
 
-      // Delete all the comments
-      final batch = fakeFirestore.batch();
-      await commentRepo.deleteAllComments(post.id, batch);
-      await batch.commit();
+        // Check that all the comments were deleted
+        final actualPostComments = await commentRepo.getPostComments(post.id);
+        expect(actualPostComments, isEmpty);
 
-      // Check that it was deleted correctly
-      await checkPostAndUserCommentsEmpty();
+        for (user in users) {
+          final userComments = await commentRepo.getUserComments(user.uid);
+          expect(userComments, isEmpty);
+        }
+      });
     });
   });
 }

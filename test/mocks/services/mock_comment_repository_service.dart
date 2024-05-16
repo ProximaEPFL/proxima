@@ -1,3 +1,4 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/comment/comment_firestore.dart";
@@ -49,6 +50,17 @@ class MockCommentRepositoryService extends Mock
     return super.noSuchMethod(
       Invocation.method(#getUserComments, [userId]),
       returnValue: Future.value(List<UserCommentFirestore>.empty()),
+    );
+  }
+
+  @override
+  Future<void> deleteAllComments(
+    PostIdFirestore? parentPostId,
+    WriteBatch? batch,
+  ) {
+    return super.noSuchMethod(
+      Invocation.method(#deleteAllComments, [parentPostId, batch]),
+      returnValue: Future.value(),
     );
   }
 }

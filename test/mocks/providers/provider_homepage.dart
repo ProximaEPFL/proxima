@@ -44,7 +44,7 @@ final loadingHomePageProvider = ProviderScope(
 
 ProviderScope homePageFakeFirestoreProvider(
   FakeFirebaseFirestore firestore,
-  MockGeoLocationService geoLocationService,
+  MockGeolocationService geoLocationService,
 ) {
   return ProviderScope(
     overrides: [
@@ -58,7 +58,7 @@ ProviderScope homePageFakeFirestoreProvider(
 }
 
 ProviderScope emptyHomePageProviderGPS(
-  MockGeoLocationService geoLocationService,
+  MockGeolocationService geoLocationService,
 ) {
   return ProviderScope(
     overrides: [

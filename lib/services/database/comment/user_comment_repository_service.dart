@@ -48,12 +48,14 @@ class UserCommentRepositoryService {
 
   /// Delete the reference to the comment with id [commentId] that the user
   /// with id [userId] made.
-  Future<void> deleteUserComment(
+  /// The deletion is not performed directly but added to the write batch [batch]
+  void deleteUserComment(
     UserIdFirestore userId,
     CommentIdFirestore commentId,
-  ) async {
-    final userCommentCollection = _userCommentCollection(userId);
+    WriteBatch batch,
+  ) {
+    final commentToDelete = _userCommentCollection(userId).doc(commentId.value);
 
-    await userCommentCollection.doc(commentId.value).delete();
+    batch.delete(commentToDelete);
   }
 }

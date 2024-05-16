@@ -1,5 +1,5 @@
 import "package:google_maps_flutter/google_maps_flutter.dart";
-import "package:proxima/views/components/options/map/map_selection_option.dart";
+import "package:proxima/views/components/options/map/map_selection_options.dart";
 
 /// Information about how the map should be displayed.
 class MapDetails {

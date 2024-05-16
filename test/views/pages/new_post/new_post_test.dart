@@ -17,14 +17,14 @@ import "../../../mocks/services/setup_firebase_mocks.dart";
 void main() {
   late ProviderScope mockedNewPostPage;
   late MockPostRepositoryService postRepository;
-  late MockGeoLocationService geoLocationService;
+  late MockGeolocationService geoLocationService;
 
   const timeDeltaMils = 5000;
 
   setUp(() async {
     setupFirebaseAuthMocks();
     postRepository = MockPostRepositoryService();
-    geoLocationService = MockGeoLocationService();
+    geoLocationService = MockGeolocationService();
     mockedNewPostPage = newPostPageProvider(postRepository, geoLocationService);
   });
 

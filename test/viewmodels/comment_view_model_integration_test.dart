@@ -88,7 +88,7 @@ void main() {
             commentData,
           );
 
-          final comment = CommentDetails.from(commentData, owner.data);
+          final comment = CommentDetails.from(commentData, owner);
 
           expectedComments.add(comment);
         }
@@ -138,7 +138,7 @@ void main() {
 
         final expectedComment = CommentDetails.from(
           commentData,
-          owner.data,
+          owner,
         );
 
         // The user should see the newly added comment

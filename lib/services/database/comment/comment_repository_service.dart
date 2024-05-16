@@ -15,12 +15,14 @@ import "package:proxima/services/database/firestore_service.dart";
 /// It will allow to add, delete and retrieve comments from the firestore database.
 /// And it will handle the references between the comments and the users.
 class CommentRepositoryService {
+  final FirebaseFirestore _firestore;
   final PostCommentRepositoryService _postCommentRepo;
   final UserCommentRepositoryService _userCommentRepo;
 
   CommentRepositoryService({
     required FirebaseFirestore firestore,
-  })  : _postCommentRepo = PostCommentRepositoryService(firestore: firestore),
+  })  : _firestore = firestore,
+        _postCommentRepo = PostCommentRepositoryService(firestore: firestore),
         _userCommentRepo = UserCommentRepositoryService(firestore: firestore);
 
   /// This method returns the comments of the post with id [parentPostId]
@@ -35,16 +37,15 @@ class CommentRepositoryService {
   ) =>
       _userCommentRepo.getUserComments(userId);
 
-  // Note: The addition/deletion/allDeletion of the comment under the post and the comment under the
-  // the user document are not done fully atomically.
-  // This is because integrating atomicity would require a complex refactor
-  // that does not add much value to the application.
-  // In the worst case, the link between the comment and the user is lost,
-  // but the database is still consistent and won't crash the application.
-
   /// This method will add the comment with data [commentData] to the
   /// post with id [parentPostId].
   /// It will also add a reference to the comment in the user document of the owner.
+  /// Important remark: The addition (and deletion and allDeletion) of the comment
+  /// under the post and the comment under the the user document are not done fully
+  /// atomically. This is because integrating atomicity would require a complex refactor
+  /// that does not add much value to the application. In the worst case, the link
+  /// between the comment and the user is lost, but the database is still consistent
+  /// and won't crash the application.
   Future<CommentIdFirestore> addComment(
     PostIdFirestore parentPostId,
     CommentData commentData,
@@ -71,22 +72,32 @@ class CommentRepositoryService {
   /// post with id [parentPostId].
   /// It will also delete the reference to the comment from the owner whose
   /// id is [ownerId].
+  /// Important remark: This is not done atomically. See [addComment]'s
+  /// documentation for more details.
   Future<void> deleteComment(
     PostIdFirestore parentPostId,
     CommentIdFirestore commentId,
     UserIdFirestore ownerId,
   ) async {
-    await _postCommentRepo.deleteComment(parentPostId, commentId);
+    final deleteCommentFuture =
+        _postCommentRepo.deleteComment(parentPostId, commentId);
 
-    await _userCommentRepo.deleteUserComment(
+    final batch = _firestore.batch();
+    _userCommentRepo.deleteUserComment(
       ownerId,
       commentId,
+      batch,
     );
+    final deleteUserCommentFuture = batch.commit();
+
+    await Future.wait([deleteCommentFuture, deleteUserCommentFuture]);
   }
 
   /// This method will delete all the comments under the post with id [parentPostId].
   /// It will also delete all the references to the comments from the owners.
   /// The post comments are deleted in a batch [batch].
+  /// Important remark: This is not done atomically. See [addComment]'s
+  /// documentation for more details.
   Future<void> deleteAllComments(
     PostIdFirestore parentPostId,
     WriteBatch batch,
@@ -94,14 +105,13 @@ class CommentRepositoryService {
     final comments = await getPostComments(parentPostId);
 
     // The user comments are deleted in parallel
-    final userCommentsDeletion = comments.map((comment) async {
-      await _userCommentRepo.deleteUserComment(
+    for (final comment in comments) {
+      _userCommentRepo.deleteUserComment(
         comment.data.ownerId,
         comment.id,
+        batch,
       );
-    });
-
-    await Future.wait(userCommentsDeletion);
+    }
 
     // The post comments are deleted in a batch
     await _postCommentRepo.deleteAllComments(parentPostId, batch);

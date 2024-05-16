@@ -55,6 +55,7 @@ class PostRepositoryService {
   /// and false otherwise
   Future<bool> postExists(PostIdFirestore postId) async {
     final docSnap = await _collectionRef.doc(postId.value).get();
+
     return docSnap.exists;
   }
 
@@ -101,6 +102,7 @@ class PostRepositoryService {
       final postPoint = post.location.geoPoint;
 
       double distance = geoFirePoint.distanceBetweenInKm(geopoint: postPoint);
+
       return minRadius <= distance && distance <= maxRadius;
     }).toList();
   }

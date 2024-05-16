@@ -23,7 +23,7 @@ void main() {
   // of the [UserRepositoryService] and [PostRepositoryService] on a fake
   // firestore instance
   group("Post Overview Provider integration testing with firestore", () {
-    late MockGeoLocationService geoLocationService;
+    late MockGeolocationService geoLocationService;
     late FakeFirebaseFirestore fakeFireStore;
 
     late UserRepositoryService userRepo;
@@ -36,7 +36,7 @@ void main() {
 
     setUp(() async {
       fakeFireStore = FakeFirebaseFirestore();
-      geoLocationService = MockGeoLocationService();
+      geoLocationService = MockGeolocationService();
 
       userRepo = UserRepositoryService(
         firestore: fakeFireStore,
@@ -117,6 +117,8 @@ void main() {
           description: postData.description,
           voteScore: postData.voteScore,
           ownerDisplayName: owner.data.displayName,
+          ownerUsername: owner.data.username,
+          ownerCentauriPoints: owner.data.centauriPoints,
           commentNumber: postData.commentCount,
           publicationDate: postData.publicationTime.toDate(),
           distance: (const GeoFirePoint(userPosition)
@@ -214,6 +216,8 @@ void main() {
           description: data.description,
           voteScore: data.voteScore,
           ownerDisplayName: owner.data.displayName,
+          ownerUsername: owner.data.username,
+          ownerCentauriPoints: owner.data.centauriPoints,
           commentNumber: data.commentCount,
           publicationDate: data.publicationTime.toDate(),
           distance: (const GeoFirePoint(userPosition0)

@@ -52,3 +52,6 @@ web/
 macos/
 linux/
 ios/
+
+# api keys
+api_keys.json

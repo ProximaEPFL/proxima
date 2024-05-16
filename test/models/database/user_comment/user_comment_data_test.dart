@@ -13,7 +13,7 @@ void main() {
 
     test("hash overrides correctly", () {
       final userCommentData =
-          userCommentDataGenerator.createMockUserCommentData();
+          userCommentDataGenerator.generateUserCommentData();
 
       final expectedHash = Object.hash(
         userCommentData.parentPostId,
@@ -25,7 +25,7 @@ void main() {
 
     test("equality overrides correctly", () {
       final userCommentData =
-          userCommentDataGenerator.createMockUserCommentData();
+          userCommentDataGenerator.generateUserCommentData();
 
       final otherUserCommentData = UserCommentData(
         parentPostId: userCommentData.parentPostId,
