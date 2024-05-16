@@ -21,6 +21,20 @@ class CommentFirestoreGenerator {
       : _commentDataGenerator = CommentDataGenerator(seed: seed),
         _postGenerator = FirestorePostGenerator();
 
+  Future<(CommentFirestore, UserCommentFirestore)> addComment(
+    PostIdFirestore postId,
+    UserIdFirestore userId,
+    CommentRepositoryService commentRepository,
+  ) async {
+    final commentData = _commentDataGenerator.createMockCommentData();
+    final commentId = await commentRepository.addComment(postId, commentData);
+
+    final comment = CommentFirestore(id: commentId, data: commentData);
+    final userComment = _toUserComment(comment, postId);
+
+    return (comment, userComment);
+  }
+
   Future<(List<CommentFirestore>, List<UserCommentFirestore>)> addComments(
     int number,
     PostIdFirestore postId,
@@ -86,5 +100,16 @@ class CommentFirestoreGenerator {
       id: commentId ?? CommentIdFirestore(value: "commentId_$_commentId"),
       data: data ?? _commentDataGenerator.createMockCommentData(),
     );
+  }
+
+  UserCommentFirestore _toUserComment(
+    CommentFirestore comment,
+    PostIdFirestore postId,
+  ) {
+    final userCommentData = UserCommentData(
+      parentPostId: postId,
+      content: comment.data.content,
+    );
+    return UserCommentFirestore(id: comment.id, data: userCommentData);
   }
 }
