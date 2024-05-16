@@ -15,6 +15,16 @@ class UserCommentFirestoreGenerator {
   UserCommentFirestoreGenerator({int seed = 0})
       : _userCommentDataGenerator = UserCommentDataGenerator(seed: seed);
 
+  /// Add a comment for the user with id [userId]
+  /// It will use the [userCommentRepository] to add the comment
+  /// It returns the added comment
+  Future<UserCommentFirestore> addComment(
+    UserIdFirestore userId,
+    UserCommentRepositoryService userCommentRepository,
+  ) async {
+    return (await addComments(1, userId, userCommentRepository)).first;
+  }
+
   /// Add [number] of user comments for the user with id [userId] to the firestore database.
   /// It will use the [userCommentRepository] to add the comments.
   /// It will return the list of user comments that were added.
