@@ -93,6 +93,7 @@ void main() {
       final followButton = find.byKey(PostMap.followButtonKey);
       expect(followButton, findsOneWidget);
       await tester.tap(followButton);
+      await tester.pumpAndSettle();
     });
   });
 
