@@ -55,7 +55,8 @@ void main() {
       verify(mockGoogleMapController.animateCamera(any)).called(1);
     });
 
-    test("Camera does not follow user when disabled", () async {
+    test("Camera does not follow user when disabled, follow again when enabled",
+        () async {
       //create a new instance of the map view model
       final mapViewModel = MapViewModel();
 
@@ -76,6 +77,11 @@ void main() {
 
       //check if the map controller is not moved to the new location
       verifyNever(mockGoogleMapController.animateCamera(any));
+
+      // enable again
+      mapViewModel.enableFollowUser();
+      await mapViewModel.updateCamera(newLocation);
+      verify(mockGoogleMapController.animateCamera(any)).called(1);
     });
   });
 }
