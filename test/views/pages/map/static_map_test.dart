@@ -1,6 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:geolocator/geolocator.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
@@ -85,6 +84,16 @@ void main() {
         find.byKey(PostMap.postMapKey),
         findsOneWidget,
       );
+    });
+
+    testWidgets("Display Follow Button", (tester) async {
+      await tester.pumpWidget(mapWidgetWithPins);
+      await tester.pumpAndSettle();
+
+      final followButton = find.byKey(PostMap.followButtonKey);
+      expect(followButton, findsOneWidget);
+      await tester.tap(followButton);
+      await tester.pumpAndSettle();
     });
   });
 

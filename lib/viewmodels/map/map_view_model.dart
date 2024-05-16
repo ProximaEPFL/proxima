@@ -1,4 +1,5 @@
 import "dart:async";
+
 import "package:flutter/material.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -7,8 +8,8 @@ import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
 
-// This view model is responsible for managing the actual location
-// of the user on the map and the displayed circles.
+/// This view model is responsible for managing the actual location
+/// of the user on the map and the displayed circles.
 class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   @override
   Future<MapDetails> build() async {
@@ -23,6 +24,7 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   }
 
   final Set<Circle> _circles = {};
+
   // Getter for the circles
   Set<Circle> get circles => _circles;
 
@@ -55,6 +57,30 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   Future<void> refresh() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => build());
+  }
+
+  /// This is the initial zoom level of the map
+  static const initialZoomLevel = 17.0;
+
+  // This boolean is used to determine if the camera should follow the user
+  bool _followUser = true;
+
+  /// Enable the camera to follow the user
+  void enableFollowUser() => _followUser = true;
+
+  /// Disable the camera from following the user
+  void disableFollowUser() => _followUser = false;
+
+  /// Move the camera to the target location
+  /// Only moves the camera if the follow user is enabled
+  Future<void> updateCamera(LatLng userPosition) async {
+    if (!_followUser) return;
+    final GoogleMapController controller = await _mapController.future;
+    // reset zoom to initial
+    // center camera on target
+    final CameraPosition cameraPosition =
+        CameraPosition(target: userPosition, zoom: initialZoomLevel);
+    controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 }
 

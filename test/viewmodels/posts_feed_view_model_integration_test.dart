@@ -23,7 +23,7 @@ void main() {
   // of the [UserRepositoryService] and [PostRepositoryService] on a fake
   // firestore instance
   group("Post Overview Provider integration testing with firestore", () {
-    late MockGeoLocationService geoLocationService;
+    late MockGeolocationService geoLocationService;
     late FakeFirebaseFirestore fakeFireStore;
 
     late UserRepositoryService userRepo;
@@ -36,7 +36,7 @@ void main() {
 
     setUp(() async {
       fakeFireStore = FakeFirebaseFirestore();
-      geoLocationService = MockGeoLocationService();
+      geoLocationService = MockGeolocationService();
 
       userRepo = UserRepositoryService(
         firestore: fakeFireStore,

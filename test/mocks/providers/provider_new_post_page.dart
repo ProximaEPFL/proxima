@@ -12,7 +12,7 @@ import "../services/mock_post_repository_service.dart";
 
 ProviderScope newPostPageProvider(
   MockPostRepositoryService postRepository,
-  MockGeoLocationService geoLocationService,
+  MockGeolocationService geoLocationService,
 ) {
   return ProviderScope(
     overrides: [

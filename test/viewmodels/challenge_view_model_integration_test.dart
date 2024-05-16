@@ -17,12 +17,12 @@ import "../mocks/data/geopoint.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 
 void main() {
-  late MockGeoLocationService geoLocationService;
+  late MockGeolocationService geoLocationService;
   late FakeFirebaseFirestore fakeFireStore;
   late ProviderContainer container;
 
   setUp(() {
-    geoLocationService = MockGeoLocationService();
+    geoLocationService = MockGeolocationService();
     fakeFireStore = FakeFirebaseFirestore();
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) async => userPosition1,

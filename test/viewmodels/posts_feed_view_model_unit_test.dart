@@ -26,7 +26,7 @@ import "../mocks/services/mock_user_repository_service.dart";
 
 void main() {
   group("Post Overview Provider unit testing", () {
-    late MockGeoLocationService geoLocationService;
+    late MockGeolocationService geoLocationService;
     late PostRepositoryService postRepository;
     late UserRepositoryService userRepository;
     late ChallengeRepositoryService challengeRepository;
@@ -34,7 +34,7 @@ void main() {
     late ProviderContainer container;
 
     setUp(() {
-      geoLocationService = MockGeoLocationService();
+      geoLocationService = MockGeolocationService();
       postRepository = MockPostRepositoryService();
       userRepository = MockUserRepositoryService();
       challengeRepository = MockChallengeRepositoryService();

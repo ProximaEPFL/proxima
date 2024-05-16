@@ -31,7 +31,7 @@ import "../utils/delay_async_func.dart";
 void main() {
   late FakeFirebaseFirestore fakeFireStore;
 
-  MockGeoLocationService geoLocationService = MockGeoLocationService();
+  MockGeolocationService geoLocationService = MockGeolocationService();
   const GeoPoint testLocation = userPosition0;
 
   setUp(() async {
