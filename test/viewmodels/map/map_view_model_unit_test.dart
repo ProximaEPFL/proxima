@@ -6,11 +6,15 @@ import "package:proxima/viewmodels/map/map_view_model.dart";
 import "../../mocks/services/mock_google_map_controller.dart";
 
 void main() {
+  late MockGoogleMapController mockGoogleMapController;
+  late MapViewModel mapViewModel;
+
+  setUp(() {
+    mockGoogleMapController = MockGoogleMapController();
+    mapViewModel = MapViewModel();
+  });
   //test the redraw circle method
   test("Redraw circle", () {
-    //create a new instance of the map view model
-    final mapViewModel = MapViewModel();
-
     //new position for the circle
     const newLocation = LatLng(1, 1);
 
@@ -22,11 +26,6 @@ void main() {
   });
 
   test("On map create", () async {
-    //create a new instance of the map view model
-    final mapViewModel = MapViewModel();
-
-    final mockGoogleMapController = MockGoogleMapController();
-
     //create a new instance of the map controller
     mapViewModel.onMapCreated(mockGoogleMapController);
 
@@ -36,11 +35,6 @@ void main() {
 
   group("Camera", () {
     test("Camera follows user by default", () async {
-      //create a new instance of the map view model
-      final mapViewModel = MapViewModel();
-
-      final mockGoogleMapController = MockGoogleMapController();
-
       //create a new instance of the map controller
       mapViewModel.onMapCreated(mockGoogleMapController);
       when(mockGoogleMapController.animateCamera(any)).thenAnswer((_) async {});
@@ -57,11 +51,6 @@ void main() {
 
     test("Camera does not follow user when disabled, follow again when enabled",
         () async {
-      //create a new instance of the map view model
-      final mapViewModel = MapViewModel();
-
-      final mockGoogleMapController = MockGoogleMapController();
-
       //create a new instance of the map controller
       mapViewModel.onMapCreated(mockGoogleMapController);
       when(mockGoogleMapController.animateCamera(any)).thenAnswer((_) async {});
