@@ -49,6 +49,7 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
         .collection(PostFirestore.collectionName)
         .doc(postId.value)
         .collection(CommentFirestore.subCollectionName);
+
     return UpvoteRepositoryService._(
       firestore: firestore,
       parentCollection: parentCollection,
@@ -88,11 +89,11 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
 
     if (!voteState.exists) {
       return VoteState.none;
-    } else {
-      return VoteFirestore.fromDbData(voteState.data()!).hasUpvoted
-          ? VoteState.upvoted
-          : VoteState.downvoted;
     }
+
+    return VoteFirestore.fromDbData(voteState.data()!).hasUpvoted
+        ? VoteState.upvoted
+        : VoteState.downvoted;
   }
 
   /// Sets the upvote state of the user with id [userId] on the parent with id [parentId]

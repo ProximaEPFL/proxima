@@ -58,8 +58,10 @@ class ChallengeRepositoryService {
   ) async {
     final userDocRef =
         _firestore.collection(UserFirestore.collectionName).doc(uid.value);
-    final challengeSnap =
-        await _activeChallengesRef(userDocRef).doc(pid.value).get();
+
+    final challengeDocRef = _activeChallengesRef(userDocRef).doc(pid.value);
+
+    final challengeSnap = await challengeDocRef.get();
 
     if (!challengeSnap.exists) {
       return null;
@@ -70,10 +72,11 @@ class ChallengeRepositoryService {
       return null;
     }
 
-    await _activeChallengesRef(userDocRef).doc(pid.value).update({
+    await challengeDocRef.update({
       ChallengeData.isCompletedField: true,
     });
     await _userRepositoryService.addPoints(uid, soloChallengeReward);
+
     return soloChallengeReward;
   }
 

@@ -152,6 +152,7 @@ void main() {
       //Logout and check that we are back to the login page
       final logoutButton = find.byKey(LogoutButton.logoutButtonKey);
       await tester.tap(logoutButton);
+      //wait for the logout to complete
       await tester.pumpAndSettle();
 
       //Check that we are in the login page

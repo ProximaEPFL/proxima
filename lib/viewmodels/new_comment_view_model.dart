@@ -56,6 +56,7 @@ class NewCommentViewModel
   Future<bool> tryAddComment(String content) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() => _tryAddComment(content));
+
     return state.value?.posted ?? false;
   }
 

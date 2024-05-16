@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/comment_details.dart";
-import "package:proxima/views/components/content/publication_header.dart";
+import "package:proxima/views/components/content/publication_header/publication_header.dart";
 
 class CommentPostWidget extends StatelessWidget {
   static const commentWidgetKey = Key("commentWidget");
@@ -22,7 +22,9 @@ class CommentPostWidget extends StatelessWidget {
       children: [
         PublicationHeader(
           key: commentUserWidgetKey,
-          posterUsername: commentPost.ownerDisplayName,
+          posterDisplayName: commentPost.ownerDisplayName,
+          posterUsername: commentPost.ownerUsername,
+          posterCentauriPoints: commentPost.ownerCentauriPoints,
           publicationDate: commentPost.publicationDate,
         ),
         Padding(

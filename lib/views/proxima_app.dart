@@ -4,6 +4,7 @@ import "package:proxima/views/navigation/routes.dart";
 
 class ProximaApp extends StatelessWidget {
   static const title = "Proxima";
+  static const color = Color.fromARGB(255, 52, 37, 168);
 
   const ProximaApp({super.key});
 
@@ -19,7 +20,7 @@ class ProximaApp extends StatelessWidget {
         useMaterial3: true,
         // Define the default brightness and colors.
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.indigo,
+          seedColor: color,
           brightness: brightness,
         ),
         fontFamily: GoogleFonts.poppins().fontFamily,

@@ -58,6 +58,7 @@ class GeolocationService {
         "Location permissions are permanently denied, we cannot request permissions.",
       );
     }
+
     return null;
   }
 
@@ -98,5 +99,6 @@ final geolocationServiceProvider = Provider<GeolocationService>(
 
 final livePositionStreamProvider = StreamProvider<GeoPoint?>((ref) {
   final locationService = ref.watch(geolocationServiceProvider);
+
   return locationService.getPositionStream();
 });
