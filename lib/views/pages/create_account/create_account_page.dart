@@ -4,6 +4,7 @@ import "package:proxima/services/authentication/auth_login_service.dart";
 import "package:proxima/viewmodels/create_account_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
+import "package:proxima/views/helpers/types.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/create_account/create_account_form.dart";
@@ -15,7 +16,8 @@ class CreateAccountPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncErrors = ref.watch(createAccountViewModelProvider);
+    final asyncErrors =
+        ref.watch(createAccountViewModelProvider.future).mapRes();
 
     navigateToLoginPageOnLogout(context, ref);
 
@@ -27,7 +29,7 @@ class CreateAccountPage extends ConsumerWidget {
 
     final form = Center(
       child: CircularValue(
-        value: asyncErrors,
+        future: asyncErrors,
         builder: (context, errors) => CreateAccountForm(
           validation: errors,
         ),

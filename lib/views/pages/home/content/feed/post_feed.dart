@@ -3,6 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/components/options/feed/feed_sort_option_chips.dart";
+import "package:proxima/views/helpers/types.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/content/feed/components/post_list.dart";
 
@@ -20,7 +21,7 @@ class PostFeed extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncPosts = ref.watch(postsFeedViewModelProvider);
+    final asyncPosts = ref.watch(postsFeedViewModelProvider.future).mapRes();
 
     final newPostButton = InkWell(
       onTap: () {
@@ -35,7 +36,7 @@ class PostFeed extends ConsumerWidget {
 
     final refreshButton = ElevatedButton(
       key: refreshButtonKey,
-      onPressed: () => ref.read(postsFeedViewModelProvider.notifier).refresh(),
+      onPressed: ref.read(postsFeedViewModelProvider.notifier).refresh,
       child: const Text("Refresh"),
     );
 
@@ -61,7 +62,7 @@ class PostFeed extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text("An error occurred"),
+          const Text("An error occurred."),
           const SizedBox(height: 10),
           refreshButton,
         ],
@@ -76,7 +77,7 @@ class PostFeed extends ConsumerWidget {
         const Divider(),
         Expanded(
           child: CircularValue(
-            value: asyncPosts,
+            future: asyncPosts,
             builder: (context, posts) {
               final postsList = PostList(
                 posts: posts,

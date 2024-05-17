@@ -135,6 +135,8 @@ void main() {
           CircularProgressIndicator,
         );
         expect(progressIndicator, findsOneWidget);
+
+        await tester.pumpAndSettle();
       },
     );
   });

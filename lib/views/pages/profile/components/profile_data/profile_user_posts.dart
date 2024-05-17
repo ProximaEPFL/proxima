@@ -2,6 +2,7 @@ import "package:flutter/widgets.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/user_posts_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
+import "package:proxima/views/helpers/types.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_column.dart";
 
@@ -16,10 +17,10 @@ class ProfileUserPosts extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userPosts = ref.watch(userPostsViewModelProvider);
+    final userPosts = ref.watch(userPostsViewModelProvider.future).mapRes();
 
     return CircularValue(
-      value: userPosts,
+      future: userPosts,
       builder: (context, value) {
         final posts = value
             .map(

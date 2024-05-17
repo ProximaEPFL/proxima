@@ -3,6 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/viewmodels/new_comment_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
+import "package:proxima/views/helpers/types.dart";
 import "package:proxima/views/pages/post/components/new_comment/new_comment_button.dart";
 import "package:proxima/views/pages/post/components/new_comment/new_comment_textfield.dart";
 import "package:proxima/views/pages/post/components/new_comment/new_comment_user_avatar.dart";
@@ -21,14 +22,16 @@ class BottomBarAddComment extends ConsumerWidget {
       newCommentViewModelProvider(parentPostId).notifier,
     );
 
-    final asyncNewCommentState = ref.watch(
-      newCommentViewModelProvider(parentPostId),
-    );
+    final asyncNewCommentState = ref
+        .watch(
+          newCommentViewModelProvider(parentPostId).future,
+        )
+        .mapRes();
 
     final contentController = newCommentViewModel.contentController;
 
     return CircularValue(
-      value: asyncNewCommentState,
+      future: asyncNewCommentState,
       builder: (context, newCommentState) {
         // The avatar of the current user on the left
         const userAvatar = NewCommentUserAvatar();

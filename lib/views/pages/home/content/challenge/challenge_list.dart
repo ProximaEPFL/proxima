@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
+import "package:proxima/views/helpers/types.dart";
 import "package:proxima/views/pages/home/content/challenge/challenge_card.dart";
 
 class ChallengeList extends ConsumerWidget {
@@ -9,14 +10,15 @@ class ChallengeList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncChallenges = ref.watch(challengeViewModelProvider);
+    final asyncChallenges =
+        ref.watch(challengeViewModelProvider.future).mapRes();
 
     const emptyChallenge = Center(
       child: Text("No challenge available here!"),
     );
 
     return CircularValue(
-      value: asyncChallenges,
+      future: asyncChallenges,
       builder: (context, challenges) {
         return RefreshIndicator(
           onRefresh: () =>
