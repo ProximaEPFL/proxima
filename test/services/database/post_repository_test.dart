@@ -8,7 +8,7 @@ import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/database/vote/vote_firestore.dart";
 import "package:proxima/models/database/vote/vote_state.dart";
-import "package:proxima/services/database/comment_repository_service.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/upvote_repository_service.dart";
 
@@ -22,6 +22,7 @@ void main() {
   group("Post Repository testing", () {
     late FakeFirebaseFirestore firestore;
     late PostRepositoryService postRepository;
+    late CommentRepositoryService commentRepository;
 
     const kmRadius = 0.1;
 
@@ -30,6 +31,7 @@ void main() {
       postRepository = PostRepositoryService(
         firestore: firestore,
       );
+      commentRepository = CommentRepositoryService(firestore: firestore);
     });
 
     final post = FirestorePostGenerator().generatePostAt(
@@ -62,7 +64,6 @@ void main() {
       final dbPost = await postRef.get();
       expect(dbPost.exists, true);
 
-      final commentRepository = CommentRepositoryService(firestore: firestore);
       await CommentFirestoreGenerator()
           .addComments(4, post.id, commentRepository);
 

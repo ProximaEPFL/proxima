@@ -5,6 +5,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
@@ -16,6 +17,7 @@ import "package:proxima/views/pages/profile/components/profile_data/profile_user
 import "package:proxima/views/pages/profile/components/user_account.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
+import "../../../mocks/data/comment_data.dart";
 import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/data/geopoint.dart";
@@ -29,6 +31,7 @@ void main() {
   late CollectionReference<Map<String, dynamic>> userCollection;
   late ProviderScope mockedProfilePage;
   late PostFirestore fakePost;
+  late CommentRepositoryService commentRepo;
 
   final expectedUser = testingUserFirestore;
 
@@ -45,8 +48,23 @@ void main() {
         .set(expectedUser.data.toDbData());
 
     setPostFirestore(
-      postsGenerator.createUserPost(testingUserFirestoreId, userPosition1),
+      fakePost,
       fakeFireStore,
+    );
+
+    //get the comment repository service to add comments
+    commentRepo = CommentRepositoryService(
+      firestore: fakeFireStore,
+    );
+
+    final commentDataGenerator = CommentDataGenerator();
+
+    final mockComment =
+        commentDataGenerator.createMockCommentData(ownerId: expectedUser.uid);
+
+    await commentRepo.addComment(
+      fakePost.id,
+      mockComment,
     );
 
     mockedProfilePage = profileProviderScope(fakeFireStore, profilePageApp);
@@ -192,6 +210,13 @@ void main() {
       //Check that the profile page is displayed
       final profilePage = find.byType(ProfilePage);
       expect(profilePage, findsOneWidget);
+
+      //check that the comment is deleted
+      final noInfoCardComment = find.byKey(ProfileInfoCard.infoCardKey);
+      expect(noInfoCardComment, findsNothing);
+
+      final userComments = await commentRepo.getUserComments(expectedUser.uid);
+      expect(userComments, isEmpty);
     });
 
     testWidgets("Tab working as expected", (tester) async {

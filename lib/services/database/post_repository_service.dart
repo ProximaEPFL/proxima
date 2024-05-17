@@ -6,7 +6,7 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/services/database/comment_repository_service.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/upvote_repository_service.dart";
 

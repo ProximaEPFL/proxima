@@ -50,6 +50,12 @@ class FirestoreUserGenerator {
     );
   }
 
+  // Create a user, add it to firestore and return it
+  static Future<UserFirestore> addUser(FirebaseFirestore firestore) async {
+    final users = await addUsers(firestore, 1);
+    return users[0];
+  }
+
   // Create [numberOfUsers] users and add them to the [firestore] db
   static Future<List<UserFirestore>> addUsers(
     FirebaseFirestore firestore,

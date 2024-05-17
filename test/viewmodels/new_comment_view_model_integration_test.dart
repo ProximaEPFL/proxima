@@ -5,7 +5,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/ui/validation/new_comment_validation.dart";
-import "package:proxima/services/database/comment_repository_service.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/new_comment_view_model.dart";
@@ -72,7 +72,7 @@ void main() {
       expect(addResult, isTrue);
 
       // Get the comments
-      final comments = await commentRepository.getComments(postId);
+      final comments = await commentRepository.getPostComments(postId);
 
       expect(comments, hasLength(1));
 

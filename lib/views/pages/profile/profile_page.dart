@@ -2,11 +2,10 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
-import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
-import "package:proxima/views/pages/profile/components/info_cards/profile_info_column.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_row.dart";
 import "package:proxima/views/pages/profile/components/profile_app_bar.dart";
 import "package:proxima/views/pages/profile/components/profile_badge.dart";
+import "package:proxima/views/pages/profile/components/profile_data/profile_user_comments.dart";
 import "package:proxima/views/pages/profile/components/profile_data/profile_user_posts.dart";
 
 /// This widget is used to display the profile page
@@ -28,7 +27,6 @@ class ProfilePage extends ConsumerWidget {
     final asyncUserData = ref.watch(profileViewModelProvider);
 
     final itemListBadge = <Widget>[];
-    final itemListComments = <Widget>[];
 
     // This is a fake list of cards
     for (var i = 0; i < 10; i++) {
@@ -36,26 +34,10 @@ class ProfilePage extends ConsumerWidget {
       itemListBadge.add(
         const ProfileBadge(),
       );
-
-      // TODO replace by user comments viewmodel (follow `UserPosts` implementation)
-      itemListComments.add(
-        ProfileInfoCard(
-          content:
-              "Here is a FAKE data comment on a super post that talks about something that is super cool and is located in a super spot that is very cosy and nice",
-          onDelete: () async {
-            // TODO handle comment deletion
-          },
-        ),
-      );
     }
     final badges = ProfileInfoRow(
       title: _badgesTitle,
       itemList: itemListBadge,
-    );
-
-    final comments = ProfileInfoColumn(
-      key: commentColumnKey,
-      itemList: itemListComments,
     );
 
     const tabsTitle = TabBar(
@@ -66,11 +48,11 @@ class ProfilePage extends ConsumerWidget {
       ],
     );
 
-    final tabsContent = Expanded(
+    const tabsContent = Expanded(
       child: TabBarView(
         children: [
-          const ProfileUserPosts(),
-          comments,
+          ProfileUserPosts(),
+          ProfileUserComments(),
         ],
       ),
     );
