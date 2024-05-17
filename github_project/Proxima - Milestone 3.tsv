@@ -1,10 +1,10 @@
 Title	URL	Assignees	Status	Time estimate	Real time	Labels	Linked pull requests	Milestone	Reviewers	Sprint	Nature	Task Type	Priority	Epics
 As a user, I want to be able to gain badges, so that I can show off much I used the app.	https://github.com/ProximaEPFL/proxima/issues/287		Product Backlog											Epic
-As a user I want to be able to see where a post is on the map from the post view, so that I can know exactly where it was posted.	https://github.com/ProximaEPFL/proxima/issues/309		Product Backlog											
-As a proxima user, I want to be notified when my location service are misconfigured so that I can correctly configure to use and enjoy the app.	https://github.com/ProximaEPFL/proxima/issues/50		Product Backlog											
-As a user, I want to be able to upvote and downvote comments, so that interesting ones rise to the top	https://github.com/ProximaEPFL/proxima/issues/93		Product Backlog											
+As a user I want to be able to see where a post is on the map from the post view, so that I can know exactly where it was posted.	https://github.com/ProximaEPFL/proxima/issues/309		Product Backlog								User stories			
+As a proxima user, I want to be notified when my location service are misconfigured so that I can correctly configure to use and enjoy the app.	https://github.com/ProximaEPFL/proxima/issues/50		Product Backlog								User stories			
+As a user, I want to be able to upvote and downvote comments, so that interesting ones rise to the top	https://github.com/ProximaEPFL/proxima/issues/93		Product Backlog								User stories			
 Add a button on the posts of the profile page that redirect to their position on the map	https://github.com/ProximaEPFL/proxima/issues/184		Product Backlog											
-As a user, I want to receive badges, so that I can show off all the things I did in the app.	https://github.com/ProximaEPFL/proxima/issues/308		Product Backlog											
+As a user, I want to receive badges, so that I can show off all the things I did in the app.	https://github.com/ProximaEPFL/proxima/issues/308		Product Backlog								User stories			
 Improve near post fetching in post page view model	https://github.com/ProximaEPFL/proxima/issues/264		Product Backlog											
 Change the number of challenge rewards points according to the distance to travel	https://github.com/ProximaEPFL/proxima/issues/232		Product Backlog											
 Update account creation validation	https://github.com/ProximaEPFL/proxima/issues/281		Product Backlog											
@@ -16,22 +16,22 @@ Points in the user profile are not updated, they do not always reflect the datab
 Refactor fallback on error widget	https://github.com/ProximaEPFL/proxima/issues/186		Product Backlog											
 As a Proxima user, I want to have the ability to delete my comments even if I'm not currently near their locations, to have complete control over my online image.	https://github.com/ProximaEPFL/proxima/issues/175		Done in Sprint 8											
 As a user, I want the app to have a nice icon, so that I can find it in my apps.	https://github.com/ProximaEPFL/proxima/issues/129		Done in Sprint 8											
-As a proxima user, I want a refresh button that updates my feed with new nearby posts and hints that new posts are available, so I am encouraged to refresh my feed when new info is available.	https://github.com/ProximaEPFL/proxima/issues/126		Product Backlog											
-As a Proxima user, I want to see the positions, authors, and publication dates of posts I was notified for on a map, for easier navigation and exploration of content.	https://github.com/ProximaEPFL/proxima/issues/15		Product Backlog			user story								
+As a proxima user, I want a refresh button that updates my feed with new nearby posts and hints that new posts are available, so I am encouraged to refresh my feed when new info is available.	https://github.com/ProximaEPFL/proxima/issues/126		Product Backlog								User stories			
+As a Proxima user, I want to see the positions, authors, and publication dates of posts I was notified for on a map, for easier navigation and exploration of content.	https://github.com/ProximaEPFL/proxima/issues/15		Product Backlog								User stories			
 As a IOS user, I want to use the app so that I can discover Proxima	https://github.com/ProximaEPFL/proxima/issues/247		Product Backlog											
-As a user, I want uninteresting comments to be hidden, so that I only see the interesting ones	https://github.com/ProximaEPFL/proxima/issues/94		Product Backlog											
-As a user, I want to reply to other comments, so that I can interact with other users	https://github.com/ProximaEPFL/proxima/issues/92		Product Backlog											
-As a Proxima user, I want to earn points from interactions within the app and traveling between interactions, so I can gain recognition and unlock cosmetic rewards.	https://github.com/ProximaEPFL/proxima/issues/9		Product Backlog			user story								
-As a Proxima user, I want to follow other users, so I can stay updated on their activities and interests.	https://github.com/ProximaEPFL/proxima/issues/14		Product Backlog			user story								
-As a user, I want to be able to upload a profile picture from my phone storage, so that other users can recognise me	https://github.com/ProximaEPFL/proxima/issues/97		Product Backlog											
-As a Proxima user, I want to have a custom profile picture specific to the app, so that other users can better identify me compared to just reading my username.	https://github.com/ProximaEPFL/proxima/issues/39		Product Backlog											
+As a user, I want uninteresting comments to be hidden, so that I only see the interesting ones	https://github.com/ProximaEPFL/proxima/issues/94		Product Backlog								User stories			
+As a user, I want to reply to other comments, so that I can interact with other users	https://github.com/ProximaEPFL/proxima/issues/92		Product Backlog								User stories			
+As a Proxima user, I want to earn points from interactions within the app and traveling between interactions, so I can gain recognition and unlock cosmetic rewards.	https://github.com/ProximaEPFL/proxima/issues/9		Product Backlog								User stories			
+As a Proxima user, I want to follow other users, so I can stay updated on their activities and interests.	https://github.com/ProximaEPFL/proxima/issues/14		Product Backlog								User stories			
+As a user, I want to be able to upload a profile picture from my phone storage, so that other users can recognise me	https://github.com/ProximaEPFL/proxima/issues/97		Product Backlog								User stories			
+As a Proxima user, I want to have a custom profile picture specific to the app, so that other users can better identify me compared to just reading my username.	https://github.com/ProximaEPFL/proxima/issues/39		Product Backlog								User stories			
 Display the profile picture of the user in the avatar	https://github.com/ProximaEPFL/proxima/issues/214		Product Backlog	4 hours										
 Make the profile picture component dynamically adapt to the username everywhere	https://github.com/ProximaEPFL/proxima/issues/183		Product Backlog											
-As a user, I want to be able to upload a profile picture from my phone camera, so that I can quickly update my profile	https://github.com/ProximaEPFL/proxima/issues/98		Product Backlog											
-As a user, I want to be able to change my display name, so that I can have a new display name if I want to	https://github.com/ProximaEPFL/proxima/issues/100		Product Backlog											
-As a Proxima user, I want to view a heat map of areas with trending posts, so I can explore areas likely to have interesting content.	https://github.com/ProximaEPFL/proxima/issues/11		Product Backlog			user story								
-As a Proxima user, I want to be able to see and join nearby groups with similar interests or objectives, so I can participate in collaborative activities and challenges with like-minded individuals.	https://github.com/ProximaEPFL/proxima/issues/13		Product Backlog			user story								
-As a Proxima user, I want the feed of posts that are nearby to be automatically refreshed when I move so that I don't lose time manually refreshing everytime I change location.	https://github.com/ProximaEPFL/proxima/issues/44		Product Backlog											
+As a user, I want to be able to upload a profile picture from my phone camera, so that I can quickly update my profile	https://github.com/ProximaEPFL/proxima/issues/98		Product Backlog								User stories			
+As a user, I want to be able to change my display name, so that I can have a new display name if I want to	https://github.com/ProximaEPFL/proxima/issues/100		Product Backlog								User stories			
+As a Proxima user, I want to view a heat map of areas with trending posts, so I can explore areas likely to have interesting content.	https://github.com/ProximaEPFL/proxima/issues/11		Product Backlog								User stories			
+As a Proxima user, I want to be able to see and join nearby groups with similar interests or objectives, so I can participate in collaborative activities and challenges with like-minded individuals.	https://github.com/ProximaEPFL/proxima/issues/13		Product Backlog								User stories			
+As a Proxima user, I want the feed of posts that are nearby to be automatically refreshed when I move so that I don't lose time manually refreshing everytime I change location.	https://github.com/ProximaEPFL/proxima/issues/44		Product Backlog								User stories			
 Add a testing method that gives a coherent database	https://github.com/ProximaEPFL/proxima/issues/233		Product Backlog											
 Removing identical testing	https://github.com/ProximaEPFL/proxima/issues/207		Product Backlog											
 Make the random mock generators seeded	https://github.com/ProximaEPFL/proxima/issues/203		Product Backlog											
@@ -102,10 +102,10 @@ Display initials of user in avatar	https://github.com/ProximaEPFL/proxima/issues
 Set up PRD	https://github.com/ProximaEPFL/proxima/issues/236	gruvw	Done in Sprint 7	1h	1h					Sprint 7	Sprint Task			
 Form epics and link to user stories	https://github.com/ProximaEPFL/proxima/issues/240	camillelnne, yoannLafore	Done in Sprint 7	1h	1h					Sprint 7	Sprint Task			
 The verification of a username and the creation of a new account should be atomic in Firebase	https://github.com/ProximaEPFL/proxima/issues/89		Product Backlog											
-As a user, I want to be able to create and join groups, so that I can use the app with my friends.	https://github.com/ProximaEPFL/proxima/issues/285		Product Backlog											
-As a user, I want to see a heatmap of the posts everywhere in the world, so that I can know where to go to see many posts.	https://github.com/ProximaEPFL/proxima/issues/289		Product Backlog											
+As a user, I want to be able to create and join groups, so that I can use the app with my friends.	https://github.com/ProximaEPFL/proxima/issues/285		Product Backlog								User stories			
+As a user, I want to see a heatmap of the posts everywhere in the world, so that I can know where to go to see many posts.	https://github.com/ProximaEPFL/proxima/issues/289		Product Backlog								User stories			
 Bug when localization is disabled on the challenge page, cannot load challenge even after enabling navigation	https://github.com/ProximaEPFL/proxima/issues/293		Product Backlog											
-As a new user, I want to see imediately whether the username I have entered is valid, so I don't lose any time	https://github.com/ProximaEPFL/proxima/issues/88		Product Backlog											
+As a new user, I want to see imediately whether the username I have entered is valid, so I don't lose any time	https://github.com/ProximaEPFL/proxima/issues/88		Product Backlog								User stories			
 Make mocks compatible with null argument matchers	https://github.com/ProximaEPFL/proxima/issues/96	Aderfish	Done is Sprint 4	1h	1h		https://github.com/ProximaEPFL/proxima/pull/113			Sprint 4				
 Handle error case on circular value	https://github.com/ProximaEPFL/proxima/issues/107	Aderfish	Done is Sprint 4	8h	3h30		https://github.com/ProximaEPFL/proxima/pull/127			Sprint 4				
 Create model for upvotes/downvotes	https://github.com/ProximaEPFL/proxima/issues/108	JoachimFavre	Done is Sprint 4	10 hours	9.5 hours		https://github.com/ProximaEPFL/proxima/pull/125			Sprint 4	Sprint Task	Model		
