@@ -125,6 +125,12 @@ void main() {
     testWidgets("Post options work", (tester) async {
       final container = await beginTest(tester);
 
+      // Verify the default option has a correct behaviour even before we click on any chip
+      await testOption(
+        container,
+        MapSelectionOptionsViewModel.defaultMapOption,
+      );
+
       for (final option in MapSelectionOptions.values) {
         // Click on option chip
         final optionChip = find.byKey(
