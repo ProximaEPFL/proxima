@@ -13,10 +13,10 @@ void main() {
       final usersList = FirestoreUserGenerator.generateUserData(5);
       listRankingElementDetails = usersList
           .mapIndexed(
-            (index, element) => RankingElementDetails(
-              userDisplayName: testingUserData.displayName,
-              userUserName: testingUserData.username,
-              centauriPoints: testingUserData.centauriPoints,
+            (index, user) => RankingElementDetails(
+              userDisplayName: user.displayName,
+              userUserName: user.username,
+              centauriPoints: user.centauriPoints,
               userRank: index + 1,
             ),
           )
@@ -111,10 +111,10 @@ void main() {
       final userList2 = FirestoreUserGenerator.generateUserData(3);
       final listRankingElementDetails2 = userList2
           .mapIndexed(
-            (index, element) => RankingElementDetails(
-              userDisplayName: testingUserData.displayName,
-              userUserName: testingUserData.username,
-              centauriPoints: testingUserData.centauriPoints,
+            (index, user) => RankingElementDetails(
+              userDisplayName: user.displayName,
+              userUserName: user.username,
+              centauriPoints: user.centauriPoints,
               userRank: index + 1,
             ),
           )
