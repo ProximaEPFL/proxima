@@ -33,6 +33,7 @@ void main() {
     fakeFirestore = FakeFirebaseFirestore();
     geoLocationService = MockGeolocationService();
 
+    // We need the whole home page for navigation
     homePage = homePageFakeFirestoreProvider(
       fakeFirestore,
       geoLocationService,
@@ -177,6 +178,43 @@ void main() {
           await testOption(container, option);
         }
       }
+    });
+
+    testWidgets("Pins refresh after post creation", (tester) async {
+      final container = await beginTest(tester);
+
+      final nearbyChip = find.byKey(
+        MapSelectionOptionChips.optionChipKeys[MapSelectionOptions.nearby]!,
+      );
+      expect(nearbyChip, findsOneWidget);
+      await tester.tap(nearbyChip);
+
+      await tester.tap(find.text("New post"));
+      final addPostButton = find.text("New post");
+      expect(addPostButton, findsOneWidget);
+      await tester.tap(addPostButton);
+      await tester.pumpAndSettle();
+
+      final titleForm = find.byKey(NewPostForm.titleFieldKey);
+      expect(titleForm, findsOneWidget);
+      await tester.enterText(titleForm, "Title");
+      final bodyForm = find.byKey(NewPostForm.bodyFieldKey);
+      expect(bodyForm, findsOneWidget);
+      await tester.enterText(bodyForm, "Body");
+      final submitButton = find.byKey(NewPostForm.postButtonKey);
+      expect(submitButton, findsOneWidget);
+      await tester.tap(submitButton);
+      await tester.pumpAndSettle();
+
+      // The option must not have change
+      final currentOption = container.read(
+        mapSelectionOptionsViewModelProvider,
+      );
+      expect(currentOption, equals(MapSelectionOptions.nearby));
+
+      // There must be one more pin
+      final pins = await container.read(mapPinViewModelProvider.future);
+      expect(pins, hasLength(nearbyPosts.length + 1));
     });
   });
 }
