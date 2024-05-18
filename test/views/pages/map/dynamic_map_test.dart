@@ -1,5 +1,6 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
+import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
@@ -9,17 +10,21 @@ import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_option_chips.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
-import "package:proxima/views/pages/home/content/map/map_screen.dart";
+import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
+import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
+import "package:proxima/views/pages/home/home_page.dart";
+import "package:proxima/views/pages/new_post/new_post_form.dart";
 
 import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/data/geopoint.dart";
-import "../../../mocks/providers/provider_map_page.dart";
+import "../../../mocks/overrides/override_posts_feed_view_model.dart";
+import "../../../mocks/providers/provider_homepage.dart";
 import "../../../mocks/services/mock_geo_location_service.dart";
 
 void main() {
   late MockGeolocationService geoLocationService;
-  late ProviderScope mapPage;
+  late ProviderScope homePage;
 
   late FakeFirebaseFirestore fakeFirestore;
   late FirestorePostGenerator postGenerator;
@@ -28,7 +33,11 @@ void main() {
     fakeFirestore = FakeFirebaseFirestore();
     geoLocationService = MockGeolocationService();
 
-    mapPage = mapScreenFakeFirestoreProvider(fakeFirestore, geoLocationService);
+    homePage = homePageFakeFirestoreProvider(
+      fakeFirestore,
+      geoLocationService,
+      additionalOverrides: mockEmptyHomeViewModelOverride,
+    );
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) => Future.value(userPosition0),
     );
@@ -42,10 +51,21 @@ void main() {
   /// Starts the test given by the [tester] by pumping the [mapPage] and
   /// getting the [ProviderContainer] of the [MapScreen] (which is returned).
   Future<ProviderContainer> beginTest(WidgetTester tester) async {
-    await tester.pumpWidget(mapPage);
+    await tester.pumpWidget(homePage);
     await tester.pumpAndSettle();
 
-    final element = tester.element(find.byType(MapScreen));
+    final bottomBar = find.byKey(NavigationBottomBar.navigationBottomBarKey);
+    await tester.tap(
+      find.descendant(
+        of: bottomBar,
+        matching: find
+            .byType(NavigationDestination)
+            .at(NavigationbarRoutes.map.index),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final element = tester.element(find.byType(HomePage));
     return ProviderScope.containerOf(element);
   }
 
