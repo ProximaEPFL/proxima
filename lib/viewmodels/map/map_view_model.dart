@@ -5,7 +5,6 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
-import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 
 /// This view model is responsible for managing the actual location
@@ -15,13 +14,10 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   Future<MapDetails> build() async {
     final actualLocation =
         await ref.read(geolocationServiceProvider).getCurrentPosition();
-    //TODO: Remove unused variable
-    final currentOption = ref.read(mapSelectionOptionsViewModelProvider);
 
     return MapDetails(
       initialLocation:
           LatLng(actualLocation.latitude, actualLocation.longitude),
-      selectOption: currentOption,
     );
   }
 
