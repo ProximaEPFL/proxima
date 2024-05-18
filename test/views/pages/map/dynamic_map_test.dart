@@ -48,15 +48,17 @@ void main() {
     await setPostsFirestore(farPosts, fakeFirestore);
   });
 
+  Future<ProviderContainer> beginTest(WidgetTester tester) async {
+    await tester.pumpWidget(mapPage);
+    await tester.pumpAndSettle();
+
+    final element = tester.element(find.byType(MapScreen));
+    return ProviderScope.containerOf(element);
+  }
+
   group("Option selection", () {
     testWidgets("Correct default option", (tester) async {
-      final container = await (WidgetTester tester) async {
-        await tester.pumpWidget(mapPage);
-        await tester.pumpAndSettle();
-
-        final element = tester.element(find.byType(MapScreen));
-        return ProviderScope.containerOf(element);
-      }(tester);
+      final container = await beginTest(tester);
 
       final currentOption = container.read(
         mapSelectionOptionsViewModelProvider,
@@ -68,13 +70,7 @@ void main() {
     });
 
     testWidgets("Nearby posts work", (tester) async {
-      final container = await (WidgetTester tester) async {
-        await tester.pumpWidget(mapPage);
-        await tester.pumpAndSettle();
-
-        final element = tester.element(find.byType(MapScreen));
-        return ProviderScope.containerOf(element);
-      }(tester);
+      final container = await beginTest(tester);
 
       final option = find.byKey(
         MapSelectionOptionChips.optionChipKeys[MapSelectionOptions.nearby]!,
