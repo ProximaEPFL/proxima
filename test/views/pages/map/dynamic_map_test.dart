@@ -96,42 +96,33 @@ void main() {
       );
     });
 
-    testWidgets("Nearby posts work", (tester) async {
+    testWidgets("Post options work", (tester) async {
       final container = await beginTest(tester);
+      final expected = {
+        MapSelectionOptions.nearby: nearbyPosts,
+        MapSelectionOptions.myPosts: userPosts,
+      };
 
-      final option = find.byKey(
-        MapSelectionOptionChips.optionChipKeys[MapSelectionOptions.nearby]!,
-      );
-      expect(option, findsOneWidget);
-      await tester.tap(option);
-      await tester.pumpAndSettle();
+      for (final option in MapSelectionOptions.values) {
+        // Click on option chip
+        final optionChip = find.byKey(
+          MapSelectionOptionChips.optionChipKeys[option]!,
+        );
+        expect(optionChip, findsOneWidget);
+        await tester.tap(optionChip);
+        await tester.pumpAndSettle();
 
-      final currentOption = container.read(
-        mapSelectionOptionsViewModelProvider,
-      );
-      expect(currentOption, equals(MapSelectionOptions.nearby));
+        // Verify the option of the view-model is correct
+        final currentOption = container.read(
+          mapSelectionOptionsViewModelProvider,
+        );
+        expect(currentOption, equals(option));
 
-      final pins = await container.read(mapPinViewModelProvider.future);
-      expectPinsAndPostsMatch(pins, nearbyPosts);
-    });
-
-    testWidgets("User posts work", (tester) async {
-      final container = await beginTest(tester);
-
-      final option = find.byKey(
-        MapSelectionOptionChips.optionChipKeys[MapSelectionOptions.myPosts]!,
-      );
-      expect(option, findsOneWidget);
-      await tester.tap(option);
-      await tester.pumpAndSettle();
-
-      final currentOption = container.read(
-        mapSelectionOptionsViewModelProvider,
-      );
-      expect(currentOption, equals(MapSelectionOptions.myPosts));
-
-      final pins = await container.read(mapPinViewModelProvider.future);
-      expectPinsAndPostsMatch(pins, userPosts);
+        // Verify the pins are correct
+        final expectedPosts = expected[option] ?? List.empty();
+        final pins = await container.read(mapPinViewModelProvider.future);
+        expectPinsAndPostsMatch(pins, expectedPosts);
+      }
     });
   });
 }
