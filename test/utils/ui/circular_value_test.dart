@@ -2,17 +2,18 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/components/async/error_alert.dart";
+import "package:proxima/views/components/async/logo_progress_indicator.dart";
 
 import "../../mocks/providers/provider_circular_value.dart";
 
 void main() {
-  testWidgets(
-      "CircularValue should show CircularProgressIndicator when loading", (
+  testWidgets("CircularValue should show a LogoProgressIndicator when loading",
+      (
     tester,
   ) async {
     await tester.pumpWidget(circularValueProvider(const AsyncValue.loading()));
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(LogoProgressIndicator), findsOneWidget);
   });
 
   testWidgets("CicularValue should build with value when finished", (

@@ -47,6 +47,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/feedback/
 
 # Command to generate the icons: `dart run flutter_launcher_icons`
 flutter_launcher_icons:
