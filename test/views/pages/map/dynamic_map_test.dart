@@ -186,77 +186,94 @@ void main() {
       }
     });
 
-    testWidgets("Pins refresh after post creation", (tester) async {
-      final container = await beginTest(tester);
+    void testNavigation({
+      required String testTitle,
+      required MapSelectionOptions optionToTest,
+      required int expectedPinDelta,
+      required Future<void> Function(
+        WidgetTester tester,
+        ProviderContainer container,
+      ) protocol,
+    }) {
+      testWidgets(testTitle, (tester) async {
+        final container = await beginTest(tester);
 
-      final nearbyChip = find.byKey(
-        MapSelectionOptionChips.optionChipKeys[MapSelectionOptions.nearby]!,
-      );
-      expect(nearbyChip, findsOneWidget);
-      await tester.tap(nearbyChip);
+        // Tap on the chip
+        final chip = find.byKey(
+          MapSelectionOptionChips.optionChipKeys[optionToTest]!,
+        );
+        expect(chip, findsOneWidget);
+        await tester.tap(chip);
 
-      await tester.tap(find.text("New post"));
-      final addPostButton = find.text("New post");
-      expect(addPostButton, findsOneWidget);
-      await tester.tap(addPostButton);
-      await tester.pumpAndSettle();
+        // Verify we have the correct number of pins
+        final expectedPins =
+            expectedPostsForOption[optionToTest] ?? List.empty();
+        final pinsStart = await container.read(mapPinViewModelProvider.future);
+        expect(pinsStart, hasLength(expectedPins.length));
 
-      final titleForm = find.byKey(NewPostForm.titleFieldKey);
-      expect(titleForm, findsOneWidget);
-      await tester.enterText(titleForm, "Title");
-      final bodyForm = find.byKey(NewPostForm.bodyFieldKey);
-      expect(bodyForm, findsOneWidget);
-      await tester.enterText(bodyForm, "Body");
-      final submitButton = find.byKey(NewPostForm.postButtonKey);
-      expect(submitButton, findsOneWidget);
-      await tester.tap(submitButton);
-      await tester.pumpAndSettle();
+        // Run the protocol
+        await protocol(tester, container);
 
-      // The option must not have change
-      final currentOption = container.read(
-        mapSelectionOptionsViewModelProvider,
-      );
-      expect(currentOption, equals(MapSelectionOptions.nearby));
+        // Verify the final state, the option should not have changed
+        final currentOption = container.read(
+          mapSelectionOptionsViewModelProvider,
+        );
+        expect(currentOption, equals(optionToTest));
 
-      // There must be one more pin
-      final pins = await container.read(mapPinViewModelProvider.future);
-      expect(pins, hasLength(nearbyPosts.length + 1));
-    });
+        // The pins should have the correct number
+        final pinsEnd = await container.read(mapPinViewModelProvider.future);
+        expect(pinsEnd, hasLength(expectedPins.length + expectedPinDelta));
+      });
+    }
 
-    testWidgets("Pins refresh after post deletion", (tester) async {
-      final container = await beginTest(tester);
+    testNavigation(
+      testTitle: "Pins refresh after post creation",
+      optionToTest: MapSelectionOptions.nearby,
+      expectedPinDelta: 1,
+      protocol: (tester, container) async {
+        await tester.tap(find.text("New post"));
+        final addPostButton = find.text("New post");
+        expect(addPostButton, findsOneWidget);
+        await tester.tap(addPostButton);
+        await tester.pumpAndSettle();
 
-      final nearbyChip = find.byKey(
-        MapSelectionOptionChips.optionChipKeys[MapSelectionOptions.myPosts]!,
-      );
-      expect(nearbyChip, findsOneWidget);
-      await tester.tap(nearbyChip);
+        final titleForm = find.byKey(NewPostForm.titleFieldKey);
+        expect(titleForm, findsOneWidget);
+        await tester.enterText(titleForm, "Title");
 
-      final profileButton = find.byType(UserAvatar);
-      expect(profileButton, findsOneWidget);
-      await tester.tap(profileButton);
-      await tester.pumpAndSettle();
+        final bodyForm = find.byKey(NewPostForm.bodyFieldKey);
+        expect(bodyForm, findsOneWidget);
+        await tester.enterText(bodyForm, "Body");
 
-      final deleteButton =
-          find.byKey(ProfileInfoCard.deleteButtonCardKey).first;
-      expect(deleteButton, findsOneWidget);
-      await tester.tap(deleteButton);
-      await tester.pumpAndSettle();
+        final submitButton = find.byKey(NewPostForm.postButtonKey);
+        expect(submitButton, findsOneWidget);
+        await tester.tap(submitButton);
 
-      final backButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
-      expect(backButton, findsOneWidget);
-      await tester.tap(backButton);
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
+      },
+    );
 
-      // The option must not have changed
-      final currentOption = container.read(
-        mapSelectionOptionsViewModelProvider,
-      );
-      expect(currentOption, equals(MapSelectionOptions.myPosts));
+    testNavigation(
+      testTitle: "Pins refresh after post deletion",
+      optionToTest: MapSelectionOptions.myPosts,
+      expectedPinDelta: -1,
+      protocol: (tester, container) async {
+        final profileButton = find.byType(UserAvatar);
+        expect(profileButton, findsOneWidget);
+        await tester.tap(profileButton);
+        await tester.pumpAndSettle();
 
-      // There must be one less pin
-      final pins = await container.read(mapPinViewModelProvider.future);
-      expect(pins, hasLength(userPosts.length - 1));
-    });
+        final deleteButton =
+            find.byKey(ProfileInfoCard.deleteButtonCardKey).first;
+        expect(deleteButton, findsOneWidget);
+        await tester.tap(deleteButton);
+        await tester.pumpAndSettle();
+
+        final backButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
+        expect(backButton, findsOneWidget);
+        await tester.tap(backButton);
+        await tester.pumpAndSettle();
+      },
+    );
   });
 }
