@@ -6,12 +6,16 @@ import "package:flutter/foundation.dart";
 class RankingElementDetails {
   const RankingElementDetails({
     required this.userDisplayName,
+    required this.userUserName,
     required this.centauriPoints,
     required this.userRank,
   });
 
   /// Display name of the user.
   final String userDisplayName;
+
+  /// Username of the user.
+  final String userUserName;
 
   /// Centauri points of the user.
   final int centauriPoints;
@@ -25,6 +29,7 @@ class RankingElementDetails {
 
     return other is RankingElementDetails &&
         other.userDisplayName == userDisplayName &&
+        other.userUserName == userUserName &&
         other.centauriPoints == centauriPoints &&
         other.userRank == userRank;
   }
@@ -32,6 +37,7 @@ class RankingElementDetails {
   @override
   int get hashCode => Object.hash(
         userDisplayName,
+        userUserName,
         centauriPoints,
         userRank,
       );

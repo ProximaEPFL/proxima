@@ -15,6 +15,7 @@ void main() {
           .mapIndexed(
             (index, element) => RankingElementDetails(
               userDisplayName: testingUserData.displayName,
+              userUserName: testingUserData.username,
               centauriPoints: testingUserData.centauriPoints,
               userRank: index + 1,
             ),
@@ -25,6 +26,7 @@ void main() {
     test("hash", () {
       final userRankingElementDetail = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
+        userUserName: testingUserData.username,
         centauriPoints: 10,
         userRank: 6,
       );
@@ -47,6 +49,7 @@ void main() {
     test("==", () {
       final userRankingElementDetail = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
+        userUserName: testingUserData.username,
         centauriPoints: 10,
         userRank: 6,
       );
@@ -67,6 +70,7 @@ void main() {
     test("!= userRankElementDetails", () {
       final userRankingElementDetail1 = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
+        userUserName: testingUserData.username,
         centauriPoints: 10,
         userRank: 6,
       );
@@ -78,6 +82,7 @@ void main() {
 
       final userRankingElementDetail2 = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
+        userUserName: testingUserData.username,
         centauriPoints: 12,
         userRank: 7,
       );
@@ -93,6 +98,7 @@ void main() {
     test("!= rankingElementDetails", () {
       final userRankingElementDetail = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
+        userUserName: testingUserData.username,
         centauriPoints: 10,
         userRank: 6,
       );
@@ -107,6 +113,7 @@ void main() {
           .mapIndexed(
             (index, element) => RankingElementDetails(
               userDisplayName: testingUserData.displayName,
+              userUserName: testingUserData.username,
               centauriPoints: testingUserData.centauriPoints,
               userRank: index + 1,
             ),

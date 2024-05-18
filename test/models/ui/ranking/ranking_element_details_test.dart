@@ -8,12 +8,14 @@ void main() {
     test("hash", () {
       final rankingElementDetail = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
+        userUserName: testingUserData.username,
         centauriPoints: 10,
         userRank: 1,
       );
 
       final expectedHash = Object.hash(
         rankingElementDetail.userDisplayName,
+        rankingElementDetail.userUserName,
         rankingElementDetail.centauriPoints,
         rankingElementDetail.userRank,
       );
@@ -26,12 +28,14 @@ void main() {
     test("==", () {
       final rankingElementDetail1 = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
+        userUserName: testingUserData.username,
         centauriPoints: 10,
         userRank: 1,
       );
 
       final rankingElementDetail2 = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
+        userUserName: testingUserData.username,
         centauriPoints: 10,
         userRank: 1,
       );
@@ -42,12 +46,14 @@ void main() {
     test("!= userDisplayName", () {
       final rankingElementDetail1 = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
+        userUserName: testingUserData.username,
         centauriPoints: 10,
         userRank: 1,
       );
 
       final rankingElementDetail2 = RankingElementDetails(
         userDisplayName: "${testingUserData.displayName}_2",
+        userUserName: testingUserData.username,
         centauriPoints: 10,
         userRank: 1,
       );
@@ -58,12 +64,14 @@ void main() {
     test("!= centauriPoints", () {
       final rankingElementDetail1 = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
+        userUserName: testingUserData.username,
         centauriPoints: 10,
         userRank: 1,
       );
 
       final rankingElementDetail2 = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
+        userUserName: testingUserData.username,
         centauriPoints: 12,
         userRank: 1,
       );
@@ -74,12 +82,14 @@ void main() {
     test("!= userRank", () {
       final rankingElementDetail1 = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
+        userUserName: testingUserData.username,
         centauriPoints: 10,
         userRank: 1,
       );
 
       final rankingElementDetail2 = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
+        userUserName: testingUserData.username,
         centauriPoints: 10,
         userRank: 2,
       );
