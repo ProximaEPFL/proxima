@@ -48,7 +48,7 @@ enum NavigationbarRoutes {
       case challenge:
         return const ChallengeList();
       case ranking:
-        return RankingWidget();
+        return const RankingWidget();
       case _:
         return const NotImplemented();
     }
