@@ -3,6 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
+import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
@@ -17,6 +18,8 @@ class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
     switch (currentOption) {
       case MapSelectionOptions.nearby:
         return _getNearbyPosts();
+      case MapSelectionOptions.myPosts:
+        return _getUserPosts();
       default:
         return List.empty();
     }
@@ -36,6 +39,27 @@ class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
       PostsFeedViewModel.kmPostRadius,
     );
     final pinList = nearPosts.map((post) {
+      final postPosition = post.location.geoPoint;
+
+      return MapPinDetails(
+        id: MarkerId(post.id.value),
+        position: LatLng(postPosition.latitude, postPosition.longitude),
+        callbackFunction: () {
+          return;
+        },
+      );
+    }).toList();
+
+    return pinList;
+  }
+
+  /// Get user posts
+  Future<List<MapPinDetails>> _getUserPosts() async {
+    final postRepository = ref.watch(postRepositoryServiceProvider);
+    final userId = ref.watch(validLoggedInUserIdProvider);
+    final userPosts = await postRepository.getUserPosts(userId);
+
+    final pinList = userPosts.map((post) {
       final postPosition = post.location.geoPoint;
 
       return MapPinDetails(
