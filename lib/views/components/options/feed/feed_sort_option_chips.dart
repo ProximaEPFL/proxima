@@ -28,7 +28,7 @@ class FeedSortOptionChips extends ConsumerWidget {
               if (selected) {
                 ref
                     .read(feedSortOptionsViewModelProvider.notifier)
-                    .setSortOption(sortOption);
+                    .setOption(sortOption);
               }
             },
           ),
