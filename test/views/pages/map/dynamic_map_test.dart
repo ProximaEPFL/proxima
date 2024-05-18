@@ -56,6 +56,24 @@ void main() {
     return ProviderScope.containerOf(element);
   }
 
+  void expectPinsAndPostsMatch(
+    List<MapPinDetails> pins,
+    List<PostFirestore> posts,
+  ) {
+    // Compare the ids
+    final pinsId = pins.map((pin) => pin.id.value);
+    final postIds = posts.map((post) => post.id.value);
+    expect(pinsId, unorderedEquals(postIds));
+
+    // Compare the positions
+    final pinsPosition = pins.map((pin) {
+      final pos = pin.position;
+      return GeoPoint(pos.latitude, pos.longitude);
+    });
+    final postPositions = posts.map((post) => post.location.geoPoint);
+    expect(pinsPosition, unorderedEquals(postPositions));
+  }
+
   group("Option selection", () {
     testWidgets("Correct default option", (tester) async {
       final container = await beginTest(tester);
@@ -85,17 +103,7 @@ void main() {
       expect(currentOption, equals(MapSelectionOptions.nearby));
 
       final pins = await container.read(mapPinViewModelProvider.future);
-      final pinsId = pins.map((pin) => pin.id.value);
-      final postIds = nearbyPosts.map((post) => post.id.value);
-      expect(pinsId, unorderedEquals(postIds));
-
-      // Compare the positions
-      final pinsPosition = pins.map((pin) {
-        final pos = pin.position;
-        return GeoPoint(pos.latitude, pos.longitude);
-      });
-      final postPositions = nearbyPosts.map((post) => post.location.geoPoint);
-      expect(pinsPosition, unorderedEquals(postPositions));
+      expectPinsAndPostsMatch(pins, nearbyPosts);
     });
   });
 }
