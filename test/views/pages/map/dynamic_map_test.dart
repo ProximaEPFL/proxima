@@ -39,6 +39,8 @@ void main() {
     postGenerator = FirestorePostGenerator();
   });
 
+  /// Starts the test given by the [tester] by pumping the [mapPage] and
+  /// getting the [ProviderContainer] of the [MapScreen] (which is returned).
   Future<ProviderContainer> beginTest(WidgetTester tester) async {
     await tester.pumpWidget(mapPage);
     await tester.pumpAndSettle();
@@ -47,6 +49,9 @@ void main() {
     return ProviderScope.containerOf(element);
   }
 
+  /// Verifies that the [pins] and [posts] match.
+  /// This means that they have the same id, and the same location. The order
+  /// of the pins and posts does not matter.
   void expectPinsAndPostsMatch(
     List<MapPinDetails> pins,
     List<PostFirestore> posts,
@@ -106,6 +111,11 @@ void main() {
       );
     });
 
+    /// Verifies that the [option] is indeed the current option of the view-model
+    /// (in the view of the [container]), and that the pins returned by the view-model
+    /// are indeed the one expected in [expectedPostsForOption]. If [expectedPostForOption]
+    /// does not contain the [option], then it is assumed that the expected posts
+    /// are an empty list.
     Future<void> testOption(
       ProviderContainer container,
       MapSelectionOptions option,
