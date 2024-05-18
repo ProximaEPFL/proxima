@@ -15,7 +15,8 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   Future<MapDetails> build() async {
     final actualLocation =
         await ref.read(geolocationServiceProvider).getCurrentPosition();
-    final currentOption = ref.watch(mapSelectionOptionsViewModelProvider);
+    //TODO: Remove unused variable
+    final currentOption = ref.read(mapSelectionOptionsViewModelProvider);
 
     return MapDetails(
       initialLocation:

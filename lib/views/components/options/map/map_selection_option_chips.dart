@@ -16,10 +16,12 @@ class MapSelectionOptionChips extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentOption = ref.watch(mapSelectionOptionsViewModelProvider);
+
     final selectOptions = MapSelectionOptions.values.map((selectOption) {
       return ChoiceChip(
         key: Key(selectOption.name),
-        selected: selectOption == mapInfo.selectOption,
+        selected: selectOption == currentOption,
         label: Text(selectOption.name),
         onSelected: (bool selected) {
           if (!selected) return;
