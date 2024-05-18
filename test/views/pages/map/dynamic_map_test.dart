@@ -11,6 +11,7 @@ import "package:proxima/views/components/options/map/map_selection_option_chips.
 import "package:proxima/views/components/options/map/map_selection_options.dart";
 import "package:proxima/views/pages/home/content/map/map_screen.dart";
 
+import "../../../mocks/data/firestore_challenge.dart";
 import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/data/geopoint.dart";
@@ -73,6 +74,7 @@ void main() {
   group("Option selection", () {
     late List<PostFirestore> nearbyPosts;
     late List<PostFirestore> userPosts;
+    late List<PostFirestore> challenges;
 
     late Map<MapSelectionOptions, List<PostFirestore>> expectedPostsForOption;
 
@@ -93,9 +95,24 @@ void main() {
       );
       await setPostsFirestore(userPosts, fakeFirestore);
 
+      challenges = [nearbyPosts.first, farPosts.first, userPosts.first];
+      for (final (i, post) in challenges.indexed) {
+        final challenge = FirestoreChallengeGenerator.generateFromPostId(
+          post.id,
+          // some are completed, others are not
+          i % 2 == 0,
+        );
+        await setChallenge(
+          fakeFirestore,
+          challenge,
+          testingUserFirestoreId,
+        );
+      }
+
       expectedPostsForOption = {
         MapSelectionOptions.nearby: nearbyPosts,
         MapSelectionOptions.myPosts: userPosts,
+        MapSelectionOptions.challenges: challenges,
       };
     });
 
