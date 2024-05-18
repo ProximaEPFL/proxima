@@ -23,10 +23,6 @@ void main() {
 
   late FakeFirebaseFirestore fakeFirestore;
   late FirestorePostGenerator postGenerator;
-  late List<PostFirestore> nearbyPosts;
-  late List<PostFirestore> userPosts;
-
-  late Map<MapSelectionOptions, List<PostFirestore>> expectedPostsForOption;
 
   setUp(() async {
     fakeFirestore = FakeFirebaseFirestore();
@@ -41,27 +37,6 @@ void main() {
     );
 
     postGenerator = FirestorePostGenerator();
-
-    nearbyPosts = postGenerator.generatePostsAtDifferentLocations(
-      GeoPointGenerator.generatePositions(userPosition0, 10, 0),
-    );
-    await setPostsFirestore(nearbyPosts, fakeFirestore);
-    final farPosts = postGenerator.generatePostsAtDifferentLocations(
-      GeoPointGenerator.generatePositions(userPosition0, 0, 10),
-    );
-    await setPostsFirestore(farPosts, fakeFirestore);
-
-    userPosts = postGenerator.createUserPosts(
-      testingUserFirestoreId,
-      userPosition1,
-      10,
-    );
-    await setPostsFirestore(userPosts, fakeFirestore);
-
-    expectedPostsForOption = {
-      MapSelectionOptions.nearby: nearbyPosts,
-      MapSelectionOptions.myPosts: userPosts,
-    };
   });
 
   Future<ProviderContainer> beginTest(WidgetTester tester) async {
@@ -91,6 +66,34 @@ void main() {
   }
 
   group("Option selection", () {
+    late List<PostFirestore> nearbyPosts;
+    late List<PostFirestore> userPosts;
+
+    late Map<MapSelectionOptions, List<PostFirestore>> expectedPostsForOption;
+
+    setUp(() async {
+      nearbyPosts = postGenerator.generatePostsAtDifferentLocations(
+        GeoPointGenerator.generatePositions(userPosition0, 10, 0),
+      );
+      await setPostsFirestore(nearbyPosts, fakeFirestore);
+      final farPosts = postGenerator.generatePostsAtDifferentLocations(
+        GeoPointGenerator.generatePositions(userPosition0, 0, 10),
+      );
+      await setPostsFirestore(farPosts, fakeFirestore);
+
+      userPosts = postGenerator.createUserPosts(
+        testingUserFirestoreId,
+        userPosition1,
+        10,
+      );
+      await setPostsFirestore(userPosts, fakeFirestore);
+
+      expectedPostsForOption = {
+        MapSelectionOptions.nearby: nearbyPosts,
+        MapSelectionOptions.myPosts: userPosts,
+      };
+    });
+
     testWidgets("Correct default option", (tester) async {
       final container = await beginTest(tester);
 
