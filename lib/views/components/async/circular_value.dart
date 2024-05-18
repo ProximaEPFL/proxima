@@ -1,8 +1,9 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/components/async/error_alert.dart";
+import "package:proxima/views/components/async/logo_progress_indicator.dart";
 
-/// Utilitiy widget used to display a [CircularProgressIndicator] while waiting
+/// Utilitiy widget used to display a [LogoProgressIndicator] while waiting
 /// for an [AsyncValue] to complete; and another widget once the data resolves.
 /// In case the data resolves to an error, an [ErrorAlert] dialog is shown, and
 /// a fallback widget is displayed. The default fallback widget is empty, but it
@@ -53,7 +54,7 @@ class CircularValue<T> extends StatelessWidget {
       },
       loading: () {
         return const Center(
-          child: CircularProgressIndicator(),
+          child: LogoProgressIndicator(),
         );
       },
     );

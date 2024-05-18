@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
+import "package:proxima/views/components/async/logo_progress_indicator.dart";
 import "package:proxima/views/helpers/types.dart";
 
 enum LoadingState {
@@ -8,7 +9,7 @@ enum LoadingState {
   completed,
 }
 
-/// An async capable button that displays a progress indicator once it is pressed
+/// An async capable button that displays a [LogoProgressIndicator] once it is pressed
 /// and until the future of the callback function completes.
 class LoadingIconButton extends HookWidget {
   static const _defaultIconSize = 26.0;
@@ -45,7 +46,7 @@ class LoadingIconButton extends HookWidget {
       child: SizedBox(
         width: iconSize,
         height: iconSize,
-        child: const CircularProgressIndicator(),
+        child: const LogoProgressIndicator(),
       ),
     );
 

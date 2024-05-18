@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/views/components/async/logo_progress_indicator.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
@@ -130,9 +131,9 @@ void main() {
         final homePage = find.byType(HomePage);
         expect(homePage, findsOneWidget);
 
-        // Check that the circular progress indicator is displayed
+        // Check that the progress indicator is displayed
         final progressIndicator = find.byType(
-          CircularProgressIndicator,
+          LogoProgressIndicator,
         );
         expect(progressIndicator, findsOneWidget);
       },
