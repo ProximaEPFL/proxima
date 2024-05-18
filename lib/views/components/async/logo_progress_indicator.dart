@@ -4,6 +4,9 @@ import "package:flutter/material.dart";
 /// Used to indicate that the app is loading data. And provide an
 /// alternative to the default circular progress indicator.
 class LogoProgressIndicator extends StatelessWidget {
+  static const _logoProgressIndicatorAsset =
+      "assets/feedback/proxima_progress_indicator_transparent.gif";
+
   const LogoProgressIndicator({
     super.key,
   });
@@ -11,7 +14,7 @@ class LogoProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image.asset(
-      "assets/feedback/proxima_progress_indicator_transparent.gif",
+      _logoProgressIndicatorAsset,
       width: 75,
     );
   }
