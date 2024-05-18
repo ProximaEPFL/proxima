@@ -1,5 +1,6 @@
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
@@ -38,19 +39,7 @@ class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
       position,
       PostsFeedViewModel.kmPostRadius,
     );
-    final pinList = nearPosts.map((post) {
-      final postPosition = post.location.geoPoint;
-
-      return MapPinDetails(
-        id: MarkerId(post.id.value),
-        position: LatLng(postPosition.latitude, postPosition.longitude),
-        callbackFunction: () {
-          return;
-        },
-      );
-    }).toList();
-
-    return pinList;
+    return nearPosts.map(_toMapPinDetails).toList();
   }
 
   /// Get user posts
@@ -59,19 +48,21 @@ class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
     final userId = ref.watch(validLoggedInUserIdProvider);
     final userPosts = await postRepository.getUserPosts(userId);
 
-    final pinList = userPosts.map((post) {
-      final postPosition = post.location.geoPoint;
+    return userPosts.map(_toMapPinDetails).toList();
+  }
 
-      return MapPinDetails(
-        id: MarkerId(post.id.value),
-        position: LatLng(postPosition.latitude, postPosition.longitude),
-        callbackFunction: () {
-          return;
-        },
-      );
-    }).toList();
+  /// Convert a [post] to a map pin details
+  MapPinDetails _toMapPinDetails(
+    PostFirestore post, {
+    void Function()? callback,
+  }) {
+    final postPosition = post.location.geoPoint;
 
-    return pinList;
+    return MapPinDetails(
+      id: MarkerId(post.id.value),
+      position: LatLng(postPosition.latitude, postPosition.longitude),
+      callbackFunction: callback ?? () => (),
+    );
   }
 }
 
