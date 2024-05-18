@@ -13,7 +13,11 @@ import "package:proxima/views/components/options/map/map_selection_options.dart"
 
 /// This view model is used to fetch the list of map pins that
 /// needs to be displayed in the map page.
-class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
+/// This needs the "AutoDispose" in [AutoDisposeAsyncNotifier] so that
+/// the pins are refreshed when navigating away from the map page. This
+/// may allow to catch some bugs that may occur when the pins are not
+/// refreshed when the user adds/deletes a post or completes a challenge.
+class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
   @override
   Future<List<MapPinDetails>> build() async {
     final currentOption = ref.watch(mapSelectionOptionsViewModelProvider);
@@ -28,6 +32,12 @@ class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
       default:
         return List.empty();
     }
+  }
+
+  /// Refreshes the map pins
+  Future<void> refresh() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => build());
   }
 
   /// Get nearby posts
@@ -100,6 +110,6 @@ class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
 }
 
 final mapPinViewModelProvider =
-    AsyncNotifierProvider<MapPinViewModel, List<MapPinDetails>>(
+    AutoDisposeAsyncNotifierProvider<MapPinViewModel, List<MapPinDetails>>(
   () => MapPinViewModel(),
 );

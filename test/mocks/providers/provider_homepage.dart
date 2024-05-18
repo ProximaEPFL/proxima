@@ -44,10 +44,12 @@ final loadingHomePageProvider = ProviderScope(
 
 ProviderScope homePageFakeFirestoreProvider(
   FakeFirebaseFirestore firestore,
-  MockGeolocationService geoLocationService,
-) {
+  MockGeolocationService geoLocationService, {
+  List<Override> additionalOverrides = const [],
+}) {
   return ProviderScope(
     overrides: [
+      ...additionalOverrides,
       ...loggedInUserOverrides,
       ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
       firestoreProvider.overrideWithValue(firestore),
