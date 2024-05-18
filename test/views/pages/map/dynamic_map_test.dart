@@ -8,12 +8,15 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
+import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/components/options/map/map_selection_option_chips.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
+import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
+import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
 
 import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
@@ -98,10 +101,13 @@ void main() {
     late Map<MapSelectionOptions, List<PostFirestore>> expectedPostsForOption;
 
     setUp(() async {
+      await setUserFirestore(fakeFirestore, testingUserFirestore);
+
       nearbyPosts = postGenerator.generatePostsAtDifferentLocations(
         GeoPointGenerator.generatePositions(userPosition0, 10, 0),
       );
       await setPostsFirestore(nearbyPosts, fakeFirestore);
+
       final farPosts = postGenerator.generatePostsAtDifferentLocations(
         GeoPointGenerator.generatePositions(userPosition0, 0, 10),
       );
@@ -215,6 +221,42 @@ void main() {
       // There must be one more pin
       final pins = await container.read(mapPinViewModelProvider.future);
       expect(pins, hasLength(nearbyPosts.length + 1));
+    });
+
+    testWidgets("Pins refresh after post deletion", (tester) async {
+      final container = await beginTest(tester);
+
+      final nearbyChip = find.byKey(
+        MapSelectionOptionChips.optionChipKeys[MapSelectionOptions.myPosts]!,
+      );
+      expect(nearbyChip, findsOneWidget);
+      await tester.tap(nearbyChip);
+
+      final profileButton = find.byType(UserAvatar);
+      expect(profileButton, findsOneWidget);
+      await tester.tap(profileButton);
+      await tester.pumpAndSettle();
+
+      final deleteButton =
+          find.byKey(ProfileInfoCard.deleteButtonCardKey).first;
+      expect(deleteButton, findsOneWidget);
+      await tester.tap(deleteButton);
+      await tester.pumpAndSettle();
+
+      final backButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
+      expect(backButton, findsOneWidget);
+      await tester.tap(backButton);
+      await tester.pumpAndSettle();
+
+      // The option must not have changed
+      final currentOption = container.read(
+        mapSelectionOptionsViewModelProvider,
+      );
+      expect(currentOption, equals(MapSelectionOptions.myPosts));
+
+      // There must be one less pin
+      final pins = await container.read(mapPinViewModelProvider.future);
+      expect(pins, hasLength(userPosts.length - 1));
     });
   });
 }
