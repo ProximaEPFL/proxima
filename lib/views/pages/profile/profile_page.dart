@@ -14,7 +14,6 @@ class ProfilePage extends ConsumerWidget {
   static const tabKey = Key("tab");
   static const commentColumnKey = Key("commentColumn");
 
-  static const _badgesTitle = "Your badges:";
   static const _postsTab = "Posts";
   static const _commentsTab = "Comments";
 
@@ -50,7 +49,7 @@ class ProfilePage extends ConsumerWidget {
             appBar: ProfileAppBar(userData: value.firestoreUser.data),
             body: Container(
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-              child: Column(
+              child: const Column(
                 children: [
                   tabsTitle,
                   tabsContent,
