@@ -6,6 +6,10 @@ import "package:proxima/views/components/options/map/map_selection_options.dart"
 
 class MapSelectionOptionChips extends ConsumerWidget {
   static const selectOptionsKey = Key("selectOptions");
+  static final optionChipKeys = Map.fromIterables(
+    MapSelectionOptions.values,
+    MapSelectionOptions.values.map((option) => Key("optionChip${option.name}")),
+  );
 
   const MapSelectionOptionChips({
     required this.mapInfo,
@@ -20,7 +24,7 @@ class MapSelectionOptionChips extends ConsumerWidget {
 
     final selectOptions = MapSelectionOptions.values.map((selectOption) {
       return ChoiceChip(
-        key: Key(selectOption.name),
+        key: optionChipKeys[selectOption],
         selected: selectOption == currentOption,
         label: Text(selectOption.name),
         onSelected: (bool selected) {

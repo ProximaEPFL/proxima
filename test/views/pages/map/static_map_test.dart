@@ -66,12 +66,9 @@ void main() {
       expect(find.byKey(MapScreen.mapScreenKey), findsOneWidget);
       expect(find.byKey(MapScreen.dividerKey), findsOneWidget);
 
-      // Extract keys from the MapSelectionOptions enum
-      final keys =
-          MapSelectionOptions.values.map((option) => Key(option.name)).toList();
-
       // Verify that each ChoiceChip is found by its key
-      for (final key in keys) {
+      for (final option in MapSelectionOptions.values) {
+        final key = MapSelectionOptionChips.optionChipKeys[option]!;
         expect(find.byKey(key), findsOneWidget);
       }
 
