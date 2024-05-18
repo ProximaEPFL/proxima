@@ -131,17 +131,21 @@ void main() {
         MapSelectionOptionsViewModel.defaultMapOption,
       );
 
-      for (final option in MapSelectionOptions.values) {
-        // Click on option chip
-        final optionChip = find.byKey(
-          MapSelectionOptionChips.optionChipKeys[option]!,
-        );
-        expect(optionChip, findsOneWidget);
-        await tester.tap(optionChip);
-        await tester.pumpAndSettle();
+      // Run the tests twice, because the first time we click on a chip, we may
+      // not refresh the posts (the first chip may be the default value)
+      for (int i = 0; i < 2; ++i) {
+        for (final option in MapSelectionOptions.values) {
+          // Click on option chip
+          final optionChip = find.byKey(
+            MapSelectionOptionChips.optionChipKeys[option]!,
+          );
+          expect(optionChip, findsOneWidget);
+          await tester.tap(optionChip);
+          await tester.pumpAndSettle();
 
-        // Verify the option
-        await testOption(container, option);
+          // Verify the option
+          await testOption(container, option);
+        }
       }
     });
   });
