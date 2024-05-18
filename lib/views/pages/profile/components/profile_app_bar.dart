@@ -5,8 +5,6 @@ import "package:proxima/views/pages/profile/components/logout_button.dart";
 import "package:proxima/views/pages/profile/components/user_account.dart";
 
 class ProfileAppBar extends AppBar {
-  static const settingsKey = Key("settings");
-
   final UserData userData;
 
   ProfileAppBar({
@@ -19,13 +17,6 @@ class ProfileAppBar extends AppBar {
           ),
           actions: [
             const LogoutButton(),
-            IconButton(
-              key: settingsKey,
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                //TODO: implement settings page
-              },
-            ),
           ],
         );
 }
