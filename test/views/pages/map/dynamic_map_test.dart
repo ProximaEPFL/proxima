@@ -186,6 +186,13 @@ void main() {
       }
     });
 
+    /// Runs a test where we navigate to a different page, and then come back to the map, in order
+    /// to see if the pins were correctly refreshed. An example is that we delete a post, and then
+    /// come back to the map to see if the pin was removed.
+    /// The [testTitle] is the title of the test, [optionToTest] is the map pin option we want to
+    /// have selected during the test, [expectedPinDelta] is the expected difference in the number
+    /// of pins after the protocol is run, and [protocol] is the function that runs the protocol
+    /// (this is where one would delete a post, or create a new post, for instance).
     void testNavigation({
       required String testTitle,
       required MapSelectionOptions optionToTest,
@@ -198,7 +205,7 @@ void main() {
       testWidgets(testTitle, (tester) async {
         final container = await beginTest(tester);
 
-        // Tap on the chip
+        // Tap on the option chip we want for the test
         final chip = find.byKey(
           MapSelectionOptionChips.optionChipKeys[optionToTest]!,
         );
