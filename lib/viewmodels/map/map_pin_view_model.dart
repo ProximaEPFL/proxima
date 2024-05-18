@@ -30,6 +30,12 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
     }
   }
 
+  /// Refreshes the map pins
+  Future<void> refresh() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => build());
+  }
+
   /// Get nearby posts
   Future<List<MapPinDetails>> _getNearbyPosts() async {
     final postRepository = ref.watch(postRepositoryServiceProvider);

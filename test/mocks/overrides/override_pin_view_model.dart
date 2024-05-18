@@ -15,6 +15,12 @@ class MockPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>>
 
   @override
   Future<List<MapPinDetails>> build() => _build();
+
+  @override
+  Future<void> refresh() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => build());
+  }
 }
 
 final mockPinViewModelOverride = mapPinViewModelProvider.overrideWith(
