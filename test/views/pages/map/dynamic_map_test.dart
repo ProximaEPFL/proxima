@@ -26,6 +26,8 @@ void main() {
   late List<PostFirestore> nearbyPosts;
   late List<PostFirestore> userPosts;
 
+  late Map<MapSelectionOptions, List<PostFirestore>> expectedPostsForOption;
+
   setUp(() async {
     fakeFirestore = FakeFirebaseFirestore();
     geoLocationService = MockGeolocationService();
@@ -55,6 +57,11 @@ void main() {
       10,
     );
     await setPostsFirestore(userPosts, fakeFirestore);
+
+    expectedPostsForOption = {
+      MapSelectionOptions.nearby: nearbyPosts,
+      MapSelectionOptions.myPosts: userPosts,
+    };
   });
 
   Future<ProviderContainer> beginTest(WidgetTester tester) async {
@@ -96,12 +103,24 @@ void main() {
       );
     });
 
+    Future<void> testOption(
+      ProviderContainer container,
+      MapSelectionOptions option,
+    ) async {
+      // Verify the option of the view-model is correct
+      final currentOption = container.read(
+        mapSelectionOptionsViewModelProvider,
+      );
+      expect(currentOption, equals(option));
+
+      // Verify the pins are correct
+      final expectedPosts = expectedPostsForOption[option] ?? List.empty();
+      final pins = await container.read(mapPinViewModelProvider.future);
+      expectPinsAndPostsMatch(pins, expectedPosts);
+    }
+
     testWidgets("Post options work", (tester) async {
       final container = await beginTest(tester);
-      final expected = {
-        MapSelectionOptions.nearby: nearbyPosts,
-        MapSelectionOptions.myPosts: userPosts,
-      };
 
       for (final option in MapSelectionOptions.values) {
         // Click on option chip
@@ -112,16 +131,8 @@ void main() {
         await tester.tap(optionChip);
         await tester.pumpAndSettle();
 
-        // Verify the option of the view-model is correct
-        final currentOption = container.read(
-          mapSelectionOptionsViewModelProvider,
-        );
-        expect(currentOption, equals(option));
-
-        // Verify the pins are correct
-        final expectedPosts = expected[option] ?? List.empty();
-        final pins = await container.read(mapPinViewModelProvider.future);
-        expectPinsAndPostsMatch(pins, expectedPosts);
+        // Verify the option
+        await testOption(container, option);
       }
     });
   });
