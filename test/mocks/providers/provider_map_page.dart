@@ -1,12 +1,16 @@
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/content/map/map_screen.dart";
 
+import "../overrides/override_auth_providers.dart";
 import "../overrides/override_map_view_model.dart";
 import "../overrides/override_pin_view_model.dart";
+import "../services/mock_geo_location_service.dart";
 
 const mapPage = MaterialApp(
   onGenerateRoute: generateRoute,
@@ -42,6 +46,20 @@ ProviderScope newMapPageWithPins(
     overrides: [
       geolocationServiceProvider.overrideWithValue(geoLocationService),
       mockPinViewModelOverride,
+    ],
+    child: mapPage,
+  );
+}
+
+ProviderScope mapScreenFakeFirestoreProvider(
+  FakeFirebaseFirestore firestore,
+  MockGeolocationService geoLocationService,
+) {
+  return ProviderScope(
+    overrides: [
+      ...loggedInUserOverrides,
+      firestoreProvider.overrideWithValue(firestore),
+      geolocationServiceProvider.overrideWithValue(geoLocationService),
     ],
     child: mapPage,
   );
