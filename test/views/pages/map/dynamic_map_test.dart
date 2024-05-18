@@ -98,11 +98,12 @@ void main() {
       await setPostsFirestore(userPosts, fakeFirestore);
 
       challenges = [nearbyPosts.first, farPosts.first, userPosts.first];
+      // The second challenge is completed, the others are not
+      const completedChallengeIdx = 1;
       for (final (i, post) in challenges.indexed) {
         final challenge = FirestoreChallengeGenerator.generateFromPostId(
           post.id,
-          // The second challenge is completed, the others are not
-          i == 1,
+          i == completedChallengeIdx,
         );
         await setChallenge(
           fakeFirestore,
@@ -110,7 +111,9 @@ void main() {
           testingUserFirestoreId,
         );
       }
-      activeChallenges = challenges.whereNotIndexed((i, _) => i == 1).toList();
+      activeChallenges = challenges
+          .whereNotIndexed((i, _) => i == completedChallengeIdx)
+          .toList();
 
       expectedPostsForOption = {
         MapSelectionOptions.nearby: nearbyPosts,
