@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_details.dart";
+import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
 
-class MapSelectionOptionChips extends StatelessWidget {
+class MapSelectionOptionChips extends ConsumerWidget {
   static const selectOptionsKey = Key("selectOptions");
 
   const MapSelectionOptionChips({
@@ -13,13 +15,18 @@ class MapSelectionOptionChips extends StatelessWidget {
   final MapDetails mapInfo;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final selectOptions = MapSelectionOptions.values.map((selectOption) {
       return ChoiceChip(
-        //TODO: Handle the selection of the options
         key: Key(selectOption.name),
         selected: selectOption == mapInfo.selectOption,
         label: Text(selectOption.name),
+        onSelected: (bool selected) {
+          if (!selected) return;
+          ref
+              .read(mapSelectionOptionsViewModelProvider.notifier)
+              .setOption(selectOption);
+        },
       );
     }).toList();
 

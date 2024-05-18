@@ -5,8 +5,8 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
+import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
-import "package:proxima/views/components/options/map/map_selection_options.dart";
 
 /// This view model is responsible for managing the actual location
 /// of the user on the map and the displayed circles.
@@ -15,11 +15,12 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
   Future<MapDetails> build() async {
     final actualLocation =
         await ref.read(geolocationServiceProvider).getCurrentPosition();
+    final currentOption = ref.watch(mapSelectionOptionsViewModelProvider);
 
     return MapDetails(
       initialLocation:
           LatLng(actualLocation.latitude, actualLocation.longitude),
-      selectOption: MapSelectionOptions.nearby,
+      selectOption: currentOption,
     );
   }
 
