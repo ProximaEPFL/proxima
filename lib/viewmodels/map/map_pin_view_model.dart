@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
@@ -54,7 +55,7 @@ class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
     return userPosts.map(_toMapPinDetails).toList();
   }
 
-  /// Get user challenges
+  /// Get user active challenges
   Future<List<MapPinDetails>> _getUserChallenges() async {
     final postRepository = ref.watch(postRepositoryServiceProvider);
     final challengeRepostory = ref.watch(challengeRepositoryServiceProvider);
@@ -71,8 +72,11 @@ class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
       userId,
       position,
     );
+    final activeChallenges = userChallenges.whereNot(
+      (challenge) => challenge.data.isCompleted,
+    );
     final posts = await Future.wait(
-      userChallenges.map(
+      activeChallenges.map(
         (challenge) => postRepository.getPost(challenge.postId),
       ),
     );

@@ -1,4 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:collection/collection.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -75,6 +76,7 @@ void main() {
     late List<PostFirestore> nearbyPosts;
     late List<PostFirestore> userPosts;
     late List<PostFirestore> challenges;
+    late List<PostFirestore> activeChallenges;
 
     late Map<MapSelectionOptions, List<PostFirestore>> expectedPostsForOption;
 
@@ -99,8 +101,8 @@ void main() {
       for (final (i, post) in challenges.indexed) {
         final challenge = FirestoreChallengeGenerator.generateFromPostId(
           post.id,
-          // some are completed, others are not
-          i % 2 == 0,
+          // The second challenge is completed, the others are not
+          i == 1,
         );
         await setChallenge(
           fakeFirestore,
@@ -108,11 +110,12 @@ void main() {
           testingUserFirestoreId,
         );
       }
+      activeChallenges = challenges.whereNotIndexed((i, _) => i == 1).toList();
 
       expectedPostsForOption = {
         MapSelectionOptions.nearby: nearbyPosts,
         MapSelectionOptions.myPosts: userPosts,
-        MapSelectionOptions.challenges: challenges,
+        MapSelectionOptions.challenges: activeChallenges,
       };
     });
 
