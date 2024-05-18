@@ -3,13 +3,27 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
+import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
+import "package:proxima/views/components/options/map/map_selection_options.dart";
 
 /// This view model is used to fetch the list of map pins that
 /// needs to be displayed in the map page.
 class MapPinViewModel extends AsyncNotifier<List<MapPinDetails>> {
   @override
   Future<List<MapPinDetails>> build() async {
+    final currentOption = ref.watch(mapSelectionOptionsViewModelProvider);
+
+    switch (currentOption) {
+      case MapSelectionOptions.nearby:
+        return _getNearbyPosts();
+      default:
+        return List.empty();
+    }
+  }
+
+  /// Get nearby posts
+  Future<List<MapPinDetails>> _getNearbyPosts() async {
     final postRepository = ref.watch(postRepositoryServiceProvider);
     final position = await ref.watch(livePositionStreamProvider.future);
 
