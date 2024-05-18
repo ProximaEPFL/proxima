@@ -3,21 +3,24 @@ import "package:proxima/models/ui/ranking/ranking_element_details.dart";
 
 /// A class that stores data for the ranking widget.
 /// Elements in [rankElementDetailsList] should have non-null [userRank].
-///
-/// Note that we don't ensure that the [userRank] are not empty as we want to leave flexibility
-/// to the developer. Moreover, when used in the UI, this will yield a runtime error
-/// if the [userRank] is null.
 @immutable
 class RankingDetails {
-  const RankingDetails({
+  RankingDetails({
     required this.userRankElementDetails,
     required this.rankElementDetailsList,
-  });
+  }) : assert(
+          rankElementDetailsList.every(
+            (elementDetailsList) => elementDetailsList.userRank != null,
+          ),
+        );
 
   /// Details of the user's rank.
+  /// The [userRank] parameter of [userRankElementDetails] can be null.
   final RankingElementDetails userRankElementDetails;
 
   /// List containing details the ranking elements.
+  /// The [userRank] parameter of every [RankingElementDetails] instances
+  /// in [rankElementDetailsList] are non-null.
   final List<RankingElementDetails> rankElementDetailsList;
 
   @override

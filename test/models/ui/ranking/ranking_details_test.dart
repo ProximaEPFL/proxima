@@ -128,4 +128,37 @@ void main() {
       expect(rankingDetails1 == rankingDetails2, isFalse);
     });
   });
+
+  test(
+      "constructor should yield exception if a userRank is null in rankElementDetailsList",
+      () {
+    final userRankingElementDetail = RankingElementDetails(
+      userDisplayName: testingUserData.displayName,
+      userUserName: testingUserData.username,
+      centauriPoints: 10,
+      userRank: 6,
+    );
+
+    final usersList = FirestoreUserGenerator.generateUserData(5);
+    final listRankingElementDetails = usersList
+        .mapIndexed(
+          (index, user) => RankingElementDetails(
+            userDisplayName: user.displayName,
+            userUserName: user.username,
+            centauriPoints: user.centauriPoints,
+            userRank: index == 1 ? null : index + 1,
+          ),
+        )
+        .toList();
+
+    expect(
+      () => {
+        RankingDetails(
+          userRankElementDetails: userRankingElementDetail,
+          rankElementDetailsList: listRankingElementDetails,
+        ),
+      },
+      throwsAssertionError,
+    );
+  });
 }
