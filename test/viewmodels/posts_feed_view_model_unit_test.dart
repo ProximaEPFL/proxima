@@ -10,8 +10,8 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/services/sorting/post/post_sorting_service.dart";
-import "package:proxima/viewmodels/option_selection/feed_sort_options_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/viewmodels/option_selection/feed_sort_options_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 
 import "../mocks/data/firestore_challenge.dart";
