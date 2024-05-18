@@ -7,6 +7,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
+import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
@@ -302,6 +303,18 @@ void main() {
         final backButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
         expect(backButton, findsOneWidget);
         await tester.tap(backButton);
+        await tester.pumpAndSettle();
+      },
+    );
+
+    testNavigation(
+      testTitle: "Pins refresh after challenge completion",
+      optionToTest: MapSelectionOptions.challenges,
+      expectedPinDelta: -1,
+      protocol: (tester, container) async {
+        container.read(challengeViewModelProvider.notifier).completeChallenge(
+              challenges.first.id,
+            );
         await tester.pumpAndSettle();
       },
     );
