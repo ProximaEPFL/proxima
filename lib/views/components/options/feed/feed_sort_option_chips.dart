@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/services/sorting/post/post_sort_option.dart";
-import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
+import "package:proxima/viewmodels/option_selection/feed_sort_options_view_model.dart";
 
 /// This widget is the list of sort options for the timeline.
 class FeedSortOptionChips extends ConsumerWidget {
