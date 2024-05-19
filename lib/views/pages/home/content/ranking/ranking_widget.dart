@@ -5,7 +5,7 @@ import "package:proxima/models/ui/ranking/ranking_element_details.dart";
 import "package:proxima/views/pages/home/content/ranking/ranking_card.dart";
 import "package:proxima/views/pages/home/content/ranking/ranking_list.dart";
 
-/// A class that displays the ranking widget.
+/// A widget that displays the ranking widget.
 class RankingWidget extends StatelessWidget {
   const RankingWidget({super.key});
 

@@ -4,7 +4,7 @@ import "package:proxima/models/ui/user_avatar_details.dart";
 import "package:proxima/views/components/content/publication_header/user_profile_pop_up.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 
-/// A class that displays a ranking card.
+/// A widget that displays a ranking card.
 /// The card displays the user's rank, display name, and centauri points.
 /// The card is clickable and opens a user profile pop-up.
 /// The card's color can be customized.
