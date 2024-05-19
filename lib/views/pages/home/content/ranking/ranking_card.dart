@@ -113,21 +113,23 @@ class RankingCard extends StatelessWidget {
       ),
     );
 
+    final content = InkWell(
+      onTap: () => onTapUserPopUp(),
+      child: Row(
+        children: [
+          userRankText,
+          Expanded(
+            child: userInfo,
+          ),
+          centauriPointsText,
+        ],
+      ),
+    );
+
     return Card(
       clipBehavior: Clip.hardEdge,
       color: cardColor,
-      child: InkWell(
-        onTap: () => onTapUserPopUp(),
-        child: Row(
-          children: [
-            userRankText,
-            Expanded(
-              child: userInfo,
-            ),
-            centauriPointsText,
-          ],
-        ),
-      ),
+      child: content,
     );
   }
 }
