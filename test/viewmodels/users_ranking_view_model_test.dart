@@ -22,12 +22,35 @@ void main() {
     });
 
     test("Correct number of users returned", () async {
-      final users =
+      final ranking =
           await rankingContainer.read(usersRankingViewModelProvider.future);
 
       expect(
-        users.rankElementDetailsList.length,
+        ranking.rankElementDetailsList.length,
         UsersRankingViewModel.rankingLimit,
+      );
+    });
+
+    test("Logged in user has correct values", () async {
+      final ranking =
+          await rankingContainer.read(usersRankingViewModelProvider.future);
+      final currentUserRanking = ranking.userRankElementDetails;
+
+      expect(
+        currentUserRanking.userDisplayName,
+        testingUserData.displayName,
+      );
+      expect(
+        currentUserRanking.userUserName,
+        testingUserData.username,
+      );
+      expect(
+        currentUserRanking.centauriPoints,
+        testingUserData.centauriPoints,
+      );
+      expect(
+        currentUserRanking.userRank,
+        isNull,
       );
     });
   });
