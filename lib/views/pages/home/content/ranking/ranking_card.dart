@@ -9,13 +9,6 @@ import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 /// The card is clickable and opens a user profile pop-up.
 /// The card's color can be customized.
 class RankingCard extends StatelessWidget {
-  const RankingCard({
-    super.key,
-    required this.rankingElementDetails,
-  });
-
-  final RankingElementDetails rankingElementDetails;
-
   static const userRankrankTextKey = Key("userRankrankText");
   static const userRankDisplayNameTextKey = Key("userRankDisplayNameText");
   static const userRankCentauriPointsTextKey =
@@ -34,6 +27,13 @@ class RankingCard extends StatelessWidget {
   // This text is used when the parameter [userRank] of the
   // provided [RankingElementDetails] is null.
   static const _nullRankText = "---";
+
+  const RankingCard({
+    super.key,
+    required this.rankingElementDetails,
+  });
+
+  final RankingElementDetails rankingElementDetails;
 
   void onTapUserPopUp(BuildContext context) {
     showDialog(

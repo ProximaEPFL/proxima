@@ -7,10 +7,10 @@ import "package:proxima/views/pages/home/content/ranking/ranking_list.dart";
 
 /// A widget that displays the ranking widget.
 class RankingWidget extends StatelessWidget {
-  const RankingWidget({super.key});
-
   static const rankingListKey = Key("rankingList");
   static const userRankingCardKey = Key("userRankingCard");
+
+  const RankingWidget({super.key});
 
   // Creating mock data for the ranking list
   final List<Map<String, int>> userList = const [
