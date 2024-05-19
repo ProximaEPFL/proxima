@@ -37,7 +37,10 @@ class UserProfilePopUp extends StatelessWidget {
             radius: 15,
           ),
           const SizedBox(width: 12),
-          Text(displayName),
+          Text(
+            displayName,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
         ],
       ),
       content: listBuilder.generate(),
