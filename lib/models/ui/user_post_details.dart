@@ -8,14 +8,12 @@ class UserPostDetails {
   final PostIdFirestore postId;
   final String title;
   final String description;
-  final DateTime publicationTime;
   // TODO add the location to be able to redirect to the map (see #184)
 
   const UserPostDetails({
     required this.postId,
     required this.title,
     required this.description,
-    required this.publicationTime,
   });
 
   @override
@@ -25,8 +23,7 @@ class UserPostDetails {
     return other is UserPostDetails &&
         other.postId == postId &&
         other.title == title &&
-        other.description == description &&
-        other.publicationTime == publicationTime;
+        other.description == description;
   }
 
   @override
@@ -35,7 +32,6 @@ class UserPostDetails {
       postId,
       title,
       description,
-      publicationTime,
     );
   }
 }
