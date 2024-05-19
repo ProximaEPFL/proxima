@@ -45,6 +45,7 @@ class RankingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO: Replace with view model RankingDetails getter logic
     final rankingDetails = RankingDetails(
       rankElementDetailsList: rankElementDetailsList,
       userRankElementDetails: userRankElementDetails,
