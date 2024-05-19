@@ -35,19 +35,19 @@ class RankingCard extends StatelessWidget {
 
   final RankingElementDetails rankingElementDetails;
 
-  void onTapUserPopUp(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => UserProfilePopUp(
-        displayName: rankingElementDetails.userDisplayName,
-        username: rankingElementDetails.userUserName,
-        centauriPoints: rankingElementDetails.centauriPoints,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    void onTapUserPopUp() {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => UserProfilePopUp(
+          displayName: rankingElementDetails.userDisplayName,
+          username: rankingElementDetails.userUserName,
+          centauriPoints: rankingElementDetails.centauriPoints,
+        ),
+      );
+    }
+
     final cardColor = switch (rankingElementDetails.userRank) {
       1 => _rankOneColor,
       2 => _rankSecondColor,
@@ -117,7 +117,7 @@ class RankingCard extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       color: cardColor,
       child: InkWell(
-        onTap: () => onTapUserPopUp(context),
+        onTap: () => onTapUserPopUp(),
         child: Row(
           children: [
             userRankText,
