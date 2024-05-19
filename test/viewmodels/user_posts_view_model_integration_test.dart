@@ -2,17 +2,16 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:mockito/mockito.dart";
+import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
+import "package:proxima/models/ui/user_post_details.dart";
 import "package:proxima/services/database/firestore_service.dart";
-import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/user_posts_view_model.dart";
 
 import "../mocks/data/firestore_post.dart";
 import "../mocks/data/firestore_user.dart";
 import "../mocks/data/geopoint.dart";
-import "../mocks/services/mock_geo_location_service.dart";
 
 void main() {
   group("Testing user posts viewmodel", () {
@@ -29,21 +28,30 @@ void main() {
       userPosition = userPosition0;
       userId = testingUserFirestoreId;
 
-      final mockGeoLocationService = MockGeolocationService();
-      when(mockGeoLocationService.getCurrentPosition()).thenAnswer(
-        (_) async => userPosition,
-      );
-
       container = ProviderContainer(
         overrides: [
           firestoreProvider.overrideWithValue(firestore),
-          geolocationServiceProvider.overrideWithValue(mockGeoLocationService),
           loggedInUserIdProvider.overrideWithValue(userId),
         ],
       );
     });
 
     group("Ordering test", () {
+      /// Get the [PostFirestore] from the list [posts] that corresponds
+      /// to the [userPostDetails]
+      PostFirestore getCorrespondingPost(
+        UserPostDetails userPostDetails,
+        List<PostFirestore> posts,
+      ) {
+        // Check that the posts list contains exactly one post with the same id
+        final correspondingPosts = posts.where(
+          (post) => post.id == userPostDetails.postId,
+        );
+        expect(correspondingPosts, hasLength(1));
+
+        return correspondingPosts.first;
+      }
+
       test("User Posts are ordered from latest to oldest", () async {
         const nbPosts = 50;
 
@@ -55,16 +63,24 @@ void main() {
         await setPostsFirestore(firestorePosts, firestore);
 
         // Get the user posts
-        final userPosts =
+        final userPostDetails =
             await container.read(userPostsViewModelProvider.future);
-        expect(userPosts.length, nbPosts);
+        expect(userPostDetails.length, nbPosts);
 
         // Check that the posts are ordered from latest to oldest
         for (var i = 0; i < nbPosts - 1; i++) {
+          final postDetailsAbove = userPostDetails[i];
+          final postDetailsBelow = userPostDetails[i + 1];
+
+          final postAbove =
+              getCorrespondingPost(postDetailsAbove, firestorePosts);
+          final postBelow =
+              getCorrespondingPost(postDetailsBelow, firestorePosts);
+
           expect(
-            userPosts[i].publicationTime.microsecondsSinceEpoch,
+            postAbove.data.publicationTime.microsecondsSinceEpoch,
             greaterThanOrEqualTo(
-              userPosts[i + 1].publicationTime.microsecondsSinceEpoch,
+              postBelow.data.publicationTime.microsecondsSinceEpoch,
             ),
           );
         }
