@@ -14,6 +14,8 @@ class RankingCard extends StatelessWidget {
     required this.rankingElementDetails,
   });
 
+  final RankingElementDetails rankingElementDetails;
+
   static const userRankrankTextKey = Key("userRankrankText");
   static const userRankDisplayNameTextKey = Key("userRankDisplayNameText");
   static const userRankCentauriPointsTextKey =
@@ -32,8 +34,6 @@ class RankingCard extends StatelessWidget {
   // This text is used when the parameter [userRank] of the
   // provided [RankingElementDetails] is null.
   static const _nullRankText = "---";
-
-  final RankingElementDetails rankingElementDetails;
 
   void onTapUserPopUp(BuildContext context) {
     showDialog(
