@@ -25,11 +25,11 @@ class RankingCard extends StatelessWidget {
   // Sized box for the rank text to make sure that the text is centered
   // and that surrounding element spacing is consistent.
   // This width is allow to display three digits.
-  static const sizedBoxRankWidth = 50.0;
+  static const _sizedBoxRankWidth = 50.0;
 
-  static const rankOneColor = Color.fromARGB(255, 255, 218, 75);
-  static const rankSecondColor = Color.fromARGB(255, 217, 218, 204);
-  static const rankThirdColor = Color.fromARGB(255, 229, 153, 137);
+  static const _rankOneColor = Color.fromARGB(255, 255, 218, 75);
+  static const _rankSecondColor = Color.fromARGB(255, 217, 218, 204);
+  static const _rankThirdColor = Color.fromARGB(255, 229, 153, 137);
 
   // This text is used when the parameter [userRank] of the
   // provided [RankingElementDetails] is null.
@@ -49,16 +49,16 @@ class RankingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cardColor = switch (rankingElementDetails.userRank) {
-      1 => rankOneColor,
-      2 => rankSecondColor,
-      3 => rankThirdColor,
+      1 => _rankOneColor,
+      2 => _rankSecondColor,
+      3 => _rankThirdColor,
       _ => null,
     };
 
     final userRankText = Padding(
       padding: const EdgeInsets.only(left: 10),
       child: SizedBox(
-        width: sizedBoxRankWidth,
+        width: _sizedBoxRankWidth,
         child: Text(
           key: userRankrankTextKey,
           textAlign: TextAlign.center,
