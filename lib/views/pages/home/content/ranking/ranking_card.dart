@@ -37,16 +37,17 @@ class RankingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void onTapUserPopUp() {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => UserProfilePopUp(
-          displayName: rankingElementDetails.userDisplayName,
-          username: rankingElementDetails.userUserName,
-          centauriPoints: rankingElementDetails.centauriPoints,
-        ),
-      );
-    }
+    /// On tap function to open the user profile pop-up.
+    onTapUserPopUp() => {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => UserProfilePopUp(
+              displayName: rankingElementDetails.userDisplayName,
+              username: rankingElementDetails.userUserName,
+              centauriPoints: rankingElementDetails.centauriPoints,
+            ),
+          ),
+        };
 
     final cardColor = switch (rankingElementDetails.userRank) {
       1 => _rankOneColor,
