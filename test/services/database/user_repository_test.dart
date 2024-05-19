@@ -162,5 +162,19 @@ void main() {
       // Must be the same order
       expect(points, orderedEquals(expectedPoints));
     });
+
+    test("User ranking by top centauri points with not enough users", () async {
+      // Add a single user to the
+      await FirestoreUserGenerator.addUser(fakeFireStore);
+
+      // Query more top users using the service under test than there are in DB
+      final topUsers = await userRepo.getTopUsers(2);
+
+      // Check that the maximum number of users are returned
+      expect(topUsers.length, 1);
+
+      // Must be the correct number of points
+      expect(topUsers.first.data.centauriPoints, 0);
+    });
   });
 }
