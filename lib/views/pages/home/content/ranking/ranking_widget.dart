@@ -9,6 +9,9 @@ import "package:proxima/views/pages/home/content/ranking/ranking_list.dart";
 class RankingWidget extends StatelessWidget {
   const RankingWidget({super.key});
 
+  static const rankingListKey = Key("rankingList");
+  static const userRankingCardKey = Key("userRankingCard");
+
   // Creating mock data for the ranking list
   final List<Map<String, int>> userList = const [
     {"user123": 9420},
@@ -53,6 +56,7 @@ class RankingWidget extends StatelessWidget {
       children: [
         Flexible(
           child: RankingList(
+            key: rankingListKey,
             rankingDetails: rankingDetails,
             onRefresh: () async {
               //TODO: Add refresh logic
@@ -61,6 +65,7 @@ class RankingWidget extends StatelessWidget {
         ),
         const Divider(),
         RankingCard(
+          key: userRankingCardKey,
           rankingElementDetails: rankingDetails.userRankElementDetails,
         ),
         const SizedBox(height: 5),

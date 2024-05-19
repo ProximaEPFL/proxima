@@ -14,6 +14,12 @@ class RankingCard extends StatelessWidget {
     required this.rankingElementDetails,
   });
 
+  static const userRankrankTextKey = Key("userRankrankText");
+  static const userRankDisplayNameTextKey = Key("userRankDisplayNameText");
+  static const userRankCentauriPointsTextKey =
+      Key("userRankCentauriPointsText");
+  static const userRankAvatarKey = Key("userRankAvatar");
+
   // Sized box for the rank text to make sure that the text is centered
   // and that surrounding element spacing is consistent.
   // This width is allow to display three digits.
@@ -50,6 +56,7 @@ class RankingCard extends StatelessWidget {
       child: SizedBox(
         width: sizedBoxRankWidth,
         child: Text(
+          key: userRankrankTextKey,
           textAlign: TextAlign.center,
           rankingElementDetails.userRank == null
               ? "---"
@@ -64,6 +71,7 @@ class RankingCard extends StatelessWidget {
     final userDisplayNameText = Padding(
       padding: const EdgeInsets.only(left: 12, right: 16),
       child: Text(
+        key: userRankDisplayNameTextKey,
         rankingElementDetails.userDisplayName,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(
@@ -81,6 +89,7 @@ class RankingCard extends StatelessWidget {
       child: Row(
         children: [
           UserAvatar(
+            key: userRankAvatarKey,
             details: userDetails,
             radius: 22,
           ),
@@ -92,6 +101,7 @@ class RankingCard extends StatelessWidget {
     final centauriPointsText = Padding(
       padding: const EdgeInsets.only(right: 10),
       child: Text(
+        key: userRankCentauriPointsTextKey,
         rankingElementDetails.centauriPoints.toString(),
         style: const TextStyle(
           fontSize: 18,
