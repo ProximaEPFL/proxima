@@ -15,7 +15,7 @@ import "../mocks/data/geopoint.dart";
 
 void main() {
   group("Testing user posts viewmodel", () {
-    late FirebaseFirestore firestore;
+    late FakeFirebaseFirestore firestore;
     late FirestorePostGenerator postGenerator;
 
     late ProviderContainer container;
