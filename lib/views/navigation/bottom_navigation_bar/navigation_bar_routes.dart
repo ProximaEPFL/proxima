@@ -7,7 +7,7 @@ import "package:proxima/views/pages/home/content/ranking/ranking_widget.dart";
 
 /// This enum is used to create the navigation bar routes.
 /// It contains the name and icon of the routes.
-enum NavigationbarRoutes {
+enum NavigationBarRoutes {
   feed("Feed", Icon(Icons.home), null),
   challenge("Challenge", Icon(Icons.emoji_events), null),
   addPost(
@@ -28,7 +28,7 @@ enum NavigationbarRoutes {
   // Non-null if it requires a push
   final Routes? routeDestination;
 
-  const NavigationbarRoutes(
+  const NavigationBarRoutes(
     this.name,
     this.icon,
     this.routeDestination,

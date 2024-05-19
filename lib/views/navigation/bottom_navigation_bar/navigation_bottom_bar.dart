@@ -15,7 +15,7 @@ class NavigationBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final destinations = NavigationbarRoutes.values.map((destination) {
+    final destinations = NavigationBarRoutes.values.map((destination) {
       return NavigationDestination(
         icon: destination.icon,
         label: destination.name,
@@ -28,7 +28,7 @@ class NavigationBottomBar extends StatelessWidget {
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       selectedIndex: selectedIndex.value,
       onDestinationSelected: (int nextIndex) {
-        final selectedRoute = NavigationbarRoutes.values[nextIndex];
+        final selectedRoute = NavigationBarRoutes.values[nextIndex];
 
         if (nextIndex != selectedIndex.value) {
           if (selectedRoute.routeDestination != null) {
