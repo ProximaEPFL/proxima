@@ -53,5 +53,27 @@ void main() {
         isNull,
       );
     });
+
+    test("View model returns a descending order with correct ranks", () async {
+      final ranking =
+          await rankingContainer.read(usersRankingViewModelProvider.future);
+      final leaderboard = ranking.rankElementDetailsList;
+
+      // Check that all ranks are non null and correct
+      final lastRank =
+          leaderboard.map((e) => e.userRank!).reduce((value, element) {
+        expect(value + 1, element);
+        return element;
+      });
+      expect(lastRank, UsersRankingViewModel.rankingLimit);
+
+      // Check that all centauri points are in descending order
+      final lastCentauri =
+          leaderboard.map((e) => e.centauriPoints).reduce((value, element) {
+        expect(value >= element, isTrue);
+        return element;
+      });
+      expect(lastCentauri, UsersRankingViewModel.rankingLimit);
+    });
   });
 }
