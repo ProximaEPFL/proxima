@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:proxima/views/components/feedback/not_implemented.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/content/challenge/challenge_list.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
@@ -50,7 +49,7 @@ enum NavigationbarRoutes {
       case ranking:
         return const RankingWidget();
       case _:
-        return const NotImplemented();
+        throw Exception("No page for this route.");
     }
   }
 
