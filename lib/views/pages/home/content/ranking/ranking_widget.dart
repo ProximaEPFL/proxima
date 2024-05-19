@@ -10,10 +10,10 @@ class RankingWidget extends StatelessWidget {
   static const rankingListKey = Key("rankingList");
   static const userRankingCardKey = Key("userRankingCard");
 
-  const RankingWidget({super.key});
+  RankingWidget({super.key});
 
   // Creating mock data for the ranking list
-  final List<Map<String, int>> userList = const [
+  static const List<Map<String, int>> userList = [
     {"user123": 9420},
     {"johnDoe": 8370},
     {"janeSmith": 6550},
@@ -32,20 +32,19 @@ class RankingWidget extends StatelessWidget {
     userRank: null,
   );
 
+  final rankElementDetailsList = userList
+      .mapIndexed(
+        (index, user) => RankingElementDetails(
+          userDisplayName: user.keys.first,
+          userUserName: "u_${user.keys.first}",
+          centauriPoints: user.values.first,
+          userRank: index + 1,
+        ),
+      )
+      .toList();
+
   @override
   Widget build(BuildContext context) {
-    //Mock data creation (should be replaced with actual data)
-    final rankElementDetailsList = userList
-        .mapIndexed(
-          (index, user) => RankingElementDetails(
-            userDisplayName: user.keys.first,
-            userUserName: "u_${user.keys.first}",
-            centauriPoints: user.values.first,
-            userRank: index + 1,
-          ),
-        )
-        .toList();
-
     final rankingDetails = RankingDetails(
       rankElementDetailsList: rankElementDetailsList,
       userRankElementDetails: userRankElementDetails,
