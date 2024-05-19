@@ -29,6 +29,10 @@ class RankingCard extends StatelessWidget {
   static const rankSecondColor = Color.fromARGB(255, 217, 218, 204);
   static const rankThirdColor = Color.fromARGB(255, 229, 153, 137);
 
+  // This text is used when the parameter [userRank] of the
+  // provided [RankingElementDetails] is null.
+  static const _nullRankText = "---";
+
   final RankingElementDetails rankingElementDetails;
 
   void onTapUserPopUp(BuildContext context) {
@@ -59,7 +63,7 @@ class RankingCard extends StatelessWidget {
           key: userRankrankTextKey,
           textAlign: TextAlign.center,
           rankingElementDetails.userRank == null
-              ? "---"
+              ? _nullRankText
               : rankingElementDetails.userRank.toString(),
           style: const TextStyle(
             fontSize: 24,
