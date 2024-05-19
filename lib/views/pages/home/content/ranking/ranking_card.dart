@@ -18,7 +18,7 @@ class RankingCard extends StatelessWidget {
   // Sized box for the rank text to make sure that the text is centered
   // and that surrounding element spacing is consistent.
   // This width is allow to display three digits.
-  static const _sizedBoxRankWidth = 50.0;
+  static const _sizedBoxRankWidth = 35.0;
 
   static const _rankOneColor = Color.fromARGB(255, 255, 218, 75);
   static const _rankSecondColor = Color.fromARGB(255, 217, 218, 204);
@@ -65,9 +65,7 @@ class RankingCard extends StatelessWidget {
           rankingElementDetails.userRank == null
               ? _nullRankText
               : rankingElementDetails.userRank.toString(),
-          style: const TextStyle(
-            fontSize: 24,
-          ),
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),
     );
@@ -78,9 +76,6 @@ class RankingCard extends StatelessWidget {
         key: userRankDisplayNameTextKey,
         rankingElementDetails.userDisplayName,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          fontSize: 18,
-        ),
       ),
     );
 
@@ -107,9 +102,6 @@ class RankingCard extends StatelessWidget {
       child: Text(
         key: userRankCentauriPointsTextKey,
         rankingElementDetails.centauriPoints.toString(),
-        style: const TextStyle(
-          fontSize: 18,
-        ),
       ),
     );
 
