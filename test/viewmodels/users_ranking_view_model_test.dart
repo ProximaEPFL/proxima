@@ -1,6 +1,11 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
+import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/user/user_data.dart";
+import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/viewmodels/users_ranking_view_model.dart";
 
 import "../mocks/data/firestore_user.dart";
@@ -18,7 +23,7 @@ void main() {
         UsersRankingViewModel.rankingLimit * 2,
       );
 
-      rankingContainer = rankingProviderContainer(fakeFirestore);
+      rankingContainer = await rankingProviderContainer(fakeFirestore);
     });
 
     test("Correct number of users returned", () async {
@@ -74,6 +79,56 @@ void main() {
         return element;
       });
       expect(lastCentauri, UsersRankingViewModel.rankingLimit);
+    });
+
+    test("View model refreshes correctly", () async {
+      final ranking =
+          await rankingContainer.read(usersRankingViewModelProvider.future);
+      final topUser = ranking.rankElementDetailsList.first;
+
+      // Create a user with more points than current top user
+      final newTopUserFireStore = UserFirestore(
+        uid: const UserIdFirestore(value: "my_top_user_uid"),
+        data: UserData(
+          username: "top user",
+          displayName: "top user",
+          joinTime: Timestamp.now(),
+          centauriPoints: topUser.centauriPoints + 1,
+        ),
+      );
+
+      await setUserFirestore(
+        fakeFirestore,
+        newTopUserFireStore,
+      );
+
+      // Refresh the viewmodel
+      await rankingContainer
+          .read(usersRankingViewModelProvider.notifier)
+          .refresh();
+      // delay for async execution of refresh
+      await Future.delayed(Durations.short1);
+
+      // Retrieve the new rankings from viewmodel
+      final newRanking =
+          await rankingContainer.read(usersRankingViewModelProvider.future);
+      final newTopUser = newRanking.rankElementDetailsList.first;
+
+      // Check that the new top user was correctly update
+      expect(
+        newTopUser.userUserName != topUser.userUserName,
+        isTrue,
+      );
+      expect(
+        newTopUser.userUserName,
+        newTopUserFireStore.data.username,
+      );
+
+      // Check that the old top user is now second
+      expect(
+        newRanking.rankElementDetailsList[1].userUserName,
+        topUser.userUserName,
+      );
     });
   });
 }

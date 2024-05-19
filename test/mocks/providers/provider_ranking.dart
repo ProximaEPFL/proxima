@@ -5,10 +5,10 @@ import "package:proxima/viewmodels/login_view_model.dart";
 
 import "../data/firestore_user.dart";
 
-ProviderContainer rankingProviderContainer(
+Future<ProviderContainer> rankingProviderContainer(
   FakeFirebaseFirestore fakeFirebaseFirestore,
-) {
-  setUserFirestore(fakeFirebaseFirestore, testingUserFirestore);
+) async {
+  await setUserFirestore(fakeFirebaseFirestore, testingUserFirestore);
 
   return ProviderContainer(
     overrides: [
