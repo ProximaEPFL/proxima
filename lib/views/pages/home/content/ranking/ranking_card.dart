@@ -24,12 +24,22 @@ class RankingCard extends StatelessWidget {
   // The colors are different for light and dark mode.
   // The first element of the tuple is the color for light mode,
   // the second element is the color for dark mode.
-  static const _rankOneColor =
-      (Color.fromARGB(255, 255, 218, 75), Color.fromARGB(255, 206, 176, 60));
-  static const _rankSecondColor =
-      (Color.fromARGB(255, 217, 218, 204), Color.fromARGB(255, 161, 161, 151));
-  static const _rankThirdColor =
-      (Color.fromARGB(255, 229, 153, 137), Color.fromARGB(255, 138, 89, 80));
+  //
+  // This list is ordered by rank.
+  static const _rankingColors = [
+    (
+      Color.fromARGB(255, 255, 218, 75),
+      Color.fromARGB(255, 206, 176, 60)
+    ), // Rank 1
+    (
+      Color.fromARGB(255, 217, 218, 204),
+      Color.fromARGB(255, 161, 161, 151)
+    ), // Rank 2
+    (
+      Color.fromARGB(255, 229, 153, 137),
+      Color.fromARGB(255, 138, 89, 80)
+    ), // Rank 3
+  ];
 
   // This text is used when the parameter [userRank] of the
   // provided [RankingElementDetails] is null.
@@ -46,6 +56,7 @@ class RankingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
     final isLightMode = themeData.brightness == Brightness.light;
+    final userRank = rankingElementDetails.userRank;
 
     /// On tap function to open the user profile pop-up.
     onTapUserPopUp() => {
@@ -59,12 +70,9 @@ class RankingCard extends StatelessWidget {
           ),
         };
 
-    final cardColor = switch (rankingElementDetails.userRank) {
-      1 => isLightMode ? _rankOneColor.$1 : _rankOneColor.$2,
-      2 => isLightMode ? _rankSecondColor.$1 : _rankSecondColor.$2,
-      3 => isLightMode ? _rankThirdColor.$1 : _rankThirdColor.$2,
-      _ => null,
-    };
+    final cardColorTuple =
+        userRank != null ? _rankingColors.elementAtOrNull(userRank - 1) : null;
+    final cardColor = isLightMode ? cardColorTuple?.$1 : cardColorTuple?.$2;
 
     final userRankText = Padding(
       padding: const EdgeInsets.only(left: 10),
@@ -73,7 +81,7 @@ class RankingCard extends StatelessWidget {
         child: Text(
           key: userRankrankTextKey,
           textAlign: TextAlign.center,
-          rankingElementDetails.userRank?.toString() ?? _nullRankText,
+          userRank?.toString() ?? _nullRankText,
           style: themeData.textTheme.bodyLarge,
         ),
       ),
