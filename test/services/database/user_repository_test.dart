@@ -154,7 +154,7 @@ void main() {
       // Check that correct number of users are returned
       expect(topUsers.length, limit);
 
-      // Compare actual points recieved with expected decreasing number of points
+      // Compare actual points received with expected decreasing number of points
       final points = topUsers.map((u) => u.data.centauriPoints);
       final expectedPoints =
           Iterable.generate(limit).map((i) => numberOfUsers - i - 1);
@@ -164,7 +164,7 @@ void main() {
     });
 
     test("User ranking by top centauri points with not enough users", () async {
-      // Add a single user to the
+      // Add a single user to the database
       await FirestoreUserGenerator.addUser(fakeFireStore);
 
       // Query more top users using the service under test than there are in DB
