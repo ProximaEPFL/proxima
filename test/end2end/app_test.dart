@@ -12,6 +12,7 @@ import "package:proxima/views/pages/create_account/create_account_page.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/home/content/map/map_screen.dart";
 import "package:proxima/views/pages/home/content/map/post_map.dart";
+import "package:proxima/views/pages/home/content/ranking/ranking_widget.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
@@ -157,10 +158,10 @@ Future<void> bottomNavigation(WidgetTester tester) async {
   await tester.pumpAndSettle();
   expect(find.text("Challenges"), findsOneWidget);
 
-  // Group
-  await tester.tap(find.text("Group"));
+  // Ranking
+  await tester.tap(find.text("Ranking"));
   await tester.pumpAndSettle();
-  expect(find.text("Proxima"), findsOneWidget);
+  expect(find.byType(RankingWidget), findsOneWidget);
 
   // Map
   await tester.tap(find.text("Map"));
