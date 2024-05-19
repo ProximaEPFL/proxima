@@ -11,7 +11,7 @@ import "package:proxima/viewmodels/login_view_model.dart";
 /// all the users in the application.
 class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
   /// Maximum number of users displayed in the leaderboard
-  static const _rankingLimit = 50;
+  static const rankingLimit = 50;
 
   UsersRankingViewModel();
 
@@ -21,7 +21,7 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
     final user = ref.watch(validLoggedInUserIdProvider);
 
     // Retrieve the top users from the database
-    final topUsersFromDb = await userRepository.getTopUsers(_rankingLimit);
+    final topUsersFromDb = await userRepository.getTopUsers(rankingLimit);
 
     // Map from users to `RankingElementDetails`
     final topUsers = topUsersFromDb.mapIndexed((i, user) {
