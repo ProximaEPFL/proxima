@@ -73,9 +73,7 @@ class RankingCard extends StatelessWidget {
         child: Text(
           key: userRankrankTextKey,
           textAlign: TextAlign.center,
-          rankingElementDetails.userRank == null
-              ? _nullRankText
-              : rankingElementDetails.userRank.toString(),
+          rankingElementDetails.userRank?.toString() ?? _nullRankText,
           style: themeData.textTheme.bodyLarge,
         ),
       ),
