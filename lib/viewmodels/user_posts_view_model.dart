@@ -1,4 +1,3 @@
-import "package:collection/collection.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/user_post_details.dart";
@@ -21,21 +20,22 @@ class UserPostsViewModel extends AutoDisposeAsyncNotifier<UserPostsState> {
 
     final postsFirestore = await postRepository.getUserPosts(user);
 
-    // Sort the posts by publication time from lattest to oldest
-    final sortedPostsFirestore = postsFirestore.toList().sorted(
-          (postA, postB) =>
-              postB.data.publicationTime.compareTo(postA.data.publicationTime),
-        );
-
-    final posts = sortedPostsFirestore.map((post) {
+    final posts = postsFirestore.map((post) {
       final userPost = UserPostDetails(
         postId: post.id,
         title: post.data.title,
         description: post.data.description,
+        publicationTime: DateTime.fromMicrosecondsSinceEpoch(
+          post.data.publicationTime.microsecondsSinceEpoch,
+        ),
       );
 
       return userPost;
     }).toList();
+
+    // Sort the posts by publication time, latest first
+    posts
+        .sort((postA, b) => b.publicationTime.compareTo(postA.publicationTime));
 
     return posts;
   }
