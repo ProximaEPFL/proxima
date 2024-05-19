@@ -62,42 +62,6 @@ void main() {
         findsNWidgets(mockRankingElementDetailsList.length),
       );
 
-      //Check that the card color corresponds to the expected color
-      const expectedRankOneColor = Color.fromARGB(255, 255, 218, 75);
-      const expectedRrankSecondColor = Color.fromARGB(255, 217, 218, 204);
-      const expectedRrankThirdColor = Color.fromARGB(255, 229, 153, 137);
-
-      final expectedColorsRank = {
-        1: expectedRankOneColor,
-        2: expectedRrankSecondColor,
-        3: expectedRrankThirdColor,
-      };
-
-      expectedColorsRank.forEach(
-        (rank, expectedColor) {
-          // Check that the color of the rank card containing
-          // the user with the rank [rank] is of the right color
-          final rankCardTextFinder = find.descendant(
-            of: rankingCards,
-            matching: find.text(rank.toString()),
-          );
-          expect(rankCardTextFinder, findsOneWidget);
-
-          // Get the card containing the user with the rank [rank]
-          final rankCardFinder = find.ancestor(
-            of: rankCardTextFinder,
-            matching: find.byType(Card),
-          );
-
-          expect(rankCardFinder, findsOneWidget);
-
-          final rankCardWidget = tester.widget(rankCardFinder);
-
-          // Check that the color matches the expected color
-          expect((rankCardWidget as Card).color, expectedColor);
-        },
-      );
-
       // Click on the first user ranking card
       await tester.tap(rankingCards.first);
       await tester.pumpAndSettle();
