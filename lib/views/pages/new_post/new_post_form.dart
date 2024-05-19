@@ -70,20 +70,6 @@ class NewPostForm extends HookConsumerWidget {
               ),
         );
 
-        final settingsButton = IconButton(
-          onPressed: () {
-            // TODO open tag and notification settings overlay
-          },
-          icon: const Icon(Icons.settings),
-        );
-
-        final buttonRow = Row(
-          children: [
-            Expanded(child: postButton),
-            settingsButton,
-          ],
-        );
-
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -92,7 +78,12 @@ class NewPostForm extends HookConsumerWidget {
               fit: FlexFit.loose,
               child: _verticallyPadded(bodyField),
             ),
-            _verticallyPadded(buttonRow),
+            _verticallyPadded(
+              SizedBox(
+                width: double.infinity,
+                child: postButton,
+              ),
+            ),
           ],
         );
       },
