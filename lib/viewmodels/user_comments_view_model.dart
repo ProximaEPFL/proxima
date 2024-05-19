@@ -17,7 +17,15 @@ class UserCommentViewModel extends AutoDisposeAsyncNotifier<UserCommentsState> {
     final user = ref.watch(validLoggedInUserIdProvider);
 
     final commentsFirestore = await userCommentRepository.getUserComments(user);
-    final comments = commentsFirestore.map((comment) {
+
+    // Sort the comments from latest to oldest
+    final sortedCommentsFirestore = commentsFirestore.toList()
+      ..sort(
+        (commentA, commentB) => commentB.data.publicationTime
+            .compareTo(commentA.data.publicationTime),
+      );
+
+    final comments = sortedCommentsFirestore.map((comment) {
       final userComment = UserCommentDetails(
         commentId: comment.id,
         parentPostId: comment.data.parentPostId,
