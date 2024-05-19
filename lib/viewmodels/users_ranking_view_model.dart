@@ -62,6 +62,14 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
 
     return state;
   }
+
+  /// Refresh the list of user rankings
+  /// This will put the state of the viewmodel to loading, fetch the posts
+  /// and update the state accordingly
+  Future<void> refresh() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => build());
+  }
 }
 
 final usersRankingViewModelProvider =
