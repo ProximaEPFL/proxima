@@ -21,7 +21,6 @@ import "package:proxima/views/pages/profile/components/info_cards/profile_info_c
 import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/data/geopoint.dart";
-import "../../../mocks/overrides/override_posts_feed_view_model.dart";
 import "../../../mocks/providers/provider_homepage.dart";
 import "../../../mocks/services/mock_geo_location_service.dart";
 
@@ -37,10 +36,9 @@ void main() {
     geoLocationService = MockGeolocationService();
 
     // We need the whole home page for navigation
-    homePage = homePageFakeFirestoreProvider(
+    homePage = homePageFakeFirestoreProviderMockHomeVM(
       fakeFirestore,
       geoLocationService,
-      additionalOverrides: mockEmptyHomeViewModelOverride,
     );
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) => Future.value(userPosition0),
