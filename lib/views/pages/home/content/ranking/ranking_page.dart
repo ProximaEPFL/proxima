@@ -9,7 +9,7 @@ class RankingPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ranking = ref.read(usersRankingViewModelProvider);
+    final ranking = ref.watch(usersRankingViewModelProvider);
 
     return CircularValue(
       value: ranking,

@@ -1,19 +1,39 @@
+import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
+import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/viewmodels/users_ranking_view_model.dart";
 import "package:proxima/views/components/content/publication_header/user_profile_pop_up.dart";
 import "package:proxima/views/pages/home/content/ranking/components/ranking_widget.dart";
+import "package:proxima/views/pages/home/content/ranking/ranking_page.dart";
 
-import "../../../../../mocks/providers/provider_homepage.dart";
+import "../../../../../mocks/data/firestore_user.dart";
+import "../../../../../mocks/providers/provider_ranking.dart";
 
 void main() {
-  group("Widgets display", () {
-    testWidgets(
-      "Display ranking elements",
-      (tester) async {
-        await tester.pumpWidget(nonEmptyHomePageProvider);
-        await tester.pumpAndSettle();
+  group("Ranking widgets display with view model", () {
+    late Widget rankingPage;
 
-        // Navigate to the ranking page
-        await tester.tap(find.text("Ranking"));
+    setUp(() async {
+      final fakeFirestore = FakeFirebaseFirestore();
+      await FirestoreUserGenerator.addUsers(
+        fakeFirestore,
+        UsersRankingViewModel.rankingLimit * 2,
+      );
+
+      final rankingContainer = await rankingProviderContainer(fakeFirestore);
+      rankingPage = MaterialApp(
+        home: UncontrolledProviderScope(
+          container: rankingContainer,
+          child: const RankingPage(),
+        ),
+      );
+    });
+
+    testWidgets(
+      "Display ranking elements correctly",
+      (tester) async {
+        await tester.pumpWidget(rankingPage);
         await tester.pumpAndSettle();
 
         // Check that the ranking widget is displayed
