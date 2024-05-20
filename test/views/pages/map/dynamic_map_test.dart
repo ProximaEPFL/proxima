@@ -236,7 +236,6 @@ void main() {
       optionToTest: MapSelectionOptions.nearby,
       expectedPinDelta: 1,
       protocol: (tester, container) async {
-        await tester.tap(find.text("New post"));
         final addPostButton = find.text("New post");
         expect(addPostButton, findsOneWidget);
         await tester.tap(addPostButton);
