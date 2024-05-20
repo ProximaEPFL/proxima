@@ -86,5 +86,22 @@ void main() {
         }
       });
     });
+
+    test("Single user post is exposed correctly", () async {
+      // Generate and add a post for the user
+      final firestorePost = postGenerator.createUserPost(userId, userPosition);
+      await setPostFirestore(firestorePost, firestore);
+
+      // Get the user posts
+      final userPostDetails =
+          await container.read(userPostsViewModelProvider.future);
+      expect(userPostDetails, hasLength(1));
+
+      // Check that the post is exposed correctly
+      final userPost = userPostDetails.first;
+      expect(userPost.postId, firestorePost.id);
+      expect(userPost.title, firestorePost.data.title);
+      expect(userPost.description, firestorePost.data.description);
+    });
   });
 }
