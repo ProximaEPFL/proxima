@@ -53,7 +53,7 @@ void main() {
       ("heLlo ", space),
       ("A", short),
       ("a%", short),
-      ("0" * 21, long),
+      ("0" * 17, long),
       ("j" * 512, long),
       (
         "jdsfklsdjflkdsjlfkjwioeoiwelkfmscvhklwjefkhjwiejfknsdkjfsdklfmjksdjfwmkfn",
@@ -92,7 +92,7 @@ void main() {
   final correctStrings = [
     "ElePhaNTS",
     "a" * 3,
-    "A" * 20,
+    "A" * 16,
     "XxX_SoBg_XxX",
     "___",
   ];
@@ -123,7 +123,7 @@ void main() {
   });
 
   testWidgets("Two users cannot log in with the same username", (tester) async {
-    const username = "evryoneloveelephants";
+    const username = "iloveelephants";
     final errorText = find.textContaining("already taken");
 
     // User 1 attempts to register
