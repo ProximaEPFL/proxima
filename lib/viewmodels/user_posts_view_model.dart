@@ -21,7 +21,7 @@ class UserPostsViewModel extends AutoDisposeAsyncNotifier<UserPostsState> {
 
     final postsFirestore = await postRepository.getUserPosts(user);
 
-    // Sort the posts by publication time from lattest to oldest
+    // Sort the posts by publication time from latest to oldest
     final sortedPostsFirestore = postsFirestore.toList().sorted(
           (postA, postB) =>
               postB.data.publicationTime.compareTo(postA.data.publicationTime),
