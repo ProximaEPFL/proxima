@@ -141,7 +141,7 @@ void main() {
     /// are indeed the one expected in [expectedPostsForOption]. If [expectedPostForOption]
     /// does not contain the [option], then it is assumed that the expected posts
     /// are an empty list.
-    Future<void> testOption(
+    Future<void> testCurrentSelectionOptionAndPins(
       ProviderContainer container,
       MapSelectionOptions option,
     ) async {
@@ -161,7 +161,7 @@ void main() {
       final container = await beginTest(tester);
 
       // Verify the default option has a correct behaviour even before we click on any chip
-      await testOption(
+      await testCurrentSelectionOptionAndPins(
         container,
         MapSelectionOptionsViewModel.defaultMapOption,
       );
@@ -179,7 +179,7 @@ void main() {
           await tester.pumpAndSettle();
 
           // Verify the option
-          await testOption(container, option);
+          await testCurrentSelectionOptionAndPins(container, option);
         }
       }
     });
