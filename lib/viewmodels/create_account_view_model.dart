@@ -8,6 +8,9 @@ import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
 class CreateAccountViewModel extends AsyncNotifier<CreateAccountValidation> {
+  static const int _minStringLength = 3;
+  static const int _maxStringLength = 16;
+
   @override
   Future<CreateAccountValidation> build() async {
     return const CreateAccountValidation();
@@ -31,11 +34,11 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountValidation> {
       return "Cannot contain spaces.";
     }
 
-    if (value.length < 3) {
+    if (value.length < _minStringLength) {
       return "Too short.";
     }
 
-    if (value.length > 20) {
+    if (value.length > _maxStringLength) {
       return "Too long.";
     }
 
