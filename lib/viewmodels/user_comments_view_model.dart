@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_id_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
@@ -19,11 +20,10 @@ class UserCommentViewModel extends AutoDisposeAsyncNotifier<UserCommentsState> {
     final commentsFirestore = await userCommentRepository.getUserComments(user);
 
     // Sort the comments from latest to oldest
-    final sortedCommentsFirestore = commentsFirestore.toList()
-      ..sort(
-        (commentA, commentB) => commentB.data.publicationTime
-            .compareTo(commentA.data.publicationTime),
-      );
+    final sortedCommentsFirestore = commentsFirestore.toList().sorted(
+          (commentA, commentB) => commentB.data.publicationTime
+              .compareTo(commentA.data.publicationTime),
+        );
 
     final comments = sortedCommentsFirestore.map((comment) {
       final userComment = UserCommentDetails(
