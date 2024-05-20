@@ -45,7 +45,6 @@ class CreateAccountViewModel extends AsyncNotifier<CreateAccountValidation> {
     // This regular expression is intentionally too restrictive (for instance,
     // the {3,20} is already checked above). Its purpose is too make sure that
     // the value is whitelisted; not that it is not blacklisted.
-    RegExp regex = RegExp("^\w{$_minStringLength,$_maxStringLength}\$");
     if (!RegExp(r"^\w{3,16}$").hasMatch(value)) {
       return "Invalid characters.";
     }
