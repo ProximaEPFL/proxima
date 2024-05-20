@@ -4,6 +4,7 @@ import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
 
+/// A widget that displays the map selection options as a wrap of chips.
 class MapSelectionOptionChips extends ConsumerWidget {
   static const selectOptionsKey = Key("selectOptions");
   static final optionChipKeys = Map.fromIterables(

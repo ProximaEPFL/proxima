@@ -10,13 +10,13 @@ import "package:proxima/models/ui/map_pin_details.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
-import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/components/options/map/map_selection_option_chips.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/home_page.dart";
+import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
 
@@ -24,7 +24,6 @@ import "../../../mocks/data/firestore_challenge.dart";
 import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/data/geopoint.dart";
-import "../../../mocks/overrides/override_posts_feed_view_model.dart";
 import "../../../mocks/providers/provider_homepage.dart";
 import "../../../mocks/services/mock_geo_location_service.dart";
 
@@ -40,10 +39,9 @@ void main() {
     geoLocationService = MockGeolocationService();
 
     // We need the whole home page for navigation
-    homePage = homePageFakeFirestoreProvider(
+    homePage = homePageFakeFirestoreProviderMockHomeVM(
       fakeFirestore,
       geoLocationService,
-      additionalOverrides: mockEmptyHomeViewModelOverride,
     );
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) => Future.value(userPosition0),
@@ -167,7 +165,7 @@ void main() {
     /// are indeed the one expected in [expectedPostsForOption]. If [expectedPostForOption]
     /// does not contain the [option], then it is assumed that the expected posts
     /// are an empty list.
-    Future<void> testOption(
+    Future<void> testCurrentSelectionOptionAndPins(
       ProviderContainer container,
       MapSelectionOptions option,
     ) async {
@@ -187,7 +185,7 @@ void main() {
       final container = await beginTest(tester);
 
       // Verify the default option has a correct behaviour even before we click on any chip
-      await testOption(
+      await testCurrentSelectionOptionAndPins(
         container,
         MapSelectionOptionsViewModel.defaultMapOption,
       );
@@ -205,7 +203,7 @@ void main() {
           await tester.pumpAndSettle();
 
           // Verify the option
-          await testOption(container, option);
+          await testCurrentSelectionOptionAndPins(container, option);
         }
       }
     });
@@ -262,7 +260,6 @@ void main() {
       optionToTest: MapSelectionOptions.nearby,
       expectedPinDelta: 1,
       protocol: (tester, container) async {
-        await tester.tap(find.text("New post"));
         final addPostButton = find.text("New post");
         expect(addPostButton, findsOneWidget);
         await tester.tap(addPostButton);
@@ -289,7 +286,7 @@ void main() {
       optionToTest: MapSelectionOptions.myPosts,
       expectedPinDelta: -1,
       protocol: (tester, container) async {
-        final profileButton = find.byType(UserAvatar);
+        final profileButton = find.byKey(HomeTopBar.profilePictureKey);
         expect(profileButton, findsOneWidget);
         await tester.tap(profileButton);
         await tester.pumpAndSettle();
