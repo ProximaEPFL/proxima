@@ -8,13 +8,13 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
-import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/components/options/map/map_selection_option_chips.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/home_page.dart";
+import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
 
@@ -262,7 +262,7 @@ void main() {
       optionToTest: MapSelectionOptions.myPosts,
       expectedPinDelta: -1,
       protocol: (tester, container) async {
-        final profileButton = find.byType(UserAvatar);
+        final profileButton = find.byKey(HomeTopBar.profilePictureKey);
         expect(profileButton, findsOneWidget);
         await tester.tap(profileButton);
         await tester.pumpAndSettle();
