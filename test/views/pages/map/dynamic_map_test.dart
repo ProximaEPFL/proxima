@@ -123,7 +123,7 @@ void main() {
       );
       await setPostsFirestore(userPosts, fakeFirestore);
 
-      challenges = [nearbyPosts.first, farPosts.first, userPosts.first];
+      challenges = [nearbyPosts.first, farPosts.first, farPosts.last];
       // The second challenge is completed, the others are not
       const completedChallengeIdx = 1;
       for (final (i, post) in challenges.indexed) {
