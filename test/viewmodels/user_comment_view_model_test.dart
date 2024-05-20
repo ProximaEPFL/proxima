@@ -89,5 +89,11 @@ void main() {
         }
       });
     });
+
+    test("Empty comments are exposed correctly", () async {
+      final comments =
+          await container.read(userCommentsViewModelProvider.future);
+      expect(comments, isEmpty);
+    });
   });
 }
