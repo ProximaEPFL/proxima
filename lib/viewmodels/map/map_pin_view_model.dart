@@ -1,7 +1,9 @@
+import "package:collection/collection.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
+import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
@@ -25,6 +27,8 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
         return _getNearbyPosts();
       case MapSelectionOptions.myPosts:
         return _getUserPosts();
+      case MapSelectionOptions.challenges:
+        return _getUserChallenges();
       default:
         return List.empty();
     }
@@ -59,6 +63,32 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
     final userPosts = await postRepository.getUserPosts(userId);
 
     return userPosts.map(_toMapPinDetails).toList();
+  }
+
+  /// Get user active challenges
+  Future<List<MapPinDetails>> _getUserChallenges() async {
+    final postRepository = ref.watch(postRepositoryServiceProvider);
+    final challengeRepostory = ref.watch(challengeRepositoryServiceProvider);
+    final userId = ref.watch(validLoggedInUserIdProvider);
+    // Only doing a read here, to decrease the number of database reads
+    // (we don't want to re-read the challenges when the position changes).
+    final position =
+        await ref.read(geolocationServiceProvider).getCurrentPosition();
+
+    final userChallenges = await challengeRepostory.getChallenges(
+      userId,
+      position,
+    );
+    final activeChallenges = userChallenges.whereNot(
+      (challenge) => challenge.data.isCompleted,
+    );
+    final posts = await Future.wait(
+      activeChallenges.map(
+        (challenge) => postRepository.getPost(challenge.postId),
+      ),
+    );
+
+    return posts.map(_toMapPinDetails).toList();
   }
 
   /// Convert a [post] to a map pin details

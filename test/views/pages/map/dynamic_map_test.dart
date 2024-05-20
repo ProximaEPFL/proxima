@@ -1,4 +1,5 @@
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:collection/collection.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
@@ -6,6 +7,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
+import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_option_chips.dart";
@@ -18,6 +20,7 @@ import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
 
+import "../../../mocks/data/firestore_challenge.dart";
 import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/data/geopoint.dart";
@@ -95,6 +98,8 @@ void main() {
   group("Option selection", () {
     late List<PostFirestore> nearbyPosts;
     late List<PostFirestore> userPosts;
+    late List<PostFirestore> challenges;
+    late List<PostFirestore> activeChallenges;
 
     late Map<MapSelectionOptions, List<PostFirestore>> expectedPostsForOption;
 
@@ -118,9 +123,28 @@ void main() {
       );
       await setPostsFirestore(userPosts, fakeFirestore);
 
+      challenges = [nearbyPosts.first, farPosts.first, farPosts.last];
+      // The second challenge is completed, the others are not
+      const completedChallengeIdx = 1;
+      for (final (i, post) in challenges.indexed) {
+        final challenge = FirestoreChallengeGenerator.generateFromPostId(
+          post.id,
+          i == completedChallengeIdx,
+        );
+        await setChallenge(
+          fakeFirestore,
+          challenge,
+          testingUserFirestoreId,
+        );
+      }
+      activeChallenges = challenges
+          .whereNotIndexed((i, _) => i == completedChallengeIdx)
+          .toList();
+
       expectedPostsForOption = {
         MapSelectionOptions.nearby: nearbyPosts,
         MapSelectionOptions.myPosts: userPosts,
+        MapSelectionOptions.challenges: activeChallenges,
       };
     });
 
@@ -276,6 +300,18 @@ void main() {
         final backButton = find.byKey(LeadingBackButton.leadingBackButtonKey);
         expect(backButton, findsOneWidget);
         await tester.tap(backButton);
+        await tester.pumpAndSettle();
+      },
+    );
+
+    testNavigation(
+      testTitle: "Pins refresh after challenge completion",
+      optionToTest: MapSelectionOptions.challenges,
+      expectedPinDelta: -1,
+      protocol: (tester, container) async {
+        container.read(challengeViewModelProvider.notifier).completeChallenge(
+              challenges.first.id,
+            );
         await tester.pumpAndSettle();
       },
     );

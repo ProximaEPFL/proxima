@@ -6,6 +6,7 @@ import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 
 /// This viewmodel is used to fetch the list of challenges that are displayed in
 /// the challenge feed. It fetches the challenges from the database and sorts
@@ -91,6 +92,9 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>> {
       // if we do we might have a weird double loading, but probably not
       // can change if we have a problem
       refresh();
+
+      // Refresh the map pins after challenge completion
+      ref.read(mapPinViewModelProvider.notifier).refresh();
     }
 
     return pointsAwarded;
