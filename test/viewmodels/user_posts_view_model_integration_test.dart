@@ -103,5 +103,12 @@ void main() {
       expect(userPost.title, firestorePost.data.title);
       expect(userPost.description, firestorePost.data.description);
     });
+
+    test("Empty user posts are exposed correctly", () async {
+      // Get the user posts
+      final userPostDetails =
+          await container.read(userPostsViewModelProvider.future);
+      expect(userPostDetails, isEmpty);
+    });
   });
 }
