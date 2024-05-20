@@ -2,8 +2,8 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/ranking/ranking_details.dart";
 import "package:proxima/viewmodels/users_ranking_view_model.dart";
-import "package:proxima/views/pages/home/content/ranking/ranking_card.dart";
-import "package:proxima/views/pages/home/content/ranking/ranking_list.dart";
+import "package:proxima/views/pages/home/content/ranking/components/ranking_card.dart";
+import "package:proxima/views/pages/home/content/ranking/components/ranking_list.dart";
 
 /// A widget that displays the ranking widget.
 class RankingWidget extends ConsumerWidget {
