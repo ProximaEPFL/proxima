@@ -40,6 +40,7 @@ class UserProfilePopUp extends StatelessWidget {
           Text(
             displayName,
             style: Theme.of(context).textTheme.bodyLarge,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
