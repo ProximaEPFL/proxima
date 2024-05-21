@@ -1,5 +1,6 @@
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
@@ -192,6 +193,51 @@ void main() {
       final updatedUser = await userRepo.getUser(testingUserFirestoreId);
       final points = updatedUser.data.centauriPoints;
       expect(points, ChallengeRepositoryService.soloChallengeReward);
+    });
+
+    test("Challenges position is updated on user position change and refresh",
+        () async {
+      const extraTime = Duration(hours: 2, minutes: 30);
+      final challengeGenerator = FirestoreChallengeGenerator();
+      final postGenerator = FirestorePostGenerator();
+
+      final posts = postGenerator.generatePostsAt(userPosition1, 3);
+      setPostsFirestore(posts, fakeFireStore);
+
+      final activeChallenges =
+          challengeGenerator.generateChallenges(1, false, extraTime);
+
+      await setChallenges(
+        fakeFireStore,
+        activeChallenges,
+        testingUserFirestoreId,
+      );
+
+      var challenges = await container.read(challengeViewModelProvider.future);
+
+      // Check initial distances are 0 since user is at userPosition1
+      for (var challenge in challenges) {
+        expect(challenge.distance, 0);
+      }
+
+      // Change user position to userPosition2
+      when(geoLocationService.getCurrentPosition()).thenAnswer(
+        (_) async => userPosition2,
+      );
+
+      // Refresh challenges
+      await container.read(challengeViewModelProvider.notifier).refresh();
+      challenges = await container.read(challengeViewModelProvider.future);
+
+      // Compute the distance between userPosition1 and userPosition2
+      final double distanceKm = const GeoFirePoint(userPosition1)
+          .distanceBetweenInKm(geopoint: userPosition2);
+      final int distanceM = (distanceKm * 1000).toInt();
+
+      // Check that challenges distances are updated correctly
+      for (var challenge in challenges) {
+        expect(challenge.distance, distanceM);
+      }
     });
   });
 
