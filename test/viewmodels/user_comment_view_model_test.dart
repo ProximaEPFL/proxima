@@ -95,5 +95,33 @@ void main() {
           await container.read(userCommentsViewModelProvider.future);
       expect(comments, isEmpty);
     });
+
+    test("Single commment is exposed correctly", () async {
+      // Add a single comment to firestore
+      final (commentsFirestore, userCommentsFirestore) =
+          await commentGenerator.addCommentsForUser(
+        1,
+        userId,
+        commentRepository,
+        firestore,
+      );
+
+      final commentFirestore = commentsFirestore.first;
+      final userComment = userCommentsFirestore.first;
+
+      // Read the profile comments
+      final comments =
+          await container.read(userCommentsViewModelProvider.future);
+      expect(comments, hasLength(1));
+
+      // Check that the comment is exposed correctly
+      final comment = comments.first;
+      expect(comment.commentId, commentFirestore.id);
+      expect(comment.description, commentFirestore.data.content);
+      expect(
+        comment.parentPostId,
+        userComment.data.parentPostId,
+      );
+    });
   });
 }
