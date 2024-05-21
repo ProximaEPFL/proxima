@@ -4,6 +4,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/views/components/async/error_alert.dart";
+import "package:proxima/views/components/async/refresh_page.dart";
 import "package:proxima/views/pages/home/content/challenge/challenge_card.dart";
 import "package:proxima/views/pages/home/content/challenge/challenge_list.dart";
 
@@ -101,7 +102,7 @@ void main() {
         await tester.tap(find.byKey(ErrorAlert.okButtonKey));
         await tester.pumpAndSettle();
 
-        final refreshButton = find.text("Refresh");
+        final refreshButton = find.byKey(RefreshPage.refreshButtonKey);
         expect(refreshButton, findsOneWidget);
 
         when(geoLocationService.getCurrentPosition()).thenAnswer(
