@@ -79,7 +79,8 @@ class FirestorePostGenerator {
         ownerId: userId,
         title: "title",
         description: "desciption",
-        publicationTime: Timestamp.fromMicrosecondsSinceEpoch(1000000),
+        publicationTime:
+            Timestamp.fromMicrosecondsSinceEpoch(Random().nextInt(100000000)),
         voteScore: Random().nextInt(100),
         commentCount: Random().nextInt(100),
       ),
