@@ -6,6 +6,8 @@ class ErrorRefreshPage extends StatelessWidget {
   final void Function() onRefresh;
 
   static const refreshButtonKey = Key("refreshButton");
+  static const errorText = "An error occurred";
+  static const refreshText = "Refresh";
 
   const ErrorRefreshPage({
     super.key,
@@ -17,14 +19,14 @@ class ErrorRefreshPage extends StatelessWidget {
     final refreshButton = ElevatedButton(
       key: refreshButtonKey,
       onPressed: onRefresh,
-      child: const Text("Refresh"),
+      child: const Text(refreshText),
     );
 
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text("An error occurred"),
+          const Text(errorText),
           const SizedBox(height: 10),
           refreshButton,
         ],
