@@ -1,5 +1,4 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:geolocator/geolocator.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
@@ -66,12 +65,9 @@ void main() {
       expect(find.byKey(MapScreen.mapScreenKey), findsOneWidget);
       expect(find.byKey(MapScreen.dividerKey), findsOneWidget);
 
-      // Extract keys from the MapSelectionOptions enum
-      final keys =
-          MapSelectionOptions.values.map((option) => Key(option.name)).toList();
-
       // Verify that each ChoiceChip is found by its key
-      for (final key in keys) {
+      for (final option in MapSelectionOptions.values) {
+        final key = MapSelectionOptionChips.optionChipKeys[option]!;
         expect(find.byKey(key), findsOneWidget);
       }
 
