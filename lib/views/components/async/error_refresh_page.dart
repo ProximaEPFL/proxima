@@ -1,11 +1,13 @@
 import "package:flutter/material.dart";
 
-class RefreshPage extends StatelessWidget {
+/// A widget that displays an error message and a refresh button. On clicking the
+/// refresh button, the [onRefresh] function is called.
+class ErrorRefreshPage extends StatelessWidget {
   final void Function() onRefresh;
 
   static const refreshButtonKey = Key("refreshButton");
 
-  const RefreshPage({
+  const ErrorRefreshPage({
     super.key,
     required this.onRefresh,
   });
