@@ -75,38 +75,42 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
         .map(
           (post) => _toMapPinDetails(
             post,
-            callback: () => showDialog(
-              context: context!,
-              builder: (context) {
-                return MapPinPopUp(
-                  title: post.data.title,
-                  content: post.data.description,
-                  displayButton: true,
-                  navigationAction: () {
-                    Navigator.pushNamed(
-                      context,
-                      Routes.post.name,
-                      arguments: PostDetails(
-                        postId: post.id,
-                        title: post.data.title,
-                        description: post.data.description,
-                        ownerCentauriPoints: user.data.centauriPoints,
-                        ownerDisplayName: user.data.displayName,
-                        ownerUsername: user.data.username,
-                        publicationDate: post.data.publicationTime.toDate(),
-                        commentNumber: post.data.commentCount,
-                        voteScore: post.data.voteScore,
-                        distance: (GeoFirePoint(position).distanceBetweenInKm(
-                                  geopoint: post.location.geoPoint,
-                                ) *
-                                1000)
-                            .round(),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
+            callback: context != null
+                ? () => showDialog(
+                      context: context!,
+                      builder: (context) {
+                        return MapPinPopUp(
+                          title: post.data.title,
+                          content: post.data.description,
+                          displayButton: true,
+                          navigationAction: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.post.name,
+                              arguments: PostDetails(
+                                postId: post.id,
+                                title: post.data.title,
+                                description: post.data.description,
+                                ownerCentauriPoints: user.data.centauriPoints,
+                                ownerDisplayName: user.data.displayName,
+                                ownerUsername: user.data.username,
+                                publicationDate:
+                                    post.data.publicationTime.toDate(),
+                                commentNumber: post.data.commentCount,
+                                voteScore: post.data.voteScore,
+                                distance:
+                                    (GeoFirePoint(position).distanceBetweenInKm(
+                                              geopoint: post.location.geoPoint,
+                                            ) *
+                                            1000)
+                                        .round(),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    )
+                : () {},
           ),
         )
         .toList();
