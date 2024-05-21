@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
+import "package:proxima/views/components/async/refresh_page.dart";
 import "package:proxima/views/pages/home/content/challenge/challenge_card.dart";
 
 class ChallengeList extends ConsumerWidget {
@@ -11,6 +12,10 @@ class ChallengeList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncChallenges = ref.watch(challengeViewModelProvider);
 
+    onRefresh() async {
+      ref.read(challengeViewModelProvider.notifier).refresh();
+    }
+
     const emptyChallenge = Center(
       child: Text("No challenge available here!"),
     );
@@ -19,8 +24,7 @@ class ChallengeList extends ConsumerWidget {
       value: asyncChallenges,
       builder: (context, challenges) {
         return RefreshIndicator(
-          onRefresh: () =>
-              ref.read(challengeViewModelProvider.notifier).refresh(),
+          onRefresh: onRefresh,
           child: challenges.isEmpty
               ? emptyChallenge
               : ListView(
@@ -29,6 +33,9 @@ class ChallengeList extends ConsumerWidget {
                       .toList(),
                 ),
         );
+      },
+      fallbackBuilder: (context, error) {
+        return RefreshPage(onRefresh: onRefresh);
       },
     );
   }
