@@ -86,6 +86,15 @@ class FirestorePostGenerator {
     );
   }
 
+  /// Create [n] posts at position [location] for user with id [userId].
+  List<PostFirestore> createUserPosts(
+    UserIdFirestore userId,
+    GeoPoint location,
+    int n,
+  ) {
+    return List.generate(n, (_) => createUserPost(userId, location));
+  }
+
   /// Add [n] posts at position [location] and return their data and the [PostFirestore] objects
   Future<List<PostFirestore>> addPosts(
     FirebaseFirestore firestore,

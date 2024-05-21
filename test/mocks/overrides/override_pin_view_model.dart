@@ -5,7 +5,7 @@ import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "../data/map_pin.dart";
 
 // A mock implementation of the [MapPinViewModel] class.
-class MockPinViewModel extends AsyncNotifier<List<MapPinDetails>>
+class MockPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>>
     implements MapPinViewModel {
   final Future<List<MapPinDetails>> Function() _build;
 
@@ -15,6 +15,12 @@ class MockPinViewModel extends AsyncNotifier<List<MapPinDetails>>
 
   @override
   Future<List<MapPinDetails>> build() => _build();
+
+  @override
+  Future<void> refresh() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => build());
+  }
 }
 
 final mockPinViewModelOverride = mapPinViewModelProvider.overrideWith(
