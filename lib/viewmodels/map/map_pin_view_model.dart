@@ -150,11 +150,8 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
     final userId = ref.watch(validLoggedInUserIdProvider);
     // Only doing a read here, to decrease the number of database reads
     // (we don't want to re-read the challenges when the position changes).
-    final position = await ref.read(livePositionStreamProvider.future);
-
-    if (position == null) {
-      return List.empty();
-    }
+    final position =
+        await ref.read(geolocationServiceProvider).getCurrentPosition();
 
     final userChallenges = await challengeRepostory.getChallenges(
       userId,

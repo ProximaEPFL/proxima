@@ -8,6 +8,7 @@ import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 
+/// View-model for adding a new post to the database. Handles validation and post creation.
 class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostValidation> {
   static const _titleError = "Please enter a title";
   static const _bodyError = "Please enter a body";
