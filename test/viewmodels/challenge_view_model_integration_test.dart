@@ -22,6 +22,8 @@ void main() {
   late FakeFirebaseFirestore fakeFireStore;
   late ProviderContainer container;
 
+  const extraTime = Duration(hours: 2, minutes: 30);
+
   setUp(() {
     geoLocationService = MockGeolocationService();
     fakeFireStore = FakeFirebaseFirestore();
@@ -32,6 +34,8 @@ void main() {
 
   group("Normal use", () {
     late UserRepositoryService userRepo;
+    late FirestoreChallengeGenerator challengeGenerator;
+    late FirestorePostGenerator postGenerator;
 
     setUp(() async {
       container = ProviderContainer(
@@ -41,7 +45,8 @@ void main() {
           firestoreProvider.overrideWithValue(fakeFireStore),
         ],
       );
-
+      challengeGenerator = FirestoreChallengeGenerator();
+      postGenerator = FirestorePostGenerator();
       userRepo = container.read(userRepositoryServiceProvider);
     });
 
@@ -54,10 +59,6 @@ void main() {
     test(
         "`ChallengeFirestore` is transformed correctly into `ChallengeCardData`",
         () async {
-      const extraTime = Duration(hours: 2, minutes: 30);
-      final challengeGenerator = FirestoreChallengeGenerator();
-      final postGenerator = FirestorePostGenerator();
-
       final post = postGenerator.generatePostAt(
         userPosition1,
       ); // the challenge is added by hand, so we can use the user position
@@ -85,10 +86,6 @@ void main() {
     });
 
     test("Completed challenge is transformed correctly", () async {
-      const extraTime = Duration(hours: 2, minutes: 30);
-      final challengeGenerator = FirestoreChallengeGenerator();
-      final postGenerator = FirestorePostGenerator();
-
       final post = postGenerator.generatePostAt(
         userPosition1,
       ); // the challenge is added by hand, so we can use the user position
@@ -116,10 +113,6 @@ void main() {
     });
 
     test("Challenges are sorted correctly", () async {
-      const extraTime = Duration(hours: 2, minutes: 30);
-      final challengeGenerator = FirestoreChallengeGenerator();
-      final postGenerator = FirestorePostGenerator();
-
       final posts = postGenerator.generatePostsAt(userPosition1, 3);
       setPostsFirestore(posts, fakeFireStore);
 
@@ -152,10 +145,6 @@ void main() {
     });
 
     test("Challenge can be completed", () async {
-      const extraTime = Duration(hours: 2, minutes: 30);
-      final challengeGenerator = FirestoreChallengeGenerator();
-      final postGenerator = FirestorePostGenerator();
-
       await setUserFirestore(fakeFireStore, testingUserFirestore);
 
       final post = postGenerator.generatePostAt(
@@ -197,10 +186,6 @@ void main() {
 
     test("Challenges position is updated on user position change and refresh",
         () async {
-      const extraTime = Duration(hours: 2, minutes: 30);
-      final challengeGenerator = FirestoreChallengeGenerator();
-      final postGenerator = FirestorePostGenerator();
-
       final posts = postGenerator.generatePostsAt(userPosition1, 3);
       setPostsFirestore(posts, fakeFireStore);
 
