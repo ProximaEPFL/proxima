@@ -31,8 +31,12 @@ class PostMap extends ConsumerWidget {
     // This provider is used to get the list of map pins.
     final mapPinsAsync = ref.watch(mapPinViewModelProvider);
 
+    final mapPinsNotifier = ref.watch(mapPinViewModelProvider.notifier);
+
     // This provider is used to get the live location of the user.
     final positionValue = ref.watch(livePositionStreamProvider);
+
+    mapPinsNotifier.setContext(context);
 
     // This will redraw the circle and update camera when the user's position changes.
     positionValue.when(
