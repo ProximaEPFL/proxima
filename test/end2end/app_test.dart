@@ -1,6 +1,7 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:firebase_core/firebase_core.dart";
+import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
@@ -21,6 +22,7 @@ import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
+import "package:proxima/views/pages/profile/components/profile_app_bar.dart";
 import "package:proxima/views/pages/profile/components/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 import "package:proxima/views/proxima_app.dart";
@@ -90,51 +92,65 @@ void main() {
   });
 
   testWidgets("Challenge creation and completion", (WidgetTester tester) async {
-    await loadProxima(tester);
-    await loginToCreateAccount(tester);
-    await createAccountToHome(tester);
-
+    // create a post that will be the challenge
     final otherUser = await FirestoreUserGenerator.addUser(fakeFireStore);
     final postLocation = GeoPointGenerator.createOnEdgeInsidePosition(
       startLocation,
-      ChallengeRepositoryService.maxChallengeRadius,
+      (ChallengeRepositoryService.maxChallengeRadius +
+              ChallengeRepositoryService.minChallengeRadius) /
+          2,
     );
     final post =
         FirestorePostGenerator().createUserPost(otherUser.uid, postLocation);
     await setPostFirestore(post, fakeFireStore);
 
-    await navigateToPage(NavigationbarRoutes.challenge, tester);
-    // Check that the challenge is displayed
+    await loadProxima(tester);
+    await loginToCreateAccount(tester);
+    await createAccountToHome(tester);
+
+    // get the challenge
+    await bottomBarNavigate(NavigationbarRoutes.challenge, tester);
     expect(find.text(post.data.title), findsOneWidget);
 
+    // complete the challenge
     goToPoint(postLocation);
-
-    await navigateToPage(NavigationbarRoutes.feed, tester);
-
-    /*
-    final error = find.byType(AlertDialog);
-    final errorText = find.textContaining("Exception");
-    // print the error found
-    if (errorText.evaluate().isNotEmpty) {
-      final d = errorText.evaluate().first.widget.toString();
-    }
-*/
-    await buttonRefresh(tester);
-
+    await bottomBarNavigate(NavigationbarRoutes.feed, tester);
     final challengePost = find.text(post.data.title);
     expect(challengePost, findsOneWidget);
     await tester.tap(challengePost);
     await tester.pumpAndSettle();
+
+    // check that points are given out
+    const reward = ChallengeRepositoryService.soloChallengeReward;
+    expect(find.byType(SnackBar), findsOne);
+    expect(find.textContaining(reward.toString()), findsOne);
+
+    await tester.tap(find.byKey(LeadingBackButton.leadingBackButtonKey));
+    await tester.pumpAndSettle();
+
+    await navigateToProfile(tester);
+
+    final topBar = find.byType(ProfileAppBar);
+    final userPoints = find.descendant(
+      of: topBar,
+      matching: find.textContaining("$reward Centauri"),
+    );
+    expect(userPoints, findsOne);
   });
 }
 
-Future<void> navigateToPage(
+Future<void> bottomBarNavigate(
   NavigationbarRoutes route,
   WidgetTester tester,
 ) async {
   final button = find.text(route.name);
   expect(button, findsOneWidget);
   await tester.tap(button);
+  await tester.pumpAndSettle();
+}
+
+Future<void> navigateToProfile(WidgetTester tester) async {
+  await tester.tap(find.byKey(HomeTopBar.profilePictureKey));
   await tester.pumpAndSettle();
 }
 
