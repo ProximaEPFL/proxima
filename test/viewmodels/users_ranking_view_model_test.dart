@@ -114,8 +114,8 @@ void main() {
 
       // Check that the new top user was correctly update
       expect(
-        newTopUser.userUserName != topUser.userUserName,
-        isTrue,
+        newTopUser.userUserName,
+        isNot(equals(topUser.userUserName)),
       );
       expect(
         newTopUser.userUserName,
