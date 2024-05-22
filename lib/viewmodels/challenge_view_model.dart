@@ -6,6 +6,7 @@ import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 
 /// This viewmodel is used to fetch the list of challenges that are displayed in
 /// the challenge feed. It fetches the challenges from the database and sorts
@@ -13,7 +14,10 @@ import "package:proxima/viewmodels/login_view_model.dart";
 /// the challenges into [ChallengeDetails] objects to be displayed, by getting
 /// the posts from the post repository and calculating the distances as well as
 /// remaining time.
-class ChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>> {
+/// It extends [AutoDisposeAsyncNotifier] to automatically dispose of the viewmodel
+/// so that the challenges are refreshed when the view is no longer visible.
+class ChallengeViewModel
+    extends AutoDisposeAsyncNotifier<List<ChallengeDetails>> {
   @override
   Future<List<ChallengeDetails>> build() async {
     final geoLocationService = ref.watch(geolocationServiceProvider);
@@ -91,13 +95,16 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>> {
       // if we do we might have a weird double loading, but probably not
       // can change if we have a problem
       refresh();
+
+      // Refresh the map pins after challenge completion
+      ref.read(mapPinViewModelProvider.notifier).refresh();
     }
 
     return pointsAwarded;
   }
 }
 
-final challengeViewModelProvider =
-    AsyncNotifierProvider<ChallengeViewModel, List<ChallengeDetails>>(
+final challengeViewModelProvider = AutoDisposeAsyncNotifierProvider<
+    ChallengeViewModel, List<ChallengeDetails>>(
   () => ChallengeViewModel(),
 );

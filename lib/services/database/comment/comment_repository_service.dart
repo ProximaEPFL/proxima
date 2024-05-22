@@ -58,6 +58,7 @@ class CommentRepositoryService {
     final userCommentData = UserCommentData(
       parentPostId: parentPostId,
       content: commentData.content,
+      publicationTime: commentData.publicationTime,
     );
 
     final userComment =

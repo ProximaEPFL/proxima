@@ -4,6 +4,7 @@ import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/content/challenge/challenge_list.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/home/content/map/map_screen.dart";
+import "package:proxima/views/pages/home/content/ranking/ranking_widget.dart";
 
 /// This enum is used to create the navigation bar routes.
 /// It contains the name and icon of the routes.
@@ -17,7 +18,7 @@ enum NavigationbarRoutes {
     ),
     Routes.newPost,
   ),
-  group("Group", Icon(Icons.group), null),
+  ranking("Ranking", Icon(Icons.leaderboard), null),
   map("Map", Icon(Icons.place), null);
 
   static const defaultLabelText = "Proxima";
@@ -46,6 +47,8 @@ enum NavigationbarRoutes {
         return const MapScreen();
       case challenge:
         return const ChallengeList();
+      case ranking:
+        return RankingWidget();
       case _:
         return const NotImplemented();
     }
@@ -57,6 +60,8 @@ enum NavigationbarRoutes {
         return "Challenges";
       case map:
         return "Map";
+      case ranking:
+        return "Ranking";
       case _:
         return defaultLabelText;
     }

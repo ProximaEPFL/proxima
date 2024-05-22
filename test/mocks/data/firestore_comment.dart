@@ -121,6 +121,7 @@ class CommentFirestoreGenerator {
     final userCommentData = UserCommentData(
       parentPostId: postId,
       content: comment.data.content,
+      publicationTime: comment.data.publicationTime,
     );
     return UserCommentFirestore(id: comment.id, data: userCommentData);
   }

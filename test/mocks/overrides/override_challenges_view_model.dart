@@ -5,7 +5,8 @@ import "package:proxima/viewmodels/challenge_view_model.dart";
 
 import "../data/challenge_list.dart";
 
-class MockChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>>
+class MockChallengeViewModel
+    extends AutoDisposeAsyncNotifier<List<ChallengeDetails>>
     implements ChallengeViewModel {
   @override
   Future<List<ChallengeDetails>> build() async {
