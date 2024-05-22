@@ -186,11 +186,11 @@ void main() {
 
     test("Challenges position is updated on user position change and refresh",
         () async {
-      final posts = postGenerator.generatePostsAt(userPosition1, 3);
-      await setPostsFirestore(posts, fakeFireStore);
+      const nbPosts = 3;
+      await postGenerator.addPosts(fakeFireStore, userPosition1, nbPosts);
 
       final activeChallenges =
-          challengeGenerator.generateChallenges(1, false, extraTime);
+          challengeGenerator.generateChallenges(nbPosts, false, extraTime);
 
       await setChallenges(
         fakeFireStore,
@@ -198,10 +198,11 @@ void main() {
         testingUserFirestoreId,
       );
 
-      var challenges = await container.read(challengeViewModelProvider.future);
+      final challengesBeforeRefresh =
+          await container.read(challengeViewModelProvider.future);
 
       // Check initial distances are 0 since user is at userPosition1
-      for (var challenge in challenges) {
+      for (final challenge in challengesBeforeRefresh) {
         expect(challenge.distance, 0);
       }
 
@@ -212,7 +213,8 @@ void main() {
 
       // Refresh challenges
       await container.read(challengeViewModelProvider.notifier).refresh();
-      challenges = await container.read(challengeViewModelProvider.future);
+      final challengesAfterRefresh =
+          await container.read(challengeViewModelProvider.future);
 
       // Compute the distance between userPosition1 and userPosition2
       final double distanceKm = const GeoFirePoint(userPosition1)
@@ -220,7 +222,7 @@ void main() {
       final int distanceM = (distanceKm * 1000).toInt();
 
       // Check that challenges distances are updated correctly
-      for (var challenge in challenges) {
+      for (final challenge in challengesAfterRefresh) {
         expect(challenge.distance, distanceM);
       }
     });
