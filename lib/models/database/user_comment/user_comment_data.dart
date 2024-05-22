@@ -30,7 +30,8 @@ class UserCommentData {
       return UserCommentData(
         parentPostId: PostIdFirestore(value: data[parentPostIdField]),
         content: data[contentField],
-        publicationTime: data[publicationTimeField],
+        publicationTime: data[publicationTimeField] ??
+            Timestamp.fromMillisecondsSinceEpoch(0),
       );
     } catch (e) {
       if (e is TypeError) {
