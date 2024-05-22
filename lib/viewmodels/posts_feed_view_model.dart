@@ -10,8 +10,8 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/services/sorting/post/post_sorting_service.dart";
-import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/viewmodels/option_selection/feed_sort_options_view_model.dart";
 
 /// This viewmodel is used to fetch the list of posts that are displayed in the home feed.
 /// It fetches the posts from the database and returns a list of
