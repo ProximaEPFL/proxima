@@ -21,7 +21,8 @@ void main() {
         UsersRankingViewModel.rankingLimit * 2,
       );
 
-      final rankingContainer = await rankingProviderContainer(fakeFirestore);
+      final rankingContainer =
+          await rankingProviderContainerWithTestingUser(fakeFirestore);
       rankingPage = MaterialApp(
         home: UncontrolledProviderScope(
           container: rankingContainer,
