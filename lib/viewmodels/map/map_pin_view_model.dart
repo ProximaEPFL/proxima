@@ -129,22 +129,24 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
         .map(
           (post) => _toMapPinDetails(
             post,
-            callback: () => showDialog(
-              context: context!,
-              builder: (context) {
-                return MapPinPopUp(
-                  title: post.data.title,
-                  content: post.data.description,
-                  displayButton: true,
-                  navigationAction: () {
-                    Navigator.pushNamed(
-                      context,
-                      Routes.profile.name,
-                    );
-                  },
-                );
-              },
-            ),
+            callback: context != null
+                ? () => showDialog(
+                      context: context!,
+                      builder: (context) {
+                        return MapPinPopUp(
+                          title: post.data.title,
+                          content: post.data.description,
+                          displayButton: true,
+                          navigationAction: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.profile.name,
+                            );
+                          },
+                        );
+                      },
+                    )
+                : () {},
           ),
         )
         .toList();
@@ -177,14 +179,16 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
         .map(
           (post) => _toMapPinDetails(
             post,
-            callback: () => showDialog(
-              context: context!,
-              builder: (context) {
-                return MapPinPopUp(
-                  title: post.data.title,
-                );
-              },
-            ),
+            callback: context != null
+                ? () => showDialog(
+                      context: context!,
+                      builder: (context) {
+                        return MapPinPopUp(
+                          title: post.data.title,
+                        );
+                      },
+                    )
+                : () {},
           ),
         )
         .toList();
