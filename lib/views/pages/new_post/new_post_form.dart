@@ -70,6 +70,12 @@ class NewPostForm extends HookConsumerWidget {
               ),
         );
 
+        final buttonRow = Row(
+          children: [
+            Expanded(child: postButton),
+          ],
+        );
+
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -78,12 +84,7 @@ class NewPostForm extends HookConsumerWidget {
               fit: FlexFit.loose,
               child: _verticallyPadded(bodyField),
             ),
-            _verticallyPadded(
-              SizedBox(
-                width: double.infinity,
-                child: postButton,
-              ),
-            ),
+            _verticallyPadded(buttonRow),
           ],
         );
       },
