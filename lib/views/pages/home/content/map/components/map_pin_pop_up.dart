@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 
 class MapPinPopUp extends StatelessWidget {
+  //key for the arrow button
+  static const arrowButtonKey = Key("arrowButton");
   const MapPinPopUp({
     super.key,
     this.title,
@@ -47,6 +49,7 @@ class MapPinPopUp extends StatelessWidget {
         : null;
 
     final arrowAction = IconButton(
+      key: arrowButtonKey,
       icon: const Icon(Icons.arrow_forward),
       onPressed: navigationAction,
     );
