@@ -67,12 +67,9 @@ void main() {
       final leaderboard = ranking.rankElementDetailsList;
 
       // Check that all ranks are non null and correct
-      final lastRank =
-          leaderboard.map((e) => e.userRank!).reduce((value, element) {
-        expect(value + 1, element);
-        return element;
-      });
-      expect(lastRank, UsersRankingViewModel.rankingLimit);
+      for (var i = 0; i < UsersRankingViewModel.rankingLimit; ++i) {
+        expect(leaderboard[i].userRank, i + 1);
+      }
 
       // Check that all centauri points are in descending order
       final centauris = leaderboard.map((e) => e.centauriPoints);
