@@ -7,6 +7,9 @@ import "package:proxima/views/pages/home/home_page.dart";
 import "../../../mocks/providers/provider_create_account.dart";
 
 void main() {
+  const int minStringLength = 3;
+  const int maxStringLength = 16;
+
   Future<(Finder, Finder, Finder)> preparePage(WidgetTester tester) async {
     await tester.pumpWidget(createAccountPageProvider);
     await tester.pumpAndSettle();
@@ -53,7 +56,7 @@ void main() {
       ("heLlo ", space),
       ("A", short),
       ("a%", short),
-      ("0" * 17, long),
+      ("0" * (maxStringLength + 1), long),
       ("j" * 512, long),
       (
         "jdsfklsdjflkdsjlfkjwioeoiwelkfmscvhklwjefkhjwiejfknsdkjfsdklfmjksdjfwmkfn",
@@ -91,8 +94,8 @@ void main() {
 
   final correctStrings = [
     "ElePhaNTS",
-    "a" * 3,
-    "A" * 16,
+    "a" * minStringLength,
+    "A" * maxStringLength,
     "XxX_SoBg_XxX",
     "___",
   ];
