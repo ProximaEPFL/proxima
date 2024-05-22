@@ -12,6 +12,7 @@ import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_ro
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account/create_account_form.dart";
 import "package:proxima/views/pages/create_account/create_account_page.dart";
+import "package:proxima/views/pages/home/content/feed/components/post_card.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/home/content/map/map_screen.dart";
 import "package:proxima/views/pages/home/content/map/post_map.dart";
@@ -21,6 +22,8 @@ import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
+import "package:proxima/views/pages/post/components/new_comment/new_comment_button.dart";
+import "package:proxima/views/pages/post/components/new_comment/new_comment_textfield.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/components/profile_app_bar.dart";
 import "package:proxima/views/pages/profile/components/profile_data/profile_user_posts.dart";
@@ -36,6 +39,9 @@ import "../mocks/services/setup_firebase_mocks.dart";
 import "../utils/delay_async_func.dart";
 
 void main() {
+  const testPostTitle = "I like turtles";
+  const testPostDescription = "Look at them go!";
+
   late FakeFirebaseFirestore fakeFireStore;
 
   MockGeolocationService geoLocationService = MockGeolocationService();
@@ -87,8 +93,8 @@ void main() {
     await createAccountToHome(tester);
     await homeToProfilePage(tester);
     await bottomNavigation(tester);
-    await createPost(tester);
-    await deletePost(tester);
+    await createPost(tester, testPostTitle, testPostDescription);
+    await deletePost(tester, testPostTitle, testPostDescription);
   });
 
   testWidgets("Challenge creation and completion", (WidgetTester tester) async {
@@ -115,19 +121,14 @@ void main() {
     // complete the challenge
     goToPoint(postLocation);
     await bottomBarNavigate(NavigationbarRoutes.feed, tester);
-    final challengePost = find.text(post.data.title);
-    expect(challengePost, findsOneWidget);
-    await tester.tap(challengePost);
-    await tester.pumpAndSettle();
+    await openPost(tester, post.data.title);
 
     // check that points are given out
     const reward = ChallengeRepositoryService.soloChallengeReward;
     expect(find.byType(SnackBar), findsOne);
     expect(find.textContaining(reward.toString()), findsOne);
 
-    await tester.tap(find.byKey(LeadingBackButton.leadingBackButtonKey));
-    await tester.pumpAndSettle();
-
+    await navigateBack(tester);
     await navigateToProfile(tester);
 
     final topBar = find.byType(ProfileAppBar);
@@ -137,6 +138,46 @@ void main() {
     );
     expect(userPoints, findsOne);
   });
+
+  testWidgets("Commenting on my post", (WidgetTester tester) async {
+    await loadProxima(tester);
+    await loginToCreateAccount(tester);
+    await createAccountToHome(tester);
+    await createPost(tester, testPostTitle, testPostDescription);
+    await openPost(tester, testPostTitle);
+    await comment(tester, "I like turtles too!");
+
+    // back to feed
+    await navigateBack(tester);
+    await flingRefresh(tester, find.byType(PostFeed));
+
+    // expect comment count to be correct
+    final commentsCount = find.byKey(PostCard.postCardCommentsNumberKey);
+    expect(commentsCount, findsOne);
+
+    final commentCountText =
+        find.descendant(of: commentsCount, matching: find.textContaining("1"));
+    expect(commentCountText, findsOne);
+  });
+}
+
+Future<void> comment(WidgetTester tester, String comment) async {
+  final commentField = find.byKey(NewCommentTextField.addCommentTextFieldKey);
+  await tester.enterText(commentField, comment);
+  await tester.tap(find.byKey(NewCommentButton.postCommentButtonKey));
+  await tester.pumpAndSettle();
+
+  expect(find.text(comment), findsOne);
+}
+
+Future<void> openPost(WidgetTester tester, String postTitle) async {
+  await tester.tap(find.text(postTitle));
+  await tester.pumpAndSettle();
+}
+
+Future<void> navigateBack(WidgetTester tester) async {
+  await tester.tap(find.byKey(LeadingBackButton.leadingBackButtonKey));
+  await tester.pumpAndSettle();
 }
 
 Future<void> bottomBarNavigate(
@@ -156,6 +197,12 @@ Future<void> navigateToProfile(WidgetTester tester) async {
 
 Future<void> buttonRefresh(WidgetTester tester) async {
   await tester.tap(find.text("Refresh"));
+  await tester.pumpAndSettle();
+}
+
+Future<void> flingRefresh(
+    WidgetTester tester, FinderBase<Element> finder) async {
+  await tester.fling(finder, const Offset(0, 500), 1000);
   await tester.pumpAndSettle();
 }
 
@@ -265,7 +312,12 @@ Future<void> bottomNavigation(WidgetTester tester) async {
 }
 
 /// Create a post
-Future<void> createPost(WidgetTester tester) async {
+/// starts from home feed and ends in home feed
+Future<void> createPost(
+  WidgetTester tester,
+  String postTitle,
+  String postDescription,
+) async {
   expect(find.byType(HomePage), findsOneWidget);
 
   // Tap on the new post button
@@ -274,10 +326,6 @@ Future<void> createPost(WidgetTester tester) async {
 
   // Check that the new post page is displayed
   expect(find.byType(NewPostForm), findsOneWidget);
-
-  // Enter post details
-  const postTitle = "I like turtles";
-  const postDescription = "Look at them go!";
 
   await tester.enterText(
     find.byKey(NewPostForm.titleFieldKey),
@@ -311,10 +359,20 @@ Future<void> createPost(WidgetTester tester) async {
   expect(find.text(postDescription), findsOneWidget);
   final postCard = find.byKey(ProfileInfoCard.infoCardKey);
   expect(postCard, findsOneWidget);
+
+  await tester.tap(find.byKey(LeadingBackButton.leadingBackButtonKey));
+  await tester.pumpAndSettle();
 }
 
 /// Delete a post
-Future<void> deletePost(WidgetTester tester) async {
+/// starts from home feed
+Future<void> deletePost(
+  WidgetTester tester,
+  String postTitle,
+  String postDescription,
+) async {
+  await navigateToProfile(tester);
+
   expect(find.byType(ProfilePage), findsOneWidget);
 
   // Check that the post card is displayed
@@ -322,8 +380,6 @@ Future<void> deletePost(WidgetTester tester) async {
   expect(postCard, findsOneWidget);
 
   // Check that the post content is displayed
-  const postTitle = "I like turtles";
-  const postDescription = "Look at them go!";
   expect(find.text(postTitle), findsOneWidget);
   expect(find.text(postDescription), findsOneWidget);
 
