@@ -114,7 +114,7 @@ void main() {
 
     test("Challenges are sorted correctly", () async {
       final posts = postGenerator.generatePostsAt(userPosition1, 3);
-      setPostsFirestore(posts, fakeFireStore);
+      await setPostsFirestore(posts, fakeFireStore);
 
       final finishedChallenges =
           challengeGenerator.generateChallenges(2, true, extraTime);
@@ -187,7 +187,7 @@ void main() {
     test("Challenges position is updated on user position change and refresh",
         () async {
       final posts = postGenerator.generatePostsAt(userPosition1, 3);
-      setPostsFirestore(posts, fakeFireStore);
+      await setPostsFirestore(posts, fakeFireStore);
 
       final activeChallenges =
           challengeGenerator.generateChallenges(1, false, extraTime);
