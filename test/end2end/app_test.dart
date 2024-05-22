@@ -145,23 +145,44 @@ void main() {
     await createAccountToHome(tester);
     await createPost(tester, testPostTitle, testPostDescription);
     await openPost(tester, testPostTitle);
-    await comment(tester, "I like turtles too!");
+    const comment = "I like turtles too!";
+    await addComment(tester, comment);
 
     // back to feed
     await navigateBack(tester);
     await flingRefresh(tester, find.byType(PostFeed));
 
     // expect comment count to be correct
-    final commentsCount = find.byKey(PostCard.postCardCommentsNumberKey);
-    expect(commentsCount, findsOne);
-
-    final commentCountText =
-        find.descendant(of: commentsCount, matching: find.textContaining("1"));
-    expect(commentCountText, findsOne);
+    expectCommentCount(tester, testPostTitle, 1);
+    await deleteComment(tester, comment);
+    expectCommentCount(tester, testPostTitle, 0);
   });
 }
 
-Future<void> comment(WidgetTester tester, String comment) async {
+Future<void> expectCommentCount(
+  WidgetTester tester,
+  String postTitle,
+  int count,
+) async {
+  // find the post card that contains the correct title
+  final postCard = find.ancestor(
+    of: find.text(postTitle),
+    matching: find.byKey(PostCard.postCardKey),
+  );
+
+  final commentsCount = find.descendant(
+    of: postCard,
+    matching: find.byKey(PostCard.postCardCommentsNumberKey),
+  );
+  expect(commentsCount, findsOne);
+  final commentCountText = find.descendant(
+    of: commentsCount,
+    matching: find.textContaining("$count"),
+  );
+  expect(commentCountText, findsOne);
+}
+
+Future<void> addComment(WidgetTester tester, String comment) async {
   final commentField = find.byKey(NewCommentTextField.addCommentTextFieldKey);
   await tester.enterText(commentField, comment);
   await tester.tap(find.byKey(NewCommentButton.postCommentButtonKey));
@@ -200,8 +221,8 @@ Future<void> buttonRefresh(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-Future<void> flingRefresh(
-    WidgetTester tester, FinderBase<Element> finder) async {
+Future<void> flingRefresh(WidgetTester tester,
+    FinderBase<Element> finder,) async {
   await tester.fling(finder, const Offset(0, 500), 1000);
   await tester.pumpAndSettle();
 }
@@ -407,4 +428,33 @@ Future<void> deletePost(
   // Can't find post anymore
   expect(find.text(postTitle), findsNothing);
   expect(find.text(postDescription), findsNothing);
+}
+
+/// Delete a comment
+/// starts from home feed
+Future<void> deleteComment(
+  WidgetTester tester,
+  String comment,
+) async {
+  await navigateToProfile(tester);
+
+  expect(find.byType(ProfilePage), findsOneWidget);
+
+  await tester.tap(find.byKey(ProfilePage.commentTabKey));
+  await tester.pumpAndSettle();
+
+  // Check that the post content is displayed
+  expect(find.text(comment), findsOneWidget);
+
+  // Find the delete button on card
+  final deleteButton = find.byKey(ProfileInfoCard.deleteButtonCardKey);
+  expect(deleteButton, findsOneWidget);
+
+  await tester.tap(deleteButton);
+  await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
+
+  // Can't find post anymore
+  expect(find.text(comment), findsNothing);
+
+  await navigateBack(tester);
 }
