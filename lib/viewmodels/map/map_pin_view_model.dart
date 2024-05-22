@@ -24,6 +24,8 @@ import "package:proxima/views/pages/home/content/map/components/map_pin_pop_up.d
 /// may allow to catch some bugs that may occur when the pins are not
 /// refreshed when the user adds/deletes a post or completes a challenge.
 class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
+  //key for the map pin pop up
+  static const mapPinPopUpKey = Key("mapPinPopUp");
   @override
   Future<List<MapPinDetails>> build() async {
     final currentOption = ref.watch(mapSelectionOptionsViewModelProvider);
@@ -80,6 +82,7 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
                       context: context!,
                       builder: (context) {
                         return MapPinPopUp(
+                          key: mapPinPopUpKey,
                           title: post.data.title,
                           content: post.data.description,
                           displayButton: true,
