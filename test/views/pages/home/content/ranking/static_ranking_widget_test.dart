@@ -1,5 +1,5 @@
 import "package:flutter_test/flutter_test.dart";
-import "package:proxima/views/components/content/publication_header/user_profile_pop_up.dart";
+import "package:proxima/views/components/content/user_profile_pop_up.dart";
 import "package:proxima/views/pages/home/content/ranking/ranking_widget.dart";
 
 import "../../../../../mocks/providers/provider_homepage.dart";

@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/ranking/ranking_element_details.dart";
 import "package:proxima/models/ui/user_avatar_details.dart";
-import "package:proxima/views/components/content/publication_header/user_profile_pop_up.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
+import "package:proxima/views/components/content/user_profile_pop_up.dart";
 
 /// A widget that displays a ranking card.
 /// The card displays the user's rank, display name, and centauri points.
