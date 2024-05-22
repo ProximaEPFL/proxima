@@ -33,8 +33,8 @@ void main() {
           await rankingContainer.read(usersRankingViewModelProvider.future);
 
       expect(
-        ranking.rankElementDetailsList.length,
-        UsersRankingViewModel.rankingLimit,
+        ranking.rankElementDetailsList,
+        hasLength(UsersRankingViewModel.rankingLimit),
       );
     });
 
