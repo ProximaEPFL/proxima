@@ -152,7 +152,7 @@ void main() {
       final topUsers = await userRepo.getTopUsers(limit);
 
       // Check that correct number of users are returned
-      expect(topUsers.length, limit);
+      expect(topUsers, hasLength(limit));
 
       // Compare actual points received with expected decreasing number of points
       final points = topUsers.map((u) => u.data.centauriPoints);
