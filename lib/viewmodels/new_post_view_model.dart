@@ -5,8 +5,10 @@ import "package:proxima/models/ui/validation/new_post_validation.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 
+/// View-model for adding a new post to the database. Handles validation and post creation.
 class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostValidation> {
   static const _titleError = "Please enter a title";
   static const _bodyError = "Please enter a body";
@@ -71,6 +73,8 @@ class NewPostViewModel extends AutoDisposeAsyncNotifier<NewPostValidation> {
 
     // Refresh the home feed after post creation
     ref.read(postsFeedViewModelProvider.notifier).refresh();
+    // Refresh the map pins after post creation
+    ref.read(mapPinViewModelProvider.notifier).refresh();
 
     return NewPostValidation(
       titleError: null,

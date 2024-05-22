@@ -1,5 +1,6 @@
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
@@ -21,6 +22,8 @@ void main() {
   late FakeFirebaseFirestore fakeFireStore;
   late ProviderContainer container;
 
+  const extraTime = Duration(hours: 2, minutes: 30);
+
   setUp(() {
     geoLocationService = MockGeolocationService();
     fakeFireStore = FakeFirebaseFirestore();
@@ -31,6 +34,8 @@ void main() {
 
   group("Normal use", () {
     late UserRepositoryService userRepo;
+    late FirestoreChallengeGenerator challengeGenerator;
+    late FirestorePostGenerator postGenerator;
 
     setUp(() async {
       container = ProviderContainer(
@@ -40,7 +45,8 @@ void main() {
           firestoreProvider.overrideWithValue(fakeFireStore),
         ],
       );
-
+      challengeGenerator = FirestoreChallengeGenerator();
+      postGenerator = FirestorePostGenerator();
       userRepo = container.read(userRepositoryServiceProvider);
     });
 
@@ -53,10 +59,6 @@ void main() {
     test(
         "`ChallengeFirestore` is transformed correctly into `ChallengeCardData`",
         () async {
-      const extraTime = Duration(hours: 2, minutes: 30);
-      final challengeGenerator = FirestoreChallengeGenerator();
-      final postGenerator = FirestorePostGenerator();
-
       final post = postGenerator.generatePostAt(
         userPosition1,
       ); // the challenge is added by hand, so we can use the user position
@@ -84,10 +86,6 @@ void main() {
     });
 
     test("Completed challenge is transformed correctly", () async {
-      const extraTime = Duration(hours: 2, minutes: 30);
-      final challengeGenerator = FirestoreChallengeGenerator();
-      final postGenerator = FirestorePostGenerator();
-
       final post = postGenerator.generatePostAt(
         userPosition1,
       ); // the challenge is added by hand, so we can use the user position
@@ -115,12 +113,8 @@ void main() {
     });
 
     test("Challenges are sorted correctly", () async {
-      const extraTime = Duration(hours: 2, minutes: 30);
-      final challengeGenerator = FirestoreChallengeGenerator();
-      final postGenerator = FirestorePostGenerator();
-
       final posts = postGenerator.generatePostsAt(userPosition1, 3);
-      setPostsFirestore(posts, fakeFireStore);
+      await setPostsFirestore(posts, fakeFireStore);
 
       final finishedChallenges =
           challengeGenerator.generateChallenges(2, true, extraTime);
@@ -151,10 +145,6 @@ void main() {
     });
 
     test("Challenge can be completed", () async {
-      const extraTime = Duration(hours: 2, minutes: 30);
-      final challengeGenerator = FirestoreChallengeGenerator();
-      final postGenerator = FirestorePostGenerator();
-
       await setUserFirestore(fakeFireStore, testingUserFirestore);
 
       final post = postGenerator.generatePostAt(
@@ -192,6 +182,49 @@ void main() {
       final updatedUser = await userRepo.getUser(testingUserFirestoreId);
       final points = updatedUser.data.centauriPoints;
       expect(points, ChallengeRepositoryService.soloChallengeReward);
+    });
+
+    test("Challenges position is updated on user position change and refresh",
+        () async {
+      const nbPosts = 3;
+      await postGenerator.addPosts(fakeFireStore, userPosition1, nbPosts);
+
+      final activeChallenges =
+          challengeGenerator.generateChallenges(nbPosts, false, extraTime);
+
+      await setChallenges(
+        fakeFireStore,
+        activeChallenges,
+        testingUserFirestoreId,
+      );
+
+      final challengesBeforeRefresh =
+          await container.read(challengeViewModelProvider.future);
+
+      // Check initial distances are 0 since user is at userPosition1
+      for (final challenge in challengesBeforeRefresh) {
+        expect(challenge.distance, 0);
+      }
+
+      // Change user position to userPosition2
+      when(geoLocationService.getCurrentPosition()).thenAnswer(
+        (_) async => userPosition2,
+      );
+
+      // Refresh challenges
+      await container.read(challengeViewModelProvider.notifier).refresh();
+      final challengesAfterRefresh =
+          await container.read(challengeViewModelProvider.future);
+
+      // Compute the distance between userPosition1 and userPosition2
+      final double distanceKm = const GeoFirePoint(userPosition1)
+          .distanceBetweenInKm(geopoint: userPosition2);
+      final int distanceM = (distanceKm * 1000).toInt();
+
+      // Check that challenges distances are updated correctly
+      for (final challenge in challengesAfterRefresh) {
+        expect(challenge.distance, distanceM);
+      }
     });
   });
 

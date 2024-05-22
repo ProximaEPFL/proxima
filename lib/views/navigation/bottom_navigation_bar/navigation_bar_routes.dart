@@ -3,7 +3,7 @@ import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/content/challenge/challenge_list.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/home/content/map/map_screen.dart";
-import "package:proxima/views/pages/home/content/ranking/ranking_widget.dart";
+import "package:proxima/views/pages/home/content/ranking/ranking_page.dart";
 
 /// This enum is used to create the navigation bar routes.
 /// It contains the name and icon of the routes.
@@ -47,7 +47,7 @@ enum NavigationBarRoutes {
       case challenge:
         return const ChallengeList();
       case ranking:
-        return const RankingWidget();
+        return const RankingPage();
       case _:
         throw Exception("No page for this route.");
     }
