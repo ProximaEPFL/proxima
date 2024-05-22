@@ -1,11 +1,9 @@
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/users_ranking_view_model.dart";
 import "package:proxima/views/components/content/publication_header/user_profile_pop_up.dart";
 import "package:proxima/views/pages/home/content/ranking/components/ranking_widget.dart";
-import "package:proxima/views/pages/home/content/ranking/ranking_page.dart";
 
 import "../../../../../mocks/data/firestore_user.dart";
 import "../../../../../mocks/providers/provider_ranking.dart";
@@ -21,14 +19,7 @@ void main() {
         UsersRankingViewModel.rankingLimit * 2,
       );
 
-      final rankingContainer =
-          await rankingProviderContainerWithTestingUser(fakeFirestore);
-      rankingPage = MaterialApp(
-        home: UncontrolledProviderScope(
-          container: rankingContainer,
-          child: const RankingPage(),
-        ),
-      );
+      rankingPage = await rankingPageMockApp(fakeFirestore);
     });
 
     testWidgets(
