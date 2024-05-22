@@ -5,7 +5,10 @@ import "package:proxima/viewmodels/login_view_model.dart";
 
 import "../data/firestore_user.dart";
 
-Future<ProviderContainer> rankingProviderContainer(
+/// Returns a testing [ProviderContainer] which purpose is to test the ranking
+/// view model.
+/// **Note**: it also sets the [testingUserFirestore] on the provided database.
+Future<ProviderContainer> rankingProviderContainerWithTestingUser(
   FakeFirebaseFirestore fakeFirebaseFirestore,
 ) async {
   await setUserFirestore(fakeFirebaseFirestore, testingUserFirestore);
