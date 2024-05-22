@@ -13,6 +13,8 @@ import "package:proxima/viewmodels/login_view_model.dart";
 /// the challenges into [ChallengeDetails] objects to be displayed, by getting
 /// the posts from the post repository and calculating the distances as well as
 /// remaining time.
+/// It extends [AutoDisposeAsyncNotifier] to automatically dispose of the viewmodel
+/// so that the challenges are refreshed when the view is no longer visible.
 class ChallengeViewModel
     extends AutoDisposeAsyncNotifier<List<ChallengeDetails>> {
   @override
