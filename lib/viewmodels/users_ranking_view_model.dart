@@ -1,5 +1,6 @@
 import "package:collection/collection.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/ui/ranking/ranking_details.dart";
 import "package:proxima/models/ui/ranking/ranking_element_details.dart";
 import "package:proxima/services/database/user_repository_service.dart";
@@ -20,8 +21,14 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
     final userRepository = ref.watch(userRepositoryServiceProvider);
     final user = ref.watch(validLoggedInUserIdProvider);
 
-    // Retrieve the top users from the database
-    final topUsersFromDb = await userRepository.getTopUsers(rankingLimit);
+    // Retrieve the top users from the database and the current user ranking
+    // at the same time.
+    final futures = await (
+      userRepository.getTopUsers(rankingLimit),
+      userRepository.getUser(user),
+    ).wait;
+
+    final topUsersFromDb = futures.$1;
 
     // Map from users to `RankingElementDetails`
     final topUsers = topUsersFromDb.mapIndexed((i, user) {
@@ -38,9 +45,7 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
       return userRankingDetails;
     }).toList();
 
-    // Retrieve the current user ranking
-    final currentUser = await userRepository.getUser(user);
-    final currentUserData = currentUser.data;
+    final currentUserData = futures.$2.data;
 
     // If the current user is in the leaderboard, also provide its rank
     final currentUserRank = topUsers.firstWhereOrNull(
