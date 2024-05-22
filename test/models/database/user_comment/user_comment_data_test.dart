@@ -18,6 +18,7 @@ void main() {
       final expectedHash = Object.hash(
         userCommentData.parentPostId,
         userCommentData.content,
+        userCommentData.publicationTime,
       );
       final actualHash = userCommentData.hashCode;
       expect(actualHash, expectedHash);
@@ -30,6 +31,7 @@ void main() {
       final otherUserCommentData = UserCommentData(
         parentPostId: userCommentData.parentPostId,
         content: userCommentData.content,
+        publicationTime: userCommentData.publicationTime,
       );
       expect(userCommentData, otherUserCommentData);
     });
