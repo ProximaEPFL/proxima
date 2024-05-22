@@ -4,8 +4,10 @@ import "package:firebase_core/firebase_core.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
+import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
+import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account/create_account_form.dart";
 import "package:proxima/views/pages/create_account/create_account_page.dart";
@@ -23,6 +25,8 @@ import "package:proxima/views/pages/profile/components/profile_data/profile_user
 import "package:proxima/views/pages/profile/profile_page.dart";
 import "package:proxima/views/proxima_app.dart";
 
+import "../mocks/data/firestore_post.dart";
+import "../mocks/data/firestore_user.dart";
 import "../mocks/data/geopoint.dart";
 import "../mocks/overrides/override_auth_providers.dart";
 import "../mocks/services/mock_geo_location_service.dart";
@@ -33,7 +37,7 @@ void main() {
   late FakeFirebaseFirestore fakeFireStore;
 
   MockGeolocationService geoLocationService = MockGeolocationService();
-  const GeoPoint testLocation = userPosition0;
+  const GeoPoint startLocation = userPosition1;
 
   setUp(() async {
     setupFirebaseAuthMocks();
@@ -41,10 +45,10 @@ void main() {
     fakeFireStore = FakeFirebaseFirestore();
 
     when(geoLocationService.getCurrentPosition()).thenAnswer(
-      (_) => Future.value(testLocation),
+      (_) => Future.value(startLocation),
     );
     when(geoLocationService.getPositionStream()).thenAnswer(
-      (_) => Stream.value(testLocation),
+      (_) => Stream.value(startLocation),
     );
   });
 
@@ -64,6 +68,15 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  void goToPoint(GeoPoint point) {
+    when(geoLocationService.getCurrentPosition()).thenAnswer(
+      (_) => Future.value(point),
+    );
+    when(geoLocationService.getPositionStream()).thenAnswer(
+      (_) => Stream.value(point),
+    );
+  }
+
   testWidgets("End-to-end test of the app navigation flow",
       (WidgetTester tester) async {
     await loadProxima(tester);
@@ -75,6 +88,59 @@ void main() {
     await createPost(tester);
     await deletePost(tester);
   });
+
+  testWidgets("Challenge creation and completion", (WidgetTester tester) async {
+    await loadProxima(tester);
+    await loginToCreateAccount(tester);
+    await createAccountToHome(tester);
+
+    final otherUser = await FirestoreUserGenerator.addUser(fakeFireStore);
+    final postLocation = GeoPointGenerator.createOnEdgeInsidePosition(
+      startLocation,
+      ChallengeRepositoryService.maxChallengeRadius,
+    );
+    final post =
+        FirestorePostGenerator().createUserPost(otherUser.uid, postLocation);
+    await setPostFirestore(post, fakeFireStore);
+
+    await navigateToPage(NavigationbarRoutes.challenge, tester);
+    // Check that the challenge is displayed
+    expect(find.text(post.data.title), findsOneWidget);
+
+    goToPoint(postLocation);
+
+    await navigateToPage(NavigationbarRoutes.feed, tester);
+
+    /*
+    final error = find.byType(AlertDialog);
+    final errorText = find.textContaining("Exception");
+    // print the error found
+    if (errorText.evaluate().isNotEmpty) {
+      final d = errorText.evaluate().first.widget.toString();
+    }
+*/
+    await buttonRefresh(tester);
+
+    final challengePost = find.text(post.data.title);
+    expect(challengePost, findsOneWidget);
+    await tester.tap(challengePost);
+    await tester.pumpAndSettle();
+  });
+}
+
+Future<void> navigateToPage(
+  NavigationbarRoutes route,
+  WidgetTester tester,
+) async {
+  final button = find.text(route.name);
+  expect(button, findsOneWidget);
+  await tester.tap(button);
+  await tester.pumpAndSettle();
+}
+
+Future<void> buttonRefresh(WidgetTester tester) async {
+  await tester.tap(find.text("Refresh"));
+  await tester.pumpAndSettle();
 }
 
 /// Navigate to the login page and login
