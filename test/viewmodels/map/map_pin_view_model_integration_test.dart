@@ -9,10 +9,14 @@ import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
+import "package:proxima/views/pages/home/content/map/components/map_pin_pop_up.dart";
+import "package:proxima/views/pages/home/content/map/map_screen.dart";
+import "package:proxima/views/pages/post/post_page.dart";
 
 import "../../mocks/data/firestore_post.dart";
 import "../../mocks/data/firestore_user.dart";
 import "../../mocks/data/geopoint.dart";
+import "../../mocks/providers/provider_map_page.dart";
 import "../../mocks/services/mock_geolocator_platform.dart";
 import "../../mocks/services/mock_user_repository_service.dart";
 
@@ -24,6 +28,7 @@ void main() {
     late ProviderContainer container;
     late FirestorePostGenerator postGenerator;
     late MockUserRepositoryService userRepositoryService;
+    late ProviderScope mapWidgetWithPins;
 
     setUp(() async {
       fakeFireStore = FakeFirebaseFirestore();
@@ -31,6 +36,12 @@ void main() {
       geolocationService = GeolocationService(geoLocator: mockGeolocator);
       postGenerator = FirestorePostGenerator();
       userRepositoryService = MockUserRepositoryService();
+      mapWidgetWithPins = newMapPageWithPinsNoOverride(
+        geolocationService,
+        fakeFireStore,
+        testingUserFirestoreId,
+        userRepositoryService,
+      );
 
       when(mockGeolocator.isLocationServiceEnabled())
           .thenAnswer((_) async => true);
@@ -129,6 +140,60 @@ void main() {
             .toList();
 
         expect(pinListTuple, unorderedEquals(expectedPinsTuple));
+      });
+
+      testWidgets("callback function is created as expected", (tester) async {
+        // Generate 10 random positions around the user but in range to be able to see them
+        // and 15 random positions out of range.
+        const postsInRange = 10;
+        const postsOutOfRange = 15;
+
+        final geoPointsPositions = GeoPointGenerator.generatePositions(
+          userPosition0,
+          postsInRange,
+          postsOutOfRange,
+        );
+
+        final generatedPosts =
+            postGenerator.generatePostsAtDifferentLocations(geoPointsPositions);
+
+        await setPostsFirestore(generatedPosts, fakeFireStore);
+
+        await tester.pumpWidget(mapWidgetWithPins);
+        await tester.pumpAndSettle();
+
+        final element = tester.element(find.byType(MapScreen));
+
+        final container = ProviderScope.containerOf(element);
+
+        final mapPinNotifier = container.read(mapPinViewModelProvider.notifier);
+
+        mapPinNotifier.setContext(element);
+
+        await mapPinNotifier.refresh();
+        await tester.pumpAndSettle();
+
+        final pinList = await container.read(mapPinViewModelProvider.future);
+        await tester.pumpAndSettle();
+
+        expect(pinList, isNotEmpty);
+
+        //check that the callback function of the pin shows a dialog
+        final pin = pinList.first;
+        pin.callbackFunction();
+
+        await tester.pumpAndSettle();
+        expect(find.byType(MapPinPopUp), findsOneWidget);
+
+        //click on the button in the popup
+        final arrowButton = find.byKey(MapPinPopUp.arrowButtonKey);
+        expect(arrowButton, findsOneWidget);
+
+        await tester.tap(arrowButton);
+
+        await tester.pumpAndSettle();
+        //check that we have a post overview page
+        expect(find.byType(PostPage), findsOneWidget);
       });
     });
 
