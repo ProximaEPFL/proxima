@@ -14,7 +14,10 @@ import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 /// the challenges into [ChallengeDetails] objects to be displayed, by getting
 /// the posts from the post repository and calculating the distances as well as
 /// remaining time.
-class ChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>> {
+/// It extends [AutoDisposeAsyncNotifier] to automatically dispose of the viewmodel
+/// so that the challenges are refreshed when the view is no longer visible.
+class ChallengeViewModel
+    extends AutoDisposeAsyncNotifier<List<ChallengeDetails>> {
   @override
   Future<List<ChallengeDetails>> build() async {
     final geoLocationService = ref.watch(geolocationServiceProvider);
@@ -101,7 +104,7 @@ class ChallengeViewModel extends AsyncNotifier<List<ChallengeDetails>> {
   }
 }
 
-final challengeViewModelProvider =
-    AsyncNotifierProvider<ChallengeViewModel, List<ChallengeDetails>>(
+final challengeViewModelProvider = AutoDisposeAsyncNotifierProvider<
+    ChallengeViewModel, List<ChallengeDetails>>(
   () => ChallengeViewModel(),
 );
