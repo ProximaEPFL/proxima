@@ -13,7 +13,7 @@ Future<ProviderContainer> rankingProviderContainer(
   return ProviderContainer(
     overrides: [
       firestoreProvider.overrideWithValue(fakeFirebaseFirestore),
-      validLoggedInUserIdProvider.overrideWith((ref) => testingUserFirestoreId),
+      validLoggedInUserIdProvider.overrideWithValue(testingUserFirestoreId),
     ],
   );
 }
