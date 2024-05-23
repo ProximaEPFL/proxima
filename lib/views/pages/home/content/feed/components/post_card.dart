@@ -4,10 +4,10 @@ import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/content/post_votes.dart";
-import "package:proxima/views/components/content/publication_header/publication_header.dart";
 import "package:proxima/views/components/feedback/centauri_snack_bar.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/content/feed/components/comment_count.dart";
+import "package:proxima/views/pages/home/content/feed/components/post_card_header.dart";
 
 /// This widget is used to display the post card in the home feed.
 /// It contains the post title, description, votes, comments
@@ -109,7 +109,7 @@ class PostCard extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 8),
-              child: PublicationHeader(
+              child: PostCardHeader(
                 key: postCardUserKey,
                 posterUsername: postDetails.ownerUsername,
                 posterDisplayName: postDetails.ownerDisplayName,

@@ -2,12 +2,12 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:intl/intl.dart";
-import "package:proxima/views/components/content/publication_header/publication_header.dart";
-import "package:proxima/views/components/content/publication_header/user_profile_pop_up.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
+import "package:proxima/views/components/content/user_profile_pop_up.dart";
 import "package:proxima/views/components/feedback/centauri_snack_bar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/content/feed/components/post_card.dart";
+import "package:proxima/views/pages/home/content/feed/components/post_card_header.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/post/components/comment/comment_post_widget.dart";
 import "package:proxima/views/pages/post/components/complete_post.dart";
@@ -154,7 +154,7 @@ void main() {
       final postUserBarDisplayNameTextWidget = tester.widget(
         find.descendant(
           of: postUserBar,
-          matching: find.byKey(PublicationHeader.displayNameTextKey),
+          matching: find.byKey(PostCardHeader.displayNameTextKey),
         ),
       );
 
@@ -168,7 +168,7 @@ void main() {
       final postUserBarTimestampTextWidget = tester.widget(
         find.descendant(
           of: postUserBar,
-          matching: find.byKey(PublicationHeader.publicationDateTextKey),
+          matching: find.byKey(PostCardHeader.publicationDateTextKey),
         ),
       );
 
@@ -269,7 +269,7 @@ void main() {
       final Iterable<Text> displayNameWidgets = tester.widgetList<Text>(
         find.descendant(
           of: find.byKey(CommentPostWidget.commentUserWidgetKey),
-          matching: find.byKey(PublicationHeader.displayNameTextKey),
+          matching: find.byKey(PostCardHeader.displayNameTextKey),
         ),
       );
 
@@ -310,7 +310,7 @@ void main() {
     }
 
     testWidgets("Pop-up is displayed when clicking on avatar", (tester) async {
-      final avatar = find.byKey(PublicationHeader.avatarKey);
+      final avatar = find.byKey(PostCardHeader.avatarKey);
       await tapOn(tester, avatar);
 
       final profilePopUp = find.byType(UserProfilePopUp);
@@ -320,7 +320,7 @@ void main() {
     testWidgets(
       "Pop-up is displayed when clicking on user display name",
       (tester) async {
-        final displayName = find.byKey(PublicationHeader.displayNameTextKey);
+        final displayName = find.byKey(PostCardHeader.displayNameTextKey);
         await tapOn(tester, displayName);
 
         final profilePopUp = find.byType(UserProfilePopUp);
@@ -331,7 +331,7 @@ void main() {
     testWidgets(
       "Pop-up contains the correct user information",
       (tester) async {
-        final avatar = find.byKey(PublicationHeader.avatarKey).first;
+        final avatar = find.byKey(PostCardHeader.avatarKey).first;
         await tapOn(tester, avatar);
 
         final profilePopUp = find.byType(UserProfilePopUp);
