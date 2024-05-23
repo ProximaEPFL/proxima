@@ -53,7 +53,7 @@ ProviderScope newMapPageWithPins(
   );
 }
 
-ProviderScope newMapPageWithPinsNoOverride(
+ProviderScope newMapPageWithPinsRealMapPinViewmodel(
   GeolocationService geoLocationService,
   FakeFirebaseFirestore fakeFireStore,
   UserIdFirestore testingUserFirestoreId,

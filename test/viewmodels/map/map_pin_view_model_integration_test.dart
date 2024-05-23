@@ -36,7 +36,7 @@ void main() {
       geolocationService = GeolocationService(geoLocator: mockGeolocator);
       postGenerator = FirestorePostGenerator();
       userRepositoryService = MockUserRepositoryService();
-      mapWidgetWithPins = newMapPageWithPinsNoOverride(
+      mapWidgetWithPins = newMapPageWithPinsRealMapPinViewmodel(
         geolocationService,
         fakeFireStore,
         testingUserFirestoreId,
