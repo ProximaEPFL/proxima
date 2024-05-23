@@ -118,8 +118,7 @@ void main() {
     await bottomBarNavigate(NavigationbarRoutes.challenge, tester);
     expect(find.text(post.data.title), findsOneWidget);
 
-    // complete the challenge
-
+    // complete the challenge with intermediate positions
     List<GeoPoint> intermediatePositions =
         GeoPointGenerator.linearInterpolation(startLocation, postLocation, 10);
     for (final point in intermediatePositions) {
@@ -150,7 +149,6 @@ void main() {
       expect(actualDist, expectedDist);
     }
 
-    goToPoint(postLocation);
     await bottomBarNavigate(NavigationbarRoutes.feed, tester);
     await openPost(tester, post.data.title);
 
@@ -190,6 +188,7 @@ void main() {
   });
 }
 
+/// Expect the comment count of a post to be [count], starts in the home feed.
 Future<void> expectCommentCount(
   WidgetTester tester,
   String postTitle,
@@ -213,6 +212,7 @@ Future<void> expectCommentCount(
   expect(commentCountText, findsOne);
 }
 
+/// Write a comment with content [comment] and post it. Starts in the post page.
 Future<void> addComment(WidgetTester tester, String comment) async {
   final commentField = find.byKey(NewCommentTextField.addCommentTextFieldKey);
   await tester.enterText(commentField, comment);
@@ -222,16 +222,20 @@ Future<void> addComment(WidgetTester tester, String comment) async {
   expect(find.text(comment), findsOne);
 }
 
+/// Open a post by tapping on its title, starting from the home feed
 Future<void> openPost(WidgetTester tester, String postTitle) async {
   await tester.tap(find.text(postTitle));
   await tester.pumpAndSettle();
 }
 
+/// Navigate back using the back button in the app bar
 Future<void> navigateBack(WidgetTester tester) async {
   await tester.tap(find.byKey(LeadingBackButton.leadingBackButtonKey));
   await tester.pumpAndSettle();
 }
 
+/// Navigate use the bottom navigation bar to open [route]. Starts from any
+/// page with a bottom navigation bar.
 Future<void> bottomBarNavigate(
   NavigationbarRoutes route,
   WidgetTester tester,
@@ -242,16 +246,20 @@ Future<void> bottomBarNavigate(
   await tester.pumpAndSettle();
 }
 
+/// Navigate to the profile page. Starts from any page with a profile button.
 Future<void> navigateToProfile(WidgetTester tester) async {
   await tester.tap(find.byKey(HomeTopBar.profilePictureKey));
   await tester.pumpAndSettle();
 }
 
+/// Refresh the page by tapping the refresh button. Starts from any page with a
+/// refresh button.
 Future<void> buttonRefresh(WidgetTester tester) async {
   await tester.tap(find.text("Refresh"));
   await tester.pumpAndSettle();
 }
 
+/// Refreshes the page by flinging down the widget [finder].
 Future<void> flingRefresh(
   WidgetTester tester,
   FinderBase<Element> finder,
