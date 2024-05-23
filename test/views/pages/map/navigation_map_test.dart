@@ -44,7 +44,7 @@ void main() {
           of: bottomBar,
           matching: find
               .byType(NavigationDestination)
-              .at(NavigationbarRoutes.map.index),
+              .at(NavigationBarRoutes.map.index),
         ),
       );
       await tester.pumpAndSettle();

@@ -118,7 +118,7 @@ void main() {
           of: bottomBar,
           matching: find.byType(NavigationDestination),
         ),
-        findsExactly(NavigationbarRoutes.values.length),
+        findsExactly(NavigationBarRoutes.values.length),
       );
     });
 

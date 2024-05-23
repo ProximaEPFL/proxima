@@ -13,13 +13,13 @@ class HomePage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     navigateToLoginPageOnLogout(context, ref);
 
-    final currentPageIndex = useState(NavigationbarRoutes.feed.index);
+    final currentPageIndex = useState(NavigationBarRoutes.feed.index);
 
     return Scaffold(
       appBar: AppBar(
         title: HomeTopBar(
           labelText:
-              NavigationbarRoutes.values[currentPageIndex.value].pageLabel(),
+              NavigationBarRoutes.values[currentPageIndex.value].pageLabel(),
         ),
       ),
       bottomNavigationBar: NavigationBottomBar(
@@ -27,7 +27,7 @@ class HomePage extends HookConsumerWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 8, right: 8),
-        child: NavigationbarRoutes.values[currentPageIndex.value].page(),
+        child: NavigationBarRoutes.values[currentPageIndex.value].page(),
       ),
     );
   }

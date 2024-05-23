@@ -28,7 +28,7 @@ void main() {
           of: bottomBar,
           matching: find
               .byType(NavigationDestination)
-              .at(NavigationbarRoutes.addPost.index),
+              .at(NavigationBarRoutes.addPost.index),
         ),
       );
       await tester.pumpAndSettle();
@@ -63,7 +63,7 @@ void main() {
           of: bottomBar,
           matching: find
               .byType(NavigationDestination)
-              .at(NavigationbarRoutes.addPost.index),
+              .at(NavigationBarRoutes.addPost.index),
         ),
       );
       await tester.pumpAndSettle();

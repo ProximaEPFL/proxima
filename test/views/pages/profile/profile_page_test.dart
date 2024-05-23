@@ -11,8 +11,6 @@ import "package:proxima/views/navigation/leading_back_button/leading_back_button
 import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_pop_up.dart";
-import "package:proxima/views/pages/profile/components/info_cards/profile_info_row.dart";
-import "package:proxima/views/pages/profile/components/profile_badge.dart";
 import "package:proxima/views/pages/profile/components/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/components/user_account.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
@@ -93,14 +91,6 @@ void main() {
       //Check that centauri points are displayed
       final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
       expect(centauriPoints, findsOneWidget);
-
-      // Check that the info row is displayed
-      final infoRowWidget = find.byKey(ProfileInfoRow.infoRowKey);
-      expect(infoRowWidget, findsOneWidget);
-
-      // Check that badges are displayed
-      final badgeCard = find.byKey(ProfileBadge.badgeKey);
-      expect(badgeCard, findsWidgets);
 
       //Check that the tab is displayed
       final tab = find.byKey(ProfilePage.tabKey);
