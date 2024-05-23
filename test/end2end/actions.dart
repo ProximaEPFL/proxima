@@ -71,7 +71,7 @@ Future<void> navigateBack(WidgetTester tester) async {
 /// Navigate use the bottom navigation bar to open [route]. Starts from any
 /// page with a bottom navigation bar.
 Future<void> bottomBarNavigate(
-  NavigationbarRoutes route,
+  NavigationBarRoutes route,
   WidgetTester tester,
 ) async {
   final button = find.text(route.name);

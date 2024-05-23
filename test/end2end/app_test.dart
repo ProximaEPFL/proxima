@@ -103,7 +103,7 @@ void main() {
     await createAccountToHome(tester);
 
     // get the challenge
-    await bottomBarNavigate(NavigationbarRoutes.challenge, tester);
+    await bottomBarNavigate(NavigationBarRoutes.challenge, tester);
     expect(find.text(post.data.title), findsOneWidget);
 
     // complete the challenge with intermediate positions
@@ -137,7 +137,7 @@ void main() {
       expect(actualDist, expectedDist);
     }
 
-    await bottomBarNavigate(NavigationbarRoutes.feed, tester);
+    await bottomBarNavigate(NavigationBarRoutes.feed, tester);
     await openPost(tester, post.data.title);
 
     // check that points are given out
