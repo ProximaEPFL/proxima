@@ -3,10 +3,13 @@ import "package:collection/collection.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:geolocator/geolocator.dart";
+import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
@@ -15,9 +18,12 @@ import "package:proxima/views/components/options/map/map_selection_options.dart"
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
+import "package:proxima/views/pages/home/content/map/components/map_pin_pop_up.dart";
+import "package:proxima/views/pages/home/content/map/map_screen.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
+import "package:proxima/views/pages/post/post_page.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
 
 import "../../../mocks/data/firestore_challenge.dart";
@@ -25,7 +31,10 @@ import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/data/geopoint.dart";
 import "../../../mocks/providers/provider_homepage.dart";
+import "../../../mocks/providers/provider_map_page.dart";
 import "../../../mocks/services/mock_geo_location_service.dart";
+import "../../../mocks/services/mock_geolocator_platform.dart";
+import "../../../mocks/services/mock_user_repository_service.dart";
 
 void main() {
   late MockGeolocationService geoLocationService;
@@ -315,5 +324,133 @@ void main() {
         await tester.pumpAndSettle();
       },
     );
+  });
+
+  group("map pin popup", () {
+    late List<PostFirestore> generatedPosts;
+    late FakeFirebaseFirestore fakeFireStore;
+    late ProviderScope mapWidgetWithPins;
+    late GeolocationService geolocationService;
+    late MockGeolocatorPlatform mockGeolocator;
+    late MockUserRepositoryService userRepositoryService;
+
+    setUp(() async {
+      fakeFireStore = FakeFirebaseFirestore();
+      mockGeolocator = MockGeolocatorPlatform();
+      geolocationService = GeolocationService(geoLocator: mockGeolocator);
+      userRepositoryService = MockUserRepositoryService();
+
+      when(mockGeolocator.isLocationServiceEnabled())
+          .thenAnswer((_) async => true);
+      when(mockGeolocator.checkPermission())
+          .thenAnswer((_) async => LocationPermission.always);
+
+      when(userRepositoryService.getUser(testingUserFirestoreId))
+          .thenAnswer((_) async => testingUserFirestore);
+
+      final position = getSimplePosition(
+        userPosition0.latitude,
+        userPosition0.longitude,
+      );
+      when(
+        mockGeolocator.getCurrentPosition(
+          locationSettings: geolocationService.locationSettings,
+        ),
+      ).thenAnswer(
+        (_) async => position,
+      );
+
+      when(
+        mockGeolocator.getPositionStream(
+          locationSettings: geolocationService.locationSettings,
+        ),
+      ).thenAnswer(
+        (_) => Stream.fromIterable([
+          position,
+        ]),
+      );
+
+      mapWidgetWithPins = newMapPageWithPinsRealMapPinViewmodel(
+        geolocationService,
+        fakeFireStore,
+        testingUserFirestoreId,
+        userRepositoryService,
+      );
+
+      const postsInRange = 1;
+      const postsOutOfRange = 1;
+
+      final geoPointsPositions = GeoPointGenerator.generatePositions(
+        userPosition0,
+        postsInRange,
+        postsOutOfRange,
+      );
+
+      generatedPosts =
+          postGenerator.generatePostsAtDifferentLocations(geoPointsPositions);
+      await setPostsFirestore(generatedPosts, fakeFireStore);
+    });
+
+    testWidgets("callback function is created as expected", (tester) async {
+      await tester.pumpWidget(mapWidgetWithPins);
+      await tester.pumpAndSettle();
+
+      final element = tester.element(find.byType(MapScreen));
+
+      final container = ProviderScope.containerOf(element);
+
+      final mapPinNotifier = container.read(mapPinViewModelProvider.notifier);
+
+      await mapPinNotifier.refresh();
+      await tester.pumpAndSettle();
+
+      final pinList = await container.read(mapPinViewModelProvider.future);
+      await tester.pumpAndSettle();
+
+      expect(pinList, isNotEmpty);
+
+      final googleMapFinder = find.byType(GoogleMap);
+      expect(googleMapFinder, findsOneWidget);
+
+      final googleMap = tester.widget(googleMapFinder) as GoogleMap;
+      final markers = googleMap.markers;
+
+      expect(markers, isNotNull);
+
+      //click on the first marker
+      final marker = markers.first;
+      marker.onTap!();
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(MapPinPopUp), findsOneWidget);
+
+      //click on the button in the popup
+      final arrowButton = find.byKey(MapPinPopUp.popUpButtonKey);
+      expect(arrowButton, findsOneWidget);
+
+      await tester.tap(arrowButton);
+
+      await tester.pumpAndSettle();
+      //check that we have a post overview page
+      expect(find.byType(PostPage), findsOneWidget);
+
+      //check that the post overview page is the correct one
+      final postPage = tester.widget(find.byType(PostPage)) as PostPage;
+      final postDetails = postPage.postDetails;
+
+      expect(postDetails.postId, generatedPosts[0].id);
+      expect(postDetails.title, generatedPosts[0].data.title);
+      expect(postDetails.description, generatedPosts[0].data.description);
+      expect(
+        postDetails.ownerDisplayName,
+        testingUserFirestore.data.displayName,
+      );
+      expect(postDetails.ownerUsername, testingUserFirestore.data.username);
+      expect(
+        postDetails.ownerCentauriPoints,
+        testingUserFirestore.data.centauriPoints,
+      );
+    });
   });
 }
