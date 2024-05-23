@@ -1,5 +1,8 @@
 import "package:flutter/foundation.dart";
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
+import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/models/database/user/user_firestore.dart";
 
 @immutable
 class PostDetails {
@@ -61,6 +64,30 @@ class PostDetails {
       publicationDate,
       distance,
       isChallenge,
+    );
+  }
+
+  factory PostDetails.fromFirestoreData(
+      PostFirestore postFirestore,
+      UserFirestore userFirestore,
+      GeoFirePoint geoFirePoint,
+      bool isChallenge) {
+    return PostDetails(
+      postId: postFirestore.id,
+      title: postFirestore.data.title,
+      description: postFirestore.data.description,
+      voteScore: postFirestore.data.voteScore,
+      commentNumber: postFirestore.data.commentCount,
+      ownerDisplayName: userFirestore.data.displayName,
+      ownerUsername: userFirestore.data.username,
+      ownerCentauriPoints: userFirestore.data.centauriPoints,
+      publicationDate: postFirestore.data.publicationTime.toDate(),
+      distance: (geoFirePoint.distanceBetweenInKm(
+                geopoint: postFirestore.location.geoPoint,
+              ) *
+              1000)
+          .round(),
+      isChallenge: isChallenge,
     );
   }
 }
