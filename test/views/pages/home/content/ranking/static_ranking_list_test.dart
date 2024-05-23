@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:proxima/views/components/content/publication_header/user_profile_pop_up.dart";
-import "package:proxima/views/pages/home/content/ranking/ranking_card.dart";
-import "package:proxima/views/pages/home/content/ranking/ranking_list.dart";
+import "package:proxima/views/components/content/user_profile_pop_up.dart";
+import "package:proxima/views/pages/home/content/ranking/components/ranking_card.dart";
+import "package:proxima/views/pages/home/content/ranking/components/ranking_list.dart";
 
 import "../../../../../mocks/data/ranking_data.dart";
 
