@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:proxima/views/components/feedback/not_implemented.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/content/challenge/challenge_list.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
@@ -8,7 +7,7 @@ import "package:proxima/views/pages/home/content/ranking/ranking_page.dart";
 
 /// This enum is used to create the navigation bar routes.
 /// It contains the name and icon of the routes.
-enum NavigationbarRoutes {
+enum NavigationBarRoutes {
   feed("Feed", Icon(Icons.home), null),
   challenge("Challenge", Icon(Icons.emoji_events), null),
   addPost(
@@ -29,7 +28,7 @@ enum NavigationbarRoutes {
   // Non-null if it requires a push
   final Routes? routeDestination;
 
-  const NavigationbarRoutes(
+  const NavigationBarRoutes(
     this.name,
     this.icon,
     this.routeDestination,
@@ -50,7 +49,7 @@ enum NavigationbarRoutes {
       case ranking:
         return const RankingPage();
       case _:
-        return const NotImplemented();
+        throw Exception("No page for this route.");
     }
   }
 
