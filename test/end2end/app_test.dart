@@ -78,6 +78,7 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  /// Change the current location to [point] in the geoLocationService.
   void goToPoint(GeoPoint point) {
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) => Future.value(point),
