@@ -49,6 +49,8 @@ void main() {
   MockGeolocationService geoLocationService = MockGeolocationService();
   const GeoPoint startLocation = userPosition1;
 
+  late FirestorePostGenerator firestorePostGenerator;
+
   setUp(() async {
     setupFirebaseAuthMocks();
     await Firebase.initializeApp();
@@ -60,6 +62,8 @@ void main() {
     when(geoLocationService.getPositionStream()).thenAnswer(
       (_) => Stream.value(startLocation),
     );
+
+    firestorePostGenerator = FirestorePostGenerator();
   });
 
   /// Pump the full Proxima app into the tester.
@@ -108,7 +112,7 @@ void main() {
       ChallengeRepositoryService.maxChallengeRadius,
     );
     final post =
-        FirestorePostGenerator().createUserPost(otherUser.uid, postLocation);
+        firestorePostGenerator.createUserPost(otherUser.uid, postLocation);
     await setPostFirestore(post, fakeFireStore);
 
     await loadProxima(tester);
