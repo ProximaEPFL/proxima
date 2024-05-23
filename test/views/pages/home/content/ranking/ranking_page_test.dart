@@ -2,7 +2,7 @@ import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/viewmodels/users_ranking_view_model.dart";
-import "package:proxima/views/components/content/publication_header/user_profile_pop_up.dart";
+import "package:proxima/views/components/content/user_profile_pop_up.dart";
 import "package:proxima/views/pages/home/content/ranking/components/ranking_widget.dart";
 
 import "../../../../../mocks/data/firestore_user.dart";
