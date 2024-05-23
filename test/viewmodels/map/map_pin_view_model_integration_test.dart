@@ -4,6 +4,7 @@ import "package:geolocator/geolocator.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
+import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
@@ -63,8 +64,10 @@ void main() {
     });
 
     group("Standing still tests", () {
+      late List<PostFirestore> generatedPosts;
+
       setUp(
-        () {
+        () async {
           final position = getSimplePosition(
             userPosition0.latitude,
             userPosition0.longitude,
@@ -86,6 +89,19 @@ void main() {
               position,
             ]),
           );
+
+          const postsInRange = 1;
+          const postsOutOfRange = 1;
+
+          final geoPointsPositions = GeoPointGenerator.generatePositions(
+            userPosition0,
+            postsInRange,
+            postsOutOfRange,
+          );
+
+          generatedPosts = postGenerator
+              .generatePostsAtDifferentLocations(geoPointsPositions);
+          await setPostsFirestore(generatedPosts, fakeFireStore);
         },
       );
 
@@ -143,22 +159,6 @@ void main() {
       });
 
       testWidgets("callback function is created as expected", (tester) async {
-        // Generate 10 random positions around the user but in range to be able to see them
-        // and 15 random positions out of range.
-        const postsInRange = 1;
-        const postsOutOfRange = 1;
-
-        final geoPointsPositions = GeoPointGenerator.generatePositions(
-          userPosition0,
-          postsInRange,
-          postsOutOfRange,
-        );
-
-        final generatedPosts =
-            postGenerator.generatePostsAtDifferentLocations(geoPointsPositions);
-
-        await setPostsFirestore(generatedPosts, fakeFireStore);
-
         await tester.pumpWidget(mapWidgetWithPins);
         await tester.pumpAndSettle();
 
