@@ -35,7 +35,7 @@ class MapScreen extends ConsumerWidget {
       },
       fallbackBuilder: (context, error) {
         return ErrorRefreshPage(
-          onRefresh: () => ref.read(mapViewModelProvider.notifier).refresh(),
+          onRefresh: ref.read(mapViewModelProvider.notifier).refresh,
         );
       },
     );
