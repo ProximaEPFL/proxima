@@ -112,11 +112,12 @@ class GeoPointGenerator {
     double latStep = (end.latitude - start.latitude) / steps;
     double lonStep = (end.longitude - start.longitude) / steps;
 
-    return List.generate(steps + 1, (i) {
-      return GeoPoint(
+    return List.generate(
+      steps + 1,
+      (i) => GeoPoint(
         start.latitude + latStep * i,
         start.longitude + lonStep * i,
-      );
-    });
+      ),
+    );```
   }
 }
