@@ -18,7 +18,7 @@ import "package:proxima/views/pages/home/content/feed/components/post_card.dart"
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/home/content/map/map_screen.dart";
 import "package:proxima/views/pages/home/content/map/post_map.dart";
-import "package:proxima/views/pages/home/content/ranking/ranking_widget.dart";
+import "package:proxima/views/pages/home/content/ranking/components/ranking_widget.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/login/login_button.dart";
