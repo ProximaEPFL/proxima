@@ -132,7 +132,6 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
             post,
             MapPopUpDetails(
               title: post.data.title,
-              description: post.data.description,
             ),
           ),
         )
