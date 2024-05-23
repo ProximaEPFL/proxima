@@ -76,14 +76,14 @@ class GeoPointGenerator {
 
     const maxDiagonalDistanceInRange = 0.0005;
     const minDiagonalOutRange = 0.001;
-    double distanceBetweenpositions =
+    double distanceBetweenPositions =
         maxDiagonalDistanceInRange / (inRange + 1);
 
     double userLatitude = userPosition.latitude;
     double userLongitude = userPosition.longitude;
 
     final positionInRange = List.generate(inRange, (i) {
-      double dDirection = distanceBetweenpositions * i;
+      double dDirection = distanceBetweenPositions * i;
       return GeoPoint(
         userLatitude + dDirection,
         userLongitude + dDirection,
@@ -92,7 +92,7 @@ class GeoPointGenerator {
 
     // Generate positions that are not in the range.
     final positionsNotInRange = List.generate(outRange, (i) {
-      double dDirection = minDiagonalOutRange + distanceBetweenpositions * i;
+      double dDirection = minDiagonalOutRange + distanceBetweenPositions * i;
       return GeoPoint(
         userLatitude + dDirection,
         userLongitude + dDirection,
@@ -118,6 +118,6 @@ class GeoPointGenerator {
         start.latitude + latStep * i,
         start.longitude + lonStep * i,
       ),
-    );```
+    );
   }
 }
