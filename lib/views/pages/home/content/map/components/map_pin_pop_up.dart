@@ -5,26 +5,24 @@ class MapPinPopUp extends StatelessWidget {
   static const arrowButtonKey = Key("arrowButton");
   const MapPinPopUp({
     super.key,
-    this.title,
+    required this.title,
     this.content,
     this.navigationAction,
   });
 
-  final String? title;
+  final String title;
   final String? content;
   final void Function()? navigationAction;
 
   @override
   Widget build(BuildContext context) {
-    final potentialTitle = title != null
-        ? SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              maxLines: 1,
-              title!,
-            ),
-          )
-        : null;
+    final popUpTitle = SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Text(
+        maxLines: 1,
+        title,
+      ),
+    );
 
     final potentialDialogContent = content != null
         ? Scrollbar(
@@ -53,7 +51,7 @@ class MapPinPopUp extends StatelessWidget {
     );
 
     return AlertDialog(
-      title: potentialTitle,
+      title: popUpTitle,
       content: potentialDialogContent,
       contentPadding: EdgeInsets.only(
         left: 24.0,
