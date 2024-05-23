@@ -9,7 +9,9 @@ import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
+import "package:proxima/views/pages/home/content/map/components/map_pin_pop_up.dart";
 import "package:proxima/views/pages/home/content/map/map_screen.dart";
+import "package:proxima/views/pages/post/post_page.dart";
 
 import "../../mocks/data/firestore_post.dart";
 import "../../mocks/data/firestore_user.dart";
@@ -143,8 +145,8 @@ void main() {
       testWidgets("callback function is created as expected", (tester) async {
         // Generate 10 random positions around the user but in range to be able to see them
         // and 15 random positions out of range.
-        const postsInRange = 10;
-        const postsOutOfRange = 15;
+        const postsInRange = 1;
+        const postsOutOfRange = 1;
 
         final geoPointsPositions = GeoPointGenerator.generatePositions(
           userPosition0,
@@ -173,6 +175,49 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(pinList, isNotEmpty);
+
+        final googleMapFinder = find.byType(GoogleMap);
+        expect(googleMapFinder, findsOneWidget);
+
+        final googleMap = tester.widget(googleMapFinder) as GoogleMap;
+        final markers = googleMap.markers;
+
+        expect(markers, isNotNull);
+
+        //click on the first marker
+        final marker = markers.first;
+        marker.onTap!();
+
+        await tester.pumpAndSettle();
+
+        expect(find.byType(MapPinPopUp), findsOneWidget);
+
+        //click on the button in the popup
+        final arrowButton = find.byKey(MapPinPopUp.popUpButtonKey);
+        expect(arrowButton, findsOneWidget);
+
+        await tester.tap(arrowButton);
+
+        await tester.pumpAndSettle();
+        //check that we have a post overview page
+        expect(find.byType(PostPage), findsOneWidget);
+
+        //check that the post overview page is the correct one
+        final postPage = tester.widget(find.byType(PostPage)) as PostPage;
+        final postDetails = postPage.postDetails;
+
+        expect(postDetails.postId, generatedPosts[0].id);
+        expect(postDetails.title, generatedPosts[0].data.title);
+        expect(postDetails.description, generatedPosts[0].data.description);
+        expect(
+          postDetails.ownerDisplayName,
+          testingUserFirestore.data.displayName,
+        );
+        expect(postDetails.ownerUsername, testingUserFirestore.data.username);
+        expect(
+          postDetails.ownerCentauriPoints,
+          testingUserFirestore.data.centauriPoints,
+        );
       });
     });
 
