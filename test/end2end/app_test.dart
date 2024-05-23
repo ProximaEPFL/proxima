@@ -3,6 +3,7 @@ import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
@@ -12,6 +13,7 @@ import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_ro
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/create_account/create_account_form.dart";
 import "package:proxima/views/pages/create_account/create_account_page.dart";
+import "package:proxima/views/pages/home/content/challenge/challenge_list.dart";
 import "package:proxima/views/pages/home/content/feed/components/post_card.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/home/content/map/map_screen.dart";
@@ -102,9 +104,7 @@ void main() {
     final otherUser = await FirestoreUserGenerator.addUser(fakeFireStore);
     final postLocation = GeoPointGenerator.createOnEdgeInsidePosition(
       startLocation,
-      (ChallengeRepositoryService.maxChallengeRadius +
-              ChallengeRepositoryService.minChallengeRadius) /
-          2,
+      ChallengeRepositoryService.maxChallengeRadius,
     );
     final post =
         FirestorePostGenerator().createUserPost(otherUser.uid, postLocation);
@@ -119,6 +119,31 @@ void main() {
     expect(find.text(post.data.title), findsOneWidget);
 
     // complete the challenge
+
+    List<GeoPoint> intermediatePositions =
+        GeoPointGenerator.linearInterpolation(startLocation, postLocation, 10);
+    for (final point in intermediatePositions) {
+      goToPoint(point);
+      await flingRefresh(tester, find.byType(ChallengeList));
+
+      final distanceText = find.textContaining("meters", findRichText: true);
+      expect(distanceText, findsOne);
+
+      // ugly
+      final d = distanceText.evaluate().first.widget as RichText;
+      final x = d.text as TextSpan;
+      final y = x.children![1] as TextSpan;
+      final z = y.text;
+      final int actualDist = int.parse(z!.split(" ")[0]);
+
+      final int expectedDist =
+          (GeoFirePoint(point).distanceBetweenInKm(geopoint: postLocation) *
+                  1000)
+              .toInt();
+
+      expect(actualDist, expectedDist);
+    }
+
     goToPoint(postLocation);
     await bottomBarNavigate(NavigationbarRoutes.feed, tester);
     await openPost(tester, post.data.title);
@@ -221,9 +246,11 @@ Future<void> buttonRefresh(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-Future<void> flingRefresh(WidgetTester tester,
-    FinderBase<Element> finder,) async {
-  await tester.fling(finder, const Offset(0, 500), 1000);
+Future<void> flingRefresh(
+  WidgetTester tester,
+  FinderBase<Element> finder,
+) async {
+  await tester.fling(finder, const Offset(0, 400), 800);
   await tester.pumpAndSettle();
 }
 

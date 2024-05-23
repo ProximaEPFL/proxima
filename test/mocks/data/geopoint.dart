@@ -101,4 +101,22 @@ class GeoPointGenerator {
 
     return [...positionInRange, ...positionsNotInRange];
   }
+
+  /// Generate a list of [GeoPoint] going from [start] to [end] with [steps]
+  /// equally spaced points steps in between. The result is of length [steps]+1.
+  static List<GeoPoint> linearInterpolation(
+    GeoPoint start,
+    GeoPoint end,
+    int steps,
+  ) {
+    double latStep = (end.latitude - start.latitude) / steps;
+    double lonStep = (end.longitude - start.longitude) / steps;
+
+    return List.generate(steps + 1, (i) {
+      return GeoPoint(
+        start.latitude + latStep * i,
+        start.longitude + lonStep * i,
+      );
+    });
+  }
 }
