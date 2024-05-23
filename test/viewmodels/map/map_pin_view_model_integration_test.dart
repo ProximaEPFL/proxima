@@ -196,6 +196,8 @@ void main() {
             );
 
             // Check that we only have a single pin
+            //This line throws an error if the streams emits a new value before the future is resolved
+            //this is why we need to introduce a delay in the stream
             final pinList =
                 await container.read(mapPinViewModelProvider.future);
 
@@ -218,6 +220,7 @@ void main() {
             );
 
             //this ensure that the new position is emitted by the stream before we start a new iteration
+            //if we don't wait we will compute the same position twice and the test will fail
             await Future.delayed(
               const Duration(
                 seconds: 1,
