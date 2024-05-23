@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 
+/// A widget that displays a pop-up with a title, content, and a button.
 class InfoPopUp extends StatelessWidget {
   static const popUpTitleKey = Key("profilePopUpTitle");
   static const popUpDescriptionKey = Key("profilePopUpDescription");
@@ -12,6 +13,7 @@ class InfoPopUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // If the title is not null, it will be displayed in a single line.
     final potentialTitle = title != null
         ? SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -23,6 +25,7 @@ class InfoPopUp extends StatelessWidget {
           )
         : null;
 
+    // If the content is not null, it will be displayed in a scrollable view.
     final potentialDialogContent = content != null
         ? Scrollbar(
             thumbVisibility: true,
@@ -36,8 +39,6 @@ class InfoPopUp extends StatelessWidget {
                 child: Text(
                   key: popUpDescriptionKey,
                   content!,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
                 ),
               ),
             ),
