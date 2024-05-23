@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
 import "package:proxima/views/components/async/loading_icon_button.dart";
+import "package:proxima/views/components/content/info_pop_up.dart";
 import "package:proxima/views/helpers/types.dart";
 
 class ProfileInfoPopUp extends StatelessWidget {
-  static const popUpTitleKey = Key("profilePopUpTitle");
-  static const popUpDescriptionKey = Key("profilePopUpDescription");
-  static const popUpDeleteButtonKey = Key("profilePopUpDeleteButton");
+  //key of the button
+  static const popUpButtonKey = Key("profilePopUpButton");
 
   const ProfileInfoPopUp({
     super.key,
@@ -20,36 +20,8 @@ class ProfileInfoPopUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final potentialTitle = title != null
-        ? SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              key: popUpTitleKey,
-              maxLines: 1,
-              title!,
-            ),
-          )
-        : null;
-
-    final dialogContent = Scrollbar(
-      thumbVisibility: true,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            top: 8.0,
-            right: 8.0,
-            left: 8.0,
-          ),
-          child: Text(
-            key: popUpDescriptionKey,
-            content,
-          ),
-        ),
-      ),
-    );
-
     final deleteAction = DeleteButton(
-      key: popUpDeleteButtonKey,
+      key: popUpButtonKey,
       onClick: () async {
         await onDelete();
         if (context.mounted) {
@@ -58,20 +30,10 @@ class ProfileInfoPopUp extends StatelessWidget {
       },
     );
 
-    return AlertDialog(
-      title: potentialTitle,
-      content: dialogContent,
-      contentPadding: const EdgeInsets.only(
-        left: 24.0,
-        top: 8.0,
-        right: 24.0,
-      ),
-      actionsPadding: const EdgeInsets.only(
-        right: 24.0,
-        bottom: 12.0,
-        left: 24.0,
-      ),
-      actions: [deleteAction],
+    return InfoPopUp(
+      title: title,
+      content: content,
+      button: deleteAction,
     );
   }
 }

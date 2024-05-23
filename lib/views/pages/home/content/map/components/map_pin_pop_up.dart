@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
+import "package:proxima/views/components/content/info_pop_up.dart";
 
 class MapPinPopUp extends StatelessWidget {
-  //key for the arrow button
-  static const arrowButtonKey = Key("arrowButton");
+  //key of the button
+  static const popUpButtonKey = Key("mapPinPopUpButton");
+
   const MapPinPopUp({
     super.key,
     required this.title,
@@ -16,55 +18,16 @@ class MapPinPopUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final popUpTitle = SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Text(
-        maxLines: 1,
-        title,
-      ),
-    );
-
-    final potentialDialogContent = content != null
-        ? Scrollbar(
-            thumbVisibility: true,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 8.0,
-                  right: 8.0,
-                  left: 8.0,
-                ),
-                child: Text(
-                  content!,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
-                ),
-              ),
-            ),
-          )
-        : null;
-
     final arrowAction = IconButton(
-      key: arrowButtonKey,
+      key: popUpButtonKey,
       icon: const Icon(Icons.arrow_forward),
       onPressed: navigationAction,
     );
 
-    return AlertDialog(
-      title: popUpTitle,
-      content: potentialDialogContent,
-      contentPadding: EdgeInsets.only(
-        left: 24.0,
-        top: 8.0,
-        right: 24.0,
-        bottom: navigationAction != null ? 12.0 : 0.0,
-      ),
-      actionsPadding: const EdgeInsets.only(
-        right: 24.0,
-        bottom: 12.0,
-        left: 24.0,
-      ),
-      actions: navigationAction != null ? [arrowAction] : null,
+    return InfoPopUp(
+      title: title,
+      content: content,
+      button: arrowAction,
     );
   }
 }
