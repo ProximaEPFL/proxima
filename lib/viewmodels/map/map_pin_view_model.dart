@@ -90,23 +90,11 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
                             Navigator.pushNamed(
                               context,
                               Routes.post.name,
-                              arguments: PostDetails(
-                                postId: post.id,
-                                title: post.data.title,
-                                description: post.data.description,
-                                ownerCentauriPoints: user.data.centauriPoints,
-                                ownerDisplayName: user.data.displayName,
-                                ownerUsername: user.data.username,
-                                publicationDate:
-                                    post.data.publicationTime.toDate(),
-                                commentNumber: post.data.commentCount,
-                                voteScore: post.data.voteScore,
-                                distance:
-                                    (GeoFirePoint(position).distanceBetweenInKm(
-                                              geopoint: post.location.geoPoint,
-                                            ) *
-                                            1000)
-                                        .round(),
+                              arguments: PostDetails.fromFirestoreData(
+                                post,
+                                user,
+                                GeoFirePoint(position),
+                                false,
                               ),
                             );
                           },

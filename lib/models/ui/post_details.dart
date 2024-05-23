@@ -68,10 +68,11 @@ class PostDetails {
   }
 
   factory PostDetails.fromFirestoreData(
-      PostFirestore postFirestore,
-      UserFirestore userFirestore,
-      GeoFirePoint geoFirePoint,
-      bool isChallenge) {
+    PostFirestore postFirestore,
+    UserFirestore userFirestore,
+    GeoFirePoint geoFirePoint,
+    bool isChallenge,
+  ) {
     return PostDetails(
       postId: postFirestore.id,
       title: postFirestore.data.title,
