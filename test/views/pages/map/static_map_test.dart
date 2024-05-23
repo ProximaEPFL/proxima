@@ -7,8 +7,8 @@ import "package:mockito/mockito.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/views/components/options/map/map_selection_option_chips.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
-import "package:proxima/views/pages/home/content/map/map_screen.dart";
 import "package:proxima/views/pages/home/content/map/components/post_map.dart";
+import "package:proxima/views/pages/home/content/map/map_screen.dart";
 
 import "../../../mocks/data/map_pin.dart";
 import "../../../mocks/providers/provider_map_page.dart";
