@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
+import "package:proxima/views/components/async/error_refresh_page.dart";
 import "package:proxima/views/components/options/feed/feed_sort_option_chips.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/content/feed/components/post_list.dart";
@@ -33,9 +34,10 @@ class PostFeed extends ConsumerWidget {
       ),
     );
 
+    final onRefresh = ref.read(postsFeedViewModelProvider.notifier).refresh;
     final refreshButton = ElevatedButton(
       key: refreshButtonKey,
-      onPressed: () => ref.read(postsFeedViewModelProvider.notifier).refresh(),
+      onPressed: onRefresh,
       child: const Text("Refresh"),
     );
 
@@ -57,17 +59,6 @@ class PostFeed extends ConsumerWidget {
       ),
     );
 
-    final fallback = Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text("An error occurred"),
-          const SizedBox(height: 10),
-          refreshButton,
-        ],
-      ),
-    );
-
     return Column(
       children: [
         const FeedSortOptionChips(
@@ -80,14 +71,15 @@ class PostFeed extends ConsumerWidget {
             builder: (context, posts) {
               final postsList = PostList(
                 posts: posts,
-                onRefresh:
-                    ref.read(postsFeedViewModelProvider.notifier).refresh,
+                onRefresh: onRefresh,
               );
 
               return posts.isEmpty ? emptyHelper : postsList;
             },
             fallbackBuilder: (context, error) {
-              return fallback;
+              return ErrorRefreshPage(
+                onRefresh: onRefresh,
+              );
             },
           ),
         ),
