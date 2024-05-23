@@ -63,7 +63,7 @@ class FirestorePostGenerator {
     UserIdFirestore userId,
     GeoPoint location,
   ) {
-    final point = GeoPoint(location.latitude, location.longitude);
+    final point = GeoFirePoint(location);
 
     _postId += 1;
 
@@ -73,7 +73,7 @@ class FirestorePostGenerator {
       ),
       location: PostLocationFirestore(
         geoPoint: location,
-        geohash: point.toString(),
+        geohash: point.geohash,
       ),
       data: PostData(
         ownerId: userId,
