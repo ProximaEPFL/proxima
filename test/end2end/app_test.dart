@@ -21,7 +21,7 @@ import "../mocks/data/geopoint.dart";
 import "../mocks/overrides/override_auth_providers.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 import "../mocks/services/setup_firebase_mocks.dart";
-import "actions.dart";
+import "app_actions.dart";
 
 void main() {
   const testPostTitle = "I like turtles";
@@ -79,12 +79,12 @@ void main() {
       (WidgetTester tester) async {
     await loadProxima(tester);
 
-    await loginToCreateAccount(tester);
-    await createAccountToHome(tester);
-    await homeToProfilePage(tester);
-    await bottomNavigation(tester);
-    await createPost(tester, testPostTitle, testPostDescription);
-    await deletePost(tester, testPostTitle, testPostDescription);
+    await AppActions.loginToCreateAccount(tester);
+    await AppActions.createAccountToHome(tester);
+    await AppActions.homeToProfilePage(tester);
+    await AppActions.bottomNavigation(tester);
+    await AppActions.createPost(tester, testPostTitle, testPostDescription);
+    await AppActions.deletePost(tester, testPostTitle, testPostDescription);
   });
 
   testWidgets("Challenge creation and completion", (WidgetTester tester) async {
@@ -99,11 +99,11 @@ void main() {
     await setPostFirestore(post, fakeFireStore);
 
     await loadProxima(tester);
-    await loginToCreateAccount(tester);
-    await createAccountToHome(tester);
+    await AppActions.loginToCreateAccount(tester);
+    await AppActions.createAccountToHome(tester);
 
     // get the challenge
-    await bottomBarNavigate(NavigationBarRoutes.challenge, tester);
+    await AppActions.bottomBarNavigate(NavigationBarRoutes.challenge, tester);
     expect(find.text(post.data.title), findsOneWidget);
 
     // complete the challenge with intermediate positions
@@ -111,7 +111,7 @@ void main() {
         GeoPointGenerator.linearInterpolation(startLocation, postLocation, 10);
     for (final point in intermediatePositions) {
       goToPoint(point);
-      await flingRefresh(tester, find.byType(ChallengeList));
+      await AppActions.flingRefresh(tester, find.byType(ChallengeList));
 
       final challengeDescription = find.textContaining(
         "meters",
@@ -137,16 +137,16 @@ void main() {
       expect(actualDist, expectedDist);
     }
 
-    await bottomBarNavigate(NavigationBarRoutes.feed, tester);
-    await openPost(tester, post.data.title);
+    await AppActions.bottomBarNavigate(NavigationBarRoutes.feed, tester);
+    await AppActions.openPost(tester, post.data.title);
 
     // check that points are given out
     const reward = ChallengeRepositoryService.soloChallengeReward;
     expect(find.byType(SnackBar), findsOne);
     expect(find.textContaining(reward.toString()), findsOne);
 
-    await navigateBack(tester);
-    await navigateToProfile(tester);
+    await AppActions.navigateBack(tester);
+    await AppActions.navigateToProfile(tester);
 
     final topBar = find.byType(ProfileAppBar);
     final userPoints = find.descendant(
@@ -158,20 +158,20 @@ void main() {
 
   testWidgets("Commenting on my post", (WidgetTester tester) async {
     await loadProxima(tester);
-    await loginToCreateAccount(tester);
-    await createAccountToHome(tester);
-    await createPost(tester, testPostTitle, testPostDescription);
-    await openPost(tester, testPostTitle);
+    await AppActions.loginToCreateAccount(tester);
+    await AppActions.createAccountToHome(tester);
+    await AppActions.createPost(tester, testPostTitle, testPostDescription);
+    await AppActions.openPost(tester, testPostTitle);
     const comment = "I like turtles too!";
-    await addComment(tester, comment);
+    await AppActions.addComment(tester, comment);
 
     // back to feed
-    await navigateBack(tester);
-    await flingRefresh(tester, find.byType(PostFeed));
+    await AppActions.navigateBack(tester);
+    await AppActions.flingRefresh(tester, find.byType(PostFeed));
 
     // expect comment count to be correct
-    expectCommentCount(tester, testPostTitle, 1);
-    await deleteComment(tester, comment);
-    expectCommentCount(tester, testPostTitle, 0);
+    AppActions.expectCommentCount(tester, testPostTitle, 1);
+    await AppActions.deleteComment(tester, comment);
+    AppActions.expectCommentCount(tester, testPostTitle, 0);
   });
 }
