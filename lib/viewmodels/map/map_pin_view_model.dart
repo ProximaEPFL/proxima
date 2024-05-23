@@ -1,10 +1,10 @@
 import "package:collection/collection.dart";
-import "package:flutter/material.dart";
 import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
+import "package:proxima/models/ui/map_pop_up_details.dart";
 import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
@@ -15,7 +15,6 @@ import "package:proxima/viewmodels/option_selection/map_selection_options_view_m
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
 import "package:proxima/views/navigation/routes.dart";
-import "package:proxima/views/pages/home/content/map/components/map_pin_pop_up.dart";
 
 /// This view model is used to fetch the list of map pins that
 /// needs to be displayed in the map page.
@@ -24,8 +23,6 @@ import "package:proxima/views/pages/home/content/map/components/map_pin_pop_up.d
 /// may allow to catch some bugs that may occur when the pins are not
 /// refreshed when the user adds/deletes a post or completes a challenge.
 class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
-  //key for the map pin pop up
-  static const mapPinPopUpKey = Key("mapPinPopUp");
   @override
   Future<List<MapPinDetails>> build() async {
     final currentOption = ref.watch(mapSelectionOptionsViewModelProvider);
@@ -40,13 +37,6 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
       default:
         return List.empty();
     }
-  }
-
-  BuildContext? context;
-
-  //setter for the context
-  void setContext(BuildContext context) {
-    this.context = context;
   }
 
   /// Refreshes the map pins
@@ -77,31 +67,17 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
         .map(
           (post) => _toMapPinDetails(
             post,
-            callback: context != null
-                ? () => showDialog(
-                      context: context!,
-                      builder: (context) {
-                        return MapPinPopUp(
-                          key: mapPinPopUpKey,
-                          title: post.data.title,
-                          content: post.data.description,
-                          displayButton: true,
-                          navigationAction: () {
-                            Navigator.pushNamed(
-                              context,
-                              Routes.post.name,
-                              arguments: PostDetails.fromFirestoreData(
-                                post,
-                                user,
-                                GeoFirePoint(position),
-                                false,
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    )
-                : () {},
+            MapPopUpDetails(
+              title: post.data.title,
+              description: post.data.description,
+              route: Routes.post.name,
+              routeArguments: PostDetails.fromFirestoreData(
+                post,
+                user,
+                GeoFirePoint(position),
+                false,
+              ),
+            ),
           ),
         )
         .toList();
@@ -117,24 +93,11 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
         .map(
           (post) => _toMapPinDetails(
             post,
-            callback: context != null
-                ? () => showDialog(
-                      context: context!,
-                      builder: (context) {
-                        return MapPinPopUp(
-                          title: post.data.title,
-                          content: post.data.description,
-                          displayButton: true,
-                          navigationAction: () {
-                            Navigator.pushNamed(
-                              context,
-                              Routes.profile.name,
-                            );
-                          },
-                        );
-                      },
-                    )
-                : () {},
+            MapPopUpDetails(
+              title: post.data.title,
+              description: post.data.description,
+              route: Routes.profile.name,
+            ),
           ),
         )
         .toList();
@@ -167,16 +130,10 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
         .map(
           (post) => _toMapPinDetails(
             post,
-            callback: context != null
-                ? () => showDialog(
-                      context: context!,
-                      builder: (context) {
-                        return MapPinPopUp(
-                          title: post.data.title,
-                        );
-                      },
-                    )
-                : () {},
+            MapPopUpDetails(
+              title: post.data.title,
+              description: post.data.description,
+            ),
           ),
         )
         .toList();
@@ -184,15 +141,15 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
 
   /// Convert a [post] to a map pin details
   MapPinDetails _toMapPinDetails(
-    PostFirestore post, {
-    void Function()? callback,
-  }) {
+    PostFirestore post,
+    MapPopUpDetails mapPopUpDetails,
+  ) {
     final postPosition = post.location.geoPoint;
 
     return MapPinDetails(
       id: MarkerId(post.id.value),
       position: LatLng(postPosition.latitude, postPosition.longitude),
-      callbackFunction: callback ?? () => (),
+      mapPopUpDetails: mapPopUpDetails,
     );
   }
 }

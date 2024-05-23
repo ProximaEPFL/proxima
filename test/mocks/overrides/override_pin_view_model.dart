@@ -9,13 +9,11 @@ import "../data/map_pin.dart";
 class MockPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>>
     implements MapPinViewModel {
   final Future<List<MapPinDetails>> Function() _build;
-  final Function(BuildContext context) _setContext;
 
   MockPinViewModel({
     Future<List<MapPinDetails>> Function()? build,
     Function(BuildContext)? setContext,
-  })  : _build = build ?? (() async => List.empty()),
-        _setContext = setContext ?? ((_) => {});
+  }) : _build = build ?? (() async => List.empty());
 
   @override
   Future<List<MapPinDetails>> build() => _build();
@@ -25,12 +23,6 @@ class MockPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>>
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => build());
   }
-
-  @override
-  void setContext(BuildContext context) => _setContext(context);
-
-  @override
-  BuildContext? context;
 }
 
 final mockPinViewModelOverride = mapPinViewModelProvider.overrideWith(

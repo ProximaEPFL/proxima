@@ -3,14 +3,16 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
-import "package:proxima/viewmodels/map/map_markers_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "package:proxima/viewmodels/map/map_view_model.dart";
 import "package:proxima/views/components/async/error_alert.dart";
+import "package:proxima/views/pages/home/content/map/components/map_pin_pop_up.dart";
 
 /// This widget displays the Google Map
 class PostMap extends ConsumerWidget {
   final MapDetails mapInfo;
+
+  static const mapPinPopUpKey = Key("mapPinPopUp");
 
   static const postMapKey = Key("postMap");
   static const followButtonKey = Key("followButton");
@@ -25,18 +27,11 @@ class PostMap extends ConsumerWidget {
     // This provider is used to get information about the map.
     final mapNotifier = ref.watch(mapViewModelProvider.notifier);
 
-    // This provider is used to keep track of the markers on the map.
-    final mapMarkersNotifier = ref.watch(mapMarkersViewModelProvider.notifier);
-
     // This provider is used to get the list of map pins.
     final mapPinsAsync = ref.watch(mapPinViewModelProvider);
 
-    final mapPinsNotifier = ref.watch(mapPinViewModelProvider.notifier);
-
     // This provider is used to get the live location of the user.
     final positionValue = ref.watch(livePositionStreamProvider);
-
-    mapPinsNotifier.setContext(context);
 
     // This will redraw the circle and update camera when the user's position changes.
     positionValue.when(
@@ -56,8 +51,40 @@ class PostMap extends ConsumerWidget {
       loading: () => (),
     );
 
+    Set<Marker> markers = {};
+
     mapPinsAsync.when(
-      data: mapMarkersNotifier.updateMarkers,
+      data: (data) {
+        markers.clear();
+        for (final pin in data) {
+          markers.add(
+            Marker(
+              markerId: pin.id,
+              position: pin.position,
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return MapPinPopUp(
+                      key: mapPinPopUpKey,
+                      title: pin.mapPopUpDetails.title,
+                      content: pin.mapPopUpDetails.description,
+                      navigationAction: pin.mapPopUpDetails.route != null
+                          ? () {
+                              Navigator.of(context).pushNamed(
+                                pin.mapPopUpDetails.route!,
+                                arguments: pin.mapPopUpDetails.routeArguments,
+                              );
+                            }
+                          : null,
+                    );
+                  },
+                );
+              },
+            ),
+          );
+        }
+      },
       error: (error, _) {
         //Pop up an error dialog if an error occurs
         final dialog = ErrorAlert(error: error);
@@ -97,7 +124,7 @@ class PostMap extends ConsumerWidget {
         zoom: MapViewModel.initialZoomLevel,
       ),
       circles: mapNotifier.circles,
-      markers: mapMarkersNotifier.markers,
+      markers: markers,
       onMapCreated: mapNotifier.onMapCreated,
     );
 

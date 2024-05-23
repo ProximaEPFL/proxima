@@ -9,9 +9,7 @@ import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
-import "package:proxima/views/pages/home/content/map/components/map_pin_pop_up.dart";
 import "package:proxima/views/pages/home/content/map/map_screen.dart";
-import "package:proxima/views/pages/post/post_page.dart";
 
 import "../../mocks/data/firestore_post.dart";
 import "../../mocks/data/firestore_user.dart";
@@ -168,8 +166,6 @@ void main() {
 
         final mapPinNotifier = container.read(mapPinViewModelProvider.notifier);
 
-        mapPinNotifier.setContext(element);
-
         await mapPinNotifier.refresh();
         await tester.pumpAndSettle();
 
@@ -177,23 +173,6 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(pinList, isNotEmpty);
-
-        //check that the callback function of the pin shows a dialog
-        final pin = pinList.first;
-        pin.callbackFunction();
-
-        await tester.pumpAndSettle();
-        expect(find.byType(MapPinPopUp), findsOneWidget);
-
-        //click on the button in the popup
-        final arrowButton = find.byKey(MapPinPopUp.arrowButtonKey);
-        expect(arrowButton, findsOneWidget);
-
-        await tester.tap(arrowButton);
-
-        await tester.pumpAndSettle();
-        //check that we have a post overview page
-        expect(find.byType(PostPage), findsOneWidget);
       });
     });
 

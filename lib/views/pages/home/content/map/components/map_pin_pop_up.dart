@@ -8,13 +8,11 @@ class MapPinPopUp extends StatelessWidget {
     this.title,
     this.content,
     this.navigationAction,
-    this.displayButton = false,
   });
 
   final String? title;
   final String? content;
   final void Function()? navigationAction;
-  final bool displayButton;
 
   @override
   Widget build(BuildContext context) {
@@ -61,14 +59,14 @@ class MapPinPopUp extends StatelessWidget {
         left: 24.0,
         top: 8.0,
         right: 24.0,
-        bottom: displayButton ? 12.0 : 0.0,
+        bottom: navigationAction != null ? 12.0 : 0.0,
       ),
       actionsPadding: const EdgeInsets.only(
         right: 24.0,
         bottom: 12.0,
         left: 24.0,
       ),
-      actions: displayButton ? [arrowAction] : null,
+      actions: navigationAction != null ? [arrowAction] : null,
     );
   }
 }

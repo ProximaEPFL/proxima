@@ -1,11 +1,12 @@
 import "package:google_maps_flutter/google_maps_flutter.dart";
+import "package:proxima/models/ui/map_pop_up_details.dart";
 
 /// Custom map pin class used to display pins on the map
 class MapPinDetails {
   const MapPinDetails({
     required this.id,
     required this.position,
-    required this.callbackFunction,
+    required this.mapPopUpDetails,
   });
 
   /// Unique id that identifies the pin
@@ -16,14 +17,14 @@ class MapPinDetails {
   final LatLng position;
 
   /// Callback function that is called when we click on the pin
-  final void Function() callbackFunction;
+  final MapPopUpDetails mapPopUpDetails;
 
   @override
   bool operator ==(Object other) {
     return other is MapPinDetails &&
         other.id == id &&
         other.position == position &&
-        other.callbackFunction == callbackFunction;
+        other.mapPopUpDetails == mapPopUpDetails;
   }
 
   @override
@@ -31,7 +32,7 @@ class MapPinDetails {
     return Object.hash(
       id,
       position,
-      callbackFunction,
+      mapPopUpDetails,
     );
   }
 }
