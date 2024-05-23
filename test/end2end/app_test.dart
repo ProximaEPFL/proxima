@@ -126,15 +126,21 @@ void main() {
       goToPoint(point);
       await flingRefresh(tester, find.byType(ChallengeList));
 
-      final distanceText = find.textContaining("meters", findRichText: true);
-      expect(distanceText, findsOne);
+      final challengeDescription = find.textContaining(
+        "meters",
+        findRichText: true,
+      );
+      expect(challengeDescription, findsOne);
 
-      // ugly
-      final d = distanceText.evaluate().first.widget as RichText;
-      final x = d.text as TextSpan;
-      final y = x.children![1] as TextSpan;
-      final z = y.text;
-      final int actualDist = int.parse(z!.split(" ")[0]);
+      final challengeDescriptionWidget =
+          challengeDescription.evaluate().first.widget as RichText;
+      final challengeDescriptionText =
+          challengeDescriptionWidget.text.toPlainText();
+
+      // use regex to extract <number> meters
+      final actualDist = int.parse(
+        RegExp(r"(\d+) meters").firstMatch(challengeDescriptionText)!.group(1)!,
+      );
 
       final int expectedDist =
           (GeoFirePoint(point).distanceBetweenInKm(geopoint: postLocation) *
