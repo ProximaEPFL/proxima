@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_details.dart";
+import "package:proxima/models/ui/map_pin_details.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "package:proxima/viewmodels/map/map_view_model.dart";
@@ -33,6 +34,36 @@ class PostMap extends ConsumerWidget {
     // This provider is used to get the live location of the user.
     final positionValue = ref.watch(livePositionStreamProvider);
 
+    //Set of markers to be displayed on the map
+    Set<Marker> markers = {};
+
+    Marker mapPinDetailsToMarker(MapPinDetails pin) {
+      return Marker(
+        markerId: pin.id,
+        position: pin.position,
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return MapPinPopUp(
+                key: mapPinPopUpKey,
+                title: pin.mapPopUpDetails.title,
+                content: pin.mapPopUpDetails.description,
+                navigationAction: pin.mapPopUpDetails.route != null
+                    ? () {
+                        Navigator.of(context).pushNamed(
+                          pin.mapPopUpDetails.route!,
+                          arguments: pin.mapPopUpDetails.routeArguments,
+                        );
+                      }
+                    : null,
+              );
+            },
+          );
+        },
+      );
+    }
+
     // This will redraw the circle and update camera when the user's position changes.
     positionValue.when(
       data: (geoPoint) {
@@ -51,37 +82,12 @@ class PostMap extends ConsumerWidget {
       loading: () => (),
     );
 
-    Set<Marker> markers = {};
-
     mapPinsAsync.when(
       data: (data) {
         markers.clear();
         for (final pin in data) {
           markers.add(
-            Marker(
-              markerId: pin.id,
-              position: pin.position,
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return MapPinPopUp(
-                      key: mapPinPopUpKey,
-                      title: pin.mapPopUpDetails.title,
-                      content: pin.mapPopUpDetails.description,
-                      navigationAction: pin.mapPopUpDetails.route != null
-                          ? () {
-                              Navigator.of(context).pushNamed(
-                                pin.mapPopUpDetails.route!,
-                                arguments: pin.mapPopUpDetails.routeArguments,
-                              );
-                            }
-                          : null,
-                    );
-                  },
-                );
-              },
-            ),
+            mapPinDetailsToMarker(pin),
           );
         }
       },
