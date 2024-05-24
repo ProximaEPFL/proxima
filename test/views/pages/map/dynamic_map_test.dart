@@ -353,61 +353,78 @@ void main() {
       await setUsersFirestore(fakeFirestore, users + [testingUserFirestore]);
     });
 
-    testWidgets("callback function is created as expected", (tester) async {
-      final container = await beginTest(tester);
+    void testCallback(
+      MapSelectionOptions optionToTest,
+      Future<void> Function(WidgetTester tester)? verifyResult,
+    ) {
+      testWidgets("${optionToTest.name} pins callback works as expected",
+          (tester) async {
+        final container = await beginTest(tester);
 
-      final mapPinNotifier = container.read(mapPinViewModelProvider.notifier);
+        final chip = find.byKey(
+          MapSelectionOptionChips.optionChipKeys[optionToTest]!,
+        );
+        expect(chip, findsOneWidget);
+        await tester.tap(chip);
 
-      await mapPinNotifier.refresh();
-      await tester.pumpAndSettle();
+        final mapPinNotifier = container.read(mapPinViewModelProvider.notifier);
+        await mapPinNotifier.refresh();
+        await tester.pumpAndSettle();
 
-      final pinList = await container.read(mapPinViewModelProvider.future);
-      await tester.pumpAndSettle();
+        final pinList = await container.read(mapPinViewModelProvider.future);
+        await tester.pumpAndSettle();
+        expect(pinList, hasLength(1));
 
-      expect(pinList, isNotEmpty);
+        final googleMapFinder = find.byType(GoogleMap);
+        expect(googleMapFinder, findsOneWidget);
 
-      final googleMapFinder = find.byType(GoogleMap);
-      expect(googleMapFinder, findsOneWidget);
+        final googleMap = tester.widget(googleMapFinder) as GoogleMap;
+        final markers = googleMap.markers;
+        expect(markers, hasLength(1));
 
-      final googleMap = tester.widget(googleMapFinder) as GoogleMap;
-      final markers = googleMap.markers;
+        //click on the only marker
+        final marker = markers.single;
+        marker.onTap!();
+        await tester.pumpAndSettle();
 
-      expect(markers, isNotNull);
+        expect(find.byType(MapPinPopUp), findsOneWidget);
 
-      //click on the first marker
-      final marker = markers.first;
-      marker.onTap!();
+        //click on the button in the popup, if it exists
+        final arrowButton = find.byKey(MapPinPopUp.popUpButtonKey);
+        if (verifyResult == null) {
+          expect(arrowButton, findsNothing);
+        } else {
+          expect(arrowButton, findsOneWidget);
+          await tester.tap(arrowButton);
+          await tester.pumpAndSettle();
+          await verifyResult(tester);
+        }
+      });
+    }
 
-      await tester.pumpAndSettle();
+    testCallback(
+      MapSelectionOptions.nearby,
+      (tester) async {
+        final postPageFinder = find.byType(PostPage);
+        expect(postPageFinder, findsOneWidget);
 
-      expect(find.byType(MapPinPopUp), findsOneWidget);
+        //check that the post overview page is the correct one
+        final postPage = tester.widget(postPageFinder) as PostPage;
+        final postDetails = postPage.postDetails;
 
-      //click on the button in the popup
-      final arrowButton = find.byKey(MapPinPopUp.popUpButtonKey);
-      expect(arrowButton, findsOneWidget);
-
-      await tester.tap(arrowButton);
-
-      await tester.pumpAndSettle();
-      //check that we have a post overview page
-      expect(find.byType(PostPage), findsOneWidget);
-
-      //check that the post overview page is the correct one
-      final postPage = tester.widget(find.byType(PostPage)) as PostPage;
-      final postDetails = postPage.postDetails;
-
-      expect(postDetails.postId, nearbyPost.id);
-      expect(postDetails.title, nearbyPost.data.title);
-      expect(postDetails.description, nearbyPost.data.description);
-      expect(
-        postDetails.ownerDisplayName,
-        testingUserFirestore.data.displayName,
-      );
-      expect(postDetails.ownerUsername, testingUserFirestore.data.username);
-      expect(
-        postDetails.ownerCentauriPoints,
-        testingUserFirestore.data.centauriPoints,
-      );
-    });
+        expect(postDetails.postId, nearbyPost.id);
+        expect(postDetails.title, nearbyPost.data.title);
+        expect(postDetails.description, nearbyPost.data.description);
+        expect(
+          postDetails.ownerDisplayName,
+          testingUserFirestore.data.displayName,
+        );
+        expect(postDetails.ownerUsername, testingUserFirestore.data.username);
+        expect(
+          postDetails.ownerCentauriPoints,
+          testingUserFirestore.data.centauriPoints,
+        );
+      },
+    );
   });
 }
