@@ -1,15 +1,20 @@
 import "package:collection/collection.dart";
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
+import "package:proxima/models/ui/map_pop_up_details.dart";
+import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
+import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
+import "package:proxima/views/navigation/routes.dart";
 
 /// This view model is used to fetch the list of map pins that
 /// needs to be displayed in the map page.
@@ -42,8 +47,9 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
 
   /// Get nearby posts
   Future<List<MapPinDetails>> _getNearbyPosts() async {
-    final postRepository = ref.watch(postRepositoryServiceProvider);
     final position = await ref.watch(livePositionStreamProvider.future);
+    final postRepository = ref.watch(postRepositoryServiceProvider);
+    final userRepository = ref.watch(userRepositoryServiceProvider);
 
     if (position == null) {
       return List.empty();
@@ -53,7 +59,29 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
       position,
       PostsFeedViewModel.kmPostRadius,
     );
-    return nearPosts.map(_toMapPinDetails).toList();
+
+    final users = await Future.wait(
+      nearPosts.map((post) => userRepository.getUser(post.data.ownerId)),
+    );
+
+    return nearPosts
+        .mapIndexed(
+          (index, post) => _toMapPinDetails(
+            post,
+            MapPopUpDetails(
+              title: post.data.title,
+              description: post.data.description,
+              route: Routes.post.name,
+              routeArguments: PostDetails.fromFirestoreData(
+                post,
+                users[index],
+                GeoFirePoint(position),
+                false,
+              ),
+            ),
+          ),
+        )
+        .toList();
   }
 
   /// Get user posts
@@ -62,7 +90,18 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
     final userId = ref.watch(validLoggedInUserIdProvider);
     final userPosts = await postRepository.getUserPosts(userId);
 
-    return userPosts.map(_toMapPinDetails).toList();
+    return userPosts
+        .map(
+          (post) => _toMapPinDetails(
+            post,
+            MapPopUpDetails(
+              title: post.data.title,
+              description: post.data.description,
+              route: Routes.profile.name,
+            ),
+          ),
+        )
+        .toList();
   }
 
   /// Get user active challenges
@@ -88,20 +127,29 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
       ),
     );
 
-    return posts.map(_toMapPinDetails).toList();
+    return posts
+        .map(
+          (post) => _toMapPinDetails(
+            post,
+            MapPopUpDetails(
+              title: post.data.title,
+            ),
+          ),
+        )
+        .toList();
   }
 
   /// Convert a [post] to a map pin details
   MapPinDetails _toMapPinDetails(
-    PostFirestore post, {
-    void Function()? callback,
-  }) {
+    PostFirestore post,
+    MapPopUpDetails mapPopUpDetails,
+  ) {
     final postPosition = post.location.geoPoint;
 
     return MapPinDetails(
       id: MarkerId(post.id.value),
       position: LatLng(postPosition.latitude, postPosition.longitude),
-      callbackFunction: callback ?? () => (),
+      mapPopUpDetails: mapPopUpDetails,
     );
   }
 }
