@@ -365,12 +365,12 @@ void main() {
       };
     });
 
-    void testCallback(
+    void testPopUp(
       MapSelectionOptions optionToTest,
       bool shouldContentBeShown,
       Future<void> Function(WidgetTester tester)? verifyResult,
     ) {
-      testWidgets("${optionToTest.name} pins callback works as expected",
+      testWidgets("${optionToTest.name} pins popup works as expected",
           (tester) async {
         await beginTest(tester);
 
@@ -419,7 +419,7 @@ void main() {
       });
     }
 
-    testCallback(
+    testPopUp(
       MapSelectionOptions.nearby,
       true,
       (tester) async {
@@ -445,7 +445,7 @@ void main() {
       },
     );
 
-    testCallback(
+    testPopUp(
       MapSelectionOptions.myPosts,
       true,
       (tester) async {
@@ -454,7 +454,7 @@ void main() {
       },
     );
 
-    testCallback(
+    testPopUp(
       MapSelectionOptions.challenges,
       false,
       // No callback in theory
