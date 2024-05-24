@@ -1,3 +1,4 @@
+///Details to be displayed in the map pop up (which is diplay when a map pin is clicked)
 class MapPopUpDetails {
   const MapPopUpDetails({
     required this.title,
