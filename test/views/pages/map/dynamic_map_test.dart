@@ -3,13 +3,11 @@ import "package:collection/collection.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:geolocator/geolocator.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
-import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
@@ -19,7 +17,6 @@ import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_ro
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/content/map/components/map_pin_pop_up.dart";
-import "package:proxima/views/pages/home/content/map/map_screen.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
@@ -31,10 +28,7 @@ import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/data/geopoint.dart";
 import "../../../mocks/providers/provider_homepage.dart";
-import "../../../mocks/providers/provider_map_page.dart";
 import "../../../mocks/services/mock_geo_location_service.dart";
-import "../../../mocks/services/mock_geolocator_platform.dart";
-import "../../../mocks/services/mock_user_repository_service.dart";
 
 void main() {
   late MockGeolocationService geoLocationService;
@@ -327,77 +321,40 @@ void main() {
   });
 
   group("map pin popup", () {
-    late List<PostFirestore> generatedPosts;
-    late FakeFirebaseFirestore fakeFireStore;
-    late ProviderScope mapWidgetWithPins;
-    late GeolocationService geolocationService;
-    late MockGeolocatorPlatform mockGeolocator;
-    late MockUserRepositoryService userRepositoryService;
+    late PostFirestore nearbyPost;
+    late PostFirestore userPost;
+    late PostFirestore challengePost;
 
     setUp(() async {
-      fakeFireStore = FakeFirebaseFirestore();
-      mockGeolocator = MockGeolocatorPlatform();
-      geolocationService = GeolocationService(geoLocator: mockGeolocator);
-      userRepositoryService = MockUserRepositoryService();
-
-      when(mockGeolocator.isLocationServiceEnabled())
-          .thenAnswer((_) async => true);
-      when(mockGeolocator.checkPermission())
-          .thenAnswer((_) async => LocationPermission.always);
-
-      when(userRepositoryService.getUser(testingUserFirestoreId))
-          .thenAnswer((_) async => testingUserFirestore);
-
-      final position = getSimplePosition(
-        userPosition0.latitude,
-        userPosition0.longitude,
-      );
-      when(
-        mockGeolocator.getCurrentPosition(
-          locationSettings: geolocationService.locationSettings,
-        ),
-      ).thenAnswer(
-        (_) async => position,
-      );
-
-      when(
-        mockGeolocator.getPositionStream(
-          locationSettings: geolocationService.locationSettings,
-        ),
-      ).thenAnswer(
-        (_) => Stream.fromIterable([
-          position,
-        ]),
-      );
-
-      mapWidgetWithPins = newMapPageWithPinsRealMapPinViewmodel(
-        geolocationService,
-        fakeFireStore,
-        testingUserFirestoreId,
-        userRepositoryService,
-      );
-
-      const postsInRange = 1;
-      const postsOutOfRange = 1;
-
-      final geoPointsPositions = GeoPointGenerator.generatePositions(
+      [nearbyPost, challengePost] =
+          postGenerator.generatePostsAtDifferentLocations([
         userPosition0,
-        postsInRange,
-        postsOutOfRange,
+        userPosition1,
+      ]);
+      userPost = postGenerator.createUserPost(
+        testingUserFirestoreId,
+        userPosition1,
       );
 
-      generatedPosts =
-          postGenerator.generatePostsAtDifferentLocations(geoPointsPositions);
-      await setPostsFirestore(generatedPosts, fakeFireStore);
+      await setPostsFirestore(
+        [nearbyPost, userPost, challengePost],
+        fakeFirestore,
+      );
+      await setChallenge(
+        fakeFirestore,
+        FirestoreChallengeGenerator.generateFromPostId(challengePost.id),
+        testingUserFirestoreId,
+      );
+
+      final users = FirestoreUserGenerator.generateUserFirestoreWithId([
+        nearbyPost.data.ownerId,
+        challengePost.data.ownerId,
+      ]);
+      await setUsersFirestore(fakeFirestore, users + [testingUserFirestore]);
     });
 
     testWidgets("callback function is created as expected", (tester) async {
-      await tester.pumpWidget(mapWidgetWithPins);
-      await tester.pumpAndSettle();
-
-      final element = tester.element(find.byType(MapScreen));
-
-      final container = ProviderScope.containerOf(element);
+      final container = await beginTest(tester);
 
       final mapPinNotifier = container.read(mapPinViewModelProvider.notifier);
 
@@ -439,9 +396,9 @@ void main() {
       final postPage = tester.widget(find.byType(PostPage)) as PostPage;
       final postDetails = postPage.postDetails;
 
-      expect(postDetails.postId, generatedPosts[0].id);
-      expect(postDetails.title, generatedPosts[0].data.title);
-      expect(postDetails.description, generatedPosts[0].data.description);
+      expect(postDetails.postId, nearbyPost.id);
+      expect(postDetails.title, nearbyPost.data.title);
+      expect(postDetails.description, nearbyPost.data.description);
       expect(
         postDetails.ownerDisplayName,
         testingUserFirestore.data.displayName,
