@@ -373,11 +373,11 @@ void main() {
     /// If [verifyResult] is null, then the button should not appear.
     /// The popup title and content are selected from the corresponding post title and
     /// description from the [postForOption] map.
-    void testPopUp(
-      MapSelectionOptions optionToTest,
-      bool shouldContentBeShown,
-      Future<void> Function(WidgetTester tester)? verifyResult,
-    ) {
+    void testPopUp({
+      required MapSelectionOptions optionToTest,
+      required bool shouldContentBeShown,
+      required Future<void> Function(WidgetTester tester)? verifyResult,
+    }) {
       testWidgets("${optionToTest.name} pins popup works as expected",
           (tester) async {
         await beginTest(tester);
@@ -428,9 +428,9 @@ void main() {
     }
 
     testPopUp(
-      MapSelectionOptions.nearby,
-      true,
-      (tester) async {
+      optionToTest: MapSelectionOptions.nearby,
+      shouldContentBeShown: true,
+      verifyResult: (tester) async {
         final postPageFinder = find.byType(PostPage);
         expect(postPageFinder, findsOneWidget);
 
@@ -454,19 +454,19 @@ void main() {
     );
 
     testPopUp(
-      MapSelectionOptions.myPosts,
-      true,
-      (tester) async {
+      optionToTest: MapSelectionOptions.myPosts,
+      shouldContentBeShown: true,
+      verifyResult: (tester) async {
         final postPageFinder = find.byType(ProfilePage);
         expect(postPageFinder, findsOneWidget);
       },
     );
 
     testPopUp(
-      MapSelectionOptions.challenges,
-      false,
+      optionToTest: MapSelectionOptions.challenges,
+      shouldContentBeShown: false,
       // No callback in theory
-      null,
+      verifyResult: null,
     );
   });
 }
