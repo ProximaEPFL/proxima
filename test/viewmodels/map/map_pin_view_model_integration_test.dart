@@ -36,7 +36,9 @@ void main() {
       when(mockGeolocator.checkPermission())
           .thenAnswer((_) async => LocationPermission.always);
 
-      when(userRepositoryService.getUser(testingUserFirestoreId))
+      //We always give the same user here but it is not an issue
+      //because we never tap on a map pin
+      when(userRepositoryService.getUser(any))
           .thenAnswer((_) async => testingUserFirestore);
 
       container = ProviderContainer(
