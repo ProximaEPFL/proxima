@@ -1,4 +1,3 @@
-import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
@@ -12,7 +11,6 @@ class MockPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>>
 
   MockPinViewModel({
     Future<List<MapPinDetails>> Function()? build,
-    Function(BuildContext)? setContext,
   }) : _build = build ?? (() async => List.empty());
 
   @override
