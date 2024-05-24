@@ -56,16 +56,18 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
       return List.empty();
     }
 
-    final user = await userRepository.getUser(userId);
-
     final nearPosts = await postRepository.getNearPosts(
       position,
       PostsFeedViewModel.kmPostRadius,
     );
 
+    final users = await Future.wait(
+      nearPosts.map((post) => userRepository.getUser(post.data.ownerId)),
+    );
+
     return nearPosts
-        .map(
-          (post) => _toMapPinDetails(
+        .mapIndexed(
+          (index, post) => _toMapPinDetails(
             post,
             MapPopUpDetails(
               title: post.data.title,
@@ -73,7 +75,7 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
               route: Routes.post.name,
               routeArguments: PostDetails.fromFirestoreData(
                 post,
-                user,
+                users[index],
                 GeoFirePoint(position),
                 false,
               ),
