@@ -146,6 +146,13 @@ void main() {
           .whereNotIndexed((i, _) => i == completedChallengeIdx)
           .toList();
 
+      // Create all the post owners
+      final allPosts = nearbyPosts + userPosts + challenges;
+      final users = FirestoreUserGenerator.generateUserFirestoreWithId(
+        allPosts.map((post) => post.data.ownerId).toList(),
+      );
+      await setUsersFirestore(fakeFirestore, users + [testingUserFirestore]);
+
       expectedPostsForOption = {
         MapSelectionOptions.nearby: nearbyPosts,
         MapSelectionOptions.myPosts: userPosts,
