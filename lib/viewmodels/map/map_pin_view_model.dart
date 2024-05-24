@@ -50,7 +50,6 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
     final position = await ref.watch(livePositionStreamProvider.future);
     final postRepository = ref.watch(postRepositoryServiceProvider);
     final userRepository = ref.watch(userRepositoryServiceProvider);
-    final userId = ref.watch(validLoggedInUserIdProvider);
 
     if (position == null) {
       return List.empty();
