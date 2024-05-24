@@ -89,7 +89,7 @@ void main() {
       expect(postPopUp, findsOneWidget);
 
       // Find the delete button on pop up
-      final deleteButton = find.byKey(ProfileInfoPopUp.popUpDeleteButtonKey);
+      final deleteButton = find.byKey(ProfileInfoPopUp.popUpButtonKey);
       expect(deleteButton, findsOneWidget);
 
       await tester.tap(deleteButton);

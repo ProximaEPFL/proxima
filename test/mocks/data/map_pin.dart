@@ -1,5 +1,6 @@
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
+import "package:proxima/models/ui/map_pop_up_details.dart";
 
 class MapPinGenerator {
   //generate a list of MapPin
@@ -9,7 +10,10 @@ class MapPinGenerator {
       (index) => MapPinDetails(
         id: MarkerId(index.toString()),
         position: LatLng(index.toDouble(), index.toDouble()),
-        callbackFunction: () {},
+        mapPopUpDetails: MapPopUpDetails(
+          title: "Title $index",
+          description: "Description $index",
+        ),
       ),
     );
 
