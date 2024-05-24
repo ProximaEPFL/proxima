@@ -18,11 +18,13 @@ class MapPinPopUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final arrowAction = IconButton(
-      key: popUpButtonKey,
-      icon: const Icon(Icons.arrow_forward),
-      onPressed: navigationAction,
-    );
+    final arrowAction = navigationAction != null
+        ? IconButton(
+            key: popUpButtonKey,
+            icon: const Icon(Icons.arrow_forward),
+            onPressed: navigationAction,
+          )
+        : null;
 
     return InfoPopUp(
       title: title,
