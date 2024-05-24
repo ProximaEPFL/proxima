@@ -5,6 +5,8 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 
 @immutable
+
+/// This class contains all the details of a post that are needed to display it in the UI.
 class PostDetails {
   final PostIdFirestore postId;
   final String title;
@@ -67,6 +69,9 @@ class PostDetails {
     );
   }
 
+  /// This method creates a [PostDetails] object from the data of some [postFirestore],
+  /// a firestore [userFirestore], its owner, the [geoFirePoint] of the post and a boolean
+  /// [isChallenge] that indicates if the post is a challenge.
   factory PostDetails.fromFirestoreData(
     PostFirestore postFirestore,
     UserFirestore userFirestore,
