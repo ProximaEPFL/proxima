@@ -22,6 +22,7 @@ import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/new_post/new_post_form.dart";
 import "package:proxima/views/pages/post/post_page.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
+import "package:proxima/views/pages/profile/profile_page.dart";
 
 import "../../../mocks/data/firestore_challenge.dart";
 import "../../../mocks/data/firestore_post.dart";
@@ -425,6 +426,20 @@ void main() {
           testingUserFirestore.data.centauriPoints,
         );
       },
+    );
+
+    testCallback(
+      MapSelectionOptions.myPosts,
+      (tester) async {
+        final postPageFinder = find.byType(ProfilePage);
+        expect(postPageFinder, findsOneWidget);
+      },
+    );
+
+    testCallback(
+      MapSelectionOptions.challenges,
+      // No callback in theory
+      null,
     );
   });
 }
