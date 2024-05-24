@@ -365,6 +365,14 @@ void main() {
       };
     });
 
+    /// Tests that the popup of the [optionToTest] type pins works as expected
+    /// by clicking on the pin and verifying the title, content and button of the popup.
+    /// If [shouldContentBeShown] is true, then the content of the post should be shown
+    /// in the popup. If [verifyResult] is not null, then it is called after the button
+    /// in the popup is clicked, and it should verify that the navigation was correct.
+    /// If [verifyResult] is null, then the button should not appear.
+    /// The popup title and content are selected from the corresponding post title and
+    /// description from the [postForOption] map.
     void testPopUp(
       MapSelectionOptions optionToTest,
       bool shouldContentBeShown,
