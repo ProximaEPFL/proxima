@@ -370,9 +370,6 @@ void main() {
         );
         expect(chip, findsOneWidget);
         await tester.tap(chip);
-
-        final mapPinNotifier = container.read(mapPinViewModelProvider.notifier);
-        await mapPinNotifier.refresh();
         await tester.pumpAndSettle();
 
         final pinList = await container.read(mapPinViewModelProvider.future);
