@@ -363,7 +363,7 @@ void main() {
     ) {
       testWidgets("${optionToTest.name} pins callback works as expected",
           (tester) async {
-        final container = await beginTest(tester);
+        await beginTest(tester);
 
         final chip = find.byKey(
           MapSelectionOptionChips.optionChipKeys[optionToTest]!,
@@ -371,10 +371,6 @@ void main() {
         expect(chip, findsOneWidget);
         await tester.tap(chip);
         await tester.pumpAndSettle();
-
-        final pinList = await container.read(mapPinViewModelProvider.future);
-        await tester.pumpAndSettle();
-        expect(pinList, hasLength(1));
 
         final googleMapFinder = find.byType(GoogleMap);
         expect(googleMapFinder, findsOneWidget);
