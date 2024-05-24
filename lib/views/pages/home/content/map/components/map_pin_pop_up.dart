@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:proxima/models/ui/map_pop_up_details.dart";
 import "package:proxima/views/components/content/info_pop_up.dart";
 
 class MapPinPopUp extends StatelessWidget {
@@ -7,28 +8,34 @@ class MapPinPopUp extends StatelessWidget {
 
   const MapPinPopUp({
     super.key,
-    required this.title,
-    this.content,
-    this.navigationAction,
+    required this.mapPinPopUpDetails,
   });
 
-  final String title;
-  final String? content;
-  final void Function()? navigationAction;
+  final MapPopUpDetails mapPinPopUpDetails;
 
   @override
   Widget build(BuildContext context) {
-    final arrowAction = navigationAction != null
-        ? IconButton(
-            key: popUpButtonKey,
-            icon: const Icon(Icons.arrow_forward),
-            onPressed: navigationAction,
-          )
-        : null;
+    late final IconButton? arrowAction;
+    if (mapPinPopUpDetails.route != null) {
+      void navigationAction() {
+        Navigator.of(context).pushNamed(
+          mapPinPopUpDetails.route!,
+          arguments: mapPinPopUpDetails.routeArguments,
+        );
+      }
+
+      arrowAction = IconButton(
+        key: popUpButtonKey,
+        icon: const Icon(Icons.arrow_forward),
+        onPressed: navigationAction,
+      );
+    } else {
+      arrowAction = null;
+    }
 
     return InfoPopUp(
-      title: title,
-      content: content,
+      title: mapPinPopUpDetails.title,
+      content: mapPinPopUpDetails.description,
       button: arrowAction,
     );
   }

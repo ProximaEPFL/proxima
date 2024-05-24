@@ -47,16 +47,7 @@ class PostMap extends ConsumerWidget {
             builder: (context) {
               return MapPinPopUp(
                 key: mapPinPopUpKey,
-                title: pin.mapPopUpDetails.title,
-                content: pin.mapPopUpDetails.description,
-                navigationAction: pin.mapPopUpDetails.route != null
-                    ? () {
-                        Navigator.of(context).pushNamed(
-                          pin.mapPopUpDetails.route!,
-                          arguments: pin.mapPopUpDetails.routeArguments,
-                        );
-                      }
-                    : null,
+                mapPinPopUpDetails: pin.mapPopUpDetails,
               );
             },
           );
