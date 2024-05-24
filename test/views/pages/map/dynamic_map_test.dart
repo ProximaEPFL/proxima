@@ -7,6 +7,7 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
+import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/ui/map_pin_details.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
@@ -323,6 +324,7 @@ void main() {
 
   group("map pin popup", () {
     late PostFirestore nearbyPost;
+    late UserFirestore nearbyUser;
     late PostFirestore userPost;
     late PostFirestore challengePost;
 
@@ -352,6 +354,7 @@ void main() {
         challengePost.data.ownerId,
       ]);
       await setUsersFirestore(fakeFirestore, users + [testingUserFirestore]);
+      nearbyUser = users.first;
     });
 
     void testCallback(
@@ -418,12 +421,12 @@ void main() {
         expect(postDetails.description, nearbyPost.data.description);
         expect(
           postDetails.ownerDisplayName,
-          testingUserFirestore.data.displayName,
+          nearbyUser.data.displayName,
         );
-        expect(postDetails.ownerUsername, testingUserFirestore.data.username);
+        expect(postDetails.ownerUsername, nearbyUser.data.username);
         expect(
           postDetails.ownerCentauriPoints,
-          testingUserFirestore.data.centauriPoints,
+          nearbyUser.data.centauriPoints,
         );
       },
     );
