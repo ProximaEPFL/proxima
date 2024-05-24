@@ -328,6 +328,8 @@ void main() {
     late PostFirestore userPost;
     late PostFirestore challengePost;
 
+    late Map<MapSelectionOptions, PostFirestore> postForOption;
+
     setUp(() async {
       [nearbyPost, challengePost] =
           postGenerator.generatePostsAtDifferentLocations([
@@ -355,10 +357,17 @@ void main() {
       ]);
       await setUsersFirestore(fakeFirestore, users + [testingUserFirestore]);
       nearbyUser = users.first;
+
+      postForOption = {
+        MapSelectionOptions.nearby: nearbyPost,
+        MapSelectionOptions.myPosts: userPost,
+        MapSelectionOptions.challenges: challengePost,
+      };
     });
 
     void testCallback(
       MapSelectionOptions optionToTest,
+      bool shouldContentBeShown,
       Future<void> Function(WidgetTester tester)? verifyResult,
     ) {
       testWidgets("${optionToTest.name} pins callback works as expected",
@@ -386,6 +395,17 @@ void main() {
 
         expect(find.byType(MapPinPopUp), findsOneWidget);
 
+        final post = postForOption[optionToTest]!;
+        final titleText = find.text(post.data.title);
+        expect(titleText, findsOneWidget);
+
+        final contentText = find.text(post.data.description);
+        if (shouldContentBeShown) {
+          expect(contentText, findsOneWidget);
+        } else {
+          expect(contentText, findsNothing);
+        }
+
         //click on the button in the popup, if it exists
         final arrowButton = find.byKey(MapPinPopUp.popUpButtonKey);
         if (verifyResult == null) {
@@ -401,6 +421,7 @@ void main() {
 
     testCallback(
       MapSelectionOptions.nearby,
+      true,
       (tester) async {
         final postPageFinder = find.byType(PostPage);
         expect(postPageFinder, findsOneWidget);
@@ -426,6 +447,7 @@ void main() {
 
     testCallback(
       MapSelectionOptions.myPosts,
+      true,
       (tester) async {
         final postPageFinder = find.byType(ProfilePage);
         expect(postPageFinder, findsOneWidget);
@@ -434,6 +456,7 @@ void main() {
 
     testCallback(
       MapSelectionOptions.challenges,
+      false,
       // No callback in theory
       null,
     );
