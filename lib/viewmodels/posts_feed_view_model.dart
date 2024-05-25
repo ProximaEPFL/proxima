@@ -10,8 +10,8 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/services/sorting/post/post_sorting_service.dart";
-import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/viewmodels/option_selection/feed_sort_options_view_model.dart";
 
 /// This viewmodel is used to fetch the list of posts that are displayed in the home feed.
 /// It fetches the posts from the database and returns a list of
@@ -82,23 +82,12 @@ class PostsFeedViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
         // the user repository would have already thrown an exception.
         orElse: () => throw Exception("Owner not found"),
       );
-      final distance = (GeoFirePoint(position)
-                  .distanceBetweenInKm(geopoint: post.location.geoPoint) *
-              1000)
-          .round(); //TODO: create method because used here and in challenges (+tests)
 
-      final postDetails = PostDetails(
-        postId: post.id,
-        title: post.data.title,
-        description: post.data.description,
-        voteScore: post.data.voteScore,
-        ownerUsername: owner.data.username,
-        ownerDisplayName: owner.data.displayName,
-        ownerCentauriPoints: owner.data.centauriPoints,
-        commentNumber: post.data.commentCount,
-        publicationDate: post.data.publicationTime.toDate(),
-        distance: distance,
-        isChallenge: uncompletedChallengesId.contains(post.id),
+      final postDetails = PostDetails.fromFirestoreData(
+        post,
+        owner,
+        GeoFirePoint(position),
+        uncompletedChallengesId.contains(post.id),
       );
 
       return postDetails;

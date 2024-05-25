@@ -6,13 +6,12 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/services/database/comment/comment_repository_service.dart";
+import "package:proxima/views/components/content/info_pop_up.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_pop_up.dart";
-import "package:proxima/views/pages/profile/components/info_cards/profile_info_row.dart";
-import "package:proxima/views/pages/profile/components/profile_badge.dart";
 import "package:proxima/views/pages/profile/components/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/components/user_account.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
@@ -94,14 +93,6 @@ void main() {
       final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
       expect(centauriPoints, findsOneWidget);
 
-      // Check that the info row is displayed
-      final infoRowWidget = find.byKey(ProfileInfoRow.infoRowKey);
-      expect(infoRowWidget, findsOneWidget);
-
-      // Check that badges are displayed
-      final badgeCard = find.byKey(ProfileBadge.badgeKey);
-      expect(badgeCard, findsWidgets);
-
       //Check that the tab is displayed
       final tab = find.byKey(ProfilePage.tabKey);
       expect(tab, findsOneWidget);
@@ -138,12 +129,11 @@ void main() {
       expect(postPopup, findsOneWidget);
 
       //Check that the title of the pop up is displayed
-      final postPopupTitle = find.byKey(ProfileInfoPopUp.popUpTitleKey);
+      final postPopupTitle = find.byKey(InfoPopUp.popUpTitleKey);
       expect(postPopupTitle, findsOneWidget);
 
       //Check that the description of the pop up is displayed
-      final postPopupDescription =
-          find.byKey(ProfileInfoPopUp.popUpDescriptionKey);
+      final postPopupDescription = find.byKey(InfoPopUp.popUpDescriptionKey);
       expect(postPopupDescription, findsOneWidget);
 
       // Check that post content is displayed on popup
@@ -159,8 +149,7 @@ void main() {
       expect(descriptionContent, findsOneWidget);
 
       //Check that the delete button is displayed
-      final postPopupDeleteButton =
-          find.byKey(ProfileInfoPopUp.popUpDeleteButtonKey);
+      final postPopupDeleteButton = find.byKey(ProfileInfoPopUp.popUpButtonKey);
       expect(postPopupDeleteButton, findsOneWidget);
 
       //Check clicking on the delete button come back to the profile page
@@ -194,13 +183,12 @@ void main() {
       expect(commentPopup, findsOneWidget);
 
       //Check that the description of the pop up is displayed
-      final commentPopupDescription =
-          find.byKey(ProfileInfoPopUp.popUpDescriptionKey);
+      final commentPopupDescription = find.byKey(InfoPopUp.popUpDescriptionKey);
       expect(commentPopupDescription, findsOneWidget);
 
       //Check that the delete button is displayed
       final commentPopupDeleteButton =
-          find.byKey(ProfileInfoPopUp.popUpDeleteButtonKey);
+          find.byKey(ProfileInfoPopUp.popUpButtonKey);
       expect(commentPopupDeleteButton, findsOneWidget);
 
       //Check clicking on the delete button come back to the profile page

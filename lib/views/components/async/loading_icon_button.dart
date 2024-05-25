@@ -8,7 +8,7 @@ enum LoadingState {
   completed,
 }
 
-/// An async capable button that displays a progress indicator once it is pressed
+/// An async capable button that displays a [CircularProgressIndicator] once it is pressed
 /// and until the future of the callback function completes.
 class LoadingIconButton extends HookWidget {
   static const _defaultIconSize = 26.0;

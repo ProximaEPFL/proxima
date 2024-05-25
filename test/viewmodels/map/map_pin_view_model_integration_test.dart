@@ -5,12 +5,15 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/services/database/firestore_service.dart";
+import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
+import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
-
 import "../../mocks/data/firestore_post.dart";
+import "../../mocks/data/firestore_user.dart";
 import "../../mocks/data/geopoint.dart";
 import "../../mocks/services/mock_geolocator_platform.dart";
+import "../../mocks/services/mock_user_repository_service.dart";
 
 void main() {
   group("Map Pin View Model integration testing", () {
@@ -19,29 +22,39 @@ void main() {
     late GeolocationService geolocationService;
     late ProviderContainer container;
     late FirestorePostGenerator postGenerator;
+    late MockUserRepositoryService userRepositoryService;
 
     setUp(() async {
       fakeFireStore = FakeFirebaseFirestore();
       mockGeolocator = MockGeolocatorPlatform();
       geolocationService = GeolocationService(geoLocator: mockGeolocator);
       postGenerator = FirestorePostGenerator();
+      userRepositoryService = MockUserRepositoryService();
 
       when(mockGeolocator.isLocationServiceEnabled())
           .thenAnswer((_) async => true);
       when(mockGeolocator.checkPermission())
           .thenAnswer((_) async => LocationPermission.always);
 
+      //We always give the same user here but it is not an issue
+      //because we never tap on a map pin
+      when(userRepositoryService.getUser(any))
+          .thenAnswer((_) async => testingUserFirestore);
+
       container = ProviderContainer(
         overrides: [
-          firestoreProvider.overrideWithValue(fakeFireStore),
           geolocationServiceProvider.overrideWithValue(geolocationService),
+          loggedInUserIdProvider.overrideWithValue(testingUserFirestoreId),
+          firestoreProvider.overrideWithValue(fakeFireStore),
+          userRepositoryServiceProvider
+              .overrideWithValue(userRepositoryService),
         ],
       );
     });
 
     group("Standing still tests", () {
       setUp(
-        () {
+        () async {
           final position = getSimplePosition(
             userPosition0.latitude,
             userPosition0.longitude,
@@ -150,17 +163,24 @@ void main() {
             ),
           );
 
-          // Set the moving position
           when(
             mockGeolocator.getPositionStream(
               locationSettings: geolocationService.locationSettings,
             ),
           ).thenAnswer(
-            (_) => Stream.fromIterable(
-              postPositions.map(
-                (geoPoint) =>
-                    getSimplePosition(geoPoint.latitude, geoPoint.longitude),
-              ),
+            //We need to introduce delay in this test
+            //because the notifier gets disposed by the new position
+            //before it could emit it's value if not.
+            (_) => Stream.periodic(
+              const Duration(
+                seconds: 1,
+              ), // Adjust the duration to the desired delay
+              (index) => index,
+            ).take(postPositions.length).map(
+              (index) {
+                final geoPoint = postPositions[index];
+                return getSimplePosition(geoPoint.latitude, geoPoint.longitude);
+              },
             ),
           );
 
@@ -176,8 +196,13 @@ void main() {
                 postPositions[i].longitude,
               ),
             );
+
             // Check that we only have a single pin
-            var pinList = await container.read(mapPinViewModelProvider.future);
+            //This line throws an error if the streams emits a new value before the future is resolved
+            //this is why we need to introduce a delay in the stream
+            final pinList =
+                await container.read(mapPinViewModelProvider.future);
+
             expect(pinList, hasLength(1));
 
             // Check that the pin is the pin associated to the post at [postPositions[i]]
@@ -194,6 +219,14 @@ void main() {
             expect(
               pinList[0].position.longitude,
               generatedPosts[i].location.geoPoint.longitude,
+            );
+
+            //this ensure that the new position is emitted by the stream before we start a new iteration
+            //if we don't wait we will compute the same position twice and the test will fail
+            await Future.delayed(
+              const Duration(
+                seconds: 1,
+              ), // Adjust the duration to the desired delay
             );
           }
         },

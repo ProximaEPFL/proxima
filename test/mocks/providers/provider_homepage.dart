@@ -48,12 +48,14 @@ final loadingHomePageProvider = ProviderScope(
   child: homePageApp,
 );
 
-ProviderScope homePageFakeFirestoreProvider(
+ProviderScope _homePageFakeFirestoreProviderAddOverrides(
   FakeFirebaseFirestore firestore,
-  MockGeolocationService geoLocationService,
-) {
+  MockGeolocationService geoLocationService, {
+  List<Override> additionalOverrides = const [],
+}) {
   return ProviderScope(
     overrides: [
+      ...additionalOverrides,
       ...loggedInUserOverrides,
       ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
       firestoreProvider.overrideWithValue(firestore),
@@ -62,6 +64,29 @@ ProviderScope homePageFakeFirestoreProvider(
     child: homePageApp,
   );
 }
+
+/// This provider is used to test the home page with a fake [firestore]
+/// and a fake [geoLocationService].
+ProviderScope homePageFakeFirestoreProvider(
+  FakeFirebaseFirestore firestore,
+  MockGeolocationService geoLocationService,
+) =>
+    _homePageFakeFirestoreProviderAddOverrides(firestore, geoLocationService);
+
+/// This provider is used to test the home page with a fake [firestore]
+/// and a fake [geoLocationService], while mocking the view-model of the
+/// home page with a non-empty view-model. This is useful if the database
+/// has posts which user do not exist in the database, and that the goal
+/// of the test is not to test the feed view-model.
+ProviderScope homePageFakeFirestoreProviderMockHomeVM(
+  FakeFirebaseFirestore firestore,
+  MockGeolocationService geoLocationService,
+) =>
+    _homePageFakeFirestoreProviderAddOverrides(
+      firestore,
+      geoLocationService,
+      additionalOverrides: mockNonEmptyHomeViewModelOverride,
+    );
 
 ProviderScope emptyHomePageProviderGPS(
   MockGeolocationService geoLocationService,

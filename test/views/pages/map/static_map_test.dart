@@ -1,5 +1,4 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:geolocator/geolocator.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
@@ -8,8 +7,8 @@ import "package:mockito/mockito.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/views/components/options/map/map_selection_option_chips.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
+import "package:proxima/views/pages/home/content/map/components/post_map.dart";
 import "package:proxima/views/pages/home/content/map/map_screen.dart";
-import "package:proxima/views/pages/home/content/map/post_map.dart";
 
 import "../../../mocks/data/map_pin.dart";
 import "../../../mocks/providers/provider_map_page.dart";
@@ -66,12 +65,9 @@ void main() {
       expect(find.byKey(MapScreen.mapScreenKey), findsOneWidget);
       expect(find.byKey(MapScreen.dividerKey), findsOneWidget);
 
-      // Extract keys from the MapSelectionOptions enum
-      final keys =
-          MapSelectionOptions.values.map((option) => Key(option.name)).toList();
-
       // Verify that each ChoiceChip is found by its key
-      for (final key in keys) {
+      for (final option in MapSelectionOptions.values) {
+        final key = MapSelectionOptionChips.optionChipKeys[option]!;
         expect(find.byKey(key), findsOneWidget);
       }
 

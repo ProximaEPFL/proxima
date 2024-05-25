@@ -3,9 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/helpers/types.dart";
-import "package:proxima/views/pages/profile/components/info_cards/profile_info_row.dart";
 import "package:proxima/views/pages/profile/components/profile_app_bar.dart";
-import "package:proxima/views/pages/profile/components/profile_badge.dart";
 import "package:proxima/views/pages/profile/components/profile_data/profile_user_comments.dart";
 import "package:proxima/views/pages/profile/components/profile_data/profile_user_posts.dart";
 
@@ -17,7 +15,6 @@ class ProfilePage extends ConsumerWidget {
   static const tabKey = Key("tab");
   static const commentColumnKey = Key("commentColumn");
 
-  static const _badgesTitle = "Your badges:";
   static const _postsTab = "Posts";
   static const _commentsTab = "Comments";
 
@@ -26,20 +23,6 @@ class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncUserData = ref.watch(profileViewModelProvider.future).mapRes();
-
-    final itemListBadge = <Widget>[];
-
-    // This is a fake list of cards
-    for (var i = 0; i < 10; i++) {
-      // TODO replace by profile badges viewmodel
-      itemListBadge.add(
-        const ProfileBadge(),
-      );
-    }
-    final badges = ProfileInfoRow(
-      title: _badgesTitle,
-      itemList: itemListBadge,
-    );
 
     const tabsTitle = TabBar(
       key: tabKey,
@@ -67,9 +50,8 @@ class ProfilePage extends ConsumerWidget {
             appBar: ProfileAppBar(userData: value.firestoreUser.data),
             body: Container(
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-              child: Column(
+              child: const Column(
                 children: [
-                  badges,
                   tabsTitle,
                   tabsContent,
                 ],

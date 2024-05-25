@@ -5,7 +5,7 @@ import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/services/sorting/post/post_sort_option.dart";
 import "package:proxima/services/sorting/post/post_sorting_service.dart";
-import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
+import "package:proxima/viewmodels/option_selection/feed_sort_options_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/options/feed/feed_sort_option_chips.dart";
 import "package:proxima/views/pages/home/home_page.dart";

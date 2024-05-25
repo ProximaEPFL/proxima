@@ -1,8 +1,10 @@
+import "package:collection/collection.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/user_post_details.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 
 typedef UserPostsState = List<UserPostDetails>;
@@ -19,7 +21,14 @@ class UserPostsViewModel extends AutoDisposeAsyncNotifier<UserPostsState> {
     final user = ref.watch(validLoggedInUserIdProvider);
 
     final postsFirestore = await postRepository.getUserPosts(user);
-    final posts = postsFirestore.map((post) {
+
+    // Sort the posts by publication time from latest to oldest
+    final sortedPostsFirestore = postsFirestore.toList().sorted(
+          (postA, postB) =>
+              postB.data.publicationTime.compareTo(postA.data.publicationTime),
+        );
+
+    final posts = sortedPostsFirestore.map((post) {
       final userPost = UserPostDetails(
         postId: post.id,
         title: post.data.title,
@@ -42,6 +51,8 @@ class UserPostsViewModel extends AutoDisposeAsyncNotifier<UserPostsState> {
     refresh();
     // Refresh the home feed after post deletion
     ref.read(postsFeedViewModelProvider.notifier).refresh();
+    // Refresh the map pins after post deletion
+    ref.read(mapPinViewModelProvider.notifier).refresh();
   }
 
   /// Refresh the list of posts

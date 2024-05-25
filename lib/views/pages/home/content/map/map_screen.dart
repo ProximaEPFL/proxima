@@ -2,9 +2,10 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/map/map_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
+import "package:proxima/views/components/async/error_refresh_page.dart";
 import "package:proxima/views/components/options/map/map_selection_option_chips.dart";
 import "package:proxima/views/helpers/types.dart";
-import "package:proxima/views/pages/home/content/map/post_map.dart";
+import "package:proxima/views/pages/home/content/map/components/post_map.dart";
 
 /// This widget displays a map with chips to select the type of map.
 class MapScreen extends ConsumerWidget {
@@ -17,25 +18,6 @@ class MapScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mapInfo = ref.watch(mapViewModelProvider.future).mapRes();
-
-    // Refresh button to refresh the map in case of error
-    final refreshButton = ElevatedButton(
-      key: refreshButtonKey,
-      onPressed: () => ref.read(mapViewModelProvider.notifier).refresh(),
-      child: const Text("Refresh"),
-    );
-
-    // Fallback widget in case of error
-    final fallback = Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text("An error occurred"),
-          const SizedBox(height: 10),
-          refreshButton,
-        ],
-      ),
-    );
 
     return CircularValue(
       future: mapInfo,
@@ -53,7 +35,9 @@ class MapScreen extends ConsumerWidget {
         );
       },
       fallbackBuilder: (context, error) {
-        return fallback;
+        return ErrorRefreshPage(
+          onRefresh: ref.read(mapViewModelProvider.notifier).refresh,
+        );
       },
     );
   }

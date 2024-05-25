@@ -2,18 +2,18 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/user_avatar_details.dart";
 import "package:proxima/services/conversion/human_time_service.dart";
-import "package:proxima/views/components/content/publication_header/user_profile_pop_up.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
+import "package:proxima/views/components/content/user_profile_pop_up.dart";
 
 /// This widget is used to display the info bar in the post card.
 /// It contains the user's profile picture and username
 /// and the publication time of the post.
-class PublicationHeader extends ConsumerWidget {
+class PostCardHeader extends ConsumerWidget {
   static const avatarKey = Key("avatarKey");
   static const displayNameTextKey = Key("displayNameText");
   static const publicationDateTextKey = Key("publicationTimeTextKey");
 
-  const PublicationHeader({
+  const PostCardHeader({
     super.key,
     required this.posterDisplayName,
     required this.posterUsername,

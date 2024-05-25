@@ -71,17 +71,9 @@ class NewPostForm extends HookConsumerWidget {
               ),
         );
 
-        final settingsButton = IconButton(
-          onPressed: () {
-            // TODO open tag and notification settings overlay
-          },
-          icon: const Icon(Icons.settings),
-        );
-
         final buttonRow = Row(
           children: [
             Expanded(child: postButton),
-            settingsButton,
           ],
         );
 

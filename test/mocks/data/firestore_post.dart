@@ -63,7 +63,7 @@ class FirestorePostGenerator {
     UserIdFirestore userId,
     GeoPoint location,
   ) {
-    final point = GeoPoint(location.latitude, location.longitude);
+    final point = GeoFirePoint(location);
 
     _postId += 1;
 
@@ -73,17 +73,27 @@ class FirestorePostGenerator {
       ),
       location: PostLocationFirestore(
         geoPoint: location,
-        geohash: point.toString(),
+        geohash: point.geohash,
       ),
       data: PostData(
         ownerId: userId,
         title: "title",
         description: "desciption",
-        publicationTime: Timestamp.fromMicrosecondsSinceEpoch(1000000),
+        publicationTime:
+            Timestamp.fromMicrosecondsSinceEpoch(Random().nextInt(100000000)),
         voteScore: Random().nextInt(100),
         commentCount: Random().nextInt(100),
       ),
     );
+  }
+
+  /// Create [n] posts at position [location] for user with id [userId].
+  List<PostFirestore> createUserPosts(
+    UserIdFirestore userId,
+    GeoPoint location,
+    int n,
+  ) {
+    return List.generate(n, (_) => createUserPost(userId, location));
   }
 
   /// Add [n] posts at position [location] and return their data and the [PostFirestore] objects

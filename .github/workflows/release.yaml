@@ -14,6 +14,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Get Version From Project
+        run: echo "VERSION=$(grep 'version:' pubspec.yaml | awk '{print $2}')" >> $GITHUB_ENV
+
+      - name: Check that tag does not already exist
+        run: |
+          if [ $(git tag -l "v${{ env.VERSION }}") ]; then
+            exit 1;
+          fi
+
       - name: Setup Flutter SDK
         uses: subosito/flutter-action@v2
         with:
@@ -43,9 +52,6 @@ jobs:
 
       - name: Flutter Build APK
         run: ./scripts/build
-
-      - name: Get Version From Project
-        run: echo "VERSION=$(grep 'version:' pubspec.yaml | awk '{print $2}')" >> $GITHUB_ENV
 
       - name: Setup git-cliff Changelog
         uses: kenji-miyake/setup-git-cliff@v1

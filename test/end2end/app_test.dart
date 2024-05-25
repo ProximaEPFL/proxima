@@ -1,38 +1,38 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:firebase_core/firebase_core.dart";
+import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
+import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
-import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
-import "package:proxima/views/pages/create_account/create_account_form.dart";
-import "package:proxima/views/pages/create_account/create_account_page.dart";
+import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
+import "package:proxima/views/pages/home/content/challenge/challenge_list.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
-import "package:proxima/views/pages/home/content/map/map_screen.dart";
-import "package:proxima/views/pages/home/content/map/post_map.dart";
-import "package:proxima/views/pages/home/home_page.dart";
-import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
-import "package:proxima/views/pages/login/login_button.dart";
-import "package:proxima/views/pages/login/login_page.dart";
-import "package:proxima/views/pages/new_post/new_post_form.dart";
-import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
-import "package:proxima/views/pages/profile/components/profile_data/profile_user_posts.dart";
-import "package:proxima/views/pages/profile/profile_page.dart";
+import "package:proxima/views/pages/profile/components/profile_app_bar.dart";
 import "package:proxima/views/proxima_app.dart";
 
+import "../mocks/data/firestore_post.dart";
+import "../mocks/data/firestore_user.dart";
 import "../mocks/data/geopoint.dart";
 import "../mocks/overrides/override_auth_providers.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 import "../mocks/services/setup_firebase_mocks.dart";
-import "../utils/delay_async_func.dart";
+import "app_actions.dart";
 
 void main() {
+  const testPostTitle = "I like turtles";
+  const testPostDescription = "Look at them go!";
+
   late FakeFirebaseFirestore fakeFireStore;
 
   MockGeolocationService geoLocationService = MockGeolocationService();
-  const GeoPoint testLocation = userPosition0;
+  const GeoPoint startLocation = userPosition1;
+
+  late FirestorePostGenerator firestorePostGenerator;
 
   setUp(() async {
     setupFirebaseAuthMocks();
@@ -40,11 +40,13 @@ void main() {
     fakeFireStore = FakeFirebaseFirestore();
 
     when(geoLocationService.getCurrentPosition()).thenAnswer(
-      (_) => Future.value(testLocation),
+      (_) => Future.value(startLocation),
     );
     when(geoLocationService.getPositionStream()).thenAnswer(
-      (_) => Stream.value(testLocation),
+      (_) => Stream.value(startLocation),
     );
+
+    firestorePostGenerator = FirestorePostGenerator();
   });
 
   /// Pump the full Proxima app into the tester.
@@ -63,209 +65,113 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  /// Change the current location to [point] in the geoLocationService.
+  void goToPoint(GeoPoint point) {
+    when(geoLocationService.getCurrentPosition()).thenAnswer(
+      (_) => Future.value(point),
+    );
+    when(geoLocationService.getPositionStream()).thenAnswer(
+      (_) => Stream.value(point),
+    );
+  }
+
   testWidgets("End-to-end test of the app navigation flow",
       (WidgetTester tester) async {
     await loadProxima(tester);
 
-    await loginToCreateAccount(tester);
-    await createAccountToHome(tester);
-    await homeToProfilePage(tester);
-    await bottomNavigation(tester);
-    await createPost(tester);
-    await deletePost(tester);
+    await AppActions.loginToCreateAccount(tester);
+    await AppActions.createAccountToHome(tester);
+    await AppActions.homeToProfilePage(tester);
+    await AppActions.bottomNavigation(tester);
+    await AppActions.createPost(tester, testPostTitle, testPostDescription);
+    await AppActions.deletePost(tester, testPostTitle, testPostDescription);
   });
-}
 
-/// Navigate to the login page and login
-Future<void> loginToCreateAccount(WidgetTester tester) async {
-  expect(find.byType(LoginPage), findsOneWidget);
+  testWidgets("Challenge creation and completion", (WidgetTester tester) async {
+    // create a post that will be the challenge
+    final otherUser = await FirestoreUserGenerator.addUser(fakeFireStore);
+    final postLocation = GeoPointGenerator.createOnEdgeInsidePosition(
+      startLocation,
+      ChallengeRepositoryService.maxChallengeRadius,
+    );
+    final post =
+        firestorePostGenerator.createUserPost(otherUser.uid, postLocation);
+    await setPostFirestore(post, fakeFireStore);
 
-  final loginButton = find.byKey(LoginButton.loginButtonKey);
-  await tester.tap(loginButton);
-  await tester.pumpAndSettle();
-}
+    await loadProxima(tester);
+    await AppActions.loginToCreateAccount(tester);
+    await AppActions.createAccountToHome(tester);
 
-/// Create an account and navigate to the home page
-Future<void> createAccountToHome(WidgetTester tester) async {
-  expect(find.byType(CreateAccountPage), findsOneWidget);
+    // get the challenge
+    await AppActions.bottomBarNavigate(NavigationBarRoutes.challenge, tester);
+    expect(find.text(post.data.title), findsOneWidget);
 
-  // Enter details in the Create Account Page
-  await tester.enterText(
-    find.byKey(CreateAccountForm.uniqueUsernameFieldKey),
-    "newUsername",
-  );
-  await tester.enterText(
-    find.byKey(CreateAccountForm.pseudoFieldKey),
-    "newPseudo",
-  );
-  await tester.pumpAndSettle();
+    // complete the challenge with intermediate positions
+    List<GeoPoint> intermediatePositions =
+        GeoPointGenerator.linearInterpolation(startLocation, postLocation, 10);
+    for (final point in intermediatePositions) {
+      goToPoint(point);
+      await AppActions.flingRefresh(tester, find.byType(ChallengeList));
 
-  // Submit the create account form
-  await tester.tap(find.byKey(CreateAccountPage.confirmButtonKey));
-  await tester.pumpAndSettle(); // Wait for navigation
+      final challengeDescription = find.textContaining(
+        "meters",
+        findRichText: true,
+      );
+      expect(challengeDescription, findsOne);
 
-  expect(find.byType(HomePage), findsOneWidget);
-}
+      final challengeDescriptionWidget =
+          challengeDescription.evaluate().first.widget as RichText;
+      final challengeDescriptionText =
+          challengeDescriptionWidget.text.toPlainText();
 
-/// Navigate to profile page from home page and go back
-Future<void> homeToProfilePage(WidgetTester tester) async {
-  expect(find.byType(HomePage), findsOneWidget);
+      // use regex to extract <number> meters
+      final actualDist = int.parse(
+        RegExp(r"(\d+) meters").firstMatch(challengeDescriptionText)!.group(1)!,
+      );
 
-  final profilePicture = find.byKey(HomeTopBar.profilePictureKey);
-  expect(profilePicture, findsOneWidget);
-  await tester.tap(profilePicture);
-  await tester.pumpAndSettle();
+      final int expectedDist =
+          (GeoFirePoint(point).distanceBetweenInKm(geopoint: postLocation) *
+                  1000)
+              .toInt();
 
-  // Check that the profile page is displayed
-  final profilePage = find.byType(ProfilePage);
-  expect(profilePage, findsOneWidget);
+      expect(actualDist, expectedDist);
+    }
 
-  // Check that the post tab is displayed
-  final postTab = find.byKey(ProfilePage.postTabKey);
-  expect(postTab, findsOneWidget);
+    await AppActions.bottomBarNavigate(NavigationBarRoutes.feed, tester);
+    await AppActions.openPost(tester, post.data.title);
 
-  // Check that the comment tab is displayed
-  final commentTab = find.byKey(ProfilePage.commentTabKey);
-  expect(commentTab, findsOneWidget);
+    // check that points are given out
+    const reward = ChallengeRepositoryService.soloChallengeReward;
+    expect(find.byType(SnackBar), findsOne);
+    expect(find.textContaining(reward.toString()), findsOne);
 
-  //Check that post column is displayed
-  final postColumn = find.byKey(ProfileUserPosts.postColumnKey);
-  expect(postColumn, findsOneWidget);
+    await AppActions.navigateBack(tester);
+    await AppActions.navigateToProfile(tester);
 
-  // Tap on the comment tab
-  await tester.tap(commentTab);
-  await tester.pumpAndSettle();
+    final topBar = find.byType(ProfileAppBar);
+    final userPoints = find.descendant(
+      of: topBar,
+      matching: find.textContaining("$reward Centauri"),
+    );
+    expect(userPoints, findsOne);
+  });
 
-  // Check that the comment column is displayed
-  final commentColumn = find.byKey(ProfilePage.commentColumnKey);
-  expect(commentColumn, findsOneWidget);
+  testWidgets("Commenting on my post", (WidgetTester tester) async {
+    await loadProxima(tester);
+    await AppActions.loginToCreateAccount(tester);
+    await AppActions.createAccountToHome(tester);
+    await AppActions.createPost(tester, testPostTitle, testPostDescription);
+    await AppActions.openPost(tester, testPostTitle);
+    const comment = "I like turtles too!";
+    await AppActions.addComment(tester, comment);
 
-  // Find arrow back button and go back to home page
-  final backButton = find.byType(LeadingBackButton);
-  expect(backButton, findsOneWidget);
-  await tester.tap(backButton);
-  await tester.pumpAndSettle();
-  expect(find.byType(HomePage), findsOneWidget);
-}
+    // back to feed
+    await AppActions.navigateBack(tester);
+    await AppActions.flingRefresh(tester, find.byType(PostFeed));
 
-/// Navigate to the other pages using bottom navigation bar
-Future<void> bottomNavigation(WidgetTester tester) async {
-  expect(find.byType(HomePage), findsOneWidget);
-
-  // Challenges
-  await tester.tap(find.text("Challenge"));
-  await tester.pumpAndSettle();
-  expect(find.text("Challenges"), findsOneWidget);
-
-  // Group
-  await tester.tap(find.text("Group"));
-  await tester.pumpAndSettle();
-  expect(find.text("Proxima"), findsOneWidget);
-
-  // Map
-  await tester.tap(find.text("Map"));
-  await tester.pumpAndSettle();
-  expect(find.byType(MapScreen), findsOneWidget);
-  expect(find.byType(PostMap), findsOneWidget);
-
-  // New Post
-  await tester.tap(find.text("New post"));
-  await tester.pumpAndSettle();
-  expect(find.text("Create a new post"), findsOneWidget);
-  await tester.tap(find.byKey(LeadingBackButton.leadingBackButtonKey));
-  await tester.pumpAndSettle();
-
-  // Home (Feed)
-  await tester.tap(find.text("Feed"));
-  await tester.pumpAndSettle();
-  expect(find.byType(HomePage), findsOneWidget);
-}
-
-/// Create a post
-Future<void> createPost(WidgetTester tester) async {
-  expect(find.byType(HomePage), findsOneWidget);
-
-  // Tap on the new post button
-  await tester.tap(find.byKey(PostFeed.newPostButtonTextKey));
-  await tester.pumpAndSettle();
-
-  // Check that the new post page is displayed
-  expect(find.byType(NewPostForm), findsOneWidget);
-
-  // Enter post details
-  const postTitle = "I like turtles";
-  const postDescription = "Look at them go!";
-
-  await tester.enterText(
-    find.byKey(NewPostForm.titleFieldKey),
-    postTitle,
-  );
-
-  await tester.enterText(
-    find.byKey(NewPostForm.bodyFieldKey),
-    postDescription,
-  );
-
-  await tester.pumpAndSettle();
-
-  // Submit the post
-  await tester.tap(find.byKey(NewPostForm.postButtonKey));
-  await tester.pumpAndSettle();
-
-  // refresh the page by pulling down
-  await tester.drag(find.byType(PostFeed), const Offset(0, 500));
-  await tester.pumpAndSettle();
-
-  // Check that the post is displayed in feed
-  expect(find.text(postTitle), findsOneWidget);
-  expect(find.text(postDescription), findsOneWidget);
-
-  // Check that the post is displayed in profile page
-  final profilePicture = find.byKey(HomeTopBar.profilePictureKey);
-  await tester.tap(profilePicture);
-  await tester.pumpAndSettle();
-  expect(find.text(postTitle), findsOneWidget);
-  expect(find.text(postDescription), findsOneWidget);
-  final postCard = find.byKey(ProfileInfoCard.infoCardKey);
-  expect(postCard, findsOneWidget);
-}
-
-/// Delete a post
-Future<void> deletePost(WidgetTester tester) async {
-  expect(find.byType(ProfilePage), findsOneWidget);
-
-  // Check that the post card is displayed
-  final postCard = find.byKey(ProfileInfoCard.infoCardKey);
-  expect(postCard, findsOneWidget);
-
-  // Check that the post content is displayed
-  const postTitle = "I like turtles";
-  const postDescription = "Look at them go!";
-  expect(find.text(postTitle), findsOneWidget);
-  expect(find.text(postDescription), findsOneWidget);
-
-  // Find the delete button on card
-  final deleteButton = find.byKey(ProfileInfoCard.deleteButtonCardKey);
-  expect(deleteButton, findsOneWidget);
-
-  await tester.tap(deleteButton);
-  await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
-
-  // Can't find post anymore
-  expect(find.text(postTitle), findsNothing);
-  expect(find.text(postDescription), findsNothing);
-
-  // Check that the post card is not displayed anymore
-  expect(postCard, findsNothing);
-
-  // Go back to home page
-  final backButton = find.byType(LeadingBackButton);
-  expect(backButton, findsOneWidget);
-  await tester.tap(backButton);
-  await tester.pumpAndSettle();
-  expect(find.byType(HomePage), findsOneWidget);
-
-  // Can't find post anymore
-  expect(find.text(postTitle), findsNothing);
-  expect(find.text(postDescription), findsNothing);
+    // expect comment count to be correct
+    AppActions.expectCommentCount(tester, testPostTitle, 1);
+    await AppActions.deleteComment(tester, comment);
+    AppActions.expectCommentCount(tester, testPostTitle, 0);
+  });
 }
