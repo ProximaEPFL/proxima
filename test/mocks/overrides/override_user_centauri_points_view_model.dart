@@ -7,13 +7,19 @@ class MockUserAvatarCentauriPointsViewModel
     extends FamilyAsyncNotifier<int?, UserIdFirestore?>
     implements UserCentauriPointsViewModel {
   final Future<int?> Function(UserIdFirestore? arg) _build;
+  final Future<void> Function() _onRefresh;
 
   MockUserAvatarCentauriPointsViewModel({
     Future<int?> Function(UserIdFirestore? arg)? build,
-  }) : _build = build ?? ((_) async => null);
+    Future<void> Function()? onRefresh,
+  })  : _build = build ?? ((_) async => null),
+        _onRefresh = onRefresh ?? (() async {});
 
   @override
   Future<int?> build(UserIdFirestore? arg) => _build(arg);
+
+  @override
+  Future<void> refresh() => _onRefresh();
 }
 
 List<Override> mockUserCentauriPointsViewModelCentauriOverride({
