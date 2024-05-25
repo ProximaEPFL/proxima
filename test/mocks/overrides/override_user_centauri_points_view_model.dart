@@ -1,3 +1,4 @@
+import "package:flutter/foundation.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/viewmodels/user_centauri_points_view_model.dart";
@@ -8,16 +9,16 @@ class MockUserAvatarCentauriPointsViewModel
     implements UserCentauriPointsViewModel {
   final Future<int?> Function(UserIdFirestore? arg) _build;
   final Future<void> Function() _onRefresh;
-  final Future<void> Function() _onRefreshWithCentauriPointsNumber;
+  final VoidCallback _onRefreshWithCentauriPointsNumber;
 
   MockUserAvatarCentauriPointsViewModel({
     Future<int?> Function(UserIdFirestore? arg)? build,
     Future<void> Function()? onRefresh,
-    Future<void> Function()? onRefreshWithCentauriPointsNumber,
+    VoidCallback? onRefreshWithCentauriPointsNumber,
   })  : _build = build ?? ((_) async => null),
         _onRefresh = onRefresh ?? (() async {}),
         _onRefreshWithCentauriPointsNumber =
-            onRefreshWithCentauriPointsNumber ?? (() async {});
+            onRefreshWithCentauriPointsNumber ?? (() {});
 
   @override
   Future<int?> build(UserIdFirestore? arg) => _build(arg);
@@ -26,7 +27,7 @@ class MockUserAvatarCentauriPointsViewModel
   Future<void> refresh() => _onRefresh();
 
   @override
-  Future<void> refreshWithCentauriPointsNumber(int centauriPoints) =>
+  void refreshWithCentauriPointsNumber(int centauriPoints) =>
       _onRefreshWithCentauriPointsNumber();
 }
 

@@ -31,9 +31,8 @@ class UserCentauriPointsViewModel
   }
 
   /// Refresh the number of centauri points of the user.
-  Future<void> refreshWithCentauriPointsNumber(int centauriPoints) async {
-    state = AsyncValue.data(centauriPoints);
-  }
+  void refreshWithCentauriPointsNumber(int centauriPoints) =>
+      state = AsyncValue.data(centauriPoints);
 }
 
 final userCentauriPointsViewModelProvider = AsyncNotifierProvider.family<
