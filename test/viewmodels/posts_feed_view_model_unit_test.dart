@@ -6,6 +6,7 @@ import "package:proxima/models/database/post/post_data.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
@@ -20,6 +21,7 @@ import "../mocks/data/firestore_user.dart";
 import "../mocks/data/geopoint.dart";
 import "../mocks/data/post_data.dart";
 import "../mocks/services/mock_challenge_repository_service.dart";
+import "../mocks/services/mock_comment_repository_service.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 import "../mocks/services/mock_post_repository_service.dart";
 import "../mocks/services/mock_user_repository_service.dart";
@@ -29,6 +31,7 @@ void main() {
     late MockGeolocationService geoLocationService;
     late PostRepositoryService postRepository;
     late UserRepositoryService userRepository;
+    late MockCommentRepositoryService commentRepository;
     late ChallengeRepositoryService challengeRepository;
 
     late ProviderContainer container;
@@ -36,6 +39,7 @@ void main() {
     setUp(() {
       geoLocationService = MockGeolocationService();
       postRepository = MockPostRepositoryService();
+      commentRepository = MockCommentRepositoryService();
       userRepository = MockUserRepositoryService();
       challengeRepository = MockChallengeRepositoryService();
 
@@ -47,6 +51,9 @@ void main() {
           postRepositoryServiceProvider.overrideWithValue(
             postRepository,
           ),
+          commentRepositoryServiceProvider.overrideWithValue(
+            commentRepository,
+          ),
           userRepositoryServiceProvider.overrideWithValue(
             userRepository,
           ),
@@ -55,6 +62,10 @@ void main() {
           ),
           loggedInUserIdProvider.overrideWithValue(testingUserFirestoreId),
         ],
+      );
+
+      when(commentRepository.hasUserCommentedUnderPost(any, any)).thenAnswer(
+        (_) async => false,
       );
 
       when(
