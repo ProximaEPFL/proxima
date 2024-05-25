@@ -17,10 +17,7 @@ class PostCommentCountViewModel
 
   /// Set the count of comments of the post to [count]. This updates
   /// the state without needing to fetch the data from the database.
-  Future<void> setCount(int count) async {
-    // We wait for the previous future to avoid race conditions with
-    // the build function.
-    await future;
+  void setCount(int count) {
     state = AsyncValue.data(count);
   }
 }
