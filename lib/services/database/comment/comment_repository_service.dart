@@ -117,6 +117,14 @@ class CommentRepositoryService {
     // The post comments are deleted in a batch
     await _postCommentRepo.deleteAllComments(parentPostId, batch);
   }
+
+  /// Check if the user with id [userId] has commented at least once
+  ///  under the post with id [parentPostId].
+  Future<bool> hasUserCommentedUnderPost(
+    UserIdFirestore userId,
+    PostIdFirestore parentPostId,
+  ) =>
+      _userCommentRepo.hasUserCommentedUnderPost(userId, parentPostId);
 }
 
 final commentRepositoryServiceProvider = Provider<CommentRepositoryService>(
