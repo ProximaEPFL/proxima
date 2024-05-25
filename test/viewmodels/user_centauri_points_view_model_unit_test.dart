@@ -3,7 +3,6 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/services/database/firestore_service.dart";
-import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/viewmodels/user_centauri_points_view_model.dart";
 
 import "../mocks/data/firestore_user.dart";
@@ -11,7 +10,6 @@ import "../mocks/data/firestore_user.dart";
 void main() {
   group("User Centauri points ViewModel unit testing", () {
     late FakeFirebaseFirestore fakeFireStore;
-    late UserRepositoryService userRepo;
 
     late ProviderContainer container;
 
@@ -20,10 +18,6 @@ void main() {
     setUp(() async {
       fakeFireStore = FakeFirebaseFirestore();
 
-      userRepo = UserRepositoryService(
-        firestore: fakeFireStore,
-      );
-
       availableUsers = FirestoreUserGenerator.generateUserFirestore(10);
       await setUsersFirestore(fakeFireStore, availableUsers);
 
@@ -31,7 +25,6 @@ void main() {
       container = ProviderContainer(
         overrides: [
           firestoreProvider.overrideWithValue(fakeFireStore),
-          userRepositoryServiceProvider.overrideWithValue(userRepo),
         ],
       );
     });
