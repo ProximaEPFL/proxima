@@ -45,7 +45,7 @@ void main() {
         userRank: 1,
       );
 
-      expect(rankingElementDetail1 == rankingElementDetail2, isTrue);
+      expect(rankingElementDetail1, rankingElementDetail2);
     });
 
     test("!= userDisplayName", () {
@@ -65,7 +65,7 @@ void main() {
         userRank: 1,
       );
 
-      expect(rankingElementDetail1 == rankingElementDetail2, isFalse);
+      expect(rankingElementDetail1, isNot(equals(rankingElementDetail2)));
     });
 
     test("!= centauriPoints", () {
@@ -85,7 +85,7 @@ void main() {
         userRank: 1,
       );
 
-      expect(rankingElementDetail1 == rankingElementDetail2, isFalse);
+      expect(rankingElementDetail1, isNot(equals(rankingElementDetail2)));
     });
 
     test("!= userRank", () {
@@ -105,7 +105,7 @@ void main() {
         userRank: 2,
       );
 
-      expect(rankingElementDetail1 == rankingElementDetail2, isFalse);
+      expect(rankingElementDetail1, isNot(equals(rankingElementDetail2)));
     });
 
     test("!= userID", () {
@@ -125,7 +125,7 @@ void main() {
         userRank: 1,
       );
 
-      expect(rankingElementDetail1 == rankingElementDetail2, isFalse);
+      expect(rankingElementDetail1, isNot(equals(rankingElementDetail2)));
     });
   });
 }
