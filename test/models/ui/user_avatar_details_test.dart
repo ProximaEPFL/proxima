@@ -18,7 +18,6 @@ void main() {
       final expectedHash = Object.hash(
         userAvatarDetails.displayName,
         userAvatarDetails.userID,
-        userAvatarDetails.userCentauriPoints,
       );
 
       final actualHash = userAvatarDetails.hashCode;
@@ -30,7 +29,6 @@ void main() {
       final userAvatarDetailsCopy = UserAvatarDetails(
         displayName: testingUserData.displayName,
         userID: testingUserFirestoreId,
-        userCentauriPoints: testingUserData.centauriPoints,
       );
 
       expect(userAvatarDetails, equals(userAvatarDetailsCopy));

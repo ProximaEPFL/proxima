@@ -29,17 +29,18 @@ class UserProfilePopUp extends StatelessWidget {
             .addPair("Username", username)
             .addPair("Score", "$centauriPoints Centauri");
 
+    final userAvatar = UserAvatar(
+      details: UserAvatarDetails(
+        displayName: displayName,
+        userID: userID,
+      ),
+      radius: 15,
+    );
+
     return AlertDialog(
       title: Row(
         children: [
-          UserAvatar(
-            details: UserAvatarDetails(
-              displayName: displayName,
-              userID: userID,
-              userCentauriPoints: centauriPoints,
-            ),
-            radius: 15,
-          ),
+          userAvatar,
           const SizedBox(width: 12),
           Text(
             displayName,

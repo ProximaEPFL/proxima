@@ -100,7 +100,6 @@ class RankingCard extends StatelessWidget {
     final userDetails = UserAvatarDetails(
       displayName: rankingElementDetails.userDisplayName,
       userID: rankingElementDetails.userID,
-      userCentauriPoints: rankingElementDetails.centauriPoints,
     );
     final userInfo = Padding(
       padding: const EdgeInsets.all(8),

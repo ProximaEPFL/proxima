@@ -14,7 +14,6 @@ class DynamicUserAvatar extends ConsumerWidget {
   static const _loadingDetails = UserAvatarDetails(
     displayName: "",
     userID: null,
-    userCentauriPoints: null,
   );
 
   final UserIdFirestore? uid;

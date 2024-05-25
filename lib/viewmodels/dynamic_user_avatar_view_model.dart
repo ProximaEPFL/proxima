@@ -31,12 +31,15 @@ class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
     10000,
   ];
 
+  /// Color used when the user's centauri points are null.
+  static const loadingColor = Colors.transparent;
+
   /// Converts some amount of [centauriPoints] to a color, based on a uniform
   /// [LinearSegmentedHSVColormap] (defined by _challengesStop). [brightness]
   /// defines the value and saturation of the colormap.
   /// If [centauriPoints] is null, the color is transparent.
   static Color centauriToColor(int? centauriPoints, Brightness brightness) {
-    if (centauriPoints == null) return Colors.transparent;
+    if (centauriPoints == null) return loadingColor;
 
     final hsvValue = switch (brightness) {
       Brightness.light => 0.9,

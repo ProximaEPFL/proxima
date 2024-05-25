@@ -86,7 +86,6 @@ class PostCardHeader extends ConsumerWidget {
           details: UserAvatarDetails(
             displayName: posterDisplayName,
             userID: posterUserID,
-            userCentauriPoints: posterCentauriPoints,
           ),
           radius: 12,
           onTap: () => onTap(context),
