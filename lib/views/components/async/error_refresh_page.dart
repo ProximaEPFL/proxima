@@ -6,7 +6,7 @@ class ErrorRefreshPage extends StatelessWidget {
   final void Function() onRefresh;
 
   static const refreshButtonKey = Key("refreshButton");
-  static const errorText = "An error occurred";
+  static const errorText = "An error occurred.";
   static const refreshText = "Refresh";
 
   const ErrorRefreshPage({

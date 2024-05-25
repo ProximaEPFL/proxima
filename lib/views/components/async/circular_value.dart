@@ -3,6 +3,7 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/components/async/error_alert.dart";
 import "package:proxima/views/components/async/logo_progress_indicator.dart";
+import "package:proxima/views/components/async/offline_alert.dart";
 import "package:proxima/views/helpers/types.dart";
 
 /// Utilitiy widget used to display a [LogoProgressIndicator] while waiting
@@ -21,9 +22,17 @@ class CircularValue<T> extends HookWidget {
   /// that should never occur for a real user of the app (not front facing errors).
   static const debugErrorTag = "DEBUG";
 
+  /// Tag to be placed inside of an error message to inform
+  /// the circular value of an TIMEOUT (due to bad internet connectivity).
+  /// **Note**: the [debugErrorTag] takes precedence over [timeoutErrorTag].
+  static const timeoutErrorTag = "TIMEOUT";
+
   /// Time after what the circular value will display an error message instead
   /// of spinning for ever.
-  static const offlineTimeout = Duration(seconds: 6);
+  static const offlineTimeout = Duration(seconds: 8);
+
+  static Widget _defaultFallback(BuildContext _, Object __) =>
+      const SizedBox.shrink();
 
   /// Constructor for the [CircularValue] widget.
   /// [value] is the underlying [AsyncValue] that controls the display.
@@ -37,39 +46,41 @@ class CircularValue<T> extends HookWidget {
     this.fallbackBuilder = _defaultFallback,
   }) : future = future
             .timeout(offlineTimeout)
-            // TODO handle timeout properly
-            .onError((error, stackTrace) => FutureRes.error("timeout"));
-
-  static Widget _defaultFallback(BuildContext _, Object __) =>
-      const SizedBox.shrink();
+            .onError((error, stackTrace) => FutureRes.error(timeoutErrorTag));
 
   @override
   Widget build(BuildContext context) {
+    // Avoids showing the error dialog twice
     final showedError = useState(false);
-
-    useEffect(
-      () {
-        future.then((value) {
-          if (value.isError) {
-            showedError.value = false;
-          }
-
-          return future;
-        });
-        return null;
-      },
-      [future],
-    );
 
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
-        if (snapshot.hasData && !snapshot.data!.isError) {
-          final data = snapshot.data!;
+        const loading = Center(
+          child: LogoProgressIndicator(),
+        );
+
+        final data = snapshot.data;
+
+        // Loading state
+        if (snapshot.connectionState != ConnectionState.done) {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            if (context.mounted) {
+              showedError.value = false;
+            }
+          });
+
+          return loading;
+        }
+
+        // Recieved some valid data which isn't an error (proceed normaly, call builder)
+        if (data != null && !data.isError) {
           return builder(context, data.value as T);
-        } else if (snapshot.hasError ||
-            (snapshot.hasData && snapshot.data!.isError)) {
-          final error = snapshot.error ?? snapshot.data!.error!;
+        }
+
+        // Future errored or recieved data which is an error
+        if (snapshot.hasError || (data != null && data.isError)) {
+          final error = snapshot.error ?? data!.error!;
 
           final errorText = error.toString();
 
@@ -78,23 +89,29 @@ class CircularValue<T> extends HookWidget {
           }
 
           if (!showedError.value) {
-            final dialog = ErrorAlert(error: error);
+            final isTimeout = errorText.contains(timeoutErrorTag);
 
             WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
               if (context.mounted) {
                 showedError.value = true;
               }
 
+              final dialog = isTimeout
+                  ? const OfflineAlert()
+                  : ErrorAlert(
+                      error: error,
+                    );
+
               showDialog(context: context, builder: (context) => dialog);
             });
           }
 
+          // Use the fallback builder to display alternative error widget
           return fallbackBuilder(context, error);
         }
 
-        return const Center(
-          child: LogoProgressIndicator(),
-        );
+        // Should never reach here, display loading just in case
+        return loading;
       },
     );
   }

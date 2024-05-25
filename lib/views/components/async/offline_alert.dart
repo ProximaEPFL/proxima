@@ -6,7 +6,7 @@ class OfflineAlert extends StatelessWidget {
   static const okButtonKey = Key("offlineAlertOkButton");
 
   static const errorMessage =
-      "Your device is offline or has poor internet connectivity.\nTry again later.";
+      "Your device is offline or has poor internet connectivity.\nPlease try again later.";
 
   /// Constructor for the [OfflineAlert] widget.
   const OfflineAlert({
