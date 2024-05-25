@@ -8,18 +8,26 @@ class MockUserAvatarCentauriPointsViewModel
     implements UserCentauriPointsViewModel {
   final Future<int?> Function(UserIdFirestore? arg) _build;
   final Future<void> Function() _onRefresh;
+  final Future<void> Function() _onRefreshWithCentauriPointsNumber;
 
   MockUserAvatarCentauriPointsViewModel({
     Future<int?> Function(UserIdFirestore? arg)? build,
     Future<void> Function()? onRefresh,
+    Future<void> Function()? onRefreshWithCentauriPointsNumber,
   })  : _build = build ?? ((_) async => null),
-        _onRefresh = onRefresh ?? (() async {});
+        _onRefresh = onRefresh ?? (() async {}),
+        _onRefreshWithCentauriPointsNumber =
+            onRefreshWithCentauriPointsNumber ?? (() async {});
 
   @override
   Future<int?> build(UserIdFirestore? arg) => _build(arg);
 
   @override
   Future<void> refresh() => _onRefresh();
+
+  @override
+  Future<void> refreshWithCentauriPointsNumber(int centauriPoints) =>
+      _onRefreshWithCentauriPointsNumber();
 }
 
 List<Override> mockUserCentauriPointsViewModelCentauriOverride({
