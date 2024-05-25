@@ -20,6 +20,10 @@ class PostCommentCountViewModel
   void setCount(int count) {
     state = AsyncValue.data(count);
   }
+
+  Future<void> refresh() async {
+    state = await AsyncValue.guard(() => build(arg));
+  }
 }
 
 final postCommentCountProvider = AsyncNotifierProvider.autoDispose
