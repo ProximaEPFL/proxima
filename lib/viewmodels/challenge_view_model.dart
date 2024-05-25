@@ -7,6 +7,7 @@ import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
+import "package:proxima/viewmodels/user_centauri_points_view_model.dart";
 
 /// This viewmodel is used to fetch the list of challenges that are displayed in
 /// the challenge feed. It fetches the challenges from the database and sorts
@@ -98,6 +99,11 @@ class ChallengeViewModel
 
       // Refresh the map pins after challenge completion
       ref.read(mapPinViewModelProvider.notifier).refresh();
+
+      // Refresh the user centauri points after challenge completion
+      ref
+          .read(userCentauriPointsViewModelProvider(currentUser).notifier)
+          .refresh();
     }
 
     return pointsAwarded;
