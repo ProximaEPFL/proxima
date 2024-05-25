@@ -1,17 +1,23 @@
 import "package:flutter/material.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/viewmodels/post_comment_count_view_model.dart";
 
 /// This widget is used to display the comment number in the post card.
 /// It contains the comment icon and the number of comments.
-class CommentCount extends StatelessWidget {
-  final int count;
+class CommentCount extends ConsumerWidget {
+  final PostIdFirestore postId;
 
   const CommentCount({
     super.key,
-    required this.count,
+    required this.postId,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncCount = ref.watch(postCommentCountProvider(postId));
+    final count = asyncCount.valueOrNull ?? 0;
+
     const icon = Icon(Icons.comment, size: 20);
     final countText = Text(count.toString());
 
