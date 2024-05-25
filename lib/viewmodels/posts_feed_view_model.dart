@@ -4,8 +4,10 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/challenge/challenge_firestore.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
@@ -28,6 +30,7 @@ class PostsFeedViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
     final geoLocationService = ref.watch(geolocationServiceProvider);
     final postRepository = ref.watch(postRepositoryServiceProvider);
     final userRepository = ref.watch(userRepositoryServiceProvider);
+    final commentRepository = ref.watch(commentRepositoryServiceProvider);
     final challengeRepositoryService = ref.watch(
       challengeRepositoryServiceProvider,
     );
@@ -68,12 +71,41 @@ class PostsFeedViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
       putOnTop: uncompletedChallengesId.toSet(),
     );
 
+    // Check if the user has commented on the posts
+    final commentedPostsFuture = Future.wait(
+      postsFirestore.map((post) async {
+        final hasUserCommented =
+            await commentRepository.hasUserCommentedUnderPost(
+          ref.read(loggedInUserIdProvider)!,
+          post.id,
+        );
+
+        return MapEntry(post.id, hasUserCommented);
+      }),
+    );
+
+    // Get the owners of the posts
     final postOwnersId =
         postsFirestore.map((post) => post.data.ownerId).toSet();
 
-    final postOwners = await Future.wait(
+    final postOwnersFuture = Future.wait(
       postOwnersId.map((userId) => userRepository.getUser(userId)),
     );
+
+    // Await in parallel for optimisation
+    final results2 = await Future.wait([
+      postOwnersFuture,
+      commentedPostsFuture,
+    ]);
+
+    final postOwners = results2[0] as List<UserFirestore>;
+
+    // Create a set of the post ids that the user has commented on for efficient lookup
+    final commentedPosts = results2[1] as List<MapEntry<PostIdFirestore, bool>>;
+    final commentedPostIds = commentedPosts
+        .where((entry) => entry.value)
+        .map((entry) => entry.key)
+        .toSet();
 
     final posts = postsFirestore.map((post) {
       final owner = postOwners.firstWhere(
@@ -88,6 +120,7 @@ class PostsFeedViewModel extends AutoDisposeAsyncNotifier<List<PostDetails>> {
         owner,
         GeoFirePoint(position),
         uncompletedChallengesId.contains(post.id),
+        commentedPostIds.contains(post.id),
       );
 
       return postDetails;
