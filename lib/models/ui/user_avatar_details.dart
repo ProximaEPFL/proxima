@@ -11,9 +11,9 @@ class UserAvatarDetails {
   /// Creates a [UserAvatarDetails] object.
   /// [displayName] is the user's display name, of which
   /// the first letter is displayed on the avatar.
-  /// [userID] is the user's ID. It can null
-  /// to allow creating a user avatar without a user and
-  /// useful for loading states.
+  /// [userID] is the user's ID. Can be null
+  /// to allow creating a user avatar without a user which
+  /// is useful for loading states.
   const UserAvatarDetails({
     required this.displayName,
     required this.userID,
