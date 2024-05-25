@@ -65,6 +65,7 @@ class RankingCard extends StatelessWidget {
             builder: (BuildContext context) => UserProfilePopUp(
               displayName: rankingElementDetails.userDisplayName,
               username: rankingElementDetails.userUserName,
+              userID: rankingElementDetails.userID,
               centauriPoints: rankingElementDetails.centauriPoints,
             ),
           ),
@@ -98,6 +99,7 @@ class RankingCard extends StatelessWidget {
 
     final userDetails = UserAvatarDetails(
       displayName: rankingElementDetails.userDisplayName,
+      userID: rankingElementDetails.userID,
       userCentauriPoints: rankingElementDetails.centauriPoints,
     );
     final userInfo = Padding(

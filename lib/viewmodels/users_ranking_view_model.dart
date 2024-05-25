@@ -37,6 +37,7 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
       final userRankingDetails = RankingElementDetails(
         userDisplayName: userData.displayName,
         userUserName: userData.username,
+        userID: user.uid,
         centauriPoints: userData.centauriPoints,
         userRank: userRank,
       );
@@ -44,7 +45,8 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
       return userRankingDetails;
     }).toList();
 
-    final currentUserData = futures.$2.data;
+    final currentUser = futures.$2;
+    final currentUserData = currentUser.data;
 
     // If the current user is in the leaderboard, also provide its rank
     final currentUserRank = topUsers.firstWhereOrNull(
@@ -54,6 +56,7 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
     final currentUserRankingDetails = RankingElementDetails(
       userDisplayName: currentUserData.displayName,
       userUserName: currentUserData.username,
+      userID: currentUser.uid,
       centauriPoints: currentUserData.centauriPoints,
       userRank: currentUserRank?.userRank,
     );

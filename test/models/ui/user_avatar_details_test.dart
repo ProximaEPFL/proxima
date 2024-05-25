@@ -8,12 +8,16 @@ void main() {
     late UserAvatarDetails userAvatarDetails;
 
     setUp(() {
-      userAvatarDetails = UserAvatarDetails.fromUserData(testingUserData);
+      userAvatarDetails = UserAvatarDetails.fromUserData(
+        testingUserData,
+        testingUserFirestoreId,
+      );
     });
 
     test("Hash overrides correctly", () {
       final expectedHash = Object.hash(
         userAvatarDetails.displayName,
+        userAvatarDetails.userID,
         userAvatarDetails.userCentauriPoints,
       );
 
@@ -25,6 +29,7 @@ void main() {
       // Copy made by the other constructor on purpose
       final userAvatarDetailsCopy = UserAvatarDetails(
         displayName: testingUserData.displayName,
+        userID: testingUserFirestoreId,
         userCentauriPoints: testingUserData.centauriPoints,
       );
 

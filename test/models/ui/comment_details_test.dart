@@ -11,6 +11,7 @@ void main() {
         commentPost.content,
         commentPost.ownerDisplayName,
         commentPost.ownerUsername,
+        commentPost.ownerUserID,
         commentPost.ownerCentauriPoints,
         commentPost.publicationDate,
       );
@@ -44,6 +45,13 @@ void main() {
     test("inequality test on publication time", () {
       final commentPost = unequalComments[0];
       final commentPostOther = unequalComments[3];
+
+      expect(commentPost != commentPostOther, true);
+    });
+
+    test("inequality test on owner ID", () {
+      final commentPost = unequalComments[0];
+      final commentPostOther = unequalComments[4];
 
       expect(commentPost != commentPostOther, true);
     });

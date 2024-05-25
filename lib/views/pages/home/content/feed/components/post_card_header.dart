@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/ui/user_avatar_details.dart";
 import "package:proxima/services/conversion/human_time_service.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
@@ -17,12 +18,14 @@ class PostCardHeader extends ConsumerWidget {
     super.key,
     required this.posterDisplayName,
     required this.posterUsername,
+    required this.posterUserID,
     required this.posterCentauriPoints,
     required this.publicationDate,
   });
 
   final String posterDisplayName;
   final String posterUsername;
+  final UserIdFirestore posterUserID;
   final int posterCentauriPoints;
   final DateTime publicationDate;
 
@@ -32,6 +35,7 @@ class PostCardHeader extends ConsumerWidget {
       builder: (BuildContext context) => UserProfilePopUp(
         displayName: posterDisplayName,
         username: posterUsername,
+        userID: posterUserID,
         centauriPoints: posterCentauriPoints,
       ),
     );
@@ -81,6 +85,7 @@ class PostCardHeader extends ConsumerWidget {
         UserAvatar(
           details: UserAvatarDetails(
             displayName: posterDisplayName,
+            userID: posterUserID,
             userCentauriPoints: posterCentauriPoints,
           ),
           radius: 12,

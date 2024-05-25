@@ -5,6 +5,7 @@ import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/viewmodels/dynamic_user_avatar_view_model.dart";
 
 import "../data/firebase_auth_user.dart";
+import "../data/firestore_user.dart";
 
 /// A mock implementation of the [DynamicUserAvatarViewModel] class.
 class MockDynamicUserAvatarViewModel
@@ -18,6 +19,7 @@ class MockDynamicUserAvatarViewModel
             ((_) async => const UserAvatarDetails(
                   displayName: "",
                   userCentauriPoints: null,
+                  userID: null,
                 ));
 
   @override
@@ -30,6 +32,7 @@ final mockDynamicUserAvatarViewModelTestLoginUserOverride = [
       build: (userUID) async => UserAvatarDetails(
         displayName: testingLoginUser.displayName!,
         userCentauriPoints: ChallengeRepositoryService.soloChallengeReward * 50,
+        userID: testingUserFirestoreId,
       ),
     ),
   ),
@@ -41,6 +44,7 @@ final mockDynamicUserAvatarViewModelEmptyDisplayNameOverride = [
       build: (userUID) async => const UserAvatarDetails(
         displayName: "",
         userCentauriPoints: null,
+        userID: null,
       ),
     ),
   ),

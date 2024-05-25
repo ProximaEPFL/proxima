@@ -59,23 +59,27 @@ class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
 
   @override
   Future<UserAvatarDetails> build(UserIdFirestore? arg) async {
-    final userID = arg;
     final currentUID = ref.watch(loggedInUserIdProvider);
     final userDataBase = ref.watch(userRepositoryServiceProvider);
 
     late final UserFirestore user;
+    late final UserIdFirestore userID;
 
-    if (userID == null) {
+    if (arg == null) {
       if (currentUID == null) {
         throw Exception("User is not logged in.");
       }
-
-      user = await userDataBase.getUser(currentUID);
+      userID = currentUID;
     } else {
-      user = await userDataBase.getUser(userID);
+      userID = arg;
     }
 
-    return UserAvatarDetails.fromUserData(user.data);
+    user = await userDataBase.getUser(userID);
+
+    return UserAvatarDetails.fromUserData(
+      user.data,
+      userID,
+    );
   }
 }
 
