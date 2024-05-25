@@ -31,7 +31,7 @@ class CircularValue<T> extends HookWidget {
   /// of spinning for ever.
   static const offlineTimeout = Duration(seconds: 8);
 
-  static Widget _defaultFallback(BuildContext _, Object __) =>
+  static Widget defaultFallback(BuildContext _, Object __) =>
       const SizedBox.shrink();
 
   /// Constructor for the [CircularValue] widget.
@@ -43,7 +43,7 @@ class CircularValue<T> extends HookWidget {
     super.key,
     required Future<FutureRes<T, Object?>> future,
     required this.builder,
-    this.fallbackBuilder = _defaultFallback,
+    this.fallbackBuilder = defaultFallback,
   }) : future = future
             .timeout(offlineTimeout)
             .onError((error, stackTrace) => FutureRes.error(timeoutErrorTag));
