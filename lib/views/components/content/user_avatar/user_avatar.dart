@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/user_avatar_details.dart";
-import "package:proxima/viewmodels/dynamic_user_avatar_view_model.dart";
+import "package:proxima/utils/user_avatar_color.dart";
 import "package:proxima/viewmodels/user_centauri_points_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 
@@ -58,7 +58,7 @@ class UserAvatar extends ConsumerWidget {
 
     return userCentauriAsync.when(
       data: (userCentauri) {
-        final backgroundColor = DynamicUserAvatarViewModel.centauriToColor(
+        final backgroundColor = UserAvatarColor.centauriToColor(
           userCentauri,
           Theme.of(context).brightness,
         );
@@ -70,7 +70,7 @@ class UserAvatar extends ConsumerWidget {
       },
       loading: () => CircleAvatar(
         radius: radius,
-        backgroundColor: DynamicUserAvatarViewModel.loadingColor,
+        backgroundColor: UserAvatarColor.loadingColor,
         child: content,
       ),
       error: (error, _) => throw Exception(
