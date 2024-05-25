@@ -58,7 +58,7 @@ class UserAvatar extends ConsumerWidget {
 
     return userCentauriAsync.when(
       data: (userCentauri) {
-        final backgroundColor = UserAvatarColor.centauriToColor(
+        final backgroundColor = centauriToUserAvatarColor(
           userCentauri,
           Theme.of(context).brightness,
         );
@@ -70,7 +70,7 @@ class UserAvatar extends ConsumerWidget {
       },
       loading: () => CircleAvatar(
         radius: radius,
-        backgroundColor: UserAvatarColor.loadingColor,
+        backgroundColor: loadingUserAvatarColor,
         child: content,
       ),
       error: (error, _) => throw Exception(
