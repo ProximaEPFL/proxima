@@ -33,10 +33,7 @@ class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
 
     user = await userDataBase.getUser(userID);
 
-    return UserAvatarDetails.fromUserData(
-      user.data,
-      userID,
-    );
+    return UserAvatarDetails.fromUser(user);
   }
 }
 

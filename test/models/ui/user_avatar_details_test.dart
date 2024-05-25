@@ -8,10 +8,7 @@ void main() {
     late UserAvatarDetails userAvatarDetails;
 
     setUp(() {
-      userAvatarDetails = UserAvatarDetails.fromUserData(
-        testingUserData,
-        testingUserFirestoreId,
-      );
+      userAvatarDetails = UserAvatarDetails.fromUser(testingUserFirestore);
     });
 
     test("Hash overrides correctly", () {

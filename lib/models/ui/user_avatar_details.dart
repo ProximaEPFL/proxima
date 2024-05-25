@@ -1,5 +1,5 @@
 import "package:flutter/foundation.dart";
-import "package:proxima/models/database/user/user_data.dart";
+import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
 
 /// A class that stores data for a user avatar UI.
@@ -19,14 +19,13 @@ class UserAvatarDetails {
     required this.userID,
   });
 
-  /// Converts a [UserData] object, [userData], to a [UserAvatarDetails] object.
-  factory UserAvatarDetails.fromUserData(
-    UserData userData,
-    UserIdFirestore userID,
+  /// Converts a [UserFirestore] object, [user], to a [UserAvatarDetails] object.
+  factory UserAvatarDetails.fromUser(
+    UserFirestore user,
   ) {
     return UserAvatarDetails(
-      displayName: userData.displayName,
-      userID: userID,
+      displayName: user.data.displayName,
+      userID: user.uid,
     );
   }
 

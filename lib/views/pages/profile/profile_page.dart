@@ -47,10 +47,7 @@ class ProfilePage extends ConsumerWidget {
         return DefaultTabController(
           length: 2,
           child: Scaffold(
-            appBar: ProfileAppBar(
-              userData: user.data,
-              userID: user.uid,
-            ),
+            appBar: ProfileAppBar(user: user),
             body: Container(
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
               child: const Column(

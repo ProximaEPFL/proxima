@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
-import "package:proxima/models/database/user/user_data.dart";
-import "package:proxima/models/database/user/user_id_firestore.dart";
+import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/ui/user_avatar_details.dart";
 import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 
@@ -11,19 +10,17 @@ class UserAccount extends StatelessWidget {
 
   const UserAccount({
     super.key,
-    required this.userData,
-    required this.userID,
+    required this.user,
   });
 
-  // The user data of the user to display
-  final UserData userData;
-
-  // The user id of the user to display
-  final UserIdFirestore userID;
+  // The user to display
+  final UserFirestore user;
 
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme.titleSmall;
+
+    final userData = user.data;
 
     final displayName = Text(
       userData.displayName,
@@ -38,10 +35,7 @@ class UserAccount extends StatelessWidget {
     );
 
     final profilePicture = UserAvatar(
-      details: UserAvatarDetails.fromUserData(
-        userData,
-        userID,
-      ),
+      details: UserAvatarDetails.fromUser(user),
       radius: 20,
     );
 
