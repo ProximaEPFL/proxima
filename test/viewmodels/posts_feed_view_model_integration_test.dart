@@ -4,7 +4,9 @@ import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_data.dart";
+import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/post_details.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
@@ -13,6 +15,8 @@ import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:test/test.dart";
 
+import "../mocks/data/comment_data.dart";
+import "../mocks/data/firestore_post.dart";
 import "../mocks/data/firestore_user.dart";
 import "../mocks/data/geopoint.dart";
 import "../mocks/data/post_data.dart";
@@ -28,6 +32,10 @@ void main() {
 
     late UserRepositoryService userRepo;
     late PostRepositoryService postRepo;
+    late CommentRepositoryService commentRepo;
+
+    late FirestorePostGenerator postGenerator;
+    late CommentDataGenerator commentGenerator;
 
     late ProviderContainer container;
 
@@ -37,6 +45,8 @@ void main() {
     setUp(() async {
       fakeFireStore = FakeFirebaseFirestore();
       geoLocationService = MockGeolocationService();
+      postGenerator = FirestorePostGenerator();
+      commentGenerator = CommentDataGenerator();
 
       userRepo = UserRepositoryService(
         firestore: fakeFireStore,
@@ -52,6 +62,8 @@ void main() {
           loggedInUserIdProvider.overrideWithValue(testingUserFirestoreId),
         ],
       );
+
+      commentRepo = container.read(commentRepositoryServiceProvider);
 
       when(geoLocationService.getCurrentPosition()).thenAnswer(
         (_) async => userPosition,
@@ -234,5 +246,47 @@ void main() {
 
       expect(actualPosts, unorderedEquals(expectedPosts));
     });
+
+    test(
+      "Exposes correctly if the user has commented on a post",
+      () async {
+        final user = testingUserFirestore;
+
+        // Add the user to the database
+        await setUserFirestore(fakeFireStore, user);
+
+        const nbPosts = 10;
+        final posts =
+            postGenerator.createUserPosts(user.uid, userPosition0, nbPosts);
+
+        // Add the posts to the database
+        await setPostsFirestore(posts, fakeFireStore);
+
+        // Comment under half the posts
+        const commentEvery = 2;
+        final commentedPostIds = <PostIdFirestore>{};
+        for (var i = 0; i < nbPosts; i += commentEvery) {
+          final commentData =
+              commentGenerator.createMockCommentData(ownerId: user.uid);
+          final post = posts[i];
+
+          await commentRepo.addComment(
+            post.id,
+            commentData,
+          );
+
+          commentedPostIds.add(post.id);
+        }
+
+        // Get the posts
+        final actualPosts =
+            await container.read(postsFeedViewModelProvider.future);
+
+        // Check if the user has commented on the right posts
+        for (final post in actualPosts) {
+          expect(post.hasUserCommented, commentedPostIds.contains(post.postId));
+        }
+      },
+    );
   });
 }
