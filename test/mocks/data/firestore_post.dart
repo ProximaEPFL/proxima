@@ -15,6 +15,10 @@ import "post_data.dart";
 class FirestorePostGenerator {
   int _postId = 0;
 
+  int _nextPostId() {
+    return _postId++;
+  }
+
   /// Create a [PostFirestore] with given data
   PostFirestore createPostAt(
     PostData data,
@@ -23,7 +27,7 @@ class FirestorePostGenerator {
   }) {
     final point = GeoFirePoint(location);
 
-    id ??= (_postId++).toString();
+    id ??= _nextPostId().toString();
 
     return PostFirestore(
       id: PostIdFirestore(value: id),
@@ -65,11 +69,9 @@ class FirestorePostGenerator {
   ) {
     final point = GeoFirePoint(location);
 
-    _postId += 1;
-
     return PostFirestore(
       id: PostIdFirestore(
-        value: _postId.toString(),
+        value: _nextPostId().toString(),
       ),
       location: PostLocationFirestore(
         geoPoint: location,
