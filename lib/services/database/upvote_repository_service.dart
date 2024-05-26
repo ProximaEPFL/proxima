@@ -83,6 +83,8 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
     Transaction? transaction,
   }) async {
     final voteStateCollection = _votersCollection(parentId).doc(userId.value);
+
+    // Exception [cloud_firestore/unavailable] is thrown here when voting offline
     final voteState = transaction != null
         ? await transaction.get(voteStateCollection)
         : await voteStateCollection.get();
