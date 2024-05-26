@@ -1,13 +1,12 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/components/async/error_alert.dart";
 import "package:proxima/views/components/async/logo_progress_indicator.dart";
 import "package:proxima/views/components/async/offline_alert.dart";
 import "package:proxima/views/helpers/types.dart";
 
-/// Utilitiy widget used to display a [LogoProgressIndicator] while waiting
-/// for an [AsyncValue] to complete; and another widget once the data resolves.
+/// Utility widget used to display a [LogoProgressIndicator] while waiting for a
+/// [Future] of type [FutureRes] to complete; and another widget once the data resolves.
 /// In case the data resolves to an error, an [ErrorAlert] dialog is shown, and
 /// a fallback widget is displayed. The default fallback widget is empty, but it
 /// can be overridden.
@@ -35,9 +34,11 @@ class CircularValue<T> extends HookWidget {
       const SizedBox.shrink();
 
   /// Constructor for the [CircularValue] widget.
-  /// [value] is the underlying [AsyncValue] that controls the display.
-  /// [builder] is the widget to display when the [value] is [AsyncValue.data].
-  /// [fallbackBuilder] is the widget to display when the [value] is [AsyncValue.error].
+  /// [future] is the underlying [Future] that controls the display.
+  /// [builder] is the widget to display when the [future] completes
+  /// with valid [FutureRes.value].
+  /// [fallbackBuilder] is the widget to display when the [future] errors
+  /// or completes with [FutureRes.error].
   /// The default [fallbackBuilder] is an empty [SizedBox].
   CircularValue({
     super.key,
@@ -73,12 +74,12 @@ class CircularValue<T> extends HookWidget {
           return loading;
         }
 
-        // Recieved some valid data which isn't an error (proceed normaly, call builder)
+        // Received some valid data which isn't an error (proceed normally, call builder)
         if (data != null && !data.isError) {
           return builder(context, data.value as T);
         }
 
-        // Future errored or recieved data which is an error
+        // Future error ed or received data which is an error
         if (snapshot.hasError || (data != null && data.isError)) {
           final error = snapshot.error ?? data!.error!;
 
