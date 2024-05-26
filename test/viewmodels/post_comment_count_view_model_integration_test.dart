@@ -6,6 +6,7 @@ import "package:mockito/mockito.dart";
 import "package:proxima/models/database/comment/comment_firestore.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
@@ -28,6 +29,7 @@ void main() {
   late ProviderContainer container;
 
   late CommentRepositoryService commentRepository;
+  late UserFirestore user;
 
   setUp(() {
     setupFirebaseAuthMocks();
@@ -38,10 +40,12 @@ void main() {
       (_) async => userPosition0,
     );
 
+    user = testingUserFirestore;
+
     container = ProviderContainer(
       overrides: [
         geolocationServiceProvider.overrideWithValue(geoLocationService),
-        loggedInUserIdProvider.overrideWithValue(testingUserFirestoreId),
+        loggedInUserIdProvider.overrideWithValue(user.uid),
         firestoreProvider.overrideWithValue(fakeFireStore),
       ],
     );
@@ -129,6 +133,56 @@ void main() {
 
       // The comment count should now be 1 less
       await expectCommentCount(post.id, startCommentCount - 1);
+    });
+  });
+
+  group("Comment count icon color", () {
+    late CommentDataGenerator commentDataGenerator;
+    late FirestorePostGenerator postGenerator;
+
+    setUp(() async {
+      commentDataGenerator = CommentDataGenerator();
+      postGenerator = FirestorePostGenerator();
+
+      // Add the user to the database
+      await setUserFirestore(fakeFireStore, user);
+    });
+
+    test("Exposes correctly the color of the icon", () async {
+      // Add posts to the database
+      const nbPosts = 10;
+      final posts =
+          postGenerator.createUserPosts(user.uid, userPosition0, nbPosts);
+
+      await setPostsFirestore(posts, fakeFireStore);
+
+      // Comment under half the posts
+      const commentEvery = 2;
+      final commentedPostIds = <PostIdFirestore>{};
+      for (var i = 0; i < nbPosts; i += commentEvery) {
+        final commentData =
+            commentDataGenerator.createMockCommentData(ownerId: user.uid);
+        final post = posts[i];
+
+        await commentRepository.addComment(
+          post.id,
+          commentData,
+        );
+
+        commentedPostIds.add(post.id);
+      }
+
+      // Check that the [isIconBlue] is correctly exposed
+      for (final post in posts) {
+        final actualCountDetails = await container.read(
+          postCommentCountProvider(post.id).future,
+        );
+
+        expect(
+          actualCountDetails.isIconBlue,
+          commentedPostIds.contains(post.id),
+        );
+      }
     });
   });
 }
