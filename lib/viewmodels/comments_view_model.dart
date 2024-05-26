@@ -22,6 +22,9 @@ class CommentsViewModel extends AutoDisposeFamilyAsyncNotifier<
 
     final commentsFirestore = await commentRepository.getPostComments(arg);
 
+    // Update the post comment count
+    ref.read(postCommentCountProvider(arg).notifier).refresh();
+
     final commentOwnersId =
         commentsFirestore.map((comment) => comment.data.ownerId).toSet();
 
@@ -45,9 +48,6 @@ class CommentsViewModel extends AutoDisposeFamilyAsyncNotifier<
       (commentA, commentB) =>
           -commentA.publicationDate.compareTo(commentB.publicationDate),
     );
-
-    // Update the post comment count
-    ref.read(postCommentCountProvider(arg).notifier).setCount(comments.length);
 
     return sortedComments;
   }
