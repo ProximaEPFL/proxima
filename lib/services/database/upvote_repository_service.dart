@@ -84,10 +84,16 @@ class UpvoteRepositoryService<ParentIdFirestore extends IdFirestore> {
   }) async {
     final voteStateCollection = _votersCollection(parentId).doc(userId.value);
 
-    // Exception [cloud_firestore/unavailable] is thrown here when voting offline
-    final voteState = transaction != null
-        ? await transaction.get(voteStateCollection)
-        : await voteStateCollection.get();
+    final DocumentSnapshot<Map<String, dynamic>> voteState;
+    try {
+      // Exception `cloud_firestore/unavailable` (of type `FirebaseException`) is thrown here when voting offline
+      voteState = transaction != null
+          ? await transaction.get(voteStateCollection)
+          : await voteStateCollection.get();
+    } on FirebaseException {
+      // Do not handle voting a post when being offline, see issue #160
+      return VoteState.none;
+    }
 
     if (!voteState.exists) {
       return VoteState.none;
