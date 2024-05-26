@@ -53,10 +53,10 @@ void main() {
     PostIdFirestore postId,
     int expectedCount,
   ) async {
-    final actualCount = await container.read(
+    final actualCountDetails = await container.read(
       postCommentCountProvider(postId).future,
     );
-    expect(actualCount, equals(expectedCount));
+    expect(actualCountDetails.count, equals(expectedCount));
   }
 
   group("Comment count refresh", () {
