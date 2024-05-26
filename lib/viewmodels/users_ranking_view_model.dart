@@ -68,23 +68,16 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
       userRankElementDetails: currentUserRankingDetails,
     );
 
-    // Refresh the centauri points of the top users
-    for (final topUsers in topUsersFromDb) {
+    // Refresh the centauri points of the top users and the current user
+    for (final user in topUsersFromDb + [currentUser]) {
       ref
           .read(
-            userCentauriPointsViewModelProvider(topUsers.uid).notifier,
+            userCentauriPointsViewModelProvider(user.uid).notifier,
           )
           .refreshWithCentauriPointsNumber(
-            topUsers.data.centauriPoints,
+            user.data.centauriPoints,
           );
     }
-
-    //Refresh the centauri points of the current user
-    ref
-        .read(
-          userCentauriPointsViewModelProvider(currentUser.uid).notifier,
-        )
-        .refreshWithCentauriPointsNumber(currentUserData.centauriPoints);
 
     return state;
   }
