@@ -56,26 +56,15 @@ class UserAvatar extends ConsumerWidget {
       ],
     );
 
-    return userCentauriAsync.when(
-      data: (userCentauri) {
-        final backgroundColor = centauriToUserAvatarColor(
-          userCentauri,
-          Theme.of(context).brightness,
-        );
-        return CircleAvatar(
-          radius: radius,
-          backgroundColor: backgroundColor,
-          child: content,
-        );
-      },
-      loading: () => CircleAvatar(
-        radius: radius,
-        backgroundColor: loadingUserAvatarColor,
-        child: content,
-      ),
-      error: (error, _) => throw Exception(
-        "${CircularValue.debugErrorTag} User avatar color error: $error",
-      ),
+    final backgroundColor = centauriToUserAvatarColor(
+      userCentauriAsync.value,
+      Theme.of(context).brightness,
+    );
+
+    return CircleAvatar(
+      radius: radius,
+      backgroundColor: backgroundColor,
+      child: content,
     );
   }
 }
