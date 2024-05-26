@@ -25,6 +25,7 @@ class PostCommentCountViewModel
   }
 
   Future<void> refresh() async {
+    state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => build(arg));
   }
 }
