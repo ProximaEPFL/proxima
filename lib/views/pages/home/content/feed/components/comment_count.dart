@@ -16,7 +16,7 @@ class CommentCount extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncCount = ref.watch(postCommentCountProvider(postId));
-    final count = asyncCount.valueOrNull ?? 0;
+    final count = asyncCount.value ?? 0;
 
     const icon = Icon(Icons.comment, size: 20);
     final countText = Text(count.toString());
