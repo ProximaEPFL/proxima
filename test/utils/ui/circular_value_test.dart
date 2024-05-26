@@ -54,7 +54,7 @@ void main() {
           await Future.delayed(Durations.short1);
           throw Exception("Blue moon");
         },
-        (context, error) => const Text(fallbackErrorMessage),
+        fallbackBuilder: (context, error) => const Text(fallbackErrorMessage),
       ),
     );
 
@@ -87,7 +87,7 @@ void main() {
           );
           return 1;
         },
-        (context, error) => const Text(fallbackMessage),
+        fallbackBuilder: (context, error) => const Text(fallbackMessage),
       ),
     );
 
