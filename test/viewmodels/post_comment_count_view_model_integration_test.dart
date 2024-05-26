@@ -12,6 +12,7 @@ import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/comments_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/post_comment_count_view_model.dart";
+import "package:proxima/viewmodels/user_comments_view_model.dart";
 
 import "../mocks/data/comment_data.dart";
 import "../mocks/data/firestore_post.dart";
@@ -112,15 +113,17 @@ void main() {
       await expectCommentCount(post.id, startCommentCount + 1);
     });
 
-    test("Refresh on post deletion", () async {
+    test("Refresh on comment deletion in view-model", () async {
       await expectCommentCount(post.id, startCommentCount);
 
       // Delete the post
       final comment = comments.first;
-      await commentRepository.deleteComment(
+      final userCommentViewModel = container.read(
+        userCommentsViewModelProvider.notifier,
+      );
+      await userCommentViewModel.deleteComment(
         post.id,
         comment.id,
-        testingUserFirestoreId,
       );
       await Future.delayed(delayNeededForAsyncFunctionExecution);
 
