@@ -3,7 +3,6 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/user_avatar_details.dart";
 import "package:proxima/utils/user_avatar_color.dart";
 import "package:proxima/viewmodels/user_centauri_points_view_model.dart";
-import "package:proxima/views/components/async/circular_value.dart";
 
 /// A widget that displays the user's avatar.
 /// It provides a [onTap] parameter to handle the user's tap,
