@@ -24,6 +24,8 @@ class MockUserAvatarCentauriPointsViewModel
   Future<void> refresh() => _onRefresh();
 }
 
+/// Overrides the [userCentauriPointsViewModelProvider] with a mock that
+/// returns the given [centauriPoints].
 List<Override> mockUserCentauriPointsViewModelCentauriOverride({
   required int centauriPoints,
 }) {
