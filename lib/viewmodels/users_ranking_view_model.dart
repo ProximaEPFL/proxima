@@ -3,6 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/ranking/ranking_details.dart";
 import "package:proxima/models/ui/ranking/ranking_element_details.dart";
 import "package:proxima/services/database/user_repository_service.dart";
+import "package:proxima/viewmodels/dynamic_user_avatar_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
 /// Provides a refreshable async list of users that are sorted by
@@ -67,6 +68,19 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
       userRankElementDetails: currentUserRankingDetails,
     );
 
+    // Get the list of user ids to refresh, and refresh the avatars.
+    // Note that we also need to refresh the null user avatar
+    // which represents the current user.
+    final userIds =
+        ([currentUser, null] + topUsersFromDb).map((user) => user?.uid);
+
+    for (final userId in userIds) {
+      ref
+          .read(
+            dynamicUserAvatarViewModelProvider(userId).notifier,
+          )
+          .refresh();
+    }
     return state;
   }
 

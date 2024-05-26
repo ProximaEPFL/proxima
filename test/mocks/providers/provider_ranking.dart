@@ -7,6 +7,7 @@ import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/pages/home/content/ranking/ranking_page.dart";
 
 import "../data/firestore_user.dart";
+import "../overrides/override_dynamic_user_avatar_view_model.dart";
 import "../services/setup_firebase_mocks.dart";
 
 /// Returns a testing [ProviderContainer] which purpose is to test the ranking
@@ -21,6 +22,7 @@ Future<ProviderContainer> rankingProviderContainerWithTestingUser(
 
   return ProviderContainer(
     overrides: [
+      ...mockDynamicUserAvatarViewModelTestLoginUserOverride,
       firestoreProvider.overrideWithValue(fakeFirebaseFirestore),
       validLoggedInUserIdProvider.overrideWithValue(testingUserFirestoreId),
     ],
