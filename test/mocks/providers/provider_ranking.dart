@@ -33,18 +33,16 @@ Future<ProviderContainer> rankingProviderContainerWithTestingUser(
 
 /// Returns a testable [RankingPage] already overriden by providers
 /// of [rankingProviderContainerWithTestingUser].
-Future<ProviderScope> rankingPageMockApp(
+Future<UncontrolledProviderScope> rankingPageMockApp(
   FakeFirebaseFirestore fakeFirebaseFirestore,
 ) async {
   final rankingContainer =
       await rankingProviderContainerWithTestingUser(fakeFirebaseFirestore);
 
-  return ProviderScope(
-    child: MaterialApp(
-      home: UncontrolledProviderScope(
-        container: rankingContainer,
-        child: const RankingPage(),
-      ),
+  return UncontrolledProviderScope(
+    container: rankingContainer,
+    child: const MaterialApp(
+      home: RankingPage(),
     ),
   );
 }
