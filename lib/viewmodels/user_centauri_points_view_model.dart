@@ -34,6 +34,7 @@ class UserCentauriPointsViewModel
 
   /// Refresh the number of centauri points of the user.
   Future<void> refresh() async {
+    state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => build(arg));
   }
 }
