@@ -47,7 +47,7 @@ class CommentsViewModel extends AutoDisposeFamilyAsyncNotifier<
     );
 
     // Update the post comment count
-    ref.read(postCommentCountProvider(arg).notifier).setCount(comments.length);
+    ref.read(postCommentCountProvider(arg).notifier).refresh();
 
     return sortedComments;
   }
