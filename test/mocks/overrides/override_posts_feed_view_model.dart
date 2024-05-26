@@ -41,7 +41,7 @@ final mockLoadingHomeViewModelOverride = [
   postsFeedViewModelProvider.overrideWith(
     () => MockPostsFeedViewModel(
       build: () async {
-        await Future.delayed(Durations.long1);
+        await Future.delayed(Durations.short1);
         return [];
       },
     ),
