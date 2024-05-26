@@ -73,8 +73,8 @@ final List<CommentDetails> unequalComments = [
   CommentDetails(
     content: "content1",
     ownerDisplayName: "username2",
-    ownerUsername: "username2username",
-    ownerUserID: const UserIdFirestore(value: "username2ID"),
+    ownerUsername: "username1username",
+    ownerUserID: const UserIdFirestore(value: "username1ID"),
     ownerCentauriPoints: 2,
     publicationDate: publicationDate1,
   ),
