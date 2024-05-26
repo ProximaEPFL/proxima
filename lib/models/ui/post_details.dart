@@ -19,7 +19,6 @@ class PostDetails {
   final DateTime publicationDate;
   final int distance; // in meters
   final bool isChallenge;
-  final bool hasUserCommented;
 
   const PostDetails({
     required this.postId,
@@ -33,7 +32,6 @@ class PostDetails {
     required this.publicationDate,
     required this.distance,
     this.isChallenge = false,
-    this.hasUserCommented = false,
   });
 
   @override
@@ -51,8 +49,7 @@ class PostDetails {
         other.ownerCentauriPoints == ownerCentauriPoints &&
         other.publicationDate == publicationDate &&
         other.distance == distance &&
-        other.isChallenge == isChallenge &&
-        other.hasUserCommented == hasUserCommented;
+        other.isChallenge == isChallenge;
   }
 
   @override
@@ -69,7 +66,6 @@ class PostDetails {
       publicationDate,
       distance,
       isChallenge,
-      hasUserCommented,
     );
   }
 
@@ -81,7 +77,6 @@ class PostDetails {
     UserFirestore userFirestore,
     GeoFirePoint geoFirePoint,
     bool isChallenge,
-    bool hasUserCommented,
   ) {
     return PostDetails(
       postId: postFirestore.id,
@@ -99,7 +94,6 @@ class PostDetails {
               1000)
           .round(),
       isChallenge: isChallenge,
-      hasUserCommented: hasUserCommented,
     );
   }
 }

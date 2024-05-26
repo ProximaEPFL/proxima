@@ -4,28 +4,22 @@ import "package:flutter/material.dart";
 /// It contains the comment icon and the number of comments.
 class CommentCount extends StatelessWidget {
   final int count;
-  final bool setBlue;
 
   const CommentCount({
     super.key,
     required this.count,
-    required this.setBlue,
   });
 
   @override
   Widget build(BuildContext context) {
-    final icon = Icon(
-      Icons.comment,
-      size: 20,
-      color: setBlue ? Colors.blue : null,
-    );
+    const icon = Icon(Icons.comment, size: 20);
     final countText = Text(count.toString());
 
     final content = Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(4),
+        const Padding(
+          padding: EdgeInsets.all(4),
           child: icon,
         ),
         Padding(

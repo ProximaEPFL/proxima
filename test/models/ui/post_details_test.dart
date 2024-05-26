@@ -19,7 +19,6 @@ void main() {
         postDetails.publicationDate,
         postDetails.distance,
         postDetails.isChallenge,
-        postDetails.hasUserCommented,
       );
 
       final actualHash = postDetails.hashCode;

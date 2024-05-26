@@ -77,7 +77,6 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
                 users[index],
                 GeoFirePoint(position),
                 false,
-                false,
               ),
             ),
           ),

@@ -80,7 +80,6 @@ class PostCard extends ConsumerWidget {
             child: CommentCount(
               key: postCardCommentsNumberKey,
               count: postDetails.commentNumber,
-              setBlue: postDetails.hasUserCommented,
             ),
           ),
         ],
