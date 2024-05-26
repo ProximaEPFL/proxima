@@ -61,6 +61,7 @@ void main() {
   group("Comment count refresh", () {
     const int startCommentCount = 5;
     late PostFirestore post;
+    late List<CommentFirestore> comments;
 
     setUp(() async {
       // Create and add a post to the database
@@ -109,6 +110,22 @@ void main() {
 
       // The comment count should now be updated
       await expectCommentCount(post.id, startCommentCount + 1);
+    });
+
+    test("Refresh on post deletion", () async {
+      await expectCommentCount(post.id, startCommentCount);
+
+      // Delete the post
+      final comment = comments.first;
+      await commentRepository.deleteComment(
+        post.id,
+        comment.id,
+        testingUserFirestoreId,
+      );
+      await Future.delayed(delayNeededForAsyncFunctionExecution);
+
+      // The comment count should now be 1 less
+      await expectCommentCount(post.id, startCommentCount - 1);
     });
   });
 }
