@@ -12,6 +12,7 @@ import "package:proxima/services/database/upvote_repository_service.dart";
 
 import "../../mocks/data/geopoint.dart";
 import "../../mocks/data/post_data.dart";
+import "../../mocks/overrides/override_firebase_transaction.dart";
 
 void main() {
   late FakeFirebaseFirestore firestore;
@@ -111,6 +112,25 @@ void main() {
         VoteState.downvoted,
         VoteState.none,
       ]);
+
+      test("Offline upvote exception is catched", () async {
+        // Regression test for the issue #160
+
+        // Use a mock firestore transaction that always throw an error (like we were offline)
+        final offlineTransaction = MockErrorFirebaseTransaction();
+
+        // Query the upvote state (triggered an error before patch applied in PR #352)
+        final offlineVoteValue = await postUpvoteRepository.getUpvoteState(
+          userId,
+          post.id,
+          transaction: offlineTransaction,
+        );
+
+        expect(
+          offlineVoteValue,
+          VoteState.none,
+        );
+      });
     },
   );
 
