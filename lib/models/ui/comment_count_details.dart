@@ -7,6 +7,13 @@ class CommentCountDetails {
   final int count;
   final bool isIconBlue;
 
+  // An empty instance of CommentCountDetails
+  // to be used as a default value.
+  static const CommentCountDetails empty = CommentCountDetails(
+    count: 0,
+    isIconBlue: false,
+  );
+
   const CommentCountDetails({
     required this.count,
     required this.isIconBlue,
