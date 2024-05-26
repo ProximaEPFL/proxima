@@ -74,9 +74,7 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
           .read(
             userCentauriPointsViewModelProvider(user.uid).notifier,
           )
-          .refreshWithCentauriPointsNumber(
-            user.data.centauriPoints,
-          );
+          .refresh();
     }
 
     return state;
