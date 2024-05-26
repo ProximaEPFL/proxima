@@ -5,6 +5,7 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/user_comment_details.dart";
 import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/viewmodels/post_comment_count_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 
 typedef UserCommentsState = List<UserCommentDetails>;
@@ -53,6 +54,8 @@ class UserCommentViewModel extends AutoDisposeAsyncNotifier<UserCommentsState> {
     // Refresh the home feed after comment deletion, that way the comment
     // count will be updated
     ref.read(postsFeedViewModelProvider.notifier).refresh();
+    // Also update the comment count for the post
+    ref.read(postCommentCountProvider(postId).notifier).refresh();
   }
 
   /// Refresh the list of posts
