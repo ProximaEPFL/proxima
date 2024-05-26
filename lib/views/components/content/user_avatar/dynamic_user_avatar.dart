@@ -13,7 +13,7 @@ import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 class DynamicUserAvatar extends ConsumerWidget {
   static const _loadingDetails = UserAvatarDetails(
     displayName: "",
-    userID: null,
+    centauriPoints: null,
   );
 
   final UserIdFirestore? uid;

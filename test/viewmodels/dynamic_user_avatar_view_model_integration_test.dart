@@ -4,8 +4,8 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
+import "package:proxima/viewmodels/dynamic_user_avatar_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
-import "package:proxima/viewmodels/user_centauri_points_view_model.dart";
 
 import "../mocks/data/firestore_challenge.dart";
 import "../mocks/data/firestore_post.dart";
@@ -21,7 +21,8 @@ void main() {
     fakeFireStore = FakeFirebaseFirestore();
   });
 
-  group("User Centauri points ViewModel integration testing using challenges",
+  group(
+      "Dynamic User Avatar check Centauri points ViewModel part integration testing using challenges",
       () {
     late FirestoreChallengeGenerator challengeGenerator;
     late FirestorePostGenerator postGenerator;
@@ -47,10 +48,10 @@ void main() {
     test("On challenge completion check centauri points refresh", () async {
       // Check the initial number of centauri points
       final centauriPointsBeforeChallengeCompletion = await container.read(
-        userCentauriPointsViewModelProvider(testingUserFirestoreId).future,
+        dynamicUserAvatarViewModelProvider(testingUserFirestoreId).future,
       );
       expect(
-        centauriPointsBeforeChallengeCompletion,
+        centauriPointsBeforeChallengeCompletion.centauriPoints,
         testingUserData.centauriPoints,
       );
 
@@ -69,10 +70,10 @@ void main() {
 
       // Check the final number of centauri points
       final centauriPointsAfterChallengeCompletion = await container.read(
-        userCentauriPointsViewModelProvider(testingUserFirestoreId).future,
+        dynamicUserAvatarViewModelProvider(testingUserFirestoreId).future,
       );
       expect(
-        centauriPointsAfterChallengeCompletion,
+        centauriPointsAfterChallengeCompletion.centauriPoints,
         testingUserData.centauriPoints +
             ChallengeRepositoryService.soloChallengeReward,
       );

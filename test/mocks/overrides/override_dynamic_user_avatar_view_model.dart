@@ -11,17 +11,23 @@ class MockDynamicUserAvatarViewModel
     extends AutoDisposeFamilyAsyncNotifier<UserAvatarDetails, UserIdFirestore?>
     implements DynamicUserAvatarViewModel {
   final Future<UserAvatarDetails> Function(UserIdFirestore? arg) _build;
+  final Future<void> Function() _onRefresh;
 
   MockDynamicUserAvatarViewModel({
     Future<UserAvatarDetails> Function(UserIdFirestore? arg)? build,
-  }) : _build = build ??
+    Future<void> Function()? onRefresh,
+  })  : _build = build ??
             ((_) async => const UserAvatarDetails(
                   displayName: "",
-                  userID: null,
-                ));
+                  centauriPoints: null,
+                )),
+        _onRefresh = onRefresh ?? (() async {});
 
   @override
   Future<UserAvatarDetails> build(UserIdFirestore? arg) => _build(arg);
+
+  @override
+  Future<void> refresh() => _onRefresh();
 }
 
 final mockDynamicUserAvatarViewModelTestLoginUserOverride = [
@@ -29,7 +35,7 @@ final mockDynamicUserAvatarViewModelTestLoginUserOverride = [
     () => MockDynamicUserAvatarViewModel(
       build: (userUID) async => UserAvatarDetails(
         displayName: testingLoginUser.displayName!,
-        userID: testingUserFirestoreId,
+        centauriPoints: testingUserData.centauriPoints,
       ),
     ),
   ),
@@ -40,7 +46,7 @@ final mockDynamicUserAvatarViewModelEmptyDisplayNameOverride = [
     () => MockDynamicUserAvatarViewModel(
       build: (userUID) async => const UserAvatarDetails(
         displayName: "",
-        userID: null,
+        centauriPoints: null,
       ),
     ),
   ),

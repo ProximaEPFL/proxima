@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/user_avatar_details.dart";
 import "package:proxima/utils/user_avatar_color.dart";
-import "package:proxima/viewmodels/user_centauri_points_view_model.dart";
 
 /// A widget that displays the user's avatar.
 /// It provides a [onTap] parameter to handle the user's tap,
@@ -28,9 +27,6 @@ class UserAvatar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userCentauriAsync =
-        ref.watch(userCentauriPointsViewModelProvider(details.userID));
-
     final content = Stack(
       children: [
         Center(
@@ -56,7 +52,7 @@ class UserAvatar extends ConsumerWidget {
     );
 
     final backgroundColor = centauriToUserAvatarColor(
-      userCentauriAsync.value,
+      details.centauriPoints,
       Theme.of(context).brightness,
     );
 

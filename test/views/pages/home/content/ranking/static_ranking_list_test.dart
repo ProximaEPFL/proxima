@@ -6,7 +6,7 @@ import "package:proxima/views/pages/home/content/ranking/components/ranking_card
 import "package:proxima/views/pages/home/content/ranking/components/ranking_list.dart";
 
 import "../../../../../mocks/data/ranking_data.dart";
-import "../../../../../mocks/overrides/override_user_centauri_points_view_model.dart";
+import "../../../../../mocks/overrides/override_dynamic_user_avatar_view_model.dart";
 
 void main() {
   group("Widgets display", () {
@@ -15,7 +15,7 @@ void main() {
       (tester) async {
         final rankingListWidget = ProviderScope(
           overrides: [
-            ...mockUserCentauriPointsViewModelZeroCentauriOverride,
+            ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
           ],
           child: MaterialApp(
             home: RankingList(

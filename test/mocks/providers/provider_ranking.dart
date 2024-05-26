@@ -7,7 +7,6 @@ import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/pages/home/content/ranking/ranking_page.dart";
 
 import "../data/firestore_user.dart";
-import "../overrides/override_user_centauri_points_view_model.dart";
 import "../services/setup_firebase_mocks.dart";
 
 /// Returns a testing [ProviderContainer] which purpose is to test the ranking
@@ -24,9 +23,6 @@ Future<ProviderContainer> rankingProviderContainerWithTestingUser(
     overrides: [
       firestoreProvider.overrideWithValue(fakeFirebaseFirestore),
       validLoggedInUserIdProvider.overrideWithValue(testingUserFirestoreId),
-      ...mockUserCentauriPointsViewModelCentauriOverride(
-        centauriPoints: testingUserData.centauriPoints,
-      ),
     ],
   );
 }

@@ -14,7 +14,7 @@ void main() {
     test("Hash overrides correctly", () {
       final expectedHash = Object.hash(
         userAvatarDetails.displayName,
-        userAvatarDetails.userID,
+        userAvatarDetails.centauriPoints,
       );
 
       final actualHash = userAvatarDetails.hashCode;
@@ -25,7 +25,7 @@ void main() {
       // Copy made by the other constructor on purpose
       final userAvatarDetailsCopy = UserAvatarDetails(
         displayName: testingUserData.displayName,
-        userID: testingUserFirestoreId,
+        centauriPoints: testingUserData.centauriPoints,
       );
 
       expect(userAvatarDetails, equals(userAvatarDetailsCopy));

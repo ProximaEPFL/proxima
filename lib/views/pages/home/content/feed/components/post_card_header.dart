@@ -1,9 +1,8 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/models/ui/user_avatar_details.dart";
 import "package:proxima/services/conversion/human_time_service.dart";
-import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
+import "package:proxima/views/components/content/user_avatar/dynamic_user_avatar.dart";
 import "package:proxima/views/components/content/user_profile_pop_up.dart";
 
 /// This widget is used to display the info bar in the post card.
@@ -82,11 +81,8 @@ class PostCardHeader extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        UserAvatar(
-          details: UserAvatarDetails(
-            displayName: posterDisplayName,
-            userID: posterUserID,
-          ),
+        DynamicUserAvatar(
+          uid: posterUserID,
           radius: 12,
           onTap: () => onTap(context),
           key: avatarKey,

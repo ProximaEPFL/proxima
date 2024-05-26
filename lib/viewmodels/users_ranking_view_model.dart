@@ -4,7 +4,6 @@ import "package:proxima/models/ui/ranking/ranking_details.dart";
 import "package:proxima/models/ui/ranking/ranking_element_details.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
-import "package:proxima/viewmodels/user_centauri_points_view_model.dart";
 
 /// Provides a refreshable async list of users that are sorted by
 /// descending score of centauri points (called their rank).
@@ -67,15 +66,6 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
       rankElementDetailsList: topUsers,
       userRankElementDetails: currentUserRankingDetails,
     );
-
-    // Refresh the centauri points of the top users and the current user
-    for (final user in topUsersFromDb + [currentUser]) {
-      ref
-          .read(
-            userCentauriPointsViewModelProvider(user.uid).notifier,
-          )
-          .refresh();
-    }
 
     return state;
   }

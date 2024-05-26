@@ -7,9 +7,10 @@ import "package:proxima/models/ui/user_avatar_details.dart";
 import "package:proxima/services/database/user_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
+// TODO: Remove the fact that the current user is "null" and accept a non-nullable user id.
 /// View model for the dynamic user avatar.
-/// This view model is used to fetch the user's display name given its id.
-/// If the id is null, the current user's display name is fetched.
+/// This view model is used to fetch the user's display name and centauri points
+/// given its id. If the id is null, the current user's information is fetched.
 class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
     UserAvatarDetails, UserIdFirestore?> {
   DynamicUserAvatarViewModel();
@@ -35,11 +36,18 @@ class DynamicUserAvatarViewModel extends AutoDisposeFamilyAsyncNotifier<
 
     return UserAvatarDetails.fromUser(user);
   }
+
+  /// Refresh the user's information.
+  Future<void> refresh() async {
+    state = const AsyncValue.loading();
+
+    state = await AsyncValue.guard(() => build(arg));
+  }
 }
 
 //TODO: Extend to fetch the user's avatar image.
-/// Flexible provider allowing to retrieve the user's display name given its id.
-/// If the id is null, the current user's display name is fetched.
+/// Flexible provider allowing to retrieve the user's display name and centauri points
+/// given its id. If the id is null, the current user's information is fetched.
 final dynamicUserAvatarViewModelProvider = AsyncNotifierProvider.autoDispose
     .family<DynamicUserAvatarViewModel, UserAvatarDetails, UserIdFirestore?>(
   () => DynamicUserAvatarViewModel(),

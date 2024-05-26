@@ -11,7 +11,6 @@ import "../overrides/override_comments_view_model.dart";
 import "../overrides/override_dynamic_user_avatar_view_model.dart";
 import "../overrides/override_firestore.dart";
 import "../overrides/override_posts_feed_view_model.dart";
-import "../overrides/override_user_centauri_points_view_model.dart";
 import "../services/mock_geo_location_service.dart";
 
 const homePageApp = MaterialApp(
@@ -22,7 +21,6 @@ const homePageApp = MaterialApp(
 final emptyHomePageProvider = ProviderScope(
   overrides: [
     ...mockEmptyHomeViewModelOverride,
-    ...mockUserCentauriPointsViewModelZeroCentauriOverride,
     ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
   ],
   child: homePageApp,
@@ -32,7 +30,6 @@ final nonEmptyHomePageProvider = ProviderScope(
   overrides: [
     ...mockNonEmptyHomeViewModelOverride,
     ...mockNonEmptyCommentViewModelOverride,
-    ...mockUserCentauriPointsViewModelZeroCentauriOverride,
     ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
     ...firebaseMocksOverrides,
     ...loggedInUserOverrides,
@@ -54,7 +51,6 @@ ProviderScope _homePageFakeFirestoreProviderAddOverrides(
     overrides: [
       ...additionalOverrides,
       ...loggedInUserOverrides,
-      ...mockUserCentauriPointsViewModelZeroCentauriOverride,
       ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
       firestoreProvider.overrideWithValue(firestore),
       geolocationServiceProvider.overrideWithValue(geoLocationService),
@@ -93,7 +89,6 @@ ProviderScope emptyHomePageProviderGPS(
     overrides: [
       ...mockDynamicUserAvatarViewModelTestLoginUserOverride,
       ...mockEmptyHomeViewModelOverride,
-      ...mockUserCentauriPointsViewModelZeroCentauriOverride,
       geolocationServiceProvider.overrideWithValue(geoLocationService),
     ],
     child: homePageApp,
