@@ -5,7 +5,7 @@ import "package:proxima/viewmodels/post_comment_count_view_model.dart";
 /// A mock implementation of the [PostCommentCountViewModel] class.
 /// Its state is always the same and can be set in the constructor.
 class MockPostCommentCountViewModel
-    extends AutoDisposeFamilyAsyncNotifier<int, PostIdFirestore>
+    extends FamilyAsyncNotifier<int, PostIdFirestore>
     implements PostCommentCountViewModel {
   final int count;
 
