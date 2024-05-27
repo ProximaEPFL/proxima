@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:geolocator/geolocator.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_details.dart";
@@ -64,11 +65,15 @@ class PostMap extends ConsumerWidget {
       },
       error: (error, _) {
         //Pop up an error dialog if an error occurs
-        final dialog = ErrorAlert(error: error);
 
-        WidgetsBinding.instance.addPostFrameCallback((timestamp) {
-          showDialog(context: context, builder: dialog.build);
-        });
+        // ignore:
+
+        if (error is! LocationServiceDisabledException) {
+          final dialog = ErrorAlert(error: error);
+          WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+            showDialog(context: context, builder: dialog.build);
+          });
+        }
       },
       loading: () => (),
     );
