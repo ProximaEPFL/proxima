@@ -3,6 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/viewmodels/comments_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
+import "package:proxima/views/helpers/types/result.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/pages/post/components/bottom_bar_add_comment.dart";
 import "package:proxima/views/pages/post/components/comment/comment_list.dart";
@@ -27,9 +28,11 @@ class PostPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final themeData = Theme.of(context);
 
-    final commentsAsync = ref.watch(
-      commentsViewModelProvider(postDetails.postId),
-    );
+    final commentsAsync = ref
+        .watch(
+          commentsViewModelProvider(postDetails.postId).future,
+        )
+        .mapRes();
 
     // Top app bar content = Title + Distance
     final appBarContent = [
@@ -49,7 +52,7 @@ class PostPage extends ConsumerWidget {
       ),
       const SizedBox(height: 10),
       CircularValue(
-        value: commentsAsync,
+        future: commentsAsync,
         builder: (context, comments) => CommentList(
           key: commentListWidgetKey,
           comments: comments,

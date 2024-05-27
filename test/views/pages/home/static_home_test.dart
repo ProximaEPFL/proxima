@@ -12,6 +12,7 @@ import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 
 import "../../../mocks/data/post_overview.dart";
 import "../../../mocks/providers/provider_homepage.dart";
+import "../../../utils/delay_async_func.dart";
 
 void main() {
   late ProviderScope nonEmptyHomePageWidget;
@@ -136,6 +137,9 @@ void main() {
           LogoProgressIndicator,
         );
         expect(progressIndicator, findsOneWidget);
+
+        // Clear flutter timers (pending timeout)
+        await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
       },
     );
   });

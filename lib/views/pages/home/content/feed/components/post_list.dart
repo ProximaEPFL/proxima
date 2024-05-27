@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/post_details.dart";
-import "package:proxima/views/helpers/types.dart";
+import "package:proxima/views/helpers/types/future_void_callback.dart";
 import "package:proxima/views/pages/home/content/feed/components/post_card.dart";
 
 class PostList extends StatelessWidget {

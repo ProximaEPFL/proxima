@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
-import "package:proxima/views/helpers/types.dart";
+import "package:proxima/views/helpers/types/future_void_callback.dart";
 
 enum LoadingState {
   still,

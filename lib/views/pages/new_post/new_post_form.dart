@@ -3,6 +3,7 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/new_post_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
+import "package:proxima/views/helpers/types/result.dart";
 
 class NewPostForm extends HookConsumerWidget {
   const NewPostForm({super.key});
@@ -24,21 +25,21 @@ class NewPostForm extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final titleController = useTextEditingController();
-    final bodyController = useTextEditingController();
-
     ref.listen(newPostViewModelProvider, (previous, state) {
       if (state.valueOrNull?.posted == true) {
         Navigator.pop(context);
       }
     });
 
-    final asyncState = ref.watch(newPostViewModelProvider);
+    final asyncState = ref.watch(newPostViewModelProvider.future).mapRes();
+
+    final titleController = useTextEditingController();
+    final bodyController = useTextEditingController();
 
     return CircularValue(
-      value: asyncState,
+      future: asyncState,
       builder: (context, state) {
-        var titleField = TextField(
+        final titleField = TextField(
           key: titleFieldKey,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
