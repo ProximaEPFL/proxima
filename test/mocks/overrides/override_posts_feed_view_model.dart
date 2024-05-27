@@ -4,6 +4,7 @@ import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 
 import "../data/post_overview.dart";
+import "override_post_comment_count_view_model.dart";
 
 /// A mock implementation of the [PostsFeedViewModel] class.
 /// This class is particularly useful for the UI tests where we want to expose
@@ -35,6 +36,8 @@ final mockNonEmptyHomeViewModelOverride = [
   postsFeedViewModelProvider.overrideWith(
     () => MockPostsFeedViewModel(build: () async => testPosts),
   ),
+  // The posts don't exist in the database, so we also override their comment count to 0
+  ...zeroPostCommentCountOverride,
 ];
 
 final mockLoadingHomeViewModelOverride = [

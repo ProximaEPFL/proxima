@@ -6,6 +6,7 @@ import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/comment_details.dart";
 import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
+import "package:proxima/viewmodels/post_comment_count_view_model.dart";
 
 /// This view model is used to fetch the comments of a post.
 /// It fetches the comments under the post with the id [arg] and returns
@@ -20,6 +21,9 @@ class CommentsViewModel extends AutoDisposeFamilyAsyncNotifier<
     final userRepository = ref.read(userRepositoryServiceProvider);
 
     final commentsFirestore = await commentRepository.getPostComments(arg);
+
+    // Update the post comment count
+    ref.read(postCommentCountProvider(arg).notifier).refresh();
 
     final commentOwnersId =
         commentsFirestore.map((comment) => comment.data.ownerId).toSet();
