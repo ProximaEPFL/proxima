@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:proxima/models/ui/ranking/ranking_element_details.dart";
-import "package:proxima/models/ui/user_avatar_details.dart";
-import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
+import "package:proxima/views/components/content/user_avatar/dynamic_user_avatar.dart";
 import "package:proxima/views/components/content/user_profile_pop_up.dart";
 
 /// A widget that displays a ranking card.
@@ -65,6 +64,7 @@ class RankingCard extends StatelessWidget {
             builder: (BuildContext context) => UserProfilePopUp(
               displayName: rankingElementDetails.userDisplayName,
               username: rankingElementDetails.userUserName,
+              userID: rankingElementDetails.userID,
               centauriPoints: rankingElementDetails.centauriPoints,
             ),
           ),
@@ -96,17 +96,13 @@ class RankingCard extends StatelessWidget {
       ),
     );
 
-    final userDetails = UserAvatarDetails(
-      displayName: rankingElementDetails.userDisplayName,
-      userCentauriPoints: rankingElementDetails.centauriPoints,
-    );
     final userInfo = Padding(
       padding: const EdgeInsets.all(8),
       child: Row(
         children: [
-          UserAvatar(
+          DynamicUserAvatar(
             key: userRankAvatarKey,
-            details: userDetails,
+            uid: rankingElementDetails.userID,
             radius: 22,
           ),
           Flexible(child: userDisplayNameText),

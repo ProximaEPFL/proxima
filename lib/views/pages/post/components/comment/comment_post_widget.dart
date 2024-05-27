@@ -24,6 +24,7 @@ class CommentPostWidget extends StatelessWidget {
           key: commentUserWidgetKey,
           posterDisplayName: commentPost.ownerDisplayName,
           posterUsername: commentPost.ownerUsername,
+          posterUserID: commentPost.ownerUserID,
           posterCentauriPoints: commentPost.ownerCentauriPoints,
           publicationDate: commentPost.publicationDate,
         ),

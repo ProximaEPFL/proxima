@@ -44,10 +44,11 @@ class ProfilePage extends ConsumerWidget {
     return CircularValue(
       future: asyncUserData,
       builder: (context, value) {
+        final user = value.firestoreUser;
         return DefaultTabController(
           length: 2,
           child: Scaffold(
-            appBar: ProfileAppBar(userData: value.firestoreUser.data),
+            appBar: ProfileAppBar(user: user),
             body: Container(
               padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
               child: const Column(

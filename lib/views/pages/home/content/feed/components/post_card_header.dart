@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/ui/user_avatar_details.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/services/conversion/human_time_service.dart";
-import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
+import "package:proxima/views/components/content/user_avatar/dynamic_user_avatar.dart";
 import "package:proxima/views/components/content/user_profile_pop_up.dart";
 
 /// This widget is used to display the info bar in the post card.
@@ -17,12 +17,14 @@ class PostCardHeader extends ConsumerWidget {
     super.key,
     required this.posterDisplayName,
     required this.posterUsername,
+    required this.posterUserID,
     required this.posterCentauriPoints,
     required this.publicationDate,
   });
 
   final String posterDisplayName;
   final String posterUsername;
+  final UserIdFirestore posterUserID;
   final int posterCentauriPoints;
   final DateTime publicationDate;
 
@@ -32,6 +34,7 @@ class PostCardHeader extends ConsumerWidget {
       builder: (BuildContext context) => UserProfilePopUp(
         displayName: posterDisplayName,
         username: posterUsername,
+        userID: posterUserID,
         centauriPoints: posterCentauriPoints,
       ),
     );
@@ -78,11 +81,8 @@ class PostCardHeader extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        UserAvatar(
-          details: UserAvatarDetails(
-            displayName: posterDisplayName,
-            userCentauriPoints: posterCentauriPoints,
-          ),
+        DynamicUserAvatar(
+          uid: posterUserID,
           radius: 12,
           onTap: () => onTap(context),
           key: avatarKey,

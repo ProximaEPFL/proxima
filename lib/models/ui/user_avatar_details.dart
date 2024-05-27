@@ -1,27 +1,29 @@
 import "package:flutter/foundation.dart";
-import "package:proxima/models/database/user/user_data.dart";
+import "package:proxima/models/database/user/user_firestore.dart";
 
 /// A class that stores data for a user avatar UI.
 @immutable
 class UserAvatarDetails {
   final String displayName;
-  final int? userCentauriPoints;
+  final int? centauriPoints;
 
   /// Creates a [UserAvatarDetails] object.
   /// [displayName] is the user's display name, of which
   /// the first letter is displayed on the avatar.
-  /// [userCentauriPoints] is the user's centauri points,
-  /// which is used to color the avatar background.
+  /// [centauriPoints] is the user's centauri points.
+  /// The [centauriPoints] parameter can be null, which is useful for loading states.
   const UserAvatarDetails({
     required this.displayName,
-    required this.userCentauriPoints,
+    required this.centauriPoints,
   });
 
-  /// Converts a [UserData] object, [userData], to a [UserAvatarDetails] object.
-  factory UserAvatarDetails.fromUserData(UserData userData) {
+  /// Converts a [UserFirestore] object, [user], to a [UserAvatarDetails] object.
+  factory UserAvatarDetails.fromUser(
+    UserFirestore user,
+  ) {
     return UserAvatarDetails(
-      displayName: userData.displayName,
-      userCentauriPoints: userData.centauriPoints,
+      displayName: user.data.displayName,
+      centauriPoints: user.data.centauriPoints,
     );
   }
 
@@ -29,14 +31,14 @@ class UserAvatarDetails {
   bool operator ==(Object other) {
     return other is UserAvatarDetails &&
         other.displayName == displayName &&
-        other.userCentauriPoints == userCentauriPoints;
+        other.centauriPoints == centauriPoints;
   }
 
   @override
   int get hashCode {
     return Object.hash(
       displayName,
-      userCentauriPoints,
+      centauriPoints,
     );
   }
 }
