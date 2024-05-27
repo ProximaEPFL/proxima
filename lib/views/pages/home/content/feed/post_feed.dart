@@ -4,7 +4,7 @@ import "package:proxima/viewmodels/posts_feed_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/components/async/error_refresh_page.dart";
 import "package:proxima/views/components/options/feed/feed_sort_option_chips.dart";
-import "package:proxima/views/helpers/types.dart";
+import "package:proxima/views/helpers/types/result.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/content/feed/components/post_list.dart";
 

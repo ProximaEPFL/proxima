@@ -3,7 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
 import "package:proxima/views/components/async/error_refresh_page.dart";
-import "package:proxima/views/helpers/types.dart";
+import "package:proxima/views/helpers/types/result.dart";
 import "package:proxima/views/pages/home/content/challenge/challenge_card.dart";
 
 class ChallengeList extends ConsumerWidget {

@@ -3,7 +3,7 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/new_post_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
-import "package:proxima/views/helpers/types.dart";
+import "package:proxima/views/helpers/types/result.dart";
 
 class NewPostForm extends HookConsumerWidget {
   const NewPostForm({super.key});

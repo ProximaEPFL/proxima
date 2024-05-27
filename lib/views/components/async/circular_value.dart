@@ -3,15 +3,15 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:proxima/views/components/async/error_alert.dart";
 import "package:proxima/views/components/async/logo_progress_indicator.dart";
 import "package:proxima/views/components/async/offline_alert.dart";
-import "package:proxima/views/helpers/types.dart";
+import "package:proxima/views/helpers/types/result.dart";
 
 /// Utility widget used to display a [LogoProgressIndicator] while waiting for a
-/// [Future] of type [FutureRes] to complete; and another widget once the data resolves.
+/// [Future] of type [Result] to complete; and another widget once the data resolves.
 /// In case the data resolves to an error, an [ErrorAlert] dialog is shown, and
 /// a fallback widget is displayed. The default fallback widget is empty, but it
 /// can be overridden.
 class CircularValue<T> extends HookWidget {
-  final Future<FutureRes<T, Object?>> future;
+  final Future<Result<T, Object?>> future;
   final Widget Function(BuildContext context, T data) builder;
   final Widget Function(BuildContext context, Object error) fallbackBuilder;
 
@@ -36,18 +36,18 @@ class CircularValue<T> extends HookWidget {
   /// Constructor for the [CircularValue] widget.
   /// [future] is the underlying [Future] that controls the display.
   /// [builder] is the widget to display when the [future] completes
-  /// with valid [FutureRes.value].
+  /// with valid [Result.value].
   /// [fallbackBuilder] is the widget to display when the [future] errors
-  /// or completes with [FutureRes.error].
+  /// or completes with [Result.error].
   /// The default [fallbackBuilder] is an empty [SizedBox].
   CircularValue({
     super.key,
-    required Future<FutureRes<T, Object?>> future,
+    required Future<Result<T, Object?>> future,
     required this.builder,
     this.fallbackBuilder = defaultFallback,
   }) : future = future
             .timeout(offlineTimeout)
-            .onError((error, stackTrace) => FutureRes.error(timeoutErrorTag));
+            .onError((error, stackTrace) => Result.error(timeoutErrorTag));
 
   @override
   Widget build(BuildContext context) {

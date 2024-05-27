@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/views/components/async/circular_value.dart";
-import "package:proxima/views/helpers/types.dart";
+import "package:proxima/views/helpers/types/result.dart";
 
 Widget _defaultBuilder(BuildContext context, int value) {
   return const Text("Completed");

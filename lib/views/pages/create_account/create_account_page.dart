@@ -4,7 +4,7 @@ import "package:proxima/services/authentication/auth_login_service.dart";
 import "package:proxima/viewmodels/create_account_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
-import "package:proxima/views/helpers/types.dart";
+import "package:proxima/views/helpers/types/result.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/create_account/create_account_form.dart";
