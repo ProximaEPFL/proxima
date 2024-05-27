@@ -5,6 +5,7 @@ import "package:proxima/models/ui/challenge_details.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
+import "package:proxima/viewmodels/dynamic_user_avatar_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 
@@ -98,6 +99,13 @@ class ChallengeViewModel
 
       // Refresh the map pins after challenge completion
       ref.read(mapPinViewModelProvider.notifier).refresh();
+
+      // Refresh the user centauri points after challenge completion
+      // Note: null is the current user id as represented in dynamicUserAvatarViewModelProvider
+      // So we have to refresh both [currentUser] and the null user
+      for (final user in [null, currentUser]) {
+        ref.read(dynamicUserAvatarViewModelProvider(user).notifier).refresh();
+      }
     }
 
     return pointsAwarded;

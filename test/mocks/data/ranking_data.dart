@@ -1,4 +1,5 @@
 import "package:collection/collection.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/ui/ranking/ranking_details.dart";
 import "package:proxima/models/ui/ranking/ranking_element_details.dart";
 
@@ -23,6 +24,7 @@ final List<RankingElementDetails> mockRankingElementDetailsList =
           (index, user) => RankingElementDetails(
             userDisplayName: user.keys.first,
             userUserName: "u_${user.keys.first}",
+            userID: UserIdFirestore(value: "uid_${user.keys.first}"),
             centauriPoints: user.values.first,
             userRank: index + 1,
           ),
@@ -41,6 +43,7 @@ final RankingElementDetails testUserRankingElementDetails =
     RankingElementDetails(
   userDisplayName: testingUserData.displayName,
   userUserName: testingUserData.username,
+  userID: testingUserFirestoreId,
   centauriPoints: 0,
   userRank: 9,
 );

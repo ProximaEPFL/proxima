@@ -113,6 +113,7 @@ class PostCard extends ConsumerWidget {
                 key: postCardUserKey,
                 posterUsername: postDetails.ownerUsername,
                 posterDisplayName: postDetails.ownerDisplayName,
+                posterUserID: postDetails.ownerUserID,
                 posterCentauriPoints: postDetails.ownerCentauriPoints,
                 publicationDate: postDetails.publicationDate,
               ),
