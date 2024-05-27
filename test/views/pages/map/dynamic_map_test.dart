@@ -54,6 +54,9 @@ void main() {
     when(geoLocationService.getPositionStream()).thenAnswer(
       (_) => Stream.value(userPosition0),
     );
+    when(geoLocationService.checkLocationServices()).thenAnswer(
+      (_) => Future.value(null),
+    );
 
     postGenerator = FirestorePostGenerator();
   });
