@@ -1,12 +1,16 @@
 import "package:flutter/foundation.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
 
+/// This class contains all the details of a comment
+/// that are needed to display it in the UI.
 @immutable
 class CommentDetails {
   final String content;
   final String ownerDisplayName;
   final String ownerUsername;
+  final UserIdFirestore ownerUserID;
   final int ownerCentauriPoints;
   final DateTime publicationDate;
 
@@ -14,6 +18,7 @@ class CommentDetails {
     required this.content,
     required this.ownerDisplayName,
     required this.ownerUsername,
+    required this.ownerUserID,
     required this.ownerCentauriPoints,
     required this.publicationDate,
   });
@@ -26,6 +31,7 @@ class CommentDetails {
         other.content == content &&
         other.ownerDisplayName == ownerDisplayName &&
         other.ownerUsername == ownerUsername &&
+        other.ownerUserID == ownerUserID &&
         other.ownerCentauriPoints == ownerCentauriPoints &&
         other.publicationDate == publicationDate;
   }
@@ -36,6 +42,7 @@ class CommentDetails {
       content,
       ownerDisplayName,
       ownerUsername,
+      ownerUserID,
       ownerCentauriPoints,
       publicationDate,
     );
@@ -53,6 +60,7 @@ class CommentDetails {
       content: commentData.content,
       ownerDisplayName: ownerData.displayName,
       ownerUsername: ownerData.username,
+      ownerUserID: owner.uid,
       ownerCentauriPoints: ownerData.centauriPoints,
       publicationDate: DateTime.fromMillisecondsSinceEpoch(
         commentData.publicationTime.millisecondsSinceEpoch,

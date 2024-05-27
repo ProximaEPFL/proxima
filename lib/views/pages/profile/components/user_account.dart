@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
-import "package:proxima/models/database/user/user_data.dart";
-import "package:proxima/models/ui/user_avatar_details.dart";
-import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
+import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/views/components/content/user_avatar/dynamic_user_avatar.dart";
 
 /// This widget display the user info in the profile page
 class UserAccount extends StatelessWidget {
@@ -10,14 +9,17 @@ class UserAccount extends StatelessWidget {
 
   const UserAccount({
     super.key,
-    required this.userData,
+    required this.user,
   });
 
-  final UserData userData;
+  // The user to display
+  final UserFirestore user;
 
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme.titleSmall;
+
+    final userData = user.data;
 
     final displayName = Text(
       userData.displayName,
@@ -31,8 +33,8 @@ class UserAccount extends StatelessWidget {
       "${userData.username} · ${userData.centauriPoints} Centauri",
     );
 
-    final profilePicture = UserAvatar(
-      details: UserAvatarDetails.fromUserData(userData),
+    final profilePicture = DynamicUserAvatar(
+      uid: user.uid,
       radius: 20,
     );
 

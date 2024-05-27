@@ -15,6 +15,7 @@ void main() {
         postDetails.commentNumber,
         postDetails.ownerDisplayName,
         postDetails.ownerUsername,
+        postDetails.ownerUserID,
         postDetails.ownerCentauriPoints,
         postDetails.publicationDate,
         postDetails.distance,

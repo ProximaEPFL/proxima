@@ -3,6 +3,7 @@ import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
 
 @immutable
 
@@ -15,6 +16,7 @@ class PostDetails {
   final int commentNumber;
   final String ownerDisplayName;
   final String ownerUsername;
+  final UserIdFirestore ownerUserID;
   final int ownerCentauriPoints;
   final DateTime publicationDate;
   final int distance; // in meters
@@ -28,6 +30,7 @@ class PostDetails {
     required this.commentNumber,
     required this.ownerDisplayName,
     required this.ownerUsername,
+    required this.ownerUserID,
     required this.ownerCentauriPoints,
     required this.publicationDate,
     required this.distance,
@@ -46,6 +49,7 @@ class PostDetails {
         other.commentNumber == commentNumber &&
         other.ownerDisplayName == ownerDisplayName &&
         other.ownerUsername == ownerUsername &&
+        other.ownerUserID == ownerUserID &&
         other.ownerCentauriPoints == ownerCentauriPoints &&
         other.publicationDate == publicationDate &&
         other.distance == distance &&
@@ -62,6 +66,7 @@ class PostDetails {
       commentNumber,
       ownerDisplayName,
       ownerUsername,
+      ownerUserID,
       ownerCentauriPoints,
       publicationDate,
       distance,
@@ -86,6 +91,7 @@ class PostDetails {
       commentNumber: postFirestore.data.commentCount,
       ownerDisplayName: userFirestore.data.displayName,
       ownerUsername: userFirestore.data.username,
+      ownerUserID: userFirestore.uid,
       ownerCentauriPoints: userFirestore.data.centauriPoints,
       publicationDate: postFirestore.data.publicationTime.toDate(),
       distance: (geoFirePoint.distanceBetweenInKm(
