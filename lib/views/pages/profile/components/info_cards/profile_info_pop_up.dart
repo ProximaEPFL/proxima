@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:proxima/views/components/async/loading_icon_button.dart";
 import "package:proxima/views/components/content/info_pop_up.dart";
-import "package:proxima/views/helpers/types.dart";
+import "package:proxima/views/helpers/types/future_void_callback.dart";
 
 class ProfileInfoPopUp extends StatelessWidget {
   //key of the button

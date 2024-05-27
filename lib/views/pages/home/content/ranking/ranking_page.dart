@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/users_ranking_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
+import "package:proxima/views/helpers/types/result.dart";
 import "package:proxima/views/pages/home/content/ranking/components/ranking_widget.dart";
 
 /// The Ranking page home content that is accessible via the bottom
@@ -12,10 +13,10 @@ class RankingPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ranking = ref.watch(usersRankingViewModelProvider);
+    final ranking = ref.watch(usersRankingViewModelProvider.future).mapRes();
 
     return CircularValue(
-      value: ranking,
+      future: ranking,
       builder: (context, value) => RankingWidget(ranking: value),
     );
   }

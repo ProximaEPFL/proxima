@@ -16,7 +16,7 @@ void main() {
       ),
     );
 
-    expect(find.text("An error occurred"), findsOneWidget);
+    expect(find.text(ErrorRefreshPage.errorText), findsOneWidget);
     expect(find.byKey(ErrorRefreshPage.refreshButtonKey), findsOneWidget);
   });
 

@@ -2,7 +2,7 @@ name: proxima
 description: "A social app that encourages users to visit places in order to see posts."
 
 publish_to: "none"
-version: 0.4.1
+version: 0.4.2
 
 environment:
   sdk: '>=3.3.1 <4.0.0'
