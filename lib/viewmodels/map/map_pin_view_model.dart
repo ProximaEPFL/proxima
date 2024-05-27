@@ -47,6 +47,15 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
 
   /// Get nearby posts
   Future<List<MapPinDetails>> _getNearbyPosts() async {
+    //checking if the location services are enabled directly here so that
+    //we throw the same exception as the challenge case
+    final locationCheck =
+        await ref.read(geolocationServiceProvider).checkLocationServices();
+
+    if (locationCheck != null) {
+      throw locationCheck;
+    }
+
     final position = await ref.watch(livePositionStreamProvider.future);
     final postRepository = ref.watch(postRepositoryServiceProvider);
     final userRepository = ref.watch(userRepositoryServiceProvider);
@@ -106,13 +115,14 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
 
   /// Get user active challenges
   Future<List<MapPinDetails>> _getUserChallenges() async {
-    final postRepository = ref.watch(postRepositoryServiceProvider);
-    final challengeRepostory = ref.watch(challengeRepositoryServiceProvider);
-    final userId = ref.watch(validLoggedInUserIdProvider);
     // Only doing a read here, to decrease the number of database reads
     // (we don't want to re-read the challenges when the position changes).
     final position =
         await ref.read(geolocationServiceProvider).getCurrentPosition();
+
+    final postRepository = ref.watch(postRepositoryServiceProvider);
+    final challengeRepostory = ref.watch(challengeRepositoryServiceProvider);
+    final userId = ref.watch(validLoggedInUserIdProvider);
 
     final userChallenges = await challengeRepostory.getChallenges(
       userId,
