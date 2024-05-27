@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/profile_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
+import "package:proxima/views/helpers/types/result.dart";
 import "package:proxima/views/pages/profile/components/profile_app_bar.dart";
 import "package:proxima/views/pages/profile/components/profile_data/profile_user_comments.dart";
 import "package:proxima/views/pages/profile/components/profile_data/profile_user_posts.dart";
@@ -21,7 +22,7 @@ class ProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncUserData = ref.watch(profileViewModelProvider);
+    final asyncUserData = ref.watch(profileViewModelProvider.future).mapRes();
 
     const tabsTitle = TabBar(
       key: tabKey,
@@ -41,7 +42,7 @@ class ProfilePage extends ConsumerWidget {
     );
 
     return CircularValue(
-      value: asyncUserData,
+      future: asyncUserData,
       builder: (context, value) {
         return DefaultTabController(
           length: 2,

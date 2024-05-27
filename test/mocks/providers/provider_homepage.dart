@@ -38,7 +38,13 @@ final nonEmptyHomePageProvider = ProviderScope(
 );
 
 final loadingHomePageProvider = ProviderScope(
-  overrides: mockLoadingHomeViewModelOverride,
+  overrides: [
+    ...mockLoadingHomeViewModelOverride,
+    ...mockNonEmptyCommentViewModelOverride,
+    ...mockDynamicUserAvatarViewModelEmptyDisplayNameOverride,
+    ...firebaseMocksOverrides,
+    ...loggedInUserOverrides,
+  ],
   child: homePageApp,
 );
 

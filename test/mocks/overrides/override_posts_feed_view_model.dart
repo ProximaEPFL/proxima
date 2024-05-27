@@ -1,3 +1,4 @@
+import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/post_details.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
@@ -39,8 +40,10 @@ final mockNonEmptyHomeViewModelOverride = [
 final mockLoadingHomeViewModelOverride = [
   postsFeedViewModelProvider.overrideWith(
     () => MockPostsFeedViewModel(
-      // Future.any([]) will never complete and simulate a loading state
-      build: () => Future.any([]),
+      build: () async {
+        await Future.delayed(Durations.short1);
+        return [];
+      },
     ),
   ),
 ];
