@@ -66,8 +66,8 @@ class PostMap extends ConsumerWidget {
       error: (error, _) {
         //Pop up an error dialog if an error occurs
 
-        // ignore:
-
+        //ignore the location service disabled exception
+        //because we are already handling it in the mapPinViewModel
         if (error is! LocationServiceDisabledException) {
           final dialog = ErrorAlert(error: error);
           WidgetsBinding.instance.addPostFrameCallback((timestamp) {
