@@ -327,7 +327,7 @@ class AppActions {
 
     // Find and tap the delete button on the card
     final commentCard = find.ancestor(
-      of: find.text(comment),
+      of: commentText,
       matching: find.byKey(ProfileInfoCard.infoCardKey),
     );
     expect(commentCard, findsOne);
