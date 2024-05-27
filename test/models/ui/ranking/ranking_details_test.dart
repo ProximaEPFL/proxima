@@ -10,23 +10,26 @@ void main() {
     late List<RankingElementDetails> listRankingElementDetails;
 
     setUp(() {
-      final usersList = FirestoreUserGenerator.generateUserData(5);
-      listRankingElementDetails = usersList
-          .mapIndexed(
-            (index, user) => RankingElementDetails(
-              userDisplayName: user.displayName,
-              userUserName: user.username,
-              centauriPoints: user.centauriPoints,
-              userRank: index + 1,
-            ),
-          )
-          .toList();
+      final usersList = FirestoreUserGenerator.generateUserFirestore(5);
+      listRankingElementDetails = usersList.mapIndexed(
+        (index, user) {
+          final userData = user.data;
+          return RankingElementDetails(
+            userDisplayName: userData.displayName,
+            userUserName: userData.username,
+            userID: user.uid,
+            centauriPoints: userData.centauriPoints,
+            userRank: index + 1,
+          );
+        },
+      ).toList();
     });
 
     test("hash", () {
       final userRankingElementDetail = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
         userUserName: testingUserData.username,
+        userID: testingUserFirestoreId,
         centauriPoints: 10,
         userRank: 6,
       );
@@ -50,6 +53,7 @@ void main() {
       final userRankingElementDetail = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
         userUserName: testingUserData.username,
+        userID: testingUserFirestoreId,
         centauriPoints: 10,
         userRank: 6,
       );
@@ -71,6 +75,7 @@ void main() {
       final userRankingElementDetail1 = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
         userUserName: testingUserData.username,
+        userID: testingUserFirestoreId,
         centauriPoints: 10,
         userRank: 6,
       );
@@ -83,6 +88,7 @@ void main() {
       final userRankingElementDetail2 = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
         userUserName: testingUserData.username,
+        userID: testingUserFirestoreId,
         centauriPoints: 12,
         userRank: 7,
       );
@@ -99,6 +105,7 @@ void main() {
       final userRankingElementDetail = RankingElementDetails(
         userDisplayName: testingUserData.displayName,
         userUserName: testingUserData.username,
+        userID: testingUserFirestoreId,
         centauriPoints: 10,
         userRank: 6,
       );
@@ -108,17 +115,19 @@ void main() {
         rankElementDetailsList: listRankingElementDetails,
       );
 
-      final userList2 = FirestoreUserGenerator.generateUserData(3);
-      final listRankingElementDetails2 = userList2
-          .mapIndexed(
-            (index, user) => RankingElementDetails(
-              userDisplayName: user.displayName,
-              userUserName: user.username,
-              centauriPoints: user.centauriPoints,
-              userRank: index + 1,
-            ),
-          )
-          .toList();
+      final userList2 = FirestoreUserGenerator.generateUserFirestore(3);
+      final listRankingElementDetails2 = userList2.mapIndexed(
+        (index, user) {
+          final userData = user.data;
+          return RankingElementDetails(
+            userDisplayName: userData.displayName,
+            userUserName: userData.username,
+            userID: user.uid,
+            centauriPoints: userData.centauriPoints,
+            userRank: index + 1,
+          );
+        },
+      ).toList();
 
       final rankingDetails2 = RankingDetails(
         userRankElementDetails: userRankingElementDetail,
@@ -135,21 +144,24 @@ void main() {
     final userRankingElementDetail = RankingElementDetails(
       userDisplayName: testingUserData.displayName,
       userUserName: testingUserData.username,
+      userID: testingUserFirestoreId,
       centauriPoints: 10,
       userRank: 6,
     );
 
-    final usersList = FirestoreUserGenerator.generateUserData(5);
-    final listRankingElementDetails = usersList
-        .mapIndexed(
-          (index, user) => RankingElementDetails(
-            userDisplayName: user.displayName,
-            userUserName: user.username,
-            centauriPoints: user.centauriPoints,
-            userRank: index == 1 ? null : index + 1,
-          ),
-        )
-        .toList();
+    final usersList = FirestoreUserGenerator.generateUserFirestore(5);
+    final listRankingElementDetails = usersList.mapIndexed(
+      (index, user) {
+        final userData = user.data;
+        return RankingElementDetails(
+          userDisplayName: userData.displayName,
+          userUserName: userData.username,
+          userID: user.uid,
+          centauriPoints: userData.centauriPoints,
+          userRank: index == 1 ? null : index + 1,
+        );
+      },
+    ).toList();
 
     expect(
       () => {

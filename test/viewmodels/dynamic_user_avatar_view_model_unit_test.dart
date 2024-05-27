@@ -10,7 +10,7 @@ import "package:proxima/viewmodels/login_view_model.dart";
 import "../mocks/data/firestore_user.dart";
 
 void main() {
-  group("User Avatar ViewModel unit testing", () {
+  group("Dynamic User Avatar ViewModel unit testing", () {
     late FakeFirebaseFirestore fakeFireStore;
     late UserRepositoryService userRepo;
 
@@ -31,7 +31,8 @@ void main() {
       ];
     });
 
-    group("User Avatar display name provider unit testing without current user",
+    group(
+        "Dynamic User Avatar display name provider unit testing without current user",
         () {
       setUp(() async {
         container = ProviderContainer(
@@ -47,7 +48,7 @@ void main() {
         );
       });
     });
-    group("User Avatar display name provider unit testing", () {
+    group("Dynamic User Avatar display name provider unit testing", () {
       late List<UserFirestore> availableUsers;
 
       setUp(() async {
@@ -84,6 +85,30 @@ void main() {
             user.data.displayName,
           );
         }
+      });
+
+      group("User Centauri points unit testing", () {
+        test("Find centauri points given null user id", () async {
+          final userAvatarDetails = await container.read(
+            dynamicUserAvatarViewModelProvider(null).future,
+          );
+          expect(
+            userAvatarDetails.centauriPoints,
+            availableUsers[0].data.centauriPoints,
+          );
+        });
+
+        test("Find centauri points given user id in available users", () async {
+          for (final user in availableUsers) {
+            final userAvatarDetails = await container.read(
+              dynamicUserAvatarViewModelProvider(user.uid).future,
+            );
+            expect(
+              userAvatarDetails.centauriPoints,
+              user.data.centauriPoints,
+            );
+          }
+        });
       });
     });
   });

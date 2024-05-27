@@ -3,6 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/ranking/ranking_details.dart";
 import "package:proxima/models/ui/ranking/ranking_element_details.dart";
 import "package:proxima/services/database/user_repository_service.dart";
+import "package:proxima/viewmodels/dynamic_user_avatar_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
 /// Provides a refreshable async list of users that are sorted by
@@ -37,6 +38,7 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
       final userRankingDetails = RankingElementDetails(
         userDisplayName: userData.displayName,
         userUserName: userData.username,
+        userID: user.uid,
         centauriPoints: userData.centauriPoints,
         userRank: userRank,
       );
@@ -44,7 +46,8 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
       return userRankingDetails;
     }).toList();
 
-    final currentUserData = futures.$2.data;
+    final currentUser = futures.$2;
+    final currentUserData = currentUser.data;
 
     // If the current user is in the leaderboard, also provide its rank
     final currentUserRank = topUsers.firstWhereOrNull(
@@ -54,6 +57,7 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
     final currentUserRankingDetails = RankingElementDetails(
       userDisplayName: currentUserData.displayName,
       userUserName: currentUserData.username,
+      userID: currentUser.uid,
       centauriPoints: currentUserData.centauriPoints,
       userRank: currentUserRank?.userRank,
     );
@@ -64,6 +68,19 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
       userRankElementDetails: currentUserRankingDetails,
     );
 
+    // Get the list of user ids to refresh, and refresh the avatars.
+    // Note that we also need to refresh the null user avatar
+    // which represents the current user.
+    final userIds =
+        ([currentUser, null] + topUsersFromDb).map((user) => user?.uid);
+
+    for (final userId in userIds) {
+      ref
+          .read(
+            dynamicUserAvatarViewModelProvider(userId).notifier,
+          )
+          .refresh();
+    }
     return state;
   }
 

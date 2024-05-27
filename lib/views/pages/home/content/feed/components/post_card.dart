@@ -79,7 +79,7 @@ class PostCard extends ConsumerWidget {
             onTap: () => _onPostSelect(context, postDetails, ref),
             child: CommentCount(
               key: postCardCommentsNumberKey,
-              count: postDetails.commentNumber,
+              postId: postDetails.postId,
             ),
           ),
         ],
@@ -113,6 +113,7 @@ class PostCard extends ConsumerWidget {
                 key: postCardUserKey,
                 posterUsername: postDetails.ownerUsername,
                 posterDisplayName: postDetails.ownerDisplayName,
+                posterUserID: postDetails.ownerUserID,
                 posterCentauriPoints: postDetails.ownerCentauriPoints,
                 publicationDate: postDetails.publicationDate,
               ),

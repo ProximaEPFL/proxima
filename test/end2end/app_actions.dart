@@ -322,11 +322,21 @@ class AppActions {
     await tester.pumpAndSettle();
 
     // Check that the post content is displayed
-    expect(find.text(comment), findsOneWidget);
+    final commentText = find.text(comment);
+    expect(commentText, findsOneWidget);
 
-    // Find the delete button on card
-    final deleteButton = find.byKey(ProfileInfoCard.deleteButtonCardKey);
-    expect(deleteButton, findsOneWidget);
+    // Find and tap the delete button on the card
+    final commentCard = find.ancestor(
+      of: commentText,
+      matching: find.byKey(ProfileInfoCard.infoCardKey),
+    );
+    expect(commentCard, findsOne);
+
+    final deleteButton = find.descendant(
+      of: commentCard,
+      matching: find.byKey(ProfileInfoCard.deleteButtonCardKey),
+    );
+    expect(deleteButton, findsOne);
 
     await tester.tap(deleteButton);
     await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);

@@ -1,4 +1,5 @@
 import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/ui/post_details.dart";
 
 import "datetime.dart";
@@ -14,6 +15,7 @@ final List<PostDetails> testPosts = [
     // to simplify testing
     ownerDisplayName: "Proxima",
     ownerUsername: "Elephant",
+    ownerUserID: const UserIdFirestore(value: "ProximaUserID"),
     ownerCentauriPoints: 32,
     publicationDate: publicationDate1,
     distance: 20,
@@ -27,6 +29,7 @@ final List<PostDetails> testPosts = [
     commentNumber: 5,
     ownerDisplayName: "Proxima",
     ownerUsername: "ProximaUsername",
+    ownerUserID: const UserIdFirestore(value: "ProximaUserID"),
     ownerCentauriPoints: 7,
     publicationDate: publicationDate1,
     distance: 20,
@@ -40,6 +43,7 @@ final List<PostDetails> testPosts = [
     commentNumber: 829,
     ownerDisplayName: "Proxima",
     ownerUsername: "ProximaUsername",
+    ownerUserID: const UserIdFirestore(value: "ProximaUserID"),
     ownerCentauriPoints: 218281828,
     publicationDate: publicationDate1,
     distance: 20,
@@ -55,6 +59,7 @@ final timeDistancePost = PostDetails(
   commentNumber: 5,
   ownerDisplayName: "owner",
   ownerUsername: "ownerUsername",
+  ownerUserID: const UserIdFirestore(value: "ownerID"),
   ownerCentauriPoints: 911,
   publicationDate: DateTime.utc(1999),
   distance: 100,

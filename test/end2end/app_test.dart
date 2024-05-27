@@ -11,7 +11,6 @@ import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/pages/home/content/challenge/challenge_list.dart";
-import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/profile/components/profile_app_bar.dart";
 import "package:proxima/views/proxima_app.dart";
 
@@ -164,17 +163,19 @@ void main() {
     await AppActions.loginToCreateAccount(tester);
     await AppActions.createAccountToHome(tester);
     await AppActions.createPost(tester, testPostTitle, testPostDescription);
-    await AppActions.openPost(tester, testPostTitle);
-    const comment = "I like turtles too!";
-    await AppActions.addComment(tester, comment);
+    await AppActions.expectCommentCount(tester, testPostTitle, 0);
 
-    // back to feed
-    await AppActions.navigateBack(tester);
-    await AppActions.flingRefresh(tester, find.byType(PostFeed));
+    // Add two comments
+    const comments = ["I like turtles too!", "I prefer elephants"];
+    for (final (i, comment) in comments.indexed) {
+      await AppActions.openPost(tester, testPostTitle);
+      await AppActions.addComment(tester, comment);
+      await AppActions.navigateBack(tester);
+      await AppActions.expectCommentCount(tester, testPostTitle, i + 1);
+    }
 
-    // expect comment count to be correct
-    AppActions.expectCommentCount(tester, testPostTitle, 1);
-    await AppActions.deleteComment(tester, comment);
-    AppActions.expectCommentCount(tester, testPostTitle, 0);
+    // Deleting a comment should reduce the comment count
+    await AppActions.deleteComment(tester, comments.first);
+    await AppActions.expectCommentCount(tester, testPostTitle, 1);
   });
 }

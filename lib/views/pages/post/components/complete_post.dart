@@ -46,6 +46,7 @@ class CompletePost extends StatelessWidget {
             key: postUserBarKey,
             posterDisplayName: post.ownerDisplayName,
             posterUsername: post.ownerUsername,
+            posterUserID: post.ownerUserID,
             posterCentauriPoints: post.ownerCentauriPoints,
             publicationDate: post.publicationDate,
           ),

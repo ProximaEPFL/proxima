@@ -11,6 +11,7 @@ void main() {
         commentPost.content,
         commentPost.ownerDisplayName,
         commentPost.ownerUsername,
+        commentPost.ownerUserID,
         commentPost.ownerCentauriPoints,
         commentPost.publicationDate,
       );
@@ -31,21 +32,28 @@ void main() {
       final commentPost = unequalComments[0];
       final commentPostOther = unequalComments[1];
 
-      expect(commentPost != commentPostOther, true);
+      expect(commentPost, isNot(equals(commentPostOther)));
     });
 
     test("inequality test on username", () {
       final commentPost = unequalComments[0];
       final commentPostOther = unequalComments[2];
 
-      expect(commentPost != commentPostOther, true);
+      expect(commentPost, isNot(equals(commentPostOther)));
     });
 
     test("inequality test on publication time", () {
       final commentPost = unequalComments[0];
       final commentPostOther = unequalComments[3];
 
-      expect(commentPost != commentPostOther, true);
+      expect(commentPost, isNot(equals(commentPostOther)));
+    });
+
+    test("inequality test on owner ID", () {
+      final commentPost = unequalComments[0];
+      final commentPostOther = unequalComments[4];
+
+      expect(commentPost, isNot(equals(commentPostOther)));
     });
   });
 }
