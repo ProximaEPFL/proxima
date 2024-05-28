@@ -36,7 +36,7 @@ class MapPinPopUp extends StatelessWidget {
     return InfoPopUp(
       title: mapPinPopUpDetails.title,
       content: mapPinPopUpDetails.description,
-      actions: [arrowAction as Widget],
+      actions: arrowAction != null ? [arrowAction] : [],
     );
   }
 }

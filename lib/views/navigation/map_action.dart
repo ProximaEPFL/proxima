@@ -1,8 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/option_selection/selected_page_view_model.dart";
-
-import "bottom_navigation_bar/navigation_bar_routes.dart";
+import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 
 class MapAction extends ConsumerWidget {
   final int depth;
