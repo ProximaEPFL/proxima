@@ -56,6 +56,12 @@ class MapPinViewModel extends AutoDisposeAsyncNotifier<List<MapPinDetails>> {
       throw locationCheck;
     }
 
+    try {
+      await ref.watch(livePositionStreamProvider.future);
+    } catch (e) {
+      ref.invalidate(livePositionStreamProvider);
+    }
+
     final position = await ref.watch(livePositionStreamProvider.future);
     final postRepository = ref.watch(postRepositoryServiceProvider);
     final userRepository = ref.watch(userRepositoryServiceProvider);
