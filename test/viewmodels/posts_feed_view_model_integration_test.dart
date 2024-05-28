@@ -126,6 +126,7 @@ void main() {
                       .distanceBetweenInKm(geopoint: postPosition) *
                   1000)
               .round(),
+          location: userPosition1,
         ),
       ];
 
@@ -226,6 +227,7 @@ void main() {
                       .distanceBetweenInKm(geopoint: postPositions[index]) *
                   1000)
               .round(),
+          location: userPosition1,
         );
 
         return postDetails;

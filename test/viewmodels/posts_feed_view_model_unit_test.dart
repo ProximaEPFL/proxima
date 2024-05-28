@@ -122,6 +122,7 @@ void main() {
           ownerCentauriPoints: owner.data.centauriPoints,
           publicationDate: post.data.publicationTime.toDate(),
           distance: 0,
+          location: userPosition1,
         ),
       ];
 
@@ -181,6 +182,7 @@ void main() {
             ownerCentauriPoints: owner.data.centauriPoints,
             publicationDate: post.data.publicationTime.toDate(),
             distance: 0,
+            location: userPosition1,
           );
 
           return postDetails;
@@ -248,6 +250,7 @@ void main() {
             ownerCentauriPoints: owners[index].data.centauriPoints,
             publicationDate: post.data.publicationTime.toDate(),
             distance: 0,
+            location: userPosition1,
           );
 
           return postDetails;
@@ -328,6 +331,7 @@ void main() {
           ownerCentauriPoints: owner.data.centauriPoints,
           publicationDate: post.data.publicationTime.toDate(),
           distance: 0,
+          location: userPosition1,
         ),
       ];
 
