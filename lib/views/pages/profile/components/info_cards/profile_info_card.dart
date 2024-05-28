@@ -1,3 +1,4 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:proxima/views/components/async/loading_icon_button.dart";
 import "package:proxima/views/helpers/types/future_void_callback.dart";
@@ -13,11 +14,13 @@ class ProfileInfoCard extends StatelessWidget {
     required this.content,
     required this.onDelete,
     this.title,
+    this.location,
   });
 
   final String content;
   final FutureVoidCallback onDelete;
   final String? title;
+  final GeoPoint? location;
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +61,7 @@ class ProfileInfoCard extends StatelessWidget {
             title: title,
             content: content,
             onDelete: onDelete,
+            location: location,
           );
         },
       ),

@@ -1,3 +1,4 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/foundation.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 
@@ -8,12 +9,13 @@ class UserPostDetails {
   final PostIdFirestore postId;
   final String title;
   final String description;
-  // TODO add the location to be able to redirect to the map (see #184)
+  final GeoPoint location;
 
   const UserPostDetails({
     required this.postId,
     required this.title,
     required this.description,
+    required this.location,
   });
 
   @override
@@ -23,7 +25,8 @@ class UserPostDetails {
     return other is UserPostDetails &&
         other.postId == postId &&
         other.title == title &&
-        other.description == description;
+        other.description == description &&
+        other.location == location;
   }
 
   @override
@@ -32,6 +35,7 @@ class UserPostDetails {
       postId,
       title,
       description,
+      location,
     );
   }
 }

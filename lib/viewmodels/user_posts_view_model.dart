@@ -33,6 +33,7 @@ class UserPostsViewModel extends AutoDisposeAsyncNotifier<UserPostsState> {
         postId: post.id,
         title: post.data.title,
         description: post.data.description,
+        location: post.location.geoPoint,
       );
 
       return userPost;

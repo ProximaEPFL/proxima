@@ -2,6 +2,8 @@ import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/user_post_details.dart";
 
+import "../../mocks/data/geopoint.dart";
+
 void main() {
   group("User Post model testing", () {
     test("hash overrides correctly", () {
@@ -9,12 +11,14 @@ void main() {
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description",
+        location: userPosition0,
       );
 
       final expectedHash = Object.hash(
         userPost.postId,
         userPost.title,
         userPost.description,
+        userPost.location,
       );
 
       final actualHash = userPost.hashCode;
@@ -27,12 +31,14 @@ void main() {
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description",
+        location: userPosition0,
       );
 
       const userPostCopy = UserPostDetails(
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description",
+        location: userPosition0,
       );
 
       expect(userPost, userPostCopy);
@@ -43,12 +49,14 @@ void main() {
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description 1",
+        location: userPosition0,
       );
 
       const userPost2 = UserPostDetails(
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description 2",
+        location: userPosition0,
       );
 
       expect(userPost1 != userPost2, true);

@@ -24,7 +24,9 @@ class MapAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
-      onPressed: () {
+      onPressed: () async {
+        final mapViewModelNotifier = ref.read(mapViewModelProvider.notifier);
+
         for (var i = 0; i < depth; i++) {
           Navigator.pop(context);
         }
@@ -38,9 +40,11 @@ class MapAction extends ConsumerWidget {
             );
 
         if (initialLocation != null) {
-          ref.watch(mapViewModelProvider.notifier).updateCamera(
-                LatLng(initialLocation!.latitude, initialLocation!.longitude),
-              );
+          await Future.delayed(Duration(seconds: 1));
+          mapViewModelNotifier.updateCamera(
+            LatLng(initialLocation!.latitude, initialLocation!.longitude),
+            followEvent: false,
+          );
         }
       },
       icon: const Icon(Icons.map),
