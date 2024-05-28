@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:proxima/views/components/async/loading_icon_button.dart";
 import "package:proxima/views/components/content/info_pop_up.dart";
 import "package:proxima/views/helpers/types/future_void_callback.dart";
+import "package:proxima/views/navigation/map_action.dart";
 
 class ProfileInfoPopUp extends StatelessWidget {
   //key of the button
@@ -30,10 +31,12 @@ class ProfileInfoPopUp extends StatelessWidget {
       },
     );
 
+    const mapAction = MapAction(depth: 2);
+
     return InfoPopUp(
       title: title,
       content: content,
-      button: deleteAction,
+      actions: [mapAction, deleteAction],
     );
   }
 }
