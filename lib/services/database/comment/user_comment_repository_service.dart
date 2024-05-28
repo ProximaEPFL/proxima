@@ -69,6 +69,9 @@ class UserCommentRepositoryService {
   ) async {
     final userCommentCollection = _userCommentCollection(userId);
 
+    // Here, we limit the query to 1 because we only need to know if the user
+    // has commented at least once under the post. This limits the number of
+    // documents that need to be retrieved and improves the performance.
     final userCommentQuery = await userCommentCollection
         .where(UserCommentData.parentPostIdField, isEqualTo: parentPostId.value)
         .limit(1)
