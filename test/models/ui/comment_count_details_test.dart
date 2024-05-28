@@ -1,12 +1,14 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/ui/comment_count_details.dart";
 
+import "../../mocks/data/comment_count.dart";
+
 void main() {
   group("Testing comment count details", () {
     late CommentCountDetails comment;
 
     setUp(() {
-      comment = const CommentCountDetails(count: 1324, isIconBlue: true);
+      comment = testCommentCounts[0];
     });
 
     test("hash overrides correctly", () {
