@@ -32,7 +32,6 @@ void main() {
         posted: true,
       );
 
-      expect(newCommentState, newCommentStateCopy);
       expect(newCommentState == newCommentStateCopy, true);
     });
 

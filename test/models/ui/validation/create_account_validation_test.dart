@@ -34,7 +34,6 @@ void main() {
         accountCreated: true,
       );
 
-      expect(createAccount, createAccountCopy);
       expect(createAccount == createAccountCopy, true);
     });
 
