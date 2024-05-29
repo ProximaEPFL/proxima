@@ -61,7 +61,7 @@ void main() {
       final stateBeforeAdd = await newCommentViewModel.future;
       expect(
         stateBeforeAdd,
-        NewCommentValidation(contentError: null, posted: false),
+        const NewCommentValidation(contentError: null, posted: false),
       );
 
       // Add the comment
@@ -95,7 +95,7 @@ void main() {
       final stateAfterAdd = await newCommentViewModel.future;
       expect(
         stateAfterAdd,
-        NewCommentValidation(contentError: null, posted: true),
+        const NewCommentValidation(contentError: null, posted: true),
       );
 
       // Reset the state
@@ -105,7 +105,7 @@ void main() {
       final stateAfterReset = await newCommentViewModel.future;
       expect(
         stateAfterReset,
-        NewCommentValidation(contentError: null, posted: false),
+        const NewCommentValidation(contentError: null, posted: false),
       );
     });
 
@@ -119,7 +119,7 @@ void main() {
       final stateBeforeAdd = await newCommentViewModel.future;
       expect(
         stateBeforeAdd,
-        NewCommentValidation(contentError: null, posted: false),
+        const NewCommentValidation(contentError: null, posted: false),
       );
 
       // Add the comment
@@ -131,7 +131,7 @@ void main() {
       final stateAfterAdd = await newCommentViewModel.future;
       expect(
         stateAfterAdd,
-        NewCommentValidation(
+        const NewCommentValidation(
           contentError: NewCommentViewModel.contentEmptyError,
           posted: false,
         ),

@@ -63,4 +63,15 @@ class MockCommentRepositoryService extends Mock
       returnValue: Future.value(),
     );
   }
+
+  @override
+  Future<bool> hasUserCommentedUnderPost(
+    UserIdFirestore? userId,
+    PostIdFirestore? parentPostId,
+  ) {
+    return super.noSuchMethod(
+      Invocation.method(#hasUserCommentedUnderPost, [userId, parentPostId]),
+      returnValue: Future.value(false),
+    );
+  }
 }
