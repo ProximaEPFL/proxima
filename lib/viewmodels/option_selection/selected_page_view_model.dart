@@ -1,6 +1,6 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/viewmodels/option_selection/home_page_options.dart";
 import "package:proxima/viewmodels/option_selection/options_view_model.dart";
+import "package:proxima/views/components/options/home/home_page_options.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 
 class SelectedPageViewModel extends OptionsViewModel<HomePageOptions> {
@@ -14,7 +14,7 @@ class SelectedPageViewModel extends OptionsViewModel<HomePageOptions> {
     if (option.route.routeDestination != null) {
       throw Exception(
           "This page should be pushed and not set as the selected page."
-          "Use the navigate method instead.");
+          "push it manually from your context instead.");
     }
     super.setOption(option);
   }

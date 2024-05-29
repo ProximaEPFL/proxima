@@ -13,4 +13,18 @@ class HomePageOptions {
   Widget page() {
     return route.page(args);
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is HomePageOptions &&
+        other.route == route &&
+        other.args == args;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(route, args);
+  }
 }
