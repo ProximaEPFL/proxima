@@ -1,5 +1,5 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
+import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:proxima/views/components/async/loading_icon_button.dart";
 import "package:proxima/views/components/content/info_pop_up.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
@@ -19,7 +19,7 @@ class ProfileInfoPopUp extends StatelessWidget {
   });
 
   final String? title;
-  final GeoPoint? location;
+  final LatLng? location;
   final String content;
   final FutureVoidCallback onDelete;
 

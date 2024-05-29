@@ -1,5 +1,5 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/foundation.dart";
+import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 
 /// A post that belongs to the current logged in user.
@@ -9,7 +9,7 @@ class UserPostDetails {
   final PostIdFirestore postId;
   final String title;
   final String description;
-  final GeoPoint location;
+  final LatLng location;
 
   const UserPostDetails({
     required this.postId,

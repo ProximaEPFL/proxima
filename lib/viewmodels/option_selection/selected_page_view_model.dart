@@ -16,7 +16,8 @@ class SelectedPageViewModel extends OptionsViewModel<SelectedPageDetails> {
   void setOption(SelectedPageDetails option) {
     if (option.route.routeDestination != null) {
       throw Exception(
-          "This page should be pushed and not set as the selected page, push it directly from your context instead.");
+        "This page should be pushed and not set as the selected page, push it directly from your context instead.",
+      );
     }
     super.setOption(option);
   }

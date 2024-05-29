@@ -1,7 +1,7 @@
 import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/ui/challenge_details.dart";
 
-import "../../mocks/data/geopoint.dart";
+import "../../mocks/data/latlng.dart";
 
 void main() {
   group("Challenge card data testing", () {
@@ -10,7 +10,7 @@ void main() {
         title: "title",
         distance: 50,
         reward: 100,
-        location: userPosition0,
+        location: latLngLocation0,
       );
 
       final expectedHash = Object.hash(
@@ -31,13 +31,13 @@ void main() {
         title: "title",
         distance: 50,
         reward: 100,
-        location: userPosition0,
+        location: latLngLocation0,
       );
       const challengeCardDataCopy = ChallengeDetails.group(
         title: "title",
         distance: 50,
         reward: 100,
-        location: userPosition0,
+        location: latLngLocation0,
       );
 
       expect(challengeCardData, challengeCardDataCopy);

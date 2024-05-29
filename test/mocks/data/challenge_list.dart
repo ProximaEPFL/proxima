@@ -1,6 +1,6 @@
 import "package:proxima/models/ui/challenge_details.dart";
 
-import "geopoint.dart";
+import "latlng.dart";
 
 // All values are purposely different to test the UI more easily
 
@@ -10,7 +10,7 @@ const mockChallengeList = [
     distance: 700,
     timeLeft: 27,
     reward: 250,
-    location: userPosition0,
+    location: latLngLocation0,
   ),
   ChallengeDetails.solo(
     title:
@@ -18,23 +18,23 @@ const mockChallengeList = [
     distance: 3200,
     timeLeft: 28,
     reward: 400,
-    location: userPosition0,
+    location: latLngLocation0,
   ),
   ChallengeDetails.group(
     title: "I'm moving out",
     distance: 4000,
     reward: 350,
-    location: userPosition0,
+    location: latLngLocation0,
   ),
   ChallengeDetails.soloFinished(
     title: "What a view!",
     timeLeft: 29,
     reward: 200,
-    location: userPosition0,
+    location: latLngLocation0,
   ),
   ChallengeDetails.groupFinished(
     title: "I saw a bird here once",
     reward: 50,
-    location: userPosition0,
+    location: latLngLocation0,
   ),
 ];

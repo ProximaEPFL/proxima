@@ -9,6 +9,7 @@ import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_ro
 import "package:proxima/views/navigation/map_action.dart";
 
 import "../../mocks/data/geopoint.dart";
+import "../../mocks/data/latlng.dart";
 
 void main() {
   late SelectedPageViewModel selectedPageViewModel;
@@ -25,7 +26,7 @@ void main() {
         home: MapAction(
           depth: 0,
           mapOption: MapSelectionOptions.myPosts,
-          initialLocation: userPosition0,
+          initialLocation: latLngLocation0,
         ),
       ),
     );

@@ -1,7 +1,6 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
+import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/utils/extensions/geopoint_extensions.dart";
 import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
 import "package:proxima/viewmodels/option_selection/selected_page_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
@@ -17,7 +16,7 @@ class MapAction extends ConsumerWidget {
   final int depth;
 
   final MapSelectionOptions mapOption;
-  final GeoPoint initialLocation;
+  final LatLng initialLocation;
 
   const MapAction({
     super.key,
@@ -50,14 +49,14 @@ class MapAction extends ConsumerWidget {
     BuildContext context,
     MapSelectionOptions mapOption,
     int depth,
-    GeoPoint initialLocation,
+    LatLng initialLocation,
   ) async {
     for (var i = 0; i < depth; i++) {
       Navigator.pop(context);
     }
     ref.watch(selectedPageViewModelProvider.notifier).selectPage(
           NavigationBarRoutes.map,
-          initialLocation.toLatLng(),
+          initialLocation,
         );
 
     ref.watch(mapSelectionOptionsViewModelProvider.notifier).setOption(

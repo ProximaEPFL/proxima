@@ -1,5 +1,5 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
+import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:proxima/views/components/async/loading_icon_button.dart";
 import "package:proxima/views/helpers/types/future_void_callback.dart";
 import "package:proxima/views/pages/profile/components/info_cards/profile_info_pop_up.dart";
@@ -20,7 +20,7 @@ class ProfileInfoCard extends StatelessWidget {
   final String content;
   final FutureVoidCallback onDelete;
   final String? title;
-  final GeoPoint? location;
+  final LatLng? location;
 
   @override
   Widget build(BuildContext context) {

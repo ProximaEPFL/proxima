@@ -1,12 +1,12 @@
-import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/foundation.dart";
+import "package:google_maps_flutter/google_maps_flutter.dart";
 
 /// This class was hard to design. We considered multiple possible implementations,
 /// and decided to use this one. If we add a parameter requiring to double the number of
 /// constructors once more, it should be changed. Here are all the possibilities:
 /// 1) Use one constructor per possibility, storing unused parameter as null internally (it is
 ///    the possibility we chose here).
-/// 2) Use a single constructor, asking the developer instanciating it to set the correct
+/// 2) Use a single constructor, asking the developer instantiating it to set the correct
 ///    parameters to null (a null distance to finish the challenge, for instance).
 /// 3) Use a single constructor, but with additional boolean parameters to specify if the
 ///    class is a group challenge or if it is finished. This requires asserts to check that
@@ -19,7 +19,7 @@ class ChallengeDetails {
   final int? distance;
   final int? timeLeft;
   final int reward;
-  final GeoPoint location;
+  final LatLng location;
 
   /// Creates a [ChallengeDetails] with the given parameters. The [title] is the
   /// post's title, the [distance] is the distance to the challenge in meters, the [timeLeft]

@@ -2,7 +2,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/user_post_details.dart";
 
-import "../../mocks/data/geopoint.dart";
+import "../../mocks/data/latlng.dart";
 
 void main() {
   group("User Post model testing", () {
@@ -11,7 +11,7 @@ void main() {
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description",
-        location: userPosition0,
+        location: latLngLocation0,
       );
 
       final expectedHash = Object.hash(
@@ -31,14 +31,14 @@ void main() {
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description",
-        location: userPosition0,
+        location: latLngLocation0,
       );
 
       const userPostCopy = UserPostDetails(
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description",
-        location: userPosition0,
+        location: latLngLocation0,
       );
 
       expect(userPost, userPostCopy);
@@ -49,14 +49,14 @@ void main() {
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description 1",
-        location: userPosition0,
+        location: latLngLocation0,
       );
 
       const userPost2 = UserPostDetails(
         postId: PostIdFirestore(value: "post_1"),
         title: "title",
         description: "description 2",
-        location: userPosition0,
+        location: latLngLocation0,
       );
 
       expect(userPost1 != userPost2, true);

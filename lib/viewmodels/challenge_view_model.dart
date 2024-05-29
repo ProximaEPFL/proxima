@@ -5,6 +5,7 @@ import "package:proxima/models/ui/challenge_details.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
+import "package:proxima/utils/extensions/geopoint_extensions.dart";
 import "package:proxima/viewmodels/dynamic_user_avatar_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
@@ -49,14 +50,14 @@ class ChallengeViewModel
           distance: distanceM,
           timeLeft: timeLeft.inHours,
           reward: ChallengeRepositoryService.soloChallengeReward,
-          location: post.location.geoPoint,
+          location: post.location.geoPoint.toLatLng(),
         );
       } else {
         return ChallengeDetails.soloFinished(
           title: post.data.title,
           timeLeft: timeLeft.inHours,
           reward: ChallengeRepositoryService.soloChallengeReward,
-          location: post.location.geoPoint,
+          location: post.location.geoPoint.toLatLng(),
         );
       }
     });
