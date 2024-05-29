@@ -2,10 +2,15 @@
 /// It contains the content error message (null if there is no error)
 /// and a flag to indicate if the comment was posted
 class NewCommentValidation {
+  static const defaultValue = NewCommentValidation(
+    contentError: null,
+    posted: false,
+  );
+
   final String? contentError;
   final bool posted;
 
-  NewCommentValidation({
+  const NewCommentValidation({
     required this.contentError,
     required this.posted,
   });
