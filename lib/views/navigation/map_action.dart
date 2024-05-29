@@ -24,7 +24,7 @@ class MapAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
-      onPressed: () async {
+      onPressed: () {
         openMap(
           ref,
           context,
@@ -37,7 +37,7 @@ class MapAction extends ConsumerWidget {
     );
   }
 
-  static void openMap(
+  static Future<void> openMap(
     WidgetRef ref,
     BuildContext context,
     MapSelectionOptions mapOption,
@@ -59,7 +59,7 @@ class MapAction extends ConsumerWidget {
 
     if (initialLocation != null) {
       await Future.delayed(const Duration(seconds: 1));
-      mapViewModelNotifier.updateCamera(
+      await mapViewModelNotifier.updateCamera(
         initialLocation.toLatLng(),
         followEvent: false,
       );
