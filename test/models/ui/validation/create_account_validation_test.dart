@@ -34,7 +34,55 @@ void main() {
         accountCreated: true,
       );
 
-      expect(createAccount, createAccountCopy);
+      expect(createAccount == createAccountCopy, true);
+    });
+
+    test("equality fails on different uniqueUsernameError", () {
+      const createAccount = CreateAccountValidation(
+        uniqueUsernameError: "uniqueUsernameError",
+        pseudoError: "pseudoError",
+        accountCreated: true,
+      );
+
+      const createAccountCopy = CreateAccountValidation(
+        uniqueUsernameError: "uniqueUsernameError2",
+        pseudoError: "pseudoError",
+        accountCreated: true,
+      );
+
+      expect(createAccount == createAccountCopy, false);
+    });
+
+    test("equality fails on different pseudoError", () {
+      const createAccount = CreateAccountValidation(
+        uniqueUsernameError: "uniqueUsernameError",
+        pseudoError: "pseudoError",
+        accountCreated: true,
+      );
+
+      const createAccountCopy = CreateAccountValidation(
+        uniqueUsernameError: "uniqueUsernameError",
+        pseudoError: "pseudoError2",
+        accountCreated: true,
+      );
+
+      expect(createAccount == createAccountCopy, false);
+    });
+
+    test("equality fails on different accountCreated", () {
+      const createAccount = CreateAccountValidation(
+        uniqueUsernameError: "uniqueUsernameError",
+        pseudoError: "pseudoError",
+        accountCreated: true,
+      );
+
+      const createAccountCopy = CreateAccountValidation(
+        uniqueUsernameError: "uniqueUsernameError",
+        pseudoError: "pseudoError",
+        accountCreated: false,
+      );
+
+      expect(createAccount == createAccountCopy, false);
     });
   });
 }

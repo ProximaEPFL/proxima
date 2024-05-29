@@ -2,7 +2,7 @@ import "package:flutter_test/flutter_test.dart";
 import "package:proxima/models/ui/validation/new_post_validation.dart";
 
 void main() {
-  group("Create Account Model testing", () {
+  group("New Post Model testing", () {
     test("hash overrides correctly", () {
       final newPostState = NewPostValidation(
         titleError: "titleError",
