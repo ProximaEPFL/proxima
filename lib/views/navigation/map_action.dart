@@ -49,20 +49,13 @@ class MapAction extends ConsumerWidget {
     for (var i = 0; i < depth; i++) {
       Navigator.pop(context);
     }
-    ref.watch(selectedPageViewModelProvider.notifier).setOption(
+    ref.watch(selectedPageViewModelProvider.notifier).navigate(
           NavigationBarRoutes.map,
+          initialLocation?.toLatLng(),
         );
 
     ref.watch(mapSelectionOptionsViewModelProvider.notifier).setOption(
           mapOption,
         );
-
-    if (initialLocation != null) {
-      await Future.delayed(const Duration(seconds: 1));
-      await mapViewModelNotifier.updateCamera(
-        initialLocation.toLatLng(),
-        followEvent: false,
-      );
-    }
   }
 }

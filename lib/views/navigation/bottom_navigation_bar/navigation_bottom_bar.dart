@@ -21,9 +21,9 @@ class NavigationBottomBar extends ConsumerWidget {
       );
     }).toList();
 
-    final selectedRoute = ref.watch(selectedPageViewModelProvider);
+    final selectedOption = ref.watch(selectedPageViewModelProvider);
     final selectedRouteIndex =
-        NavigationBarRoutes.values.indexOf(selectedRoute);
+        NavigationBarRoutes.values.indexOf(selectedOption.route);
 
     return NavigationBar(
       key: navigationBottomBarKey,
@@ -33,7 +33,7 @@ class NavigationBottomBar extends ConsumerWidget {
       onDestinationSelected: (int nextIndex) {
         final route = NavigationBarRoutes.values[nextIndex];
         if (route.routeDestination == null) {
-          ref.watch(selectedPageViewModelProvider.notifier).setOption(route);
+          ref.watch(selectedPageViewModelProvider.notifier).navigate(route);
         } else {
           Navigator.pushNamed(context, route.routeDestination!.name);
         }
