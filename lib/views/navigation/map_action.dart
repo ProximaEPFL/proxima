@@ -33,7 +33,7 @@ class MapAction extends ConsumerWidget {
           initialLocation: initialLocation,
         );
       },
-      icon: const Icon(Icons.map),
+      icon: NavigationBarRoutes.map.icon,
     );
   }
 
