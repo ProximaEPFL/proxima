@@ -330,5 +330,36 @@ void main() {
         }
       });
     });
+
+    group(
+      "getting if user has commented on post",
+      () {
+        test("should return true if the user has commented on the post",
+            () async {
+          await commentGenerator.addComment(
+            post.id,
+            user.uid,
+            commentRepo,
+          );
+
+          final hasUserCommented = await commentRepo.hasUserCommentedUnderPost(
+            user.uid,
+            post.id,
+          );
+
+          expect(hasUserCommented, isTrue);
+        });
+
+        test("should return false if the user has not commented on the post",
+            () async {
+          final hasUserCommented = await commentRepo.hasUserCommentedUnderPost(
+            user.uid,
+            post.id,
+          );
+
+          expect(hasUserCommented, isFalse);
+        });
+      },
+    );
   });
 }
