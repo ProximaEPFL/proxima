@@ -55,8 +55,13 @@ class ChallengeCard extends ConsumerWidget {
       clipBehavior: Clip.hardEdge,
       child: InkWell(
         onTap: () {
-          MapAction.openMap(ref, context, MapSelectionOptions.challenges, 1,
-              initialLocation: challenge.location);
+          MapAction.openMap(
+            ref,
+            context,
+            MapSelectionOptions.challenges,
+            0,
+            initialLocation: challenge.location,
+          );
         },
         child: Opacity(
           opacity: challenge.isFinished ? _opacityWhenChallengedFinished : 1.0,
