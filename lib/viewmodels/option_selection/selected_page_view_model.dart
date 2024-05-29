@@ -1,16 +1,16 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:proxima/models/ui/selected_page_details.dart";
 import "package:proxima/viewmodels/option_selection/options_view_model.dart";
-import "package:proxima/views/components/options/home/home_page_options.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 
-class SelectedPageViewModel extends OptionsViewModel<HomePageOptions> {
+class SelectedPageViewModel extends OptionsViewModel<SelectedPageDetails> {
   static const defaultSelectedPage =
-      HomePageOptions(route: NavigationBarRoutes.feed);
+      SelectedPageDetails(route: NavigationBarRoutes.feed);
 
   SelectedPageViewModel() : super(defaultSelectedPage);
 
   @override
-  void setOption(HomePageOptions option) {
+  void setOption(SelectedPageDetails option) {
     if (option.route.routeDestination != null) {
       throw Exception(
           "This page should be pushed and not set as the selected page."
@@ -19,12 +19,12 @@ class SelectedPageViewModel extends OptionsViewModel<HomePageOptions> {
     super.setOption(option);
   }
 
-  void navigate(NavigationBarRoutes route, [Object? args]) {
-    setOption(HomePageOptions(route: route, args: args));
+  void selectPage(NavigationBarRoutes route, [Object? args]) {
+    setOption(SelectedPageDetails(route: route, args: args));
   }
 }
 
 final selectedPageViewModelProvider =
-    NotifierProvider<SelectedPageViewModel, HomePageOptions>(
+    NotifierProvider<SelectedPageViewModel, SelectedPageDetails>(
   () => SelectedPageViewModel(),
 );

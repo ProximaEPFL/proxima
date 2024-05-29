@@ -46,7 +46,7 @@ class MapAction extends ConsumerWidget {
     for (var i = 0; i < depth; i++) {
       Navigator.pop(context);
     }
-    ref.watch(selectedPageViewModelProvider.notifier).navigate(
+    ref.watch(selectedPageViewModelProvider.notifier).selectPage(
           NavigationBarRoutes.map,
           initialLocation?.toLatLng(),
         );
