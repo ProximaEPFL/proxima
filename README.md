@@ -36,11 +36,11 @@ Here are a few screenshots of the main screens of the application:
 
 ### User Interface Design
 
-Link to the [Mockup](https://design.penpot.app/#/view/68a1c0e6-b27c-807b-8004-4f1cc693ba89?page-id=76cd5706-e69f-8069-8004-1a1578d3f0c7&section=interactions&index=40&share-id=ee63301e-1fa7-81b1-8004-5bef8c6bb2fd) (view mode only).
+Link to the [Mockup](https://design.penpot.app/#/view/ee63301e-1fa7-81b1-8004-5bee937a6d84?page-id=76cd5706-e69f-8069-8004-1a1578d3f0c7&section=interactions&index=41&share-id=271c9855-ceb4-8079-8004-6c8525144113) (view mode only).
 
-Link to the [Wireframe](https://design.penpot.app/#/view/68a1c0e6-b27c-807b-8004-4f1cc693ba89?page-id=93d0ad32-dfe5-8194-8004-0171998eeabf&section=interactions&index=20&share-id=ee63301e-1fa7-81b1-8004-5bef2dc7d349) (view mode only).
+Link to the [Wireframe](https://design.penpot.app/#/view/ee63301e-1fa7-81b1-8004-5bee937a6d84?page-id=93d0ad32-dfe5-8194-8004-0171998eeabf&section=interactions&index=17&share-id=064214a4-70ce-8065-8004-6c855a546150) (view mode only).
 
-Link to the [Penpot Project](https://design.penpot.app/#/workspace/43442e9d-d45f-8169-8004-017078780238/68a1c0e6-b27c-807b-8004-4f1cc693ba89).
+Link to the [Penpot Project](https://design.penpot.app/#/workspace/43442e9d-d45f-8169-8004-017078780238/ee63301e-1fa7-81b1-8004-5bee937a6d84?page-id=93d0ad32-dfe5-8194-8004-0171998eeabf).
 
 ### Project Architecture Diagram
 
