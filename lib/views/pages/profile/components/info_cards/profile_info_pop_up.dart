@@ -35,16 +35,22 @@ class ProfileInfoPopUp extends StatelessWidget {
       },
     );
 
-    final mapAction = MapAction(
-      depth: 2,
-      mapOption: MapSelectionOptions.myPosts,
-      initialLocation: location,
-    );
+    List<Widget> actions = [deleteAction];
+    if (location != null) {
+      actions.insert(
+        0,
+        MapAction(
+          depth: 2,
+          mapOption: MapSelectionOptions.myPosts,
+          initialLocation: location,
+        ),
+      );
+    }
 
     return InfoPopUp(
       title: title,
       content: content,
-      actions: [mapAction, deleteAction],
+      actions: actions,
     );
   }
 }
