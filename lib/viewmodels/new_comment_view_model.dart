@@ -1,7 +1,6 @@
 import "dart:async";
 
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
@@ -13,16 +12,11 @@ import "package:proxima/viewmodels/login_view_model.dart";
 /// post id [PostIdFirestore] is provided as an argument.
 class NewCommentViewModel
     extends FamilyAsyncNotifier<NewCommentValidation, PostIdFirestore> {
-  static const String contentEmptyError = "Please fill out your comment";
-
-  // The controller for the content of the comment
-  // is kept in the view model to avoid losing the content of the comment
-  // if the user navigates away from the page inadvertedly.
-  final contentController = TextEditingController();
+  static const contentEmptyError = "Please fill out your comment";
 
   @override
   Future<NewCommentValidation> build(PostIdFirestore arg) async {
-    return NewCommentValidation(contentError: null, posted: false);
+    return NewCommentValidation.defaultValue;
   }
 
   /// Validates that the content is not empty.
@@ -30,7 +24,7 @@ class NewCommentViewModel
   /// Returns true if the content is not empty, false otherwise.
   bool validate(String content) {
     if (content.isEmpty) {
-      state = AsyncData(
+      state = const AsyncData(
         NewCommentValidation(
           contentError: contentEmptyError,
           posted: false,
@@ -85,7 +79,7 @@ class NewCommentViewModel
 
     await commentRepository.addComment(postId, commentData);
 
-    state = AsyncData(
+    state = const AsyncData(
       NewCommentValidation(
         contentError: null,
         posted: true,

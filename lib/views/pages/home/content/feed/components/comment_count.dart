@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/models/ui/comment_count_details.dart";
 import "package:proxima/viewmodels/post_comment_count_view_model.dart";
 
 /// This widget is used to display the comment number in the post card.
@@ -16,16 +17,20 @@ class CommentCount extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncCount = ref.watch(postCommentCountProvider(postId));
-    final count = asyncCount.value ?? 0;
+    final countDetails = asyncCount.value ?? CommentCountDetails.empty;
 
-    const icon = Icon(Icons.comment, size: 20);
-    final countText = Text(count.toString());
+    final icon = Icon(
+      Icons.comment,
+      size: 20,
+      color: countDetails.isIconBlue ? Colors.blue : null,
+    );
+    final countText = Text(countDetails.count.toString());
 
     final content = Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        const Padding(
-          padding: EdgeInsets.all(4),
+        Padding(
+          padding: const EdgeInsets.all(4),
           child: icon,
         ),
         Padding(
