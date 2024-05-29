@@ -5,7 +5,7 @@ void main() {
   group("New Comment Model Testing", () {
     test("hash overrides correctly", () {
       // Define the expected result
-      final newCommentState = NewCommentValidation(
+      const newCommentState = NewCommentValidation(
         contentError: "contentError",
         posted: true,
       );
@@ -22,12 +22,12 @@ void main() {
 
     test("equality overrides correctly", () {
       // Define the expected result
-      final newCommentState = NewCommentValidation(
+      const newCommentState = NewCommentValidation(
         contentError: "commentError",
         posted: true,
       );
 
-      final newCommentStateCopy = NewCommentValidation(
+      const newCommentStateCopy = NewCommentValidation(
         contentError: "commentError",
         posted: true,
       );
@@ -37,12 +37,12 @@ void main() {
 
     test("equality fails on different contentError", () {
       // Define the expected result
-      final newCommentState = NewCommentValidation(
+      const newCommentState = NewCommentValidation(
         contentError: "commentError",
         posted: true,
       );
 
-      final newCommentStateCopy = NewCommentValidation(
+      const newCommentStateCopy = NewCommentValidation(
         contentError: "commentError2",
         posted: true,
       );
@@ -52,12 +52,12 @@ void main() {
 
     test("equality fails on different posted", () {
       // Define the expected result
-      final newCommentState = NewCommentValidation(
+      const newCommentState = NewCommentValidation(
         contentError: "commentError",
         posted: true,
       );
 
-      final newCommentStateCopy = NewCommentValidation(
+      const newCommentStateCopy = NewCommentValidation(
         contentError: "commentError",
         posted: false,
       );
