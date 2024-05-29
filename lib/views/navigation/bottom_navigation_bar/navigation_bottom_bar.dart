@@ -31,9 +31,12 @@ class NavigationBottomBar extends ConsumerWidget {
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       selectedIndex: selectedRouteIndex,
       onDestinationSelected: (int nextIndex) {
-        ref
-            .watch(selectedPageViewModelProvider.notifier)
-            .navigate(NavigationBarRoutes.values[nextIndex], context);
+        final route = NavigationBarRoutes.values[nextIndex];
+        if (route.routeDestination == null) {
+          ref.watch(selectedPageViewModelProvider.notifier).setOption(route);
+        } else {
+          Navigator.pushNamed(context, route.routeDestination!.name);
+        }
       },
       destinations: destinations,
     );

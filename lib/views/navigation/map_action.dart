@@ -30,9 +30,8 @@ class MapAction extends ConsumerWidget {
         for (var i = 0; i < depth; i++) {
           Navigator.pop(context);
         }
-        ref.watch(selectedPageViewModelProvider.notifier).navigate(
+        ref.watch(selectedPageViewModelProvider.notifier).setOption(
               NavigationBarRoutes.map,
-              context,
             );
 
         ref.watch(mapSelectionOptionsViewModelProvider.notifier).setOption(
@@ -40,7 +39,7 @@ class MapAction extends ConsumerWidget {
             );
 
         if (initialLocation != null) {
-          await Future.delayed(Duration(seconds: 1));
+          await Future.delayed(const Duration(seconds: 1));
           mapViewModelNotifier.updateCamera(
             LatLng(initialLocation!.latitude, initialLocation!.longitude),
             followEvent: false,
