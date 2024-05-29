@@ -42,7 +42,7 @@ class ProfileInfoPopUp extends StatelessWidget {
         MapAction(
           depth: 2,
           mapOption: MapSelectionOptions.myPosts,
-          initialLocation: location,
+          initialLocation: location!,
         ),
       );
     }

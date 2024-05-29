@@ -60,7 +60,7 @@ class ChallengeCard extends ConsumerWidget {
             context,
             MapSelectionOptions.challenges,
             0,
-            initialLocation: challenge.location,
+            challenge.location,
           );
         },
         child: Opacity(

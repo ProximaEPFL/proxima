@@ -13,13 +13,13 @@ class MapAction extends ConsumerWidget {
   final int depth;
 
   final MapSelectionOptions mapOption;
-  final GeoPoint? initialLocation;
+  final GeoPoint initialLocation;
 
   const MapAction({
     super.key,
     required this.depth,
     required this.mapOption,
-    this.initialLocation,
+    required this.initialLocation,
   });
 
   @override
@@ -31,7 +31,7 @@ class MapAction extends ConsumerWidget {
           context,
           mapOption,
           depth,
-          initialLocation: initialLocation,
+          initialLocation,
         );
       },
       icon: NavigationBarRoutes.map.icon,
@@ -39,19 +39,21 @@ class MapAction extends ConsumerWidget {
     );
   }
 
+  /// Open the map with the given [mapOption] and [initialLocation].
+  /// The [depth] is used to pop the navigation stack back to the root page.
   static Future<void> openMap(
     WidgetRef ref,
     BuildContext context,
     MapSelectionOptions mapOption,
-    int depth, {
-    GeoPoint? initialLocation,
-  }) async {
+    int depth,
+    GeoPoint initialLocation,
+  ) async {
     for (var i = 0; i < depth; i++) {
       Navigator.pop(context);
     }
     ref.watch(selectedPageViewModelProvider.notifier).selectPage(
           NavigationBarRoutes.map,
-          initialLocation?.toLatLng(),
+          initialLocation.toLatLng(),
         );
 
     ref.watch(mapSelectionOptionsViewModelProvider.notifier).setOption(

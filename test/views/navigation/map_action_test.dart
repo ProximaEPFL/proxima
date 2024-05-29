@@ -2,10 +2,13 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/selected_page_details.dart";
+import "package:proxima/utils/extensions/geopoint_extensions.dart";
 import "package:proxima/viewmodels/option_selection/selected_page_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/map_action.dart";
+
+import "../../mocks/data/geopoint.dart";
 
 void main() {
   late SelectedPageViewModel selectedPageViewModel;
@@ -22,6 +25,7 @@ void main() {
         home: MapAction(
           depth: 0,
           mapOption: MapSelectionOptions.myPosts,
+          initialLocation: userPosition0,
         ),
       ),
     );
@@ -40,7 +44,10 @@ void main() {
 
     expect(
       selectedPageViewModel.state,
-      const SelectedPageDetails(route: NavigationBarRoutes.map),
+      SelectedPageDetails(
+        route: NavigationBarRoutes.map,
+        args: userPosition0.toLatLng(),
+      ),
     );
   });
 }
