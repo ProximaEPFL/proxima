@@ -2,7 +2,6 @@ import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/utils/extensions/geopoint_extensions.dart";
-import "package:proxima/viewmodels/map/map_view_model.dart";
 import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
 import "package:proxima/viewmodels/option_selection/selected_page_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
@@ -44,8 +43,6 @@ class MapAction extends ConsumerWidget {
     int depth, {
     GeoPoint? initialLocation,
   }) async {
-    final mapViewModelNotifier = ref.read(mapViewModelProvider(null).notifier);
-
     for (var i = 0; i < depth; i++) {
       Navigator.pop(context);
     }
