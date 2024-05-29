@@ -9,7 +9,7 @@ import "package:proxima/viewmodels/map/map_view_model.dart";
 import "package:proxima/views/components/async/error_alert.dart";
 import "package:proxima/views/pages/home/content/map/components/map_pin_pop_up.dart";
 
-/// This widget displays the Google Map
+/// This widget displays the Google Map. Initially centered on initialLocation.
 class PostMap extends ConsumerWidget {
   final MapDetails mapInfo;
   final LatLng? initialLocation;

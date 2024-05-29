@@ -9,7 +9,9 @@ import "package:proxima/utils/extensions/geopoint_extensions.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 
 /// This view model is responsible for managing the actual location
-/// of the user on the map and the displayed circles.
+/// of the user on the map and the displayed circles. Building with a [LatLng]
+/// will set the initial location of the map to the given [LatLng]. Otherwise
+/// it will use the current location of the user.
 class MapViewModel extends AutoDisposeFamilyAsyncNotifier<MapDetails, LatLng?> {
   @override
   Future<MapDetails> build([LatLng? arg]) async {
