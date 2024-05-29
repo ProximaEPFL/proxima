@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 
+/// A class that holds the currently open page in the home screen, with optional
+/// arguments.
 class SelectedPageDetails {
   final NavigationBarRoutes route;
   final Object? args;

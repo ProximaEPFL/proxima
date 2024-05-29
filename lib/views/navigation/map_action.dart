@@ -7,6 +7,10 @@ import "package:proxima/viewmodels/option_selection/selected_page_view_model.dar
 import "package:proxima/views/components/options/map/map_selection_options.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 
+/// An icon that opens the map with the given [mapOption] and [initialLocation]
+/// when pressed. The [depth] is how many pop backs should be made to reach the
+/// home page. This is useful when the map action is nested in a popup. Shows
+/// the map icon.
 class MapAction extends ConsumerWidget {
   static const mapActionKey = Key("MapAction");
 
