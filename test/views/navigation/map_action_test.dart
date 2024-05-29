@@ -38,7 +38,9 @@ void main() {
     await tester.tap(find.byKey(MapAction.mapActionKey));
     await tester.pumpAndSettle();
 
-    expect(selectedPageViewModel.state,
-        const SelectedPageDetails(route: NavigationBarRoutes.map));
+    expect(
+      selectedPageViewModel.state,
+      const SelectedPageDetails(route: NavigationBarRoutes.map),
+    );
   });
 }
