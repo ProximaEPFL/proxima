@@ -49,12 +49,14 @@ class ChallengeViewModel
           distance: distanceM,
           timeLeft: timeLeft.inHours,
           reward: ChallengeRepositoryService.soloChallengeReward,
+          location: post.location.geoPoint,
         );
       } else {
         return ChallengeDetails.soloFinished(
           title: post.data.title,
           timeLeft: timeLeft.inHours,
           reward: ChallengeRepositoryService.soloChallengeReward,
+          location: post.location.geoPoint,
         );
       }
     });

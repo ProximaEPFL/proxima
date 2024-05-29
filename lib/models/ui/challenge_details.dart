@@ -1,3 +1,4 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/foundation.dart";
 
 /// This class was hard to design. We considered multiple possible implementations,
@@ -18,6 +19,7 @@ class ChallengeDetails {
   final int? distance;
   final int? timeLeft;
   final int reward;
+  final GeoPoint location;
 
   /// Creates a [ChallengeDetails] with the given parameters. The [title] is the
   /// post's title, the [distance] is the distance to the challenge in meters, the [timeLeft]
@@ -28,27 +30,32 @@ class ChallengeDetails {
     required int this.distance,
     required int this.timeLeft,
     required this.reward,
+    required this.location,
   });
 
   const ChallengeDetails.group({
     required this.title,
     required int this.distance,
     required this.reward,
+    required this.location,
   }) : timeLeft = null;
 
   const ChallengeDetails.soloFinished({
     required this.title,
     required int this.timeLeft,
     required this.reward,
+    required this.location,
   }) : distance = null;
 
   const ChallengeDetails.groupFinished({
     required this.title,
     required this.reward,
+    required this.location,
   })  : distance = null,
         timeLeft = null;
 
   bool get isFinished => distance == null;
+
   bool get isGroupChallenge => timeLeft == null;
 
   @override
@@ -57,11 +64,12 @@ class ChallengeDetails {
         other.title == title &&
         other.distance == distance &&
         other.timeLeft == timeLeft &&
-        other.reward == reward;
+        other.reward == reward &&
+        other.location == location;
   }
 
   @override
   int get hashCode {
-    return Object.hash(title, distance, timeLeft, reward);
+    return Object.hash(title, distance, timeLeft, reward, location);
   }
 }
