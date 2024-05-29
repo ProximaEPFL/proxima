@@ -1,21 +1,24 @@
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
+import "package:proxima/models/ui/comment_count_details.dart";
 import "package:proxima/viewmodels/post_comment_count_view_model.dart";
 
 /// A mock implementation of the [PostCommentCountViewModel] class.
 /// Its state is always the same and can be set in the constructor.
 class MockPostCommentCountViewModel
-    extends FamilyAsyncNotifier<int, PostIdFirestore>
+    extends FamilyAsyncNotifier<CommentCountDetails, PostIdFirestore>
     implements PostCommentCountViewModel {
-  final int count;
+  final CommentCountDetails countDetails;
 
-  /// Creates a new [MockPostCommentCountViewModel] with the given [count],
+  /// Creates a new [MockPostCommentCountViewModel] with the given [countDetails],
   /// which is the value that will always be returned by this view-model.
-  MockPostCommentCountViewModel({this.count = 0});
+  MockPostCommentCountViewModel({
+    this.countDetails = CommentCountDetails.empty,
+  });
 
   @override
-  Future<int> build(PostIdFirestore arg) async {
-    return count;
+  Future<CommentCountDetails> build(PostIdFirestore arg) async {
+    return countDetails;
   }
 
   @override
