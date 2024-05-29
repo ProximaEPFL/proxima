@@ -8,6 +8,8 @@ import "package:proxima/views/components/options/map/map_selection_options.dart"
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 
 class MapAction extends ConsumerWidget {
+  static const mapActionKey = Key("MapAction");
+
   final int depth;
 
   final MapSelectionOptions mapOption;
@@ -33,6 +35,7 @@ class MapAction extends ConsumerWidget {
         );
       },
       icon: NavigationBarRoutes.map.icon,
+      key: mapActionKey,
     );
   }
 
