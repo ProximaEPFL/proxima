@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/viewmodels/map/map_view_model.dart";
 import "package:proxima/views/components/async/circular_value.dart";
@@ -9,7 +10,12 @@ import "package:proxima/views/pages/home/content/map/components/post_map.dart";
 
 /// This widget displays a map with chips to select the type of map.
 class MapScreen extends ConsumerWidget {
-  const MapScreen({super.key});
+  final LatLng? initialLocation;
+
+  const MapScreen({
+    super.key,
+    this.initialLocation,
+  });
 
   static const mapScreenKey = Key("mapScreen");
   static const dividerKey = Key("divider");
@@ -17,7 +23,8 @@ class MapScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mapInfo = ref.watch(mapViewModelProvider.future).mapRes();
+    final mapInfo =
+        ref.watch(mapViewModelProvider(initialLocation).future).mapRes();
 
     return CircularValue(
       future: mapInfo,
@@ -29,14 +36,15 @@ class MapScreen extends ConsumerWidget {
               MapSelectionOptionChips(mapInfo: value),
               const Divider(key: dividerKey),
               //TODO: change the map when clicking on a selection option
-              PostMap(mapInfo: value),
+              PostMap(mapInfo: value, initialLocation: initialLocation),
             ],
           ),
         );
       },
       fallbackBuilder: (context, error) {
         return ErrorRefreshPage(
-          onRefresh: ref.read(mapViewModelProvider.notifier).refresh,
+          onRefresh:
+              ref.read(mapViewModelProvider(initialLocation).notifier).refresh,
         );
       },
     );

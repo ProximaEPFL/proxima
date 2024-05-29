@@ -44,7 +44,7 @@ class MapAction extends ConsumerWidget {
     int depth, {
     GeoPoint? initialLocation,
   }) async {
-    final mapViewModelNotifier = ref.read(mapViewModelProvider.notifier);
+    final mapViewModelNotifier = ref.read(mapViewModelProvider(null).notifier);
 
     for (var i = 0; i < depth; i++) {
       Navigator.pop(context);

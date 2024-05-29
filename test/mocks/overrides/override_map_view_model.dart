@@ -6,9 +6,10 @@ import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/viewmodels/map/map_view_model.dart";
 
 /// A mock implementation of the [MapViewModel] class.
-class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
+class MockMapViewModel
+    extends AutoDisposeFamilyAsyncNotifier<MapDetails, LatLng?>
     implements MapViewModel {
-  final Future<MapDetails> Function() _build;
+  final Future<MapDetails> Function(LatLng?) _build;
   final Future<void> Function() _onRefresh;
   final void Function(GoogleMapController) _onMapCreated;
   final Set<Circle> _circles;
@@ -20,7 +21,7 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
   final Future<void> Function(LatLng) _moveCamera;
 
   MockMapViewModel({
-    Future<MapDetails> Function()? build,
+    Future<MapDetails> Function([LatLng?])? build,
     Future<void> Function()? onRefresh,
     Future<void> Function(LatLng)? animateCamera,
     void Function(GoogleMapController)? onMapCreated,
@@ -31,7 +32,8 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
     void Function()? enableFollowUser,
     void Function(LatLng)? moveCamera,
   })  : _build = build ??
-            (() async => throw Exception("Location services are disabled.")),
+            (([LatLng? arg]) async =>
+                throw Exception("Location services are disabled.")),
         _onRefresh = onRefresh ?? (() async {}),
         _onMapCreated = onMapCreated ?? ((_) {}),
         _circles = circles ?? {},
@@ -42,7 +44,7 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapDetails>
         _moveCamera = animateCamera ?? ((_) async {});
 
   @override
-  Future<MapDetails> build() => _build();
+  Future<MapDetails> build([LatLng? arg]) => _build(arg);
 
   @override
   Future<void> refresh() => _onRefresh();

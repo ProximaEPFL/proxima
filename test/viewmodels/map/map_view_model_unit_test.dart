@@ -29,7 +29,7 @@ void main() {
       ],
     );
 
-    mapViewModel = container.read(mapViewModelProvider.notifier);
+    mapViewModel = container.read(mapViewModelProvider(null).notifier);
   });
   //test the redraw circle method
   test("Redraw circle", () {
@@ -94,7 +94,7 @@ void main() {
     await mapViewModel.refresh();
 
     // Verify the state is updated with the new location
-    final newState = container.read(mapViewModelProvider);
+    final newState = container.read(mapViewModelProvider(null));
     expect(newState, isInstanceOf<AsyncData<MapDetails>>());
     expect(
       newState.value!.initialLocation,

@@ -5,20 +5,27 @@ import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/services/sensors/geolocation_service.dart";
+import "package:proxima/utils/extensions/geopoint_extensions.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
 
 /// This view model is responsible for managing the actual location
 /// of the user on the map and the displayed circles.
-class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
+class MapViewModel extends AutoDisposeFamilyAsyncNotifier<MapDetails, LatLng?> {
   @override
-  Future<MapDetails> build() async {
-    final actualLocation =
-        await ref.read(geolocationServiceProvider).getCurrentPosition();
-
-    return MapDetails(
-      initialLocation:
-          LatLng(actualLocation.latitude, actualLocation.longitude),
-    );
+  Future<MapDetails> build([LatLng? arg]) async {
+    if (arg != null) {
+      disableFollowUser();
+      return MapDetails(
+        initialLocation: arg,
+      );
+    } else {
+      enableFollowUser();
+      final geoPoint =
+          await ref.read(geolocationServiceProvider).getCurrentPosition();
+      return MapDetails(
+        initialLocation: geoPoint.toLatLng(),
+      );
+    }
   }
 
   final Set<Circle> _circles = {};
@@ -87,6 +94,6 @@ class MapViewModel extends AutoDisposeAsyncNotifier<MapDetails> {
 }
 
 final mapViewModelProvider =
-    AsyncNotifierProvider.autoDispose<MapViewModel, MapDetails>(
+    AsyncNotifierProvider.autoDispose.family<MapViewModel, MapDetails, LatLng?>(
   () => MapViewModel(),
 );

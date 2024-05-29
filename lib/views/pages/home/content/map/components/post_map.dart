@@ -12,6 +12,7 @@ import "package:proxima/views/pages/home/content/map/components/map_pin_pop_up.d
 /// This widget displays the Google Map
 class PostMap extends ConsumerWidget {
   final MapDetails mapInfo;
+  final LatLng? initialLocation;
 
   static const mapPinPopUpKey = Key("mapPinPopUp");
 
@@ -21,12 +22,14 @@ class PostMap extends ConsumerWidget {
   const PostMap({
     super.key,
     required this.mapInfo,
+    this.initialLocation,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // This provider is used to get information about the map.
-    final mapNotifier = ref.watch(mapViewModelProvider.notifier);
+    final mapNotifier =
+        ref.watch(mapViewModelProvider(initialLocation).notifier);
 
     // This provider is used to get the list of map pins.
     final mapPinsAsync = ref.watch(mapPinViewModelProvider);
