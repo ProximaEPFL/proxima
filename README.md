@@ -27,12 +27,8 @@ Please check out the Product Requirements Document (PRD) for more details about 
 
 Here are a few screenshots of the main screens of the application:
 
-<img src="docs/screenshots/feed.png" height="400">
-<img src="docs/screenshots/post.png" height="400">
-<img src="docs/screenshots/map.png" height="400">
-<img src="docs/screenshots/challenges.png" height="400">
-<img src="docs/screenshots/ranking.png" height="400">
-<img src="docs/screenshots/profile.png" height="400">
+<img src="docs/screenshots/feed.png" height="500">  <img src="docs/screenshots/post.png" height="500">  <img src="docs/screenshots/map.png" height="500"><br>
+<img src="docs/screenshots/challenges.png" height="500">  <img src="docs/screenshots/ranking.png" height="500">  <img src="docs/screenshots/profile.png" height="500">
 
 **Note**: you can also check out the video presentation of the app: [Proxima Video Presentation](https://www.youtube.com/watch?v=831yjtsBgHM).
 
