@@ -30,6 +30,7 @@ class ProfileUserPosts extends ConsumerWidget {
                 onDelete: () => ref
                     .read(userPostsViewModelProvider.notifier)
                     .deletePost(p.postId),
+                location: p.location,
               ),
             )
             .toList();

@@ -5,11 +5,11 @@ class InfoPopUp extends StatelessWidget {
   static const popUpTitleKey = Key("profilePopUpTitle");
   static const popUpDescriptionKey = Key("profilePopUpDescription");
 
-  const InfoPopUp({super.key, this.title, this.content, this.button});
+  const InfoPopUp({super.key, this.title, this.content, this.actions});
 
   final String? title;
   final String? content;
-  final Widget? button;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +52,14 @@ class InfoPopUp extends StatelessWidget {
         left: 24.0,
         top: 8.0,
         right: 24.0,
-        bottom: button != null ? 12.0 : 0.0,
+        bottom: actions != null ? 12.0 : 0.0,
       ),
       actionsPadding: const EdgeInsets.only(
         right: 24.0,
         bottom: 12.0,
         left: 24.0,
       ),
-      actions: button != null ? [button!] : [],
+      actions: actions ?? [],
     );
   }
 }

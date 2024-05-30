@@ -3,6 +3,7 @@ import "package:proxima/models/database/user/user_id_firestore.dart";
 import "package:proxima/models/ui/post_details.dart";
 
 import "datetime.dart";
+import "latlng.dart";
 
 final List<PostDetails> testPosts = [
   PostDetails(
@@ -19,6 +20,7 @@ final List<PostDetails> testPosts = [
     ownerCentauriPoints: 32,
     publicationDate: publicationDate1,
     distance: 20,
+    location: latLngLocation0,
   ),
   PostDetails(
     postId: const PostIdFirestore(value: "post_2"),
@@ -34,6 +36,7 @@ final List<PostDetails> testPosts = [
     publicationDate: publicationDate1,
     distance: 20,
     isChallenge: true,
+    location: latLngLocation0,
   ),
   PostDetails(
     postId: const PostIdFirestore(value: "post_3"),
@@ -47,6 +50,7 @@ final List<PostDetails> testPosts = [
     ownerCentauriPoints: 218281828,
     publicationDate: publicationDate1,
     distance: 20,
+    location: latLngLocation0,
   ),
 ];
 
@@ -63,4 +67,5 @@ final timeDistancePost = PostDetails(
   ownerCentauriPoints: 911,
   publicationDate: DateTime.utc(1999),
   distance: 100,
+  location: latLngLocation0,
 );

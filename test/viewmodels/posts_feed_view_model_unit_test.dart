@@ -18,6 +18,7 @@ import "../mocks/data/firestore_challenge.dart";
 import "../mocks/data/firestore_post.dart";
 import "../mocks/data/firestore_user.dart";
 import "../mocks/data/geopoint.dart";
+import "../mocks/data/latlng.dart";
 import "../mocks/data/post_data.dart";
 import "../mocks/services/mock_challenge_repository_service.dart";
 import "../mocks/services/mock_geo_location_service.dart";
@@ -122,6 +123,7 @@ void main() {
           ownerCentauriPoints: owner.data.centauriPoints,
           publicationDate: post.data.publicationTime.toDate(),
           distance: 0,
+          location: latLngLocation0,
         ),
       ];
 
@@ -181,6 +183,7 @@ void main() {
             ownerCentauriPoints: owner.data.centauriPoints,
             publicationDate: post.data.publicationTime.toDate(),
             distance: 0,
+            location: latLngLocation0,
           );
 
           return postDetails;
@@ -248,6 +251,7 @@ void main() {
             ownerCentauriPoints: owners[index].data.centauriPoints,
             publicationDate: post.data.publicationTime.toDate(),
             distance: 0,
+            location: latLngLocation0,
           );
 
           return postDetails;
@@ -328,6 +332,7 @@ void main() {
           ownerCentauriPoints: owner.data.centauriPoints,
           publicationDate: post.data.publicationTime.toDate(),
           distance: 0,
+          location: latLngLocation0,
         ),
       ];
 
