@@ -62,7 +62,7 @@ the [Penpot Project](https://design.penpot.app/#/workspace/43442e9d-d45f-8169-80
 This should give a quick reference/overview on the overall architecture and the relations between
 the different screens, data sources, and internal state of the application.
 
-<img src="docs/app_diagram.jpg" alt="Proxima Arichtecture Diagram" width="600">
+<img src="docs/app_diagram.jpg" alt="Proxima Arichtecture Diagram" width="800">
 
 ## Contributors
 
