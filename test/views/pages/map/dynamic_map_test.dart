@@ -54,6 +54,9 @@ void main() {
     when(geoLocationService.getPositionStream()).thenAnswer(
       (_) => Stream.value(userPosition0),
     );
+    when(geoLocationService.checkLocationServices()).thenAnswer(
+      (_) => Future.value(null),
+    );
 
     postGenerator = FirestorePostGenerator();
   });
@@ -475,5 +478,90 @@ void main() {
       // No callback in theory
       verifyResult: null,
     );
+  });
+
+  group("location errors", () {
+    testWidgets("one error pop up occurs", (tester) async {
+      //make the location services fail
+
+      when(geoLocationService.checkLocationServices()).thenAnswer(
+        (_) => Future.value(Exception("Location services not enabled")),
+      );
+
+      await beginTest(tester);
+
+      //find an dialog with the error message
+      final errorPopUp = find.byType(Dialog);
+
+      expect(errorPopUp, findsExactly(1));
+
+      //find the error message
+      final errorText = find.text("Exception: Location services not enabled");
+      expect(errorText, findsOneWidget);
+    });
+
+    testWidgets("no error with user posts", (tester) async {
+      await beginTest(tester);
+
+      //disable the location services
+      when(geoLocationService.checkLocationServices()).thenAnswer(
+        (_) => Future.value(Exception("Location services not enabled")),
+      );
+
+      //click on user posts tab
+      final chip = find.byKey(
+        MapSelectionOptionChips.optionChipKeys[MapSelectionOptions.myPosts]!,
+      );
+      expect(chip, findsOneWidget);
+      await tester.tap(chip);
+      await tester.pumpAndSettle();
+
+      //no error dialog should appear
+      final errorPopUp = find.byType(Dialog);
+      expect(errorPopUp, findsNothing);
+    });
+
+    testWidgets("no errors when location services are re-enabled",
+        (tester) async {
+      //disable the location services
+      when(geoLocationService.checkLocationServices()).thenAnswer(
+        (_) => Future.value(Exception("Location services not enabled")),
+      );
+
+      await beginTest(tester);
+
+      //expect an error dialog
+      final errorPopUp = find.byType(Dialog);
+      expect(errorPopUp, findsExactly(1));
+
+      //make the Dialog disappear by tapping next to it
+      await tester.tapAt(const Offset(0, 0)); // Top-left corner of the screen
+      await tester.pumpAndSettle();
+
+      //click on the user posts tab
+      final chip = find.byKey(
+        MapSelectionOptionChips.optionChipKeys[MapSelectionOptions.myPosts]!,
+      );
+      expect(chip, findsOneWidget);
+      await tester.tap(chip);
+      await tester.pumpAndSettle();
+
+      //re-enable the location services
+      when(geoLocationService.checkLocationServices()).thenAnswer(
+        (_) => Future.value(null),
+      );
+
+      //click on the nearby posts tab
+      final nearbyChip = find.byKey(
+        MapSelectionOptionChips.optionChipKeys[MapSelectionOptions.nearby]!,
+      );
+      expect(nearbyChip, findsOneWidget);
+      await tester.tap(nearbyChip);
+      await tester.pumpAndSettle();
+
+      //expect no error dialog
+      final errorPopUpAfter = find.byType(Dialog);
+      expect(errorPopUpAfter, findsNothing);
+    });
   });
 }
