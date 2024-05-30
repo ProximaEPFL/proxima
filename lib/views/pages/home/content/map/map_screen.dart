@@ -33,7 +33,7 @@ class MapScreen extends ConsumerWidget {
           key: mapScreenKey,
           body: Column(
             children: [
-              MapSelectionOptionChips(mapInfo: value),
+              const MapSelectionOptionChips(),
               const Divider(key: dividerKey),
               PostMap(mapInfo: value, initialLocation: initialLocation),
             ],
