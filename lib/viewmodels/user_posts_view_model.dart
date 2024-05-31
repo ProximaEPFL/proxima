@@ -3,6 +3,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/ui/user_post_details.dart";
 import "package:proxima/services/database/post_repository_service.dart";
+import "package:proxima/utils/extensions/geopoint_extensions.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 import "package:proxima/viewmodels/map/map_pin_view_model.dart";
 import "package:proxima/viewmodels/posts_feed_view_model.dart";
@@ -33,6 +34,7 @@ class UserPostsViewModel extends AutoDisposeAsyncNotifier<UserPostsState> {
         postId: post.id,
         title: post.data.title,
         description: post.data.description,
+        location: post.location.geoPoint.toLatLng(),
       );
 
       return userPost;

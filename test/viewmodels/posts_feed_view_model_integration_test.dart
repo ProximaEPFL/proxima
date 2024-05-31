@@ -15,6 +15,7 @@ import "package:test/test.dart";
 
 import "../mocks/data/firestore_user.dart";
 import "../mocks/data/geopoint.dart";
+import "../mocks/data/latlng.dart";
 import "../mocks/data/post_data.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 
@@ -126,6 +127,7 @@ void main() {
                       .distanceBetweenInKm(geopoint: postPosition) *
                   1000)
               .round(),
+          location: latLngLocation0,
         ),
       ];
 
@@ -226,6 +228,7 @@ void main() {
                       .distanceBetweenInKm(geopoint: postPositions[index]) *
                   1000)
               .round(),
+          location: latLngLocation0,
         );
 
         return postDetails;

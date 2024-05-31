@@ -1,4 +1,5 @@
 import "package:flutter/foundation.dart";
+import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 
 /// A post that belongs to the current logged in user.
@@ -8,12 +9,13 @@ class UserPostDetails {
   final PostIdFirestore postId;
   final String title;
   final String description;
-  // TODO add the location to be able to redirect to the map (see #184)
+  final LatLng location;
 
   const UserPostDetails({
     required this.postId,
     required this.title,
     required this.description,
+    required this.location,
   });
 
   @override
@@ -23,7 +25,8 @@ class UserPostDetails {
     return other is UserPostDetails &&
         other.postId == postId &&
         other.title == title &&
-        other.description == description;
+        other.description == description &&
+        other.location == location;
   }
 
   @override
@@ -32,6 +35,7 @@ class UserPostDetails {
       postId,
       title,
       description,
+      location,
     );
   }
 }

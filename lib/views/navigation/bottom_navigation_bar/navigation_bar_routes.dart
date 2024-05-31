@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:proxima/views/navigation/routes.dart";
 import "package:proxima/views/pages/home/content/challenge/challenge_list.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
@@ -34,7 +35,7 @@ enum NavigationBarRoutes {
     this.routeDestination,
   );
 
-  Widget page() {
+  Widget page([Object? args]) {
     if (routeDestination != null) {
       throw Exception("Route must be pushed.");
     }
@@ -43,7 +44,13 @@ enum NavigationBarRoutes {
       case feed:
         return const PostFeed();
       case map:
-        return const MapScreen();
+        if (args is LatLng) {
+          return MapScreen(initialLocation: args);
+        } else if (args == null) {
+          return const MapScreen();
+        } else {
+          throw Exception("LatLng object required");
+        }
       case challenge:
         return const ChallengeList();
       case ranking:

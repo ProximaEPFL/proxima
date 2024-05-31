@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:geolocator/geolocator.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/map_details.dart";
@@ -9,9 +10,10 @@ import "package:proxima/viewmodels/map/map_view_model.dart";
 import "package:proxima/views/components/async/error_alert.dart";
 import "package:proxima/views/pages/home/content/map/components/map_pin_pop_up.dart";
 
-/// This widget displays the Google Map
+/// This widget displays the Google Map. Initially centered on initialLocation.
 class PostMap extends ConsumerWidget {
   final MapDetails mapInfo;
+  final LatLng? initialLocation;
 
   static const mapPinPopUpKey = Key("mapPinPopUp");
 
@@ -21,12 +23,14 @@ class PostMap extends ConsumerWidget {
   const PostMap({
     super.key,
     required this.mapInfo,
+    this.initialLocation,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // This provider is used to get information about the map.
-    final mapNotifier = ref.watch(mapViewModelProvider.notifier);
+    final mapNotifier =
+        ref.watch(mapViewModelProvider(initialLocation).notifier);
 
     // This provider is used to get the list of map pins.
     final mapPinsAsync = ref.watch(mapPinViewModelProvider);
@@ -64,11 +68,15 @@ class PostMap extends ConsumerWidget {
       },
       error: (error, _) {
         //Pop up an error dialog if an error occurs
-        final dialog = ErrorAlert(error: error);
 
-        WidgetsBinding.instance.addPostFrameCallback((timestamp) {
-          showDialog(context: context, builder: dialog.build);
-        });
+        //ignore the location service disabled exception
+        //because we are already handling it in the mapPinViewModel
+        if (error is! LocationServiceDisabledException) {
+          final dialog = ErrorAlert(error: error);
+          WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+            showDialog(context: context, builder: dialog.build);
+          });
+        }
       },
       loading: () => (),
     );

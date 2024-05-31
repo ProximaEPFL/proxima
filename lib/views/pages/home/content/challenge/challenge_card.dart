@@ -1,9 +1,12 @@
 import "package:flutter/material.dart";
 import "package:flutter_svg/svg.dart";
+import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/ui/challenge_details.dart";
+import "package:proxima/views/components/options/map/map_selection_options.dart";
 import "package:proxima/views/helpers/key_value_list_builder.dart";
+import "package:proxima/views/navigation/map_action.dart";
 
-class ChallengeCard extends StatelessWidget {
+class ChallengeCard extends ConsumerWidget {
   static const challengeGroupIconKey = Key("challenge_group_icon");
   static const challengeSingleIconKey = Key("challenge_single_icon");
 
@@ -16,7 +19,7 @@ class ChallengeCard extends StatelessWidget {
   const ChallengeCard(this.challenge, {super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final listGenerator = KeyValueListBuilder(
       style: DefaultTextStyle.of(context).style,
     );
@@ -51,7 +54,15 @@ class ChallengeCard extends StatelessWidget {
     return Card(
       clipBehavior: Clip.hardEdge,
       child: InkWell(
-        onTap: () => (),
+        onTap: () {
+          MapAction.openMap(
+            ref,
+            context,
+            MapSelectionOptions.challenges,
+            0,
+            challenge.location,
+          );
+        },
         child: Opacity(
           opacity: challenge.isFinished ? _opacityWhenChallengedFinished : 1.0,
           child: ListTile(

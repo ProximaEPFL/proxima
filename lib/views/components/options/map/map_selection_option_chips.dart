@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/ui/map_details.dart";
 import "package:proxima/viewmodels/option_selection/map_selection_options_view_model.dart";
 import "package:proxima/views/components/options/map/map_selection_options.dart";
 
@@ -13,11 +12,8 @@ class MapSelectionOptionChips extends ConsumerWidget {
   );
 
   const MapSelectionOptionChips({
-    required this.mapInfo,
     super.key,
   });
-
-  final MapDetails mapInfo;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

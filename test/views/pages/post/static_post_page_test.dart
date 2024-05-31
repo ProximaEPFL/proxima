@@ -6,9 +6,11 @@ import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/components/content/user_profile_pop_up.dart";
 import "package:proxima/views/components/feedback/centauri_snack_bar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
+import "package:proxima/views/navigation/map_action.dart";
 import "package:proxima/views/pages/home/content/feed/components/post_card.dart";
 import "package:proxima/views/pages/home/content/feed/components/post_card_header.dart";
 import "package:proxima/views/pages/home/content/feed/post_feed.dart";
+import "package:proxima/views/pages/home/content/map/map_screen.dart";
 import "package:proxima/views/pages/post/components/comment/comment_post_widget.dart";
 import "package:proxima/views/pages/post/components/complete_post.dart";
 import "package:proxima/views/pages/post/components/new_comment/new_comment_button.dart";
@@ -110,6 +112,26 @@ void main() {
 
     testSnackbarNavigation(true);
     testSnackbarNavigation(false);
+  });
+
+  testWidgets("Navigation to the map", (tester) async {
+    await tester.pumpWidget(nonEmptyHomePageWidget);
+    await tester.pumpAndSettle();
+
+    // Tap of the first post
+    await tester.tap(find.byKey(PostCard.postCardKey).first);
+    await tester.pumpAndSettle();
+
+    // Check if the post page is displayed, with the correct title
+    expect(find.byType(CompletePost), findsOneWidget);
+    expect(find.text(testPosts.first.title), findsAtLeastNWidgets(1));
+
+    // tap on the map icon
+    await tester.tap(find.byKey(MapAction.mapActionKey));
+    await tester.pumpAndSettle();
+
+    // Check if the map is displayed
+    expect(find.byKey(MapScreen.mapScreenKey), findsOneWidget);
   });
 
   group("Widgets display", () {

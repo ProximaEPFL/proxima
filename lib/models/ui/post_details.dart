@@ -1,9 +1,11 @@
 import "package:flutter/foundation.dart";
 import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
+import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
+import "package:proxima/utils/extensions/geopoint_extensions.dart";
 
 @immutable
 
@@ -21,6 +23,7 @@ class PostDetails {
   final DateTime publicationDate;
   final int distance; // in meters
   final bool isChallenge;
+  final LatLng location;
 
   const PostDetails({
     required this.postId,
@@ -34,6 +37,7 @@ class PostDetails {
     required this.ownerCentauriPoints,
     required this.publicationDate,
     required this.distance,
+    required this.location,
     this.isChallenge = false,
   });
 
@@ -99,6 +103,7 @@ class PostDetails {
               ) *
               1000)
           .round(),
+      location: postFirestore.location.geoPoint.toLatLng(),
       isChallenge: isChallenge,
     );
   }
