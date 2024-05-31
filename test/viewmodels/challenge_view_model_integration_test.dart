@@ -1,14 +1,15 @@
 import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
+import "package:geoflutterfire_plus/geoflutterfire_plus.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/services/database/challenge_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/user_repository_service.dart";
-import "package:proxima/services/geolocation_service.dart";
-import "package:proxima/utils/ui/circular_value.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
 import "package:proxima/viewmodels/challenge_view_model.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
+import "package:proxima/views/components/async/circular_value.dart";
 
 import "../mocks/data/firestore_challenge.dart";
 import "../mocks/data/firestore_post.dart";
@@ -17,12 +18,14 @@ import "../mocks/data/geopoint.dart";
 import "../mocks/services/mock_geo_location_service.dart";
 
 void main() {
-  late MockGeoLocationService geoLocationService;
+  late MockGeolocationService geoLocationService;
   late FakeFirebaseFirestore fakeFireStore;
   late ProviderContainer container;
 
+  const extraTime = Duration(hours: 2, minutes: 30);
+
   setUp(() {
-    geoLocationService = MockGeoLocationService();
+    geoLocationService = MockGeolocationService();
     fakeFireStore = FakeFirebaseFirestore();
     when(geoLocationService.getCurrentPosition()).thenAnswer(
       (_) async => userPosition1,
@@ -31,31 +34,31 @@ void main() {
 
   group("Normal use", () {
     late UserRepositoryService userRepo;
+    late FirestoreChallengeGenerator challengeGenerator;
+    late FirestorePostGenerator postGenerator;
 
     setUp(() async {
       container = ProviderContainer(
         overrides: [
-          geoLocationServiceProvider.overrideWithValue(geoLocationService),
-          uidProvider.overrideWithValue(testingUserFirestoreId),
+          geolocationServiceProvider.overrideWithValue(geoLocationService),
+          loggedInUserIdProvider.overrideWithValue(testingUserFirestoreId),
           firestoreProvider.overrideWithValue(fakeFireStore),
         ],
       );
-
-      userRepo = container.read(userRepositoryProvider);
+      challengeGenerator = FirestoreChallengeGenerator();
+      postGenerator = FirestorePostGenerator();
+      userRepo = container.read(userRepositoryServiceProvider);
     });
 
     test("No challenges are returned when the database is empty", () async {
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       expect(challenges, isEmpty);
     });
 
     test(
         "`ChallengeFirestore` is transformed correctly into `ChallengeCardData`",
         () async {
-      const extraTime = Duration(hours: 2, minutes: 30);
-      final challengeGenerator = FirestoreChallengeGenerator();
-      final postGenerator = FirestorePostGenerator();
-
       final post = postGenerator.generatePostAt(
         userPosition1,
       ); // the challenge is added by hand, so we can use the user position
@@ -64,7 +67,8 @@ void main() {
       final challenge = challengeGenerator.generateChallenge(false, extraTime);
       await setChallenge(fakeFireStore, challenge, testingUserFirestoreId);
 
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       expect(challenges.length, 1);
 
       final uiChallenge = challenges.first;
@@ -82,10 +86,6 @@ void main() {
     });
 
     test("Completed challenge is transformed correctly", () async {
-      const extraTime = Duration(hours: 2, minutes: 30);
-      final challengeGenerator = FirestoreChallengeGenerator();
-      final postGenerator = FirestorePostGenerator();
-
       final post = postGenerator.generatePostAt(
         userPosition1,
       ); // the challenge is added by hand, so we can use the user position
@@ -94,7 +94,8 @@ void main() {
       final challenge = challengeGenerator.generateChallenge(true, extraTime);
       await setChallenge(fakeFireStore, challenge, testingUserFirestoreId);
 
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       expect(challenges.length, 1);
 
       final uiChallenge = challenges.first;
@@ -112,12 +113,8 @@ void main() {
     });
 
     test("Challenges are sorted correctly", () async {
-      const extraTime = Duration(hours: 2, minutes: 30);
-      final challengeGenerator = FirestoreChallengeGenerator();
-      final postGenerator = FirestorePostGenerator();
-
       final posts = postGenerator.generatePostsAt(userPosition1, 3);
-      setPostsFirestore(posts, fakeFireStore);
+      await setPostsFirestore(posts, fakeFireStore);
 
       final finishedChallenges =
           challengeGenerator.generateChallenges(2, true, extraTime);
@@ -135,7 +132,8 @@ void main() {
         testingUserFirestoreId,
       );
 
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       final areChallengesFinished =
           challenges.map((c) => c.isFinished).toList();
 
@@ -147,10 +145,6 @@ void main() {
     });
 
     test("Challenge can be completed", () async {
-      const extraTime = Duration(hours: 2, minutes: 30);
-      final challengeGenerator = FirestoreChallengeGenerator();
-      final postGenerator = FirestorePostGenerator();
-
       await setUserFirestore(fakeFireStore, testingUserFirestore);
 
       final post = postGenerator.generatePostAt(
@@ -162,12 +156,13 @@ void main() {
       await setChallenge(fakeFireStore, challenge, testingUserFirestoreId);
 
       await container
-          .read(challengeProvider.notifier)
+          .read(challengeViewModelProvider.notifier)
           .completeChallenge(challenge.postId);
 
       await Future.delayed(const Duration(milliseconds: 100));
 
-      final challenges = await container.read(challengeProvider.future);
+      final challenges =
+          await container.read(challengeViewModelProvider.future);
       expect(challenges.length, 1);
 
       final uiChallenge = challenges.first;
@@ -188,14 +183,57 @@ void main() {
       final points = updatedUser.data.centauriPoints;
       expect(points, ChallengeRepositoryService.soloChallengeReward);
     });
+
+    test("Challenges position is updated on user position change and refresh",
+        () async {
+      const nbPosts = 3;
+      await postGenerator.addPosts(fakeFireStore, userPosition1, nbPosts);
+
+      final activeChallenges =
+          challengeGenerator.generateChallenges(nbPosts, false, extraTime);
+
+      await setChallenges(
+        fakeFireStore,
+        activeChallenges,
+        testingUserFirestoreId,
+      );
+
+      final challengesBeforeRefresh =
+          await container.read(challengeViewModelProvider.future);
+
+      // Check initial distances are 0 since user is at userPosition1
+      for (final challenge in challengesBeforeRefresh) {
+        expect(challenge.distance, 0);
+      }
+
+      // Change user position to userPosition2
+      when(geoLocationService.getCurrentPosition()).thenAnswer(
+        (_) async => userPosition2,
+      );
+
+      // Refresh challenges
+      await container.read(challengeViewModelProvider.notifier).refresh();
+      final challengesAfterRefresh =
+          await container.read(challengeViewModelProvider.future);
+
+      // Compute the distance between userPosition1 and userPosition2
+      final double distanceKm = const GeoFirePoint(userPosition1)
+          .distanceBetweenInKm(geopoint: userPosition2);
+      final int distanceM = (distanceKm * 1000).toInt();
+
+      // Check that challenges distances are updated correctly
+      for (final challenge in challengesAfterRefresh) {
+        expect(challenge.distance, distanceM);
+      }
+    });
   });
 
   group("No logged in user", () {
     setUp(() async {
       container = ProviderContainer(
         overrides: [
-          geoLocationServiceProvider.overrideWithValue(geoLocationService),
-          uidProvider.overrideWithValue(null),
+          geolocationServiceProvider.overrideWithValue(geoLocationService),
+          loggedInUserIdProvider.overrideWithValue(null),
           firestoreProvider.overrideWithValue(fakeFireStore),
         ],
       );
@@ -204,7 +242,7 @@ void main() {
     test("No user only throws debug error", () async {
       expect(
         () async {
-          await container.read(challengeProvider.future);
+          await container.read(challengeViewModelProvider.future);
         },
         throwsA(
           (exception) =>

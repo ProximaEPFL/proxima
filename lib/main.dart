@@ -1,48 +1,35 @@
 import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:google_fonts/google_fonts.dart";
+import "package:flutter_native_splash/flutter_native_splash.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/utils/firebase/firebase_options.dart";
-import "package:proxima/views/navigation/routes.dart";
+import "package:proxima/utils/firebase_options.dart";
+import "package:proxima/views/proxima_app.dart";
+
+const _splashWait = Duration(milliseconds: 600);
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  // Preserve the splash screen for initialization
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  SystemChrome.setPreferredOrientations([
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+
+  await Future.delayed(_splashWait);
+
+  // Hide splash screen
+  FlutterNativeSplash.remove();
 
   runApp(
     const ProviderScope(
       child: ProximaApp(),
     ),
   );
-}
-
-class ProximaApp extends StatelessWidget {
-  const ProximaApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final Brightness brightness = MediaQuery.platformBrightnessOf(context);
-
-    return MaterialApp(
-      title: "Proxima",
-      onGenerateRoute: generateRoute,
-      initialRoute: Routes.login.name,
-      theme: ThemeData(
-        useMaterial3: true,
-        // Define the default brightness and colors.
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.indigo,
-          brightness: brightness,
-        ),
-        fontFamily: GoogleFonts.poppins().fontFamily,
-      ),
-    );
-  }
 }

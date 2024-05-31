@@ -5,17 +5,18 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
-import "package:proxima/views/components/user_avatar/user_avatar.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
+import "package:proxima/views/components/content/info_pop_up.dart";
+import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
-import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
-import "package:proxima/views/pages/profile/components/profile_badge.dart";
+import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
+import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
+import "package:proxima/views/pages/profile/components/info_cards/profile_info_pop_up.dart";
+import "package:proxima/views/pages/profile/components/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/components/user_account.dart";
-import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
-import "package:proxima/views/pages/profile/info_cards/profile_info_pop_up.dart";
-import "package:proxima/views/pages/profile/info_cards/profile_info_row.dart";
-import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
 import "package:proxima/views/pages/profile/profile_page.dart";
 
+import "../../../mocks/data/comment_data.dart";
 import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
 import "../../../mocks/data/geopoint.dart";
@@ -29,6 +30,7 @@ void main() {
   late CollectionReference<Map<String, dynamic>> userCollection;
   late ProviderScope mockedProfilePage;
   late PostFirestore fakePost;
+  late CommentRepositoryService commentRepo;
 
   final expectedUser = testingUserFirestore;
 
@@ -45,8 +47,23 @@ void main() {
         .set(expectedUser.data.toDbData());
 
     setPostFirestore(
-      postsGenerator.createUserPost(testingUserFirestoreId, userPosition1),
+      fakePost,
       fakeFireStore,
+    );
+
+    //get the comment repository service to add comments
+    commentRepo = CommentRepositoryService(
+      firestore: fakeFireStore,
+    );
+
+    final commentDataGenerator = CommentDataGenerator();
+
+    final mockComment =
+        commentDataGenerator.createMockCommentData(ownerId: expectedUser.uid);
+
+    await commentRepo.addComment(
+      fakePost.id,
+      mockComment,
     );
 
     mockedProfilePage = profileProviderScope(fakeFireStore, profilePageApp);
@@ -75,14 +92,6 @@ void main() {
       //Check that centauri points are displayed
       final centauriPoints = find.byKey(UserAccount.centauriPointsKey);
       expect(centauriPoints, findsOneWidget);
-
-      // Check that the info row is displayed
-      final infoRowWidget = find.byKey(ProfileInfoRow.infoRowKey);
-      expect(infoRowWidget, findsOneWidget);
-
-      // Check that badges are displayed
-      final badgeCard = find.byKey(ProfileBadge.badgeKey);
-      expect(badgeCard, findsWidgets);
 
       //Check that the tab is displayed
       final tab = find.byKey(ProfilePage.tabKey);
@@ -120,12 +129,11 @@ void main() {
       expect(postPopup, findsOneWidget);
 
       //Check that the title of the pop up is displayed
-      final postPopupTitle = find.byKey(ProfileInfoPopUp.popUpTitleKey);
+      final postPopupTitle = find.byKey(InfoPopUp.popUpTitleKey);
       expect(postPopupTitle, findsOneWidget);
 
       //Check that the description of the pop up is displayed
-      final postPopupDescription =
-          find.byKey(ProfileInfoPopUp.popUpDescriptionKey);
+      final postPopupDescription = find.byKey(InfoPopUp.popUpDescriptionKey);
       expect(postPopupDescription, findsOneWidget);
 
       // Check that post content is displayed on popup
@@ -141,8 +149,7 @@ void main() {
       expect(descriptionContent, findsOneWidget);
 
       //Check that the delete button is displayed
-      final postPopupDeleteButton =
-          find.byKey(ProfileInfoPopUp.popUpDeleteButtonKey);
+      final postPopupDeleteButton = find.byKey(ProfileInfoPopUp.popUpButtonKey);
       expect(postPopupDeleteButton, findsOneWidget);
 
       //Check clicking on the delete button come back to the profile page
@@ -176,13 +183,12 @@ void main() {
       expect(commentPopup, findsOneWidget);
 
       //Check that the description of the pop up is displayed
-      final commentPopupDescription =
-          find.byKey(ProfileInfoPopUp.popUpDescriptionKey);
+      final commentPopupDescription = find.byKey(InfoPopUp.popUpDescriptionKey);
       expect(commentPopupDescription, findsOneWidget);
 
       //Check that the delete button is displayed
       final commentPopupDeleteButton =
-          find.byKey(ProfileInfoPopUp.popUpDeleteButtonKey);
+          find.byKey(ProfileInfoPopUp.popUpButtonKey);
       expect(commentPopupDeleteButton, findsOneWidget);
 
       //Check clicking on the delete button come back to the profile page
@@ -192,6 +198,13 @@ void main() {
       //Check that the profile page is displayed
       final profilePage = find.byType(ProfilePage);
       expect(profilePage, findsOneWidget);
+
+      //check that the comment is deleted
+      final noInfoCardComment = find.byKey(ProfileInfoCard.infoCardKey);
+      expect(noInfoCardComment, findsNothing);
+
+      final userComments = await commentRepo.getUserComments(expectedUser.uid);
+      expect(userComments, isEmpty);
     });
 
     testWidgets("Tab working as expected", (tester) async {
@@ -264,11 +277,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // Check that the top bar is displayed
-      final topBar = find.byKey(AppTopBar.homeTopBarKey);
+      final topBar = find.byKey(HomeTopBar.homeTopBarKey);
       expect(topBar, findsOneWidget);
 
       //Check profile picture is displayed
-      final profilePicture = find.byKey(AppTopBar.profilePictureKey);
+      final profilePicture = find.byKey(HomeTopBar.profilePictureKey);
       expect(profilePicture, findsOneWidget);
 
       // Tap on the profile picture
@@ -289,7 +302,7 @@ void main() {
       const increment = 10;
 
       // Navigate to profile
-      await tester.tap(find.byKey(AppTopBar.profilePictureKey));
+      await tester.tap(find.byKey(HomeTopBar.profilePictureKey));
       await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
       // Check correct centauri points
@@ -305,7 +318,7 @@ void main() {
           .set(expectedUser.data.withPointsAddition(increment).toDbData());
 
       // Navigate back to profile page
-      await tester.tap(find.byKey(AppTopBar.profilePictureKey));
+      await tester.tap(find.byKey(HomeTopBar.profilePictureKey));
       await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
 
       // Check update centauri points

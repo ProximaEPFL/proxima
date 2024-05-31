@@ -3,11 +3,11 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
-import "package:proxima/services/sorting/post_sort_option.dart";
-import "package:proxima/services/sorting/post_sorting_service.dart";
-import "package:proxima/viewmodels/feed_sort_options_view_model.dart";
-import "package:proxima/viewmodels/home_view_model.dart";
-import "package:proxima/views/home_content/feed/feed_sort_option_chips.dart";
+import "package:proxima/services/sorting/post/post_sort_option.dart";
+import "package:proxima/services/sorting/post/post_sorting_service.dart";
+import "package:proxima/viewmodels/option_selection/feed_sort_options_view_model.dart";
+import "package:proxima/viewmodels/posts_feed_view_model.dart";
+import "package:proxima/views/components/options/feed/feed_sort_option_chips.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 
 import "../../../mocks/data/firestore_post.dart";
@@ -20,13 +20,13 @@ void main() {
   const position = userPosition0;
 
   late FakeFirebaseFirestore firestore;
-  late MockGeoLocationService geoLocationService;
+  late MockGeolocationService geoLocationService;
   late ProviderScope homepageWidget;
   late List<PostFirestore> posts;
 
   setUp(() async {
     firestore = FakeFirebaseFirestore();
-    geoLocationService = MockGeoLocationService();
+    geoLocationService = MockGeolocationService();
     homepageWidget = homePageFakeFirestoreProvider(
       firestore,
       geoLocationService,
@@ -74,12 +74,15 @@ void main() {
             await tester.pumpAndSettle();
 
             // Expect to be in the correct state
-            expect(container.read(feedSortOptionsProvider), equals(sortOption));
+            expect(
+              container.read(feedSortOptionsViewModelProvider),
+              equals(sortOption),
+            );
 
             // Expect the list to be in correct order
             // We compare the post id values for an easier debugging.
             final actualPostsOverview = await container.read(
-              postOverviewProvider.future,
+              postsFeedViewModelProvider.future,
             );
             final actualPostsId = actualPostsOverview.map(
               (post) => post.postId.value,

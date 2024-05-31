@@ -140,5 +140,41 @@ void main() {
         expectedUser.data.centauriPoints + pointsToAdd,
       );
     });
+
+    test("User ranking by top centauri points with enough users", () async {
+      const numberOfUsers = 10;
+      const limit = 5;
+
+      // Generate users with different centauri points
+      await FirestoreUserGenerator.addUsers(fakeFireStore, numberOfUsers);
+
+      // Query top users using the service under test (actual)
+      final topUsers = await userRepo.getTopUsers(limit);
+
+      // Check that correct number of users are returned
+      expect(topUsers, hasLength(limit));
+
+      // Compare actual points received with expected decreasing number of points
+      final points = topUsers.map((u) => u.data.centauriPoints);
+      final expectedPoints =
+          Iterable.generate(limit).map((i) => numberOfUsers - i - 1);
+
+      // Must be the same order
+      expect(points, orderedEquals(expectedPoints));
+    });
+
+    test("User ranking by top centauri points with not enough users", () async {
+      // Add a single user to the database
+      await FirestoreUserGenerator.addUser(fakeFireStore);
+
+      // Query more top users using the service under test than there are in DB
+      final topUsers = await userRepo.getTopUsers(2);
+
+      // Check that the maximum number of users are returned
+      expect(topUsers, hasLength(1));
+
+      // Must be the correct number of points
+      expect(topUsers.first.data.centauriPoints, 0);
+    });
   });
 }

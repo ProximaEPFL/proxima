@@ -63,9 +63,23 @@ class UserRepositoryService {
       transaction.update(userDocRef, updatedUserData);
     });
   }
+
+  /// This method will return the top [limit] users that have
+  /// the most centauri points.
+  Future<List<UserFirestore>> getTopUsers(int limit) async {
+    final centauriSorted = _collectionRef.orderBy(
+      UserData.centauriPointsField,
+      descending: true,
+    );
+
+    final query = await centauriSorted.limit(limit).get();
+    final result = query.docs.map((doc) => UserFirestore.fromDb(doc));
+
+    return result.toList();
+  }
 }
 
-final userRepositoryProvider = Provider<UserRepositoryService>(
+final userRepositoryServiceProvider = Provider<UserRepositoryService>(
   (ref) => UserRepositoryService(
     firestore: ref.watch(firestoreProvider),
   ),

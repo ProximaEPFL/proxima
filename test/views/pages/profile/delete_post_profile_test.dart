@@ -4,9 +4,9 @@ import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/user/user_firestore.dart";
-import "package:proxima/views/pages/profile/info_cards/profile_info_card.dart";
-import "package:proxima/views/pages/profile/info_cards/profile_info_pop_up.dart";
-import "package:proxima/views/pages/profile/profile_data/profile_user_posts.dart";
+import "package:proxima/views/pages/profile/components/info_cards/profile_info_card.dart";
+import "package:proxima/views/pages/profile/components/info_cards/profile_info_pop_up.dart";
+import "package:proxima/views/pages/profile/components/profile_data/profile_user_posts.dart";
 
 import "../../../mocks/data/firestore_post.dart";
 import "../../../mocks/data/firestore_user.dart";
@@ -89,7 +89,7 @@ void main() {
       expect(postPopUp, findsOneWidget);
 
       // Find the delete button on pop up
-      final deleteButton = find.byKey(ProfileInfoPopUp.popUpDeleteButtonKey);
+      final deleteButton = find.byKey(ProfileInfoPopUp.popUpButtonKey);
       expect(deleteButton, findsOneWidget);
 
       await tester.tap(deleteButton);

@@ -12,13 +12,15 @@ class LeadingBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final backButton = IconButton(
+      key: leadingBackButtonKey,
+      onPressed: onPressed ?? () => Navigator.pop(context),
+      icon: const Icon(Icons.arrow_back),
+    );
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: IconButton(
-        key: leadingBackButtonKey,
-        onPressed: onPressed ?? () => Navigator.pop(context),
-        icon: const Icon(Icons.arrow_back),
-      ),
+      child: backButton,
     );
   }
 }

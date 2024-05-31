@@ -2,36 +2,49 @@ import "dart:async";
 
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/models/ui/map_info.dart";
-import "package:proxima/viewmodels/map_view_model.dart";
+import "package:proxima/models/ui/map_details.dart";
+import "package:proxima/viewmodels/map/map_view_model.dart";
 
-class MockMapViewModel extends AutoDisposeAsyncNotifier<MapInfo>
+/// A mock implementation of the [MapViewModel] class.
+class MockMapViewModel
+    extends AutoDisposeFamilyAsyncNotifier<MapDetails, LatLng?>
     implements MapViewModel {
-  final Future<MapInfo> Function() _build;
+  final Future<MapDetails> Function(LatLng?) _build;
   final Future<void> Function() _onRefresh;
   final void Function(GoogleMapController) _onMapCreated;
   final Set<Circle> _circles;
   final Future<void> Function(LatLng) _redrawCircle;
   final Completer<GoogleMapController> _mapController;
 
+  final void Function() _disableFollowUser;
+  final void Function() _enableFollowUser;
+  final Future<void> Function(LatLng) _moveCamera;
+
   MockMapViewModel({
-    Future<MapInfo> Function()? build,
+    Future<MapDetails> Function([LatLng?])? build,
     Future<void> Function()? onRefresh,
     Future<void> Function(LatLng)? animateCamera,
     void Function(GoogleMapController)? onMapCreated,
     Future<void> Function(LatLng)? redrawCircle,
     Set<Circle>? circles,
     Completer<GoogleMapController>? mapController,
+    void Function()? disableFollowUser,
+    void Function()? enableFollowUser,
+    void Function(LatLng)? moveCamera,
   })  : _build = build ??
-            (() async => throw Exception("Location services are disabled.")),
+            (([LatLng? arg]) async =>
+                throw Exception("Location services are disabled.")),
         _onRefresh = onRefresh ?? (() async {}),
         _onMapCreated = onMapCreated ?? ((_) {}),
         _circles = circles ?? {},
         _redrawCircle = redrawCircle ?? ((_) async {}),
-        _mapController = mapController ?? Completer();
+        _mapController = mapController ?? Completer(),
+        _disableFollowUser = disableFollowUser ?? (() {}),
+        _enableFollowUser = enableFollowUser ?? (() {}),
+        _moveCamera = animateCamera ?? ((_) async {});
 
   @override
-  Future<MapInfo> build() => _build();
+  Future<MapDetails> build([LatLng? arg]) => _build(arg);
 
   @override
   Future<void> refresh() => _onRefresh();
@@ -48,8 +61,18 @@ class MockMapViewModel extends AutoDisposeAsyncNotifier<MapInfo>
 
   @override
   Completer<GoogleMapController> get mapController => _mapController;
+
+  @override
+  void disableFollowUser() => _disableFollowUser();
+
+  @override
+  void enableFollowUser() => _enableFollowUser();
+
+  @override
+  Future<void> updateCamera(LatLng target, {bool followEvent = true}) =>
+      _moveCamera(target);
 }
 
 final mockNoGPSMapViewModelOverride = [
-  mapProvider.overrideWith(() => MockMapViewModel()),
+  mapViewModelProvider.overrideWith(() => MockMapViewModel()),
 ];

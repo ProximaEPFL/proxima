@@ -3,10 +3,10 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
-import "package:proxima/utils/ui/error_alert.dart";
-import "package:proxima/views/home_content/map/map_screen.dart";
+import "package:proxima/views/components/async/error_alert.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
+import "package:proxima/views/pages/home/content/map/map_screen.dart";
 
 import "../../../mocks/data/geopoint.dart";
 import "../../../mocks/providers/provider_homepage.dart";
@@ -15,11 +15,11 @@ import "../../../mocks/services/mock_geo_location_service.dart";
 
 void main() {
   late ProviderScope mapPageNoGPSWidget;
-  late MockGeoLocationService geoLocationService;
+  late MockGeolocationService geoLocationService;
   late ProviderScope homePageGPSWidget;
 
   setUp(() async {
-    geoLocationService = MockGeoLocationService();
+    geoLocationService = MockGeolocationService();
     mapPageNoGPSWidget = newMapPageNoGPS();
     homePageGPSWidget = emptyHomePageProviderGPS(geoLocationService);
   });
@@ -44,7 +44,7 @@ void main() {
           of: bottomBar,
           matching: find
               .byType(NavigationDestination)
-              .at(NavigationbarRoutes.map.index),
+              .at(NavigationBarRoutes.map.index),
         ),
       );
       await tester.pumpAndSettle();

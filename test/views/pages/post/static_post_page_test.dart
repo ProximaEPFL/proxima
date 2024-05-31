@@ -2,18 +2,21 @@ import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:intl/intl.dart";
-import "package:proxima/utils/ui/centauri_snack_bar.dart";
-import "package:proxima/views/components/user_avatar/user_avatar.dart";
-import "package:proxima/views/home_content/feed/post_card/post_card.dart";
-import "package:proxima/views/home_content/feed/post_card/post_header_widget.dart";
-import "package:proxima/views/home_content/feed/post_feed.dart";
+import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
+import "package:proxima/views/components/content/user_profile_pop_up.dart";
+import "package:proxima/views/components/feedback/centauri_snack_bar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
-import "package:proxima/views/pages/post/components/comment/new_comment_button.dart";
-import "package:proxima/views/pages/post/components/comment/new_comment_textfield.dart";
-import "package:proxima/views/pages/post/components/comment/new_comment_user_avatar.dart";
+import "package:proxima/views/navigation/map_action.dart";
+import "package:proxima/views/pages/home/content/feed/components/post_card.dart";
+import "package:proxima/views/pages/home/content/feed/components/post_card_header.dart";
+import "package:proxima/views/pages/home/content/feed/post_feed.dart";
+import "package:proxima/views/pages/home/content/map/map_screen.dart";
+import "package:proxima/views/pages/post/components/comment/comment_post_widget.dart";
+import "package:proxima/views/pages/post/components/complete_post.dart";
+import "package:proxima/views/pages/post/components/new_comment/new_comment_button.dart";
+import "package:proxima/views/pages/post/components/new_comment/new_comment_textfield.dart";
+import "package:proxima/views/pages/post/components/new_comment/new_comment_user_avatar.dart";
 import "package:proxima/views/pages/post/post_page.dart";
-import "package:proxima/views/pages/post/post_page_widget/comment_post_widget.dart";
-import "package:proxima/views/pages/post/post_page_widget/complete_post_widget.dart";
 import "package:timeago/timeago.dart" as timeago;
 
 import "../../../mocks/data/firebase_auth_user.dart";
@@ -50,7 +53,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Check if the post page is displayed, with the correct title
-      expect(find.byType(CompletePostWidget), findsOneWidget);
+      expect(find.byType(CompletePost), findsOneWidget);
       expect(find.text(testPosts.first.title), findsAtLeastNWidgets(1));
 
       // Tap on the back button
@@ -91,14 +94,14 @@ void main() {
           final clickOnFinder = find.byWidgetPredicate(
             (widget) =>
                 widget is PostCard &&
-                (widget.postOverview.isChallenge == clickChallenge),
+                (widget.postDetails.isChallenge == clickChallenge),
           );
           expect(clickOnFinder, findsAtLeast(1));
           await tester.tap(clickOnFinder.first);
 
           // Wait enough time for the snackbar to be displayed, but
           // not enough for it to disappear
-          await tester.pump(centauriPointsSnackBarDuration * 0.75);
+          await tester.pump(CentauriSnackBar.pointsDuration * 0.75);
 
           // Check if the snackbar is displayed
           final snackBar = find.textContaining("You won");
@@ -109,6 +112,26 @@ void main() {
 
     testSnackbarNavigation(true);
     testSnackbarNavigation(false);
+  });
+
+  testWidgets("Navigation to the map", (tester) async {
+    await tester.pumpWidget(nonEmptyHomePageWidget);
+    await tester.pumpAndSettle();
+
+    // Tap of the first post
+    await tester.tap(find.byKey(PostCard.postCardKey).first);
+    await tester.pumpAndSettle();
+
+    // Check if the post page is displayed, with the correct title
+    expect(find.byType(CompletePost), findsOneWidget);
+    expect(find.text(testPosts.first.title), findsAtLeastNWidgets(1));
+
+    // tap on the map icon
+    await tester.tap(find.byKey(MapAction.mapActionKey));
+    await tester.pumpAndSettle();
+
+    // Check if the map is displayed
+    expect(find.byKey(MapScreen.mapScreenKey), findsOneWidget);
   });
 
   group("Widgets display", () {
@@ -123,7 +146,7 @@ void main() {
       expect(completePostWidget, findsOneWidget);
 
       //Check that the post title is displayed
-      final postTitle = find.byKey(CompletePostWidget.postTitleKey);
+      final postTitle = find.byKey(CompletePost.postTitleKey);
       expect(postTitle, findsOneWidget);
       final postTitleWidget = tester.widget(postTitle);
       expect(
@@ -132,7 +155,7 @@ void main() {
       );
 
       //Check that the post description is displayed
-      final postDescription = find.byKey(CompletePostWidget.postDescriptionKey);
+      final postDescription = find.byKey(CompletePost.postDescriptionKey);
       expect(postDescription, findsOneWidget);
       final postDescriptionWidget = tester.widget(postDescription);
       expect(
@@ -142,18 +165,18 @@ void main() {
       );
 
       //Check that the post vote widget is displayed
-      final postVote = find.byKey(CompletePostWidget.postVoteWidgetKey);
+      final postVote = find.byKey(CompletePost.postVoteWidgetKey);
       expect(postVote, findsOneWidget);
 
       //Check the userbar is displayed
-      final postUserBar = find.byKey(CompletePostWidget.postUserBarKey);
+      final postUserBar = find.byKey(CompletePost.postUserBarKey);
       expect(postUserBar, findsOneWidget);
 
       //Check that the owner display name is displayed
       final postUserBarDisplayNameTextWidget = tester.widget(
         find.descendant(
           of: postUserBar,
-          matching: find.byKey(PostHeaderWidget.displayNameTextKey),
+          matching: find.byKey(PostCardHeader.displayNameTextKey),
         ),
       );
 
@@ -167,7 +190,7 @@ void main() {
       final postUserBarTimestampTextWidget = tester.widget(
         find.descendant(
           of: postUserBar,
-          matching: find.byKey(PostHeaderWidget.publicationDateTextKey),
+          matching: find.byKey(PostCardHeader.publicationDateTextKey),
         ),
       );
 
@@ -268,7 +291,7 @@ void main() {
       final Iterable<Text> displayNameWidgets = tester.widgetList<Text>(
         find.descendant(
           of: find.byKey(CommentPostWidget.commentUserWidgetKey),
-          matching: find.byKey(PostHeaderWidget.displayNameTextKey),
+          matching: find.byKey(PostCardHeader.displayNameTextKey),
         ),
       );
 
@@ -295,5 +318,73 @@ void main() {
 
       expect(actualCommentContents, expectedCommentContents);
     });
+  });
+
+  group("Profile pop-up", () {
+    Future<void> tapOn(WidgetTester tester, Finder toTapOn) async {
+      await tester.pumpWidget(emptyPostPageWidget);
+      await tester.pumpAndSettle();
+
+      expect(toTapOn, findsOneWidget);
+
+      await tester.tap(toTapOn);
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets("Pop-up is displayed when clicking on avatar", (tester) async {
+      final avatar = find.byKey(PostCardHeader.avatarKey);
+      await tapOn(tester, avatar);
+
+      final profilePopUp = find.byType(UserProfilePopUp);
+      expect(profilePopUp, findsOneWidget);
+    });
+
+    testWidgets(
+      "Pop-up is displayed when clicking on user display name",
+      (tester) async {
+        final displayName = find.byKey(PostCardHeader.displayNameTextKey);
+        await tapOn(tester, displayName);
+
+        final profilePopUp = find.byType(UserProfilePopUp);
+        expect(profilePopUp, findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      "Pop-up contains the correct user information",
+      (tester) async {
+        final avatar = find.byKey(PostCardHeader.avatarKey).first;
+        await tapOn(tester, avatar);
+
+        final profilePopUp = find.byType(UserProfilePopUp);
+        final post = testPosts.first;
+
+        // Consider the descendants only to be sure it is displyed on the pop-up,
+        // not somewhere else on the post page.
+        final username = find.descendant(
+          of: profilePopUp,
+          matching: find.textContaining(post.ownerUsername, findRichText: true),
+        );
+        expect(username, findsOneWidget);
+
+        final displayName = find.descendant(
+          of: profilePopUp,
+          matching: find.textContaining(
+            post.ownerDisplayName,
+            findRichText: true,
+          ),
+        );
+        expect(displayName, findsOneWidget);
+
+        final centauriPoints = find.descendant(
+          of: profilePopUp,
+          matching: find.textContaining(
+            post.ownerCentauriPoints.toString(),
+            findRichText: true,
+          ),
+        );
+        expect(centauriPoints, findsOneWidget);
+      },
+    );
   });
 }

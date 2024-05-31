@@ -15,6 +15,10 @@ import "post_data.dart";
 class FirestorePostGenerator {
   int _postId = 0;
 
+  int _nextPostId() {
+    return _postId++;
+  }
+
   /// Create a [PostFirestore] with given data
   PostFirestore createPostAt(
     PostData data,
@@ -23,7 +27,7 @@ class FirestorePostGenerator {
   }) {
     final point = GeoFirePoint(location);
 
-    id ??= (_postId++).toString();
+    id ??= _nextPostId().toString();
 
     return PostFirestore(
       id: PostIdFirestore(value: id),
@@ -63,27 +67,35 @@ class FirestorePostGenerator {
     UserIdFirestore userId,
     GeoPoint location,
   ) {
-    final point = GeoPoint(location.latitude, location.longitude);
-
-    _postId += 1;
+    final point = GeoFirePoint(location);
 
     return PostFirestore(
       id: PostIdFirestore(
-        value: _postId.toString(),
+        value: _nextPostId().toString(),
       ),
       location: PostLocationFirestore(
         geoPoint: location,
-        geohash: point.toString(),
+        geohash: point.geohash,
       ),
       data: PostData(
         ownerId: userId,
         title: "title",
         description: "desciption",
-        publicationTime: Timestamp.fromMicrosecondsSinceEpoch(1000000),
+        publicationTime:
+            Timestamp.fromMicrosecondsSinceEpoch(Random().nextInt(100000000)),
         voteScore: Random().nextInt(100),
         commentCount: Random().nextInt(100),
       ),
     );
+  }
+
+  /// Create [n] posts at position [location] for user with id [userId].
+  List<PostFirestore> createUserPosts(
+    UserIdFirestore userId,
+    GeoPoint location,
+    int n,
+  ) {
+    return List.generate(n, (_) => createUserPost(userId, location));
   }
 
   /// Add [n] posts at position [location] and return their data and the [PostFirestore] objects

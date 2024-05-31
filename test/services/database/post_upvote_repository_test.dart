@@ -4,7 +4,7 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/models/database/vote/upvote_state.dart";
+import "package:proxima/models/database/vote/vote_state.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/post_repository_service.dart";
 import "package:proxima/services/database/post_upvote_repository_service.dart";
@@ -12,6 +12,7 @@ import "package:proxima/services/database/upvote_repository_service.dart";
 
 import "../../mocks/data/geopoint.dart";
 import "../../mocks/data/post_data.dart";
+import "../../mocks/overrides/override_firebase_transaction.dart";
 
 void main() {
   late FakeFirebaseFirestore firestore;
@@ -33,17 +34,17 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         firestoreProvider.overrideWithValue(firestore),
-        postRepositoryProvider.overrideWithValue(postRepository),
+        postRepositoryServiceProvider.overrideWithValue(postRepository),
       ],
     );
 
-    postUpvoteRepository = container.read(postUpvoteRepositoryProvider);
+    postUpvoteRepository = container.read(postUpvoteRepositoryServiceProvider);
   });
 
   Future<void> assertPostUpvoteState(
     UserIdFirestore userId,
     PostIdFirestore postId,
-    UpvoteState expectedState, {
+    VoteState expectedState, {
     testScore = true,
   }) async {
     final upvoteState = await postUpvoteRepository.getUpvoteState(
@@ -71,12 +72,12 @@ void main() {
 
       /// Those tests run a sequence of actions, given by [states],
       /// for a single user on a single post. Everything is done atomically.
-      void testActions(List<UpvoteState> states) {
+      void testActions(List<VoteState> states) {
         final stateNames = states.map((state) => state.name).join(", ");
         test(
           "User can use actions [$stateNames] correctly",
           () async {
-            await assertPostUpvoteState(userId, post.id, UpvoteState.none);
+            await assertPostUpvoteState(userId, post.id, VoteState.none);
 
             for (final state in states) {
               await postUpvoteRepository.setUpvoteState(
@@ -91,26 +92,45 @@ void main() {
         );
       }
 
-      for (final state in UpvoteState.values) {
+      for (final state in VoteState.values) {
         testActions([state]);
       }
 
-      for (final firstState in UpvoteState.values) {
-        for (final secondState in UpvoteState.values) {
+      for (final firstState in VoteState.values) {
+        for (final secondState in VoteState.values) {
           testActions([firstState, secondState]);
         }
       }
       testActions([
-        UpvoteState.upvoted,
-        UpvoteState.downvoted,
-        UpvoteState.none,
-        UpvoteState.upvoted,
-        UpvoteState.none,
-        UpvoteState.upvoted,
-        UpvoteState.upvoted,
-        UpvoteState.downvoted,
-        UpvoteState.none,
+        VoteState.upvoted,
+        VoteState.downvoted,
+        VoteState.none,
+        VoteState.upvoted,
+        VoteState.none,
+        VoteState.upvoted,
+        VoteState.upvoted,
+        VoteState.downvoted,
+        VoteState.none,
       ]);
+
+      test("Offline upvote exception is catched", () async {
+        // Regression test for the issue #160
+
+        // Use a mock firestore transaction that always throw an error (like we were offline)
+        final offlineTransaction = MockErrorFirebaseTransaction();
+
+        // Query the upvote state (triggered an error before patch applied in PR #352)
+        final offlineVoteValue = await postUpvoteRepository.getUpvoteState(
+          userId,
+          post.id,
+          transaction: offlineTransaction,
+        );
+
+        expect(
+          offlineVoteValue,
+          VoteState.none,
+        );
+      });
     },
   );
 
@@ -130,12 +150,12 @@ void main() {
       });
 
       /// In this tests, a single user applies the same action, [newState], to multiple posts
-      for (final newState in UpvoteState.values) {
+      for (final newState in VoteState.values) {
         test(
           "User can apply action ${newState.name} on $nPosts different posts",
           () async {
             for (final post in posts) {
-              await assertPostUpvoteState(userId, post.id, UpvoteState.none);
+              await assertPostUpvoteState(userId, post.id, VoteState.none);
             }
 
             final futures = posts.map(

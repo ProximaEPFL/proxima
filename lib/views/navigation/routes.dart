@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
-import "package:proxima/models/ui/post_overview.dart";
-import "package:proxima/views/pages/create_account_page.dart";
+import "package:proxima/models/ui/post_details.dart";
+import "package:proxima/views/pages/create_account/create_account_page.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/login/login_page.dart";
 import "package:proxima/views/pages/new_post/new_post_page.dart";
@@ -36,12 +36,10 @@ enum Routes {
       case createAccount:
         return const CreateAccountPage();
       case post:
-        if (args is PostOverview) {
-          return PostPage(
-            postOverview: args,
-          );
+        if (args is PostDetails) {
+          return PostPage(postDetails: args);
         } else {
-          throw Exception("PostOverview object required");
+          throw Exception("PostDetails object required");
         }
     }
   }

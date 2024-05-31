@@ -1,13 +1,14 @@
 import "package:flutter/material.dart";
-import "package:proxima/utils/ui/not_implemented.dart";
-import "package:proxima/views/home_content/challenge/challenge_list.dart";
-import "package:proxima/views/home_content/feed/post_feed.dart";
-import "package:proxima/views/home_content/map/map_screen.dart";
+import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:proxima/views/navigation/routes.dart";
+import "package:proxima/views/pages/home/content/challenge/challenge_list.dart";
+import "package:proxima/views/pages/home/content/feed/post_feed.dart";
+import "package:proxima/views/pages/home/content/map/map_screen.dart";
+import "package:proxima/views/pages/home/content/ranking/ranking_page.dart";
 
 /// This enum is used to create the navigation bar routes.
 /// It contains the name and icon of the routes.
-enum NavigationbarRoutes {
+enum NavigationBarRoutes {
   feed("Feed", Icon(Icons.home), null),
   challenge("Challenge", Icon(Icons.emoji_events), null),
   addPost(
@@ -17,7 +18,7 @@ enum NavigationbarRoutes {
     ),
     Routes.newPost,
   ),
-  group("Group", Icon(Icons.group), null),
+  ranking("Ranking", Icon(Icons.leaderboard), null),
   map("Map", Icon(Icons.place), null);
 
   static const defaultLabelText = "Proxima";
@@ -28,27 +29,34 @@ enum NavigationbarRoutes {
   // Non-null if it requires a push
   final Routes? routeDestination;
 
-  const NavigationbarRoutes(
+  const NavigationBarRoutes(
     this.name,
     this.icon,
     this.routeDestination,
   );
 
-  Widget page() {
+  Widget page([Object? args]) {
     if (routeDestination != null) {
       throw Exception("Route must be pushed.");
     }
 
-    // TODO implement other routes
     switch (this) {
       case feed:
         return const PostFeed();
       case map:
-        return const MapScreen();
+        if (args is LatLng) {
+          return MapScreen(initialLocation: args);
+        } else if (args == null) {
+          return const MapScreen();
+        } else {
+          throw Exception("LatLng object required");
+        }
       case challenge:
         return const ChallengeList();
+      case ranking:
+        return const RankingPage();
       case _:
-        return const NotImplemented();
+        throw Exception("No page for this route.");
     }
   }
 
@@ -58,6 +66,8 @@ enum NavigationbarRoutes {
         return "Challenges";
       case map:
         return "Map";
+      case ranking:
+        return "Ranking";
       case _:
         return defaultLabelText;
     }

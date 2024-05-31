@@ -1,16 +1,18 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:proxima/views/components/user_avatar/user_avatar.dart";
-import "package:proxima/views/home_content/feed/post_card/post_card.dart";
-import "package:proxima/views/home_content/feed/post_feed.dart";
+import "package:proxima/views/components/async/logo_progress_indicator.dart";
+import "package:proxima/views/components/content/user_avatar/user_avatar.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
+import "package:proxima/views/pages/home/content/feed/components/post_card.dart";
+import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/home/home_page.dart";
-import "package:proxima/views/pages/home/top_bar/app_top_bar.dart";
+import "package:proxima/views/pages/home/home_top_bar/home_top_bar.dart";
 
 import "../../../mocks/data/post_overview.dart";
 import "../../../mocks/providers/provider_homepage.dart";
+import "../../../utils/delay_async_func.dart";
 
 void main() {
   late ProviderScope nonEmptyHomePageWidget;
@@ -34,11 +36,11 @@ void main() {
       expect(homePage, findsOneWidget);
 
       // Check that the top bar is displayed
-      final topBar = find.byKey(AppTopBar.homeTopBarKey);
+      final topBar = find.byKey(HomeTopBar.homeTopBarKey);
       expect(topBar, findsOneWidget);
 
       //Check profile picture is displayed
-      final profilePicture = find.byKey(AppTopBar.profilePictureKey);
+      final profilePicture = find.byKey(HomeTopBar.profilePictureKey);
       expect(profilePicture, findsOneWidget);
 
       //Check user initial is displayed in the app bar
@@ -117,7 +119,7 @@ void main() {
           of: bottomBar,
           matching: find.byType(NavigationDestination),
         ),
-        findsExactly(NavigationbarRoutes.values.length),
+        findsExactly(NavigationBarRoutes.values.length),
       );
     });
 
@@ -130,11 +132,14 @@ void main() {
         final homePage = find.byType(HomePage);
         expect(homePage, findsOneWidget);
 
-        // Check that the circular progress indicator is displayed
+        // Check that the progress indicator is displayed
         final progressIndicator = find.byType(
-          CircularProgressIndicator,
+          LogoProgressIndicator,
         );
         expect(progressIndicator, findsOneWidget);
+
+        // Clear flutter timers (pending timeout)
+        await tester.pumpAndSettle(delayNeededForAsyncFunctionExecution);
       },
     );
   });

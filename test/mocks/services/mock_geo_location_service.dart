@@ -1,11 +1,11 @@
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:mockito/mockito.dart";
-import "package:proxima/services/geolocation_service.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
 
 import "../data/geopoint.dart";
 
-class MockGeoLocationService extends Mock implements GeoLocationService {
+class MockGeolocationService extends Mock implements GeolocationService {
   @override
   Future<GeoPoint> getCurrentPosition() {
     return super.noSuchMethod(
@@ -19,6 +19,14 @@ class MockGeoLocationService extends Mock implements GeoLocationService {
     return super.noSuchMethod(
       Invocation.method(#requestPermission, []),
       returnValue: Stream.value(userPosition0),
+    );
+  }
+
+  @override
+  Future<Exception?> checkLocationServices() {
+    return super.noSuchMethod(
+      Invocation.method(#checkLocationServices, []),
+      returnValue: Future.value(null),
     );
   }
 }

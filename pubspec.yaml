@@ -1,8 +1,8 @@
 name: proxima
-description: "A new Flutter project."
+description: "A social app that encourages users to visit places in order to see posts."
 
 publish_to: "none"
-version: 0.3.1
+version: 0.4.3
 
 environment:
   sdk: '>=3.3.1 <4.0.0'
@@ -30,7 +30,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   timeago: ^3.6.1
   intl: ^0.19.0
-
+  flutter_native_splash: ^2.4.0
 
 dev_dependencies:
   flutter_test:
@@ -40,9 +40,21 @@ dev_dependencies:
   riverpod_lint: ^2.3.9
   test: ^1.24.9
   mockito: ^5.4.4
+  flutter_launcher_icons: "^0.13.1"
 
 flutter:
   uses-material-design: true
   assets:
     - assets/images/
     - assets/icons/
+    - assets/feedback/
+
+# Command to generate the icons: `dart run flutter_launcher_icons`
+flutter_launcher_icons:
+  android: true
+  image_path: assets/images/proxima_white.png
+
+# Command to generate the splash screen: `dart run flutter_native_splash:create`
+flutter_native_splash:
+  color: "#FFFEFE"  # logo background color
+  image: assets/images/proxima_white.png

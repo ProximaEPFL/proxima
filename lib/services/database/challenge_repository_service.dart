@@ -58,8 +58,10 @@ class ChallengeRepositoryService {
   ) async {
     final userDocRef =
         _firestore.collection(UserFirestore.collectionName).doc(uid.value);
-    final challengeSnap =
-        await _activeChallengesRef(userDocRef).doc(pid.value).get();
+
+    final challengeDocRef = _activeChallengesRef(userDocRef).doc(pid.value);
+
+    final challengeSnap = await challengeDocRef.get();
 
     if (!challengeSnap.exists) {
       return null;
@@ -70,10 +72,11 @@ class ChallengeRepositoryService {
       return null;
     }
 
-    await _activeChallengesRef(userDocRef).doc(pid.value).update({
+    await challengeDocRef.update({
       ChallengeData.isCompletedField: true,
     });
     await _userRepositoryService.addPoints(uid, soloChallengeReward);
+
     return soloChallengeReward;
   }
 
@@ -146,21 +149,23 @@ class ChallengeRepositoryService {
     final Iterable<PostIdFirestore> possiblePosts =
         await _inRangeUnsortedPosts(pos, excludedUser);
 
-    // The whereIn argument of the where method crashed
+    // The [whereIn] argument of the where method crashed
     // if the query is empty for the real firestore. This
     // cannot be tested with the mock firestore.
+    // (It is now fixed with the local filtering below, but
+    // we can keep it for the sake of optimization.)
     if (possiblePosts.isEmpty) return;
 
-    final Iterable<String> possiblePostsStringIds =
-        possiblePosts.map((post) => post.value);
-
     final pastChallengesCollectionRef = _pastChallengesRef(parentRef);
-    final alreadyDonePostsSnap = await pastChallengesCollectionRef
-        .where(FieldPath.documentId, whereIn: possiblePostsStringIds)
-        .get();
+    final alreadyDonePostsSnap = await pastChallengesCollectionRef.get();
 
+    // The [whereIn] argument of the where method crashed
+    // if the query has more than 30 elements for the real firestore.
+    // So we do the filtering locally rather than using the whereIn parameter
+    // of the where method.
     final alreadyDonePosts = alreadyDonePostsSnap.docs
         .map((post) => PostIdFirestore(value: post.id))
+        .where((donePost) => possiblePosts.contains(donePost))
         .toSet();
 
     final postIt = possiblePosts.iterator;
@@ -231,8 +236,8 @@ final challengeRepositoryServiceProvider = Provider<ChallengeRepositoryService>(
   (ref) {
     return ChallengeRepositoryService(
       firestore: ref.watch(firestoreProvider),
-      postRepositoryService: ref.watch(postRepositoryProvider),
-      userRepositoryService: ref.watch(userRepositoryProvider),
+      postRepositoryService: ref.watch(postRepositoryServiceProvider),
+      userRepositoryService: ref.watch(userRepositoryServiceProvider),
     );
   },
 );

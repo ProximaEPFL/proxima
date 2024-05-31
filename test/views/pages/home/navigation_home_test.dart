@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import "package:flutter_test/flutter_test.dart";
-import "package:proxima/views/home_content/feed/post_feed.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bar_routes.dart";
 import "package:proxima/views/navigation/bottom_navigation_bar/navigation_bottom_bar.dart";
 import "package:proxima/views/navigation/leading_back_button/leading_back_button.dart";
+import "package:proxima/views/pages/home/content/feed/post_feed.dart";
 import "package:proxima/views/pages/home/home_page.dart";
 import "package:proxima/views/pages/new_post/new_post_page.dart";
 
@@ -28,7 +28,7 @@ void main() {
           of: bottomBar,
           matching: find
               .byType(NavigationDestination)
-              .at(NavigationbarRoutes.addPost.index),
+              .at(NavigationBarRoutes.addPost.index),
         ),
       );
       await tester.pumpAndSettle();
@@ -63,7 +63,7 @@ void main() {
           of: bottomBar,
           matching: find
               .byType(NavigationDestination)
-              .at(NavigationbarRoutes.addPost.index),
+              .at(NavigationBarRoutes.addPost.index),
         ),
       );
       await tester.pumpAndSettle();

@@ -1,16 +1,15 @@
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 import "package:flutter_test/flutter_test.dart";
 import "package:geolocator/geolocator.dart";
 import "package:google_maps_flutter/google_maps_flutter.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:mockito/mockito.dart";
-import "package:proxima/services/geolocation_service.dart";
-import "package:proxima/views/home_content/map/map_screen.dart";
-import "package:proxima/views/home_content/map/post_map.dart";
-import "package:proxima/views/option_widgets/map/map_selection_option.dart";
-import "package:proxima/views/option_widgets/map/map_selection_option_chips.dart";
+import "package:proxima/services/sensors/geolocation_service.dart";
+import "package:proxima/views/components/options/map/map_selection_option_chips.dart";
+import "package:proxima/views/components/options/map/map_selection_options.dart";
+import "package:proxima/views/pages/home/content/map/components/post_map.dart";
+import "package:proxima/views/pages/home/content/map/map_screen.dart";
+
 import "../../../mocks/data/map_pin.dart";
 import "../../../mocks/providers/provider_map_page.dart";
 import "../../../mocks/services/mock_geolocator_platform.dart";
@@ -19,11 +18,12 @@ void main() {
   late ProviderScope mapWidget;
   late ProviderScope mapWidgetWithPins;
   late MockGeolocatorPlatform mockGeolocator;
-  late GeoLocationService geoLocationService;
+  late GeolocationService geoLocationService;
   late Set<GeoPoint?> geoPoints;
+
   setUp(() async {
     mockGeolocator = MockGeolocatorPlatform();
-    geoLocationService = GeoLocationService(geoLocator: mockGeolocator);
+    geoLocationService = GeolocationService(geoLocator: mockGeolocator);
     geoPoints = <GeoPoint>{
       const GeoPoint(37.4219983, -122.084),
       const GeoPoint(38.4219983, -123.084),
@@ -65,12 +65,9 @@ void main() {
       expect(find.byKey(MapScreen.mapScreenKey), findsOneWidget);
       expect(find.byKey(MapScreen.dividerKey), findsOneWidget);
 
-      // Extract keys from the MapSelectionOptions enum
-      final keys =
-          MapSelectionOptions.values.map((option) => Key(option.name)).toList();
-
       // Verify that each ChoiceChip is found by its key
-      for (final key in keys) {
+      for (final option in MapSelectionOptions.values) {
+        final key = MapSelectionOptionChips.optionChipKeys[option]!;
         expect(find.byKey(key), findsOneWidget);
       }
 
@@ -83,6 +80,16 @@ void main() {
         find.byKey(PostMap.postMapKey),
         findsOneWidget,
       );
+    });
+
+    testWidgets("Display Follow Button", (tester) async {
+      await tester.pumpWidget(mapWidgetWithPins);
+      await tester.pumpAndSettle();
+
+      final followButton = find.byKey(PostMap.followButtonKey);
+      expect(followButton, findsOneWidget);
+      await tester.tap(followButton);
+      await tester.pumpAndSettle();
     });
   });
 

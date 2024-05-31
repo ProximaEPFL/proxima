@@ -1,28 +1,22 @@
 import "dart:async";
 
 import "package:cloud_firestore/cloud_firestore.dart";
-import "package:flutter/material.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:proxima/models/database/comment/comment_data.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
-import "package:proxima/models/ui/new_comment_state.dart";
-import "package:proxima/services/database/comment_repository_service.dart";
+import "package:proxima/models/ui/validation/new_comment_validation.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/viewmodels/login_view_model.dart";
 
 /// The view model for adding a new comment to a post whose
 /// post id [PostIdFirestore] is provided as an argument.
 class NewCommentViewModel
-    extends FamilyAsyncNotifier<NewCommentState, PostIdFirestore> {
-  static const String contentEmptyError = "Please fill out your comment";
-
-  // The controller for the content of the comment
-  // is kept in the view model to avoid losing the content of the comment
-  // if the user navigates away from the page inadvertedly.
-  final contentController = TextEditingController();
+    extends FamilyAsyncNotifier<NewCommentValidation, PostIdFirestore> {
+  static const contentEmptyError = "Please fill out your comment";
 
   @override
-  Future<NewCommentState> build(PostIdFirestore arg) async {
-    return NewCommentState(contentError: null, posted: false);
+  Future<NewCommentValidation> build(PostIdFirestore arg) async {
+    return NewCommentValidation.defaultValue;
   }
 
   /// Validates that the content is not empty.
@@ -30,8 +24,8 @@ class NewCommentViewModel
   /// Returns true if the content is not empty, false otherwise.
   bool validate(String content) {
     if (content.isEmpty) {
-      state = AsyncData(
-        NewCommentState(
+      state = const AsyncData(
+        NewCommentValidation(
           contentError: contentEmptyError,
           posted: false,
         ),
@@ -56,12 +50,13 @@ class NewCommentViewModel
   Future<bool> tryAddComment(String content) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() => _tryAddComment(content));
+
     return state.value?.posted ?? false;
   }
 
-  Future<NewCommentState> _tryAddComment(String content) async {
-    final currentUserId = ref.read(uidProvider);
-    final commentRepository = ref.read(commentRepositoryProvider);
+  Future<NewCommentValidation> _tryAddComment(String content) async {
+    final currentUserId = ref.read(loggedInUserIdProvider);
+    final commentRepository = ref.read(commentRepositoryServiceProvider);
 
     if (currentUserId == null) {
       throw Exception("User must be logged in before creating a comment");
@@ -84,8 +79,8 @@ class NewCommentViewModel
 
     await commentRepository.addComment(postId, commentData);
 
-    state = AsyncData(
-      NewCommentState(
+    state = const AsyncData(
+      NewCommentValidation(
         contentError: null,
         posted: true,
       ),
@@ -95,7 +90,7 @@ class NewCommentViewModel
   }
 }
 
-final newCommentStateProvider = AsyncNotifierProvider.family<
-    NewCommentViewModel, NewCommentState, PostIdFirestore>(
+final newCommentViewModelProvider = AsyncNotifierProvider.family<
+    NewCommentViewModel, NewCommentValidation, PostIdFirestore>(
   () => NewCommentViewModel(),
 );

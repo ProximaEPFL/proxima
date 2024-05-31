@@ -6,7 +6,7 @@ import "package:proxima/models/database/post/post_firestore.dart";
 import "package:proxima/models/database/post/post_id_firestore.dart";
 import "package:proxima/models/database/post/post_location_firestore.dart";
 import "package:proxima/models/database/user/user_id_firestore.dart";
-import "package:proxima/services/database/comment_repository_service.dart";
+import "package:proxima/services/database/comment/comment_repository_service.dart";
 import "package:proxima/services/database/firestore_service.dart";
 import "package:proxima/services/database/upvote_repository_service.dart";
 
@@ -23,7 +23,7 @@ class PostRepositoryService {
         _collectionRef = firestore.collection(PostFirestore.collectionName),
         _commentRepository = CommentRepositoryService(firestore: firestore),
         _upvoteRepository =
-            UpvoteRepositoryService.postUpvoteRepository(firestore);
+            UpvoteRepositoryService.postUpvoteRepositoryService(firestore);
 
   /// This method creates a new post that has for data [postData]
   /// and that is located at [position] and adds it to the database
@@ -55,6 +55,7 @@ class PostRepositoryService {
   /// and false otherwise
   Future<bool> postExists(PostIdFirestore postId) async {
     final docSnap = await _collectionRef.doc(postId.value).get();
+
     return docSnap.exists;
   }
 
@@ -101,6 +102,7 @@ class PostRepositoryService {
       final postPoint = post.location.geoPoint;
 
       double distance = geoFirePoint.distanceBetweenInKm(geopoint: postPoint);
+
       return minRadius <= distance && distance <= maxRadius;
     }).toList();
   }
@@ -124,7 +126,7 @@ class PostRepositoryService {
   }
 }
 
-final postRepositoryProvider = Provider<PostRepositoryService>(
+final postRepositoryServiceProvider = Provider<PostRepositoryService>(
   (ref) => PostRepositoryService(
     firestore: ref.watch(firestoreProvider),
   ),

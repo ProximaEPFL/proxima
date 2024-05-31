@@ -128,6 +128,40 @@ void main() {
       expect(challenges.length, 1);
       expect(challenges.first.postId, posts[1].id); // the other post
     });
+
+    group("Regression tests", () {
+      // It seems that if you don't have any pastChallenges the mocked firestore
+      // will don't do any check on the query, so we need to add a pastChallenge to
+      // the user.
+      test("Challenge getter when more than 30 available posts works",
+          () async {
+        // Create a post that will be used as a completed past challenge.
+        final pastPost = PostDataGenerator.generatePostData(1).first;
+        final pastPostId =
+            await postRepository.addPost(pastPost, inChallengeRange);
+
+        // Set the post as a past challenge
+        final data = ChallengeGenerator.generate();
+        await firestore
+            .collection(UserFirestore.collectionName)
+            .doc(uid.value)
+            .collection(ChallengeFirestore.pastChallengesSubCollectionName)
+            .doc(pastPostId.value)
+            .set(data.toDbData());
+
+        // Create 30 posts and get the challenges
+        final generator = FirestorePostGenerator();
+        await generator.addPostsReturnDataOnly(firestore, inChallengeRange, 30);
+
+        final challenges =
+            await challengeRepository.getChallenges(uid, userPos);
+
+        expect(
+          challenges.length,
+          ChallengeRepositoryService.maxActiveChallenges,
+        );
+      });
+    });
   });
 
   group("Challenges update correctly", () {
