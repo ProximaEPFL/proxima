@@ -1,6 +1,6 @@
 <img src="assets/images/proxima_white.png" width="100" align="right">
 
-<a href="https://github.com/ProximaEPFL/proxima/releases/download/v0.4.1/Proxima-v0.4.1.apk"><img src="https://img.shields.io/badge/download_APK-502cb1?style=for-the-badge"></a> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/gruvw/1009ca75162e4a39e4561300eadbc5c4/raw/proxima_badge.json">
+<a href="https://github.com/ProximaEPFL/proxima/releases/download/v0.4.3/Proxima-v0.4.3.apk"><img src="https://img.shields.io/badge/download_APK-502cb1?style=for-the-badge"></a> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/gruvw/1009ca75162e4a39e4561300eadbc5c4/raw/proxima_badge.json">
 
 # Proxima
 
