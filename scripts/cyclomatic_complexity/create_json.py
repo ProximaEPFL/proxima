@@ -37,6 +37,8 @@ def dcm_out_to_dict(content: str) -> dict:
         elif func_match:
             if file_name is None:
                 raise Exception("A function should be in a file.")
+            if function_name is not None:
+                raise Exception("A function should be followed by its complexity.")
             function_name = func_match.group(1)
         elif complex_match:
             if function_name is None:
@@ -44,6 +46,8 @@ def dcm_out_to_dict(content: str) -> dict:
             complexity = int(complex_match.group(1))
             result[file_name][function_name] = complexity
             function_name = None
+    if function_name is not None:
+        raise Exception("A function should be followed by its complexity.")
     
     return result
 
