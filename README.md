@@ -47,7 +47,7 @@ app: [Proxima Video Presentation](https://www.youtube.com/watch?v=831yjtsBgHM).
 ### User Interface Design
 
 Link to
-the [Mockup](https://design.penpot.app/#/view/ee63301e-1fa7-81b1-8004-5bee937a6d84?page-id=76cd5706-e69f-8069-8004-1a1578d3f0c7&section=interactions&index=41&share-id=271c9855-ceb4-8079-8004-6c8525144113) (
+the [Mockup](https://design.penpot.app/#/view/ee63301e-1fa7-81b1-8004-5bee937a6d84?page-id=76cd5706-e69f-8069-8004-1a1578d3f0c7&section=interactions&index=40&share-id=271c9855-ceb4-8079-8004-6c8525144113) (
 view mode only).
 
 Link to
