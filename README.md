@@ -40,7 +40,7 @@ Here are a few screenshots of the main screens of the application:
 <img src="docs/screenshots/challenges.png" height="500">  <img src="docs/screenshots/ranking.png" height="500">  <img src="docs/screenshots/profile.png" height="500">
 
 **Note**: you can also check out the video presentation of the
-app: [Proxima Video Presentation](https://www.youtube.com/watch?v=831yjtsBgHM).
+app: [Proxima Video Presentation](https://youtu.be/0_kLZJLHsW4).
 
 ## Technical Details
 
