@@ -1,6 +1,6 @@
 <img src="assets/images/proxima_white.png" width="100" align="right">
 
-<a href="https://github.com/ProximaEPFL/proxima/releases/download/v0.4.1/Proxima-v0.4.1.apk"><img src="https://img.shields.io/badge/download_APK-502cb1?style=for-the-badge"></a> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/gruvw/1009ca75162e4a39e4561300eadbc5c4/raw/proxima_badge.json">
+<a href="https://github.com/ProximaEPFL/proxima/releases/download/v0.4.3/Proxima-v0.4.3.apk"><img src="https://img.shields.io/badge/download_APK-502cb1?style=for-the-badge"></a> <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/gruvw/1009ca75162e4a39e4561300eadbc5c4/raw/proxima_badge.json">
 
 # Proxima
 
@@ -40,14 +40,14 @@ Here are a few screenshots of the main screens of the application:
 <img src="docs/screenshots/challenges.png" height="500">  <img src="docs/screenshots/ranking.png" height="500">  <img src="docs/screenshots/profile.png" height="500">
 
 **Note**: you can also check out the video presentation of the
-app: [Proxima Video Presentation](https://www.youtube.com/watch?v=831yjtsBgHM).
+app: [Proxima Video Presentation](https://youtu.be/0_kLZJLHsW4).
 
 ## Technical Details
 
 ### User Interface Design
 
 Link to
-the [Mockup](https://design.penpot.app/#/view/ee63301e-1fa7-81b1-8004-5bee937a6d84?page-id=76cd5706-e69f-8069-8004-1a1578d3f0c7&section=interactions&index=41&share-id=271c9855-ceb4-8079-8004-6c8525144113) (
+the [Mockup](https://design.penpot.app/#/view/ee63301e-1fa7-81b1-8004-5bee937a6d84?page-id=76cd5706-e69f-8069-8004-1a1578d3f0c7&section=interactions&index=40&share-id=271c9855-ceb4-8079-8004-6c8525144113) (
 view mode only).
 
 Link to
