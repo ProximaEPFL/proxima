@@ -19,6 +19,7 @@ class ChallengeList extends ConsumerWidget {
     );
 
     final onRefresh = ref.read(challengeViewModelProvider.notifier).refresh;
+
     return CircularValue(
       future: asyncChallenges,
       builder: (context, challenges) {

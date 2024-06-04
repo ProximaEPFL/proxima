@@ -2,12 +2,6 @@ import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:proxima/views/helpers/types/future_void_callback.dart";
 
-enum LoadingState {
-  still,
-  pending,
-  completed,
-}
-
 /// An async capable button that displays a [CircularProgressIndicator] once it is pressed
 /// and until the future of the callback function completes.
 class LoadingIconButton extends HookWidget {
@@ -69,4 +63,10 @@ class LoadingIconButton extends HookWidget {
 class DeleteButton extends LoadingIconButton {
   const DeleteButton({super.key, required super.onClick})
       : super(icon: Icons.delete);
+}
+
+enum LoadingState {
+  still,
+  pending,
+  completed,
 }

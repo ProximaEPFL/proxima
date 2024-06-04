@@ -26,6 +26,24 @@ class PostMap extends ConsumerWidget {
     this.initialLocation,
   });
 
+  static Marker mapPinDetailsToMarker(BuildContext context, MapPinDetails pin) {
+    return Marker(
+      markerId: pin.id,
+      position: pin.position,
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return MapPinPopUp(
+              key: mapPinPopUpKey,
+              mapPinPopUpDetails: pin.mapPopUpDetails,
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // This provider is used to get information about the map.
@@ -40,24 +58,6 @@ class PostMap extends ConsumerWidget {
 
     //Set of markers to be displayed on the map
     Set<Marker> markers = {};
-
-    Marker mapPinDetailsToMarker(MapPinDetails pin) {
-      return Marker(
-        markerId: pin.id,
-        position: pin.position,
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return MapPinPopUp(
-                key: mapPinPopUpKey,
-                mapPinPopUpDetails: pin.mapPopUpDetails,
-              );
-            },
-          );
-        },
-      );
-    }
 
     // This will redraw the circle and update camera when the user's position changes.
     positionValue.when(
@@ -86,7 +86,7 @@ class PostMap extends ConsumerWidget {
         markers.clear();
         for (final pin in data) {
           markers.add(
-            mapPinDetailsToMarker(pin),
+            mapPinDetailsToMarker(context, pin),
           );
         }
       },

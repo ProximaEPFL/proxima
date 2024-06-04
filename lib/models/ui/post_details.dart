@@ -87,6 +87,8 @@ class PostDetails {
     GeoFirePoint geoFirePoint,
     bool isChallenge,
   ) {
+    final geopoint = postFirestore.location.geoPoint;
+
     return PostDetails(
       postId: postFirestore.id,
       title: postFirestore.data.title,
@@ -99,11 +101,11 @@ class PostDetails {
       ownerCentauriPoints: userFirestore.data.centauriPoints,
       publicationDate: postFirestore.data.publicationTime.toDate(),
       distance: (geoFirePoint.distanceBetweenInKm(
-                geopoint: postFirestore.location.geoPoint,
+                geopoint: geopoint,
               ) *
               1000)
           .round(),
-      location: postFirestore.location.geoPoint.toLatLng(),
+      location: geopoint.toLatLng(),
       isChallenge: isChallenge,
     );
   }

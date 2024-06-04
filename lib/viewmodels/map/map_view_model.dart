@@ -17,16 +17,14 @@ class MapViewModel extends AutoDisposeFamilyAsyncNotifier<MapDetails, LatLng?> {
   Future<MapDetails> build([LatLng? arg]) async {
     if (arg != null) {
       disableFollowUser();
-      return MapDetails(
-        initialLocation: arg,
-      );
+
+      return MapDetails(initialLocation: arg);
     } else {
       enableFollowUser();
       final geoPoint =
           await ref.read(geolocationServiceProvider).getCurrentPosition();
-      return MapDetails(
-        initialLocation: geoPoint.toLatLng(),
-      );
+
+      return MapDetails(initialLocation: geoPoint.toLatLng());
     }
   }
 

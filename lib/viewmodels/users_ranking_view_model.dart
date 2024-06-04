@@ -81,6 +81,7 @@ class UsersRankingViewModel extends AutoDisposeAsyncNotifier<RankingDetails> {
           )
           .refresh();
     }
+
     return state;
   }
 
