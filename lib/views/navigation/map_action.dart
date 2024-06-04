@@ -44,13 +44,13 @@ class MapAction extends ConsumerWidget {
 
   /// Open the map with the given [mapOption] and [initialLocation].
   /// The [depth] is used to pop the navigation stack back to the root page.
-  static Future<void> openMap(
+  static void openMap(
     WidgetRef ref,
     BuildContext context,
     MapSelectionOptions mapOption,
     int depth,
     LatLng initialLocation,
-  ) async {
+  ) {
     for (var i = 0; i < depth; i++) {
       Navigator.pop(context);
     }

@@ -46,10 +46,12 @@ class LinearSegmentedHSVColormap {
     assert(stops.length >= 2, "There must be at least two color stops");
     final colors = stops.mapIndexed((i, _) {
       final hue = hueStart + (hueEnd - hueStart) * i / (stops.length - 1);
+
       return HSVColor.fromAHSV(1, hue, saturation, value);
     });
 
     final colorStops = Map.fromIterables(stops, colors);
+
     return LinearSegmentedHSVColormap(colorStops);
   }
 

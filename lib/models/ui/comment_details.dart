@@ -56,6 +56,7 @@ class CommentDetails {
     UserFirestore owner,
   ) {
     final ownerData = owner.data;
+
     return CommentDetails(
       content: commentData.content,
       ownerDisplayName: ownerData.displayName,

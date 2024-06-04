@@ -32,6 +32,7 @@ class UserCommentViewModel extends AutoDisposeAsyncNotifier<UserCommentsState> {
         parentPostId: comment.data.parentPostId,
         description: comment.data.content,
       );
+
       return userComment;
     }).toList();
 

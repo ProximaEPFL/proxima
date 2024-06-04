@@ -45,6 +45,7 @@ class ProfilePage extends ConsumerWidget {
       future: asyncUserData,
       builder: (context, value) {
         final user = value.firestoreUser;
+
         return DefaultTabController(
           length: 2,
           child: Scaffold(
